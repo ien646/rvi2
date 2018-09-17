@@ -137,7 +137,7 @@ namespace rvi
             assert(data_container.size() > (offset_ref + 3));
 
             const size_t char_size = sizeof(T::value_type);
-            
+
             U16 dataBuffLen = Serializer::DeserializePOD_Internal<U16>(data_container, offset_ref);
             U8 dataCharSz = Serializer::DeserializePOD_Internal<U8>(data_container, offset_ref);
 
@@ -152,10 +152,10 @@ namespace rvi
             // If its an std::string just directly copy the data
             if (dataCharSz == 1)
             {
-				auto it_begin = (data_container.begin() + offset_ref);
-				auto it_end = it_begin + resultLen;
-				std::copy(it_begin, it_end, std::back_inserter(result));
-				offset_ref += resultLen;
+                auto it_begin = (data_container.begin() + offset_ref);
+                auto it_end = it_begin + resultLen;
+                std::copy(it_begin, it_end, std::back_inserter(result));
+                offset_ref += resultLen;
             }
             else
             {
