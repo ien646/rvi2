@@ -1,5 +1,5 @@
 #include "commands.h"
-#include "serializer.h"
+#include "serialization.h"
 
 namespace rvi
 {
@@ -21,7 +21,7 @@ namespace rvi
 
 	void Command_RequestAck::BuildData()
 	{
-		AppendData(Serializer::GetBytes(RequestId));
+		Serializer::SerializeInteger(Data, RequestId);
 	}
 
 	Command_ResponseAck::Command_ResponseAck(U16 reqId)
@@ -32,7 +32,7 @@ namespace rvi
 
 	void Command_ResponseAck::BuildData()
 	{
-		AppendData(Serializer::GetBytes(RequestId));
+        Serializer::SerializeInteger(Data, RequestId);
 	}
 
 	Command_DrawLine::Command_DrawLine(const Vertex& vxFrom, const Vertex& vxTo)
@@ -51,8 +51,8 @@ namespace rvi
 
 	void Command_DrawLine::BuildData()
 	{
-		AppendData(Serializer::GetBytes(VxFrom));
-		AppendData(Serializer::GetBytes(VxTo));
+		Serializer::SerializeVertex(Data, VxFrom);
+		Serializer::SerializeVertex(Data, VxTo);
 	}
 
 	Command_SelectFrame::Command_SelectFrame(const std::string& frameName)
@@ -69,7 +69,7 @@ namespace rvi
 
 	void Command_SelectFrame::BuildData()
 	{
-		AppendData(Serializer::GetBytes(FrameName));
+        Serializer::SerializeString(Data, FrameName);
 	}
 
 	Command_DeleteFrame::Command_DeleteFrame(const std::string& frameName)
@@ -86,7 +86,7 @@ namespace rvi
 
 	void Command_DeleteFrame::BuildData()
 	{
-		AppendData(Serializer::GetBytes(FrameName));
+        Serializer::SerializeString(Data, FrameName);
 	}
 
 	Command_ClearFrame::Command_ClearFrame(const std::string & frameName)
@@ -103,6 +103,6 @@ namespace rvi
 
 	void Command_ClearFrame::BuildData()
 	{
-		AppendData(Serializer::GetBytes(FrameName));
+        Serializer::SerializeString(Data, FrameName);
 	}
 }

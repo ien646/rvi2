@@ -27,6 +27,11 @@ namespace rvi
             A = a;
         }
 
+        U32 RGBA()
+        {
+            return *((U32*)this);
+        }
+
         RVI_CRGBA_STANDARD_COLOR(TRANSPARENT,   00, 00, 00, FF);
         RVI_CRGBA_STANDARD_COLOR(WHITE,         FF, FF, FF, 00);
         RVI_CRGBA_STANDARD_COLOR(BLACK,         00, 00, 00, 00);

@@ -11,7 +11,6 @@ namespace rvi
     ClientContext::ClientContext()
         : _mainFrame(MAIN_FRAMENAME) 
         , _selectedFrame(_mainFrame)
-        , _contextId(Random().GetUnsigned64())
     { 
         _frameStack.push_back(_mainFrame);
     }
@@ -20,11 +19,6 @@ namespace rvi
 	{
 		return ClientContext();
 	}
-
-    U64 ClientContext::ContextId() const noexcept
-    {
-        return _contextId;
-    }
 
     void ClientContext::DrawLine(Vector2 from, Vector2 to)
     {

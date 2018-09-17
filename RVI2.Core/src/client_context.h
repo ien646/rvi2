@@ -19,10 +19,7 @@ namespace rvi
         const std::string MAIN_FRAMENAME = "__MAINFRAME__";
 		const char FRAMEPATH_SEPARATOR = ':';
         const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);		
-
-		// Runtime-wise unique id
-		U64 _contextId;
-
+        
         Frame _mainFrame;
         std::reference_wrapper<Frame> _selectedFrame;
 
@@ -40,8 +37,6 @@ namespace rvi
 		ClientContext();
     public:
 		static ClientContext CreateNew();
-
-        U64 ContextId() const noexcept;
 
         void DrawLine(Vector2 from, Vector2 to);
         void DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor);

@@ -7,41 +7,50 @@
 #include <unordered_map>
 #include <type_traits>
 
-
-
 namespace rvi
 {
-	#define CONCAT(x,y) x##y
+	#define RVI_CONCAT(x,y) x##y
+    #define FWD_DECL_CLASS(X) class X
 
 	// Generate a unique prefixed name
-	#define UNIQUENAME(prefix) CONCAT(prefix,__COUNTER__)
+	#define RVI_UNIQUENAME(prefix) RVI_CONCAT(prefix,__COUNTER__)
 
 	// Discard return value explicitly
-	#define DISCARD auto UNIQUENAME(_trash_) =
+	#define DISCARD auto RVI_UNIQUENAME(_trash_) =
 
 	// Compiler conditional macros
 	#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) /* MSVC++ */
-	#define RVI_COMPILER_MSVC 1
+	    #define RVI_COMPILER_MSVC 1
+
 	#elif defined(__GNUC__) || defined(__GNUG__) && !defined(__clang__) /* GNU GCC/G++ */
-	#define RVI_COMPILER_GNU 1
+	    #define RVI_COMPILER_GNU 1
+
 	#elif defined(__clang__) /* CLANG */
-	#define RVI_COMPILER_CLANG 1
+	    #define RVI_COMPILER_CLANG 1
+
 	#elif defined(__INTEL_COMPILER) || defined(__ICC) /* INTEL C/C++ COMPILER */
-	#define RVI_COMPILER_INTEL 1
+	    #define RVI_COMPILER_INTEL 1
+
 	#endif
+
+    // Template helpers
+    #define TEMPLATE_ENABLE_IF_IS_POD(T) typename = std::enable_if<std::is_pod<T>::value>::type
+    #define TEMPLATE_ENABLE_IF_IS_INTEGER(T) typename = std::enable_if<std::is_integral<T>::value>::type
+    #define TEMPLATE_ENABLE_IF_IS_FLOAT(T) typename = std::enable_if<std::is_floating_point<T>::value>::type
+    #define TEMPLATE_ENABLE_IF_IS_STRING(T) typename = std::enable_if<std::is_base_of<std::basic_string, T>::value>::type
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Integer data types
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    typedef std::uint8_t    U8;
-    typedef std::uint16_t   U16;
-    typedef std::uint32_t   U32;
-    typedef std::uint64_t   U64;
+    using U8    = std::uint8_t;
+    using U16   = std::uint16_t;
+    using U32   = std::uint32_t;
+    using U64   = std::uint64_t;
 
-    typedef std::int8_t     I8;
-    typedef std::int16_t    I16;
-    typedef std::int32_t    I32;
-    typedef std::int64_t    I64;
+    using I8    = std::int8_t;
+    using I16   = std::int16_t;
+    using I32   = std::int32_t;
+    using I64   = std::int64_t;
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Random generator

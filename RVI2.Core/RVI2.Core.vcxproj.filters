@@ -57,10 +57,10 @@
     <ClInclude Include="src\commands.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\serializer.h">
+    <ClInclude Include="src\command_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\command_base.h">
+    <ClInclude Include="src\serialization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -104,7 +104,7 @@
     <ClCompile Include="src\commands.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\serializer.cpp">
+    <ClCompile Include="src\serialization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

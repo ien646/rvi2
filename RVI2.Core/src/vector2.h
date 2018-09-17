@@ -2,6 +2,7 @@
 #pragma once
 
 #include "rvi_base.h"
+#include "serialization.h"
 
 namespace rvi
 {

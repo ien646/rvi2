@@ -39,7 +39,7 @@
     <ClInclude Include="src\commands.h" />
     <ClInclude Include="src\rvi_math.h" />
     <ClInclude Include="src\rvi_base.h" />
-    <ClInclude Include="src\serializer.h" />
+    <ClInclude Include="src\serialization.h" />
     <ClInclude Include="src\transform2.h" />
     <ClInclude Include="src\vector2.h" />
     <ClInclude Include="src\vertex.h" />
@@ -55,7 +55,7 @@
     <ClCompile Include="src\command_base.cpp" />
     <ClCompile Include="src\rvi_base.cpp" />
     <ClCompile Include="src\rvi_math.cpp" />
-    <ClCompile Include="src\serializer.cpp" />
+    <ClCompile Include="src\serialization.cpp" />
     <ClCompile Include="src\transform2.cpp" />
     <ClCompile Include="src\vector2.cpp" />
     <ClCompile Include="src\vertex.cpp" />
@@ -151,7 +151,7 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
