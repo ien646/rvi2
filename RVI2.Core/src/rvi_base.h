@@ -1,4 +1,4 @@
-/* FILE: rviTypes.h */
+/* FILE: rvi_base.h */
 #pragma once
 
 #include <cstdint>
@@ -40,20 +40,28 @@ namespace rvi
     #define TEMPLATE_ENABLE_IF_IS_STRING(T)		typename = std::enable_if_t<std::is_same_v<std::basic_string<T::value_type>,T>>
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    // Integer data types
+    // Integer data typedefs
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    using U8 = std::uint8_t;
+    using U8  = std::uint8_t;
     using U16 = std::uint16_t;
     using U32 = std::uint32_t;
     using U64 = std::uint64_t;
 
-    using I8 = std::int8_t;
+    using I8  = std::int8_t;
     using I16 = std::int16_t;
     using I32 = std::int32_t;
     using I64 = std::int64_t;
+   
+    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    // Endianess constant expressions
+    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+    static constexpr U16 _RVI_CEXPR_ENDIAN_MAGIC_NUMBER = 0x00FF;
+    static constexpr bool RVI_CEXPR_BIG_ENDIAN      = ((const uint8_t&)_RVI_ENDIAN_MAGIC_NUMBER) == 0x00;
+    static constexpr bool RVI_CEXPR_LITTLE_ENDIAN   = ((const uint8_t&)_RVI_ENDIAN_MAGIC_NUMBER) == 0xFF;
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    // Random generator
+    // Random integer generator
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     class Random
     {
