@@ -17,42 +17,42 @@ namespace rvi
 
 		Vector2(float x, float y) noexcept;
 		
-		float Magnitude() const;
+		float Magnitude() const noexcept;
 		
-		Vector2 CrossProduct(Vector2 other) const;
-		void CrossProductInPlace(Vector2 other);
+		Vector2 CrossProduct(Vector2 other) const noexcept;
+		void CrossProductInPlace(Vector2 other) noexcept;
 
-		Vector2 Offset(Vector2 offset) const;
-		void OffsetInPlace(Vector2 offset);
+		Vector2 Offset(Vector2 offset) const noexcept;
+		void OffsetInPlace(Vector2 offset) noexcept;
 
-		Vector2 Rotate(float angle) const;
-		void RotateInPlace(float angle);
+		Vector2 Rotate(float angle) const noexcept;
+		void RotateInPlace(float angle) noexcept;
 
-		Vector2 Reverse() const;
-		void ReverseInPlace();
+		Vector2 Reverse() const noexcept;
+		void ReverseInPlace() noexcept;
 
-		Vector2 Inverse() const;
-		void InvertInPlace();
+		Vector2 Inverse() const noexcept;
+		void InvertInPlace() noexcept;
 
-		Vector2 Scale(float scale) const;
-		Vector2 Scale(Vector2 scaleVec) const;
-		void ScaleInPlace(float scale);
-		void ScaleInPlace(Vector2 scale);
+		Vector2 Scale(float scale) const noexcept;
+		Vector2 Scale(Vector2 scaleVec) const noexcept;
+		void ScaleInPlace(float scale) noexcept;
+		void ScaleInPlace(Vector2 scale) noexcept;
 
-		void ApplyTransform(const Transform2& tform);
+		void ApplyTransform(const Transform2& tform) noexcept;
 		
-		Vector2 operator+(Vector2 other) const;		
-		Vector2 operator-(Vector2 other) const;		
-		Vector2 operator*(float other) const;	
-		Vector2 operator*(Vector2 other) const;
-		Vector2 operator/(float other) const;
-		Vector2 operator/(Vector2 other) const;
+		Vector2 operator+(Vector2 other) const noexcept;
+		Vector2 operator-(Vector2 other) const noexcept;
+		Vector2 operator*(float other) const noexcept;
+		Vector2 operator*(Vector2 other) const noexcept;
+		Vector2 operator/(float other) const noexcept;
+		Vector2 operator/(Vector2 other) const noexcept;
 		
-		void operator+=(Vector2 other);		
-		void operator-=(Vector2 other);		
-		void operator*=(float other);
-		void operator*=(Vector2 other);
-		void operator/=(float other);
-		void operator/=(Vector2 other);
+		void operator+=(Vector2 other) noexcept;
+		void operator-=(Vector2 other) noexcept;
+		void operator*=(float other) noexcept;
+		void operator*=(Vector2 other) noexcept;
+		void operator/=(float other) noexcept;
+		void operator/=(Vector2 other) noexcept;
 	};
 }

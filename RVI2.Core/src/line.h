@@ -15,9 +15,9 @@ namespace rvi
 		Vertex End;
 		
 		constexpr Line() noexcept { }		
-		Line(const Vertex& start, const Vertex& end);		
-		Line(Vertex&& start, Vertex&& end);
+		Line(const Vertex& start, const Vertex& end) noexcept;
+		Line(Vertex&& start, Vertex&& end) noexcept;
 
-		void ApplyTransform(const Transform2& tform);
+		void ApplyTransform(const Transform2& tform) noexcept;
 	};
 }

@@ -1,24 +1,27 @@
 #include "vertex.h"
 
-rvi::Vertex::Vertex(Vector2 pos, ColorRGBA vxColor) 
-	: Position(pos)
-	, VertexColor(vxColor)
-{ }
-
-rvi::Vertex::Vertex(float x, float y) 
-	: Position(Vector2(x, y))
-{ }
-
-rvi::Vertex::Vertex(float x, float y, U8 r, U8 g, U8 b, U8 a) 
-	: Position(Vector2(x, y))
-	, VertexColor(Color(r, g, b, a))
-{ }
-
-rvi::Vertex::Vertex(Vector2 pos) 
-	: Position(pos)
-{ }
-
-void rvi::Vertex::ApplyTransform(const Transform2& tform)
+namespace rvi
 {
-	Position.ApplyTransform(tform);
+	Vertex::Vertex(Vector2 pos, ColorRGBA vxColor) noexcept
+		: Position(pos)
+		, VertexColor(vxColor)
+	{ }
+
+	Vertex::Vertex(float x, float y) noexcept
+		: Position(Vector2(x, y))
+	{ }
+
+	Vertex::Vertex(float x, float y, U8 r, U8 g, U8 b, U8 a) noexcept
+		: Position(Vector2(x, y))
+		, VertexColor(ColorRGBA(r, g, b, a))
+	{ }
+
+	Vertex::Vertex(Vector2 pos) noexcept
+		: Position(pos)
+	{ }
+
+	void Vertex::ApplyTransform(const Transform2& tform) noexcept
+	{
+		Position.ApplyTransform(tform);
+	}
 }

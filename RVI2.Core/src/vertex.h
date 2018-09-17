@@ -3,7 +3,7 @@
 
 #include "rviTypes.h"
 #include "vector2.h"
-#include "color.h"
+#include "colorRgba.h"
 
 namespace rvi
 {
@@ -15,14 +15,14 @@ namespace rvi
 		
 		constexpr Vertex() noexcept { }
 		
-		Vertex(float x, float y);
+		Vertex(float x, float y) noexcept;
 		
-		Vertex(float x, float y, U8 r, U8 g, U8 b, U8 a);
+		Vertex(float x, float y, U8 r, U8 g, U8 b, U8 a) noexcept;
 		
-		Vertex(Vector2 pos);
+		Vertex(Vector2 pos) noexcept;
 		
-		Vertex(Vector2 pos, ColorRGBA vxColor);
+		Vertex(Vector2 pos, ColorRGBA vxColor) noexcept;
 
-		void ApplyTransform(const Transform2& tform);
+		void ApplyTransform(const Transform2& tform) noexcept;
 	};
 }

@@ -12,10 +12,10 @@ namespace rvi
 
 		const float PI = 3.141592653589793238F;
 
-		extern float Deg2Rad(float angleDeg);
+		extern constexpr float Deg2Rad(float angleDeg);
 
-		extern float Rad2Deg(float angleRad);
+		extern constexpr float Rad2Deg(float angleRad);
 
-		extern Matrix2x2 Get2DRotationMatrix(float angle);
+		extern Matrix2x2 Get2DRotationMatrix(float angle) noexcept;
 	}
 }

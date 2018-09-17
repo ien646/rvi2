@@ -17,10 +17,10 @@ namespace rvi
 		float Rotation = 0.0F;
 		
 		Transform2() noexcept { }
-		Transform2(Vector2 pos, Vector2 scale, float rot);
+		Transform2(Vector2 pos, Vector2 scale, float rot) noexcept;
 
-		void ApplyTo(std::vector<Line>& vecs) const;
+		void ApplyTo(std::vector<Line>& vecs) const noexcept;
 
-		Transform2 Merge(const Transform2& other);
+		Transform2 Merge(const Transform2& other) noexcept;
 	};
 }

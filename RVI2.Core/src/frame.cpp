@@ -10,7 +10,7 @@ namespace rvi
 		: _name(std::move(name))
 	{ }
 
-	void Frame::ClearLines()
+	void Frame::ClearLines() noexcept
 	{
 		_lines.clear();
 	}
@@ -28,17 +28,19 @@ namespace rvi
 	void Frame::AddChildFrame(const std::string& name)
 	{
 		_childFrames.emplace_back(name);
+		_childFramesMap.emplace(name, *_childFrames.end());
 	}
 
 	void Frame::AddChildFrame(std::string&& name)
 	{
 		_childFrames.emplace_back(std::move(name));
+		_childFramesMap.emplace(_childFrames.end()->Name(), *_childFrames.end());
 	}
 
 	void Frame::GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform)
 	{
 		// Current absolute transform
-		Transform2 absTform = _transform.Merge(parentTform);
+		const Transform2 absTform = _transform.Merge(parentTform);
 
 		// Owned lines
 		std::vector<Line> ownLines;
@@ -47,28 +49,28 @@ namespace rvi
 		std::move(ownLines.begin(), ownLines.end(), std::back_inserter(result));
 
 		// Child frames
-		for (auto& chFrame : _childFrames)
+		for (Frame& chFrame : _childFrames)
 		{
 			chFrame.GetModulatedLines(result, absTform);
 		}
 	}
 
-	void Frame::SetColor(U8 r, U8 g, U8 b, U8 a)
+	void Frame::SetColor(U8 r, U8 g, U8 b, U8 a) noexcept
 	{
 		_color = ColorRGBA(r, g, b, a);
 	}
 
-	void Frame::SetColor(ColorRGBA color)
+	void Frame::SetColor(ColorRGBA color) noexcept
 	{
 		_color = color;
 	}
 
-	void Frame::SetTransform(const Transform2& tform)
+	void Frame::SetTransform(const Transform2& tform) noexcept
 	{
 		_transform = tform;
 	}
 
-	void Frame::SetTransform(Transform2&& tform)
+	void Frame::SetTransform(Transform2&& tform) noexcept
 	{
 		_transform = std::move(tform);
 	}

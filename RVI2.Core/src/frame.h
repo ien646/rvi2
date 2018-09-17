@@ -2,6 +2,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_map>
 #include <string>
 #include <utility>
 
@@ -16,6 +17,7 @@ namespace rvi
 	private:
 		std::string _name;
 		std::vector<Line> _lines;
+		std::unordered_map<std::string, Frame&> _childFramesMap;
 		std::vector<Frame> _childFrames;
 		Transform2 _transform;
 		ColorRGBA _color;
@@ -26,7 +28,7 @@ namespace rvi
 		Frame(const std::string& name);
 		Frame(std::string&& name);
 		
-		void ClearLines();
+		void ClearLines() noexcept;
 		
 		void AddLine(const Line& ln);		
 		void AddLine(Line&& ln);
@@ -46,7 +48,7 @@ namespace rvi
 		// -- Setters --
 		void SetColor(U8 r, U8 g, U8 b, U8 a) noexcept;
 		void SetColor(ColorRGBA color) noexcept;
-		void SetTransform(const Transform2& tform);
-		void SetTransform(Transform2&& tform);
+		void SetTransform(const Transform2& tform) noexcept;
+		void SetTransform(Transform2&& tform) noexcept;
 	};
 }
