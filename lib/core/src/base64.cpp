@@ -19,10 +19,10 @@ void rvi::Base64::Encode(std::istream& in, std::ostringstream& out)
     while (in.readsome(&buff1[i++], 1))
         if (i == 3)
         {
-            out << encodeCharacterTable[(buff1[0] & 0xfc) >> 2];
-            out << encodeCharacterTable[((buff1[0] & 0x03) << 4) + ((buff1[1] & 0xf0) >> 4)];
-            out << encodeCharacterTable[((buff1[1] & 0x0f) << 2) + ((buff1[2] & 0xc0) >> 6)];
-            out << encodeCharacterTable[buff1[2] & 0x3f];
+            out << ENCODE_TABLE[(buff1[0] & 0xfc) >> 2];
+            out << ENCODE_TABLE[((buff1[0] & 0x03) << 4) + ((buff1[1] & 0xf0) >> 4)];
+            out << ENCODE_TABLE[((buff1[1] & 0x0f) << 2) + ((buff1[2] & 0xc0) >> 6)];
+            out << ENCODE_TABLE[buff1[2] & 0x3f];
             i = 0;
         }
 
@@ -35,7 +35,7 @@ void rvi::Base64::Encode(std::istream& in, std::ostringstream& out)
         buff2[2] = ((buff1[1] & 0x0f) << 2) + ((buff1[2] & 0xc0) >> 6);
         buff2[3] = buff1[2] & 0x3f;
 
-        for (j = 0; j < (i + 1); j++) out << encodeCharacterTable[buff2[j]];
+        for (j = 0; j < (i + 1); j++) out << ENCODE_TABLE[buff2[j]];
 
         while (i++ < 3) out << '=';
     }
@@ -53,7 +53,7 @@ void rvi::Base64::Decode(std::istringstream & in, std::ostream & out)
         if (++i == 4)
         {
             for (i = 0; i != 4; i++)
-                buff2[i] = decodeCharacterTable[buff2[i]];
+                buff2[i] = DECODE_TABLE[buff2[i]];
 
             out << static_cast<char>((buff2[0] << 2) + ((buff2[1] & 0x30) >> 4));
             out << static_cast<char>(((buff2[1] & 0xf) << 4) + ((buff2[2] & 0x3c) >> 2));
@@ -65,7 +65,7 @@ void rvi::Base64::Decode(std::istringstream & in, std::ostream & out)
     if (i)
     {
         for (j = i; j < 4; j++) buff2[j] = '\0';
-        for (j = 0; j < 4; j++) buff2[j] = decodeCharacterTable[buff2[j]];
+        for (j = 0; j < 4; j++) buff2[j] = DECODE_TABLE[buff2[j]];
 
         buff1[0] = (buff2[0] << 2) + ((buff2[1] & 0x30) >> 4);
         buff1[1] = ((buff2[1] & 0xf) << 4) + ((buff2[2] & 0x3c) >> 2);
