@@ -63,12 +63,57 @@ namespace rvi::serialization
     void Serializer::FillContractBinary_VarLen(const std::vector<uint8_t>& val, int elemidx)
     {
         CheckContractValidType(elemidx, ContractElemType::BINARY_FIXLEN);
-        CheckContractValidVarSize(elemidx, val.size());
+        CheckMaxContainerLength(val.size());
 
         uint16_t size = static_cast<uint16_t>(val.size());
         Internal_SerializeIntegral(_buffer, size);
 
         std::copy(val.begin(), val.end(), std::back_inserter(_buffer));
+    }
+
+    void Serializer::FillContractElemBoolArray_FixLen(const std::vector<bool>& val, int contract_iidx)
+    {
+        CheckContractValidType(contract_iidx, ContractElemType::BOOL_ARRAY_FIXLEN);
+        CheckMaxContainerLength(val.size());
+        CheckContractValidFixedSize(contract_iidx, val.size() / sizeof(uint8_t));
+
+        Internal_SerializeBoolArray(_buffer, val);
+    }
+
+    void Serializer::Internal_SerializeFloat32(std::vector<uint8_t>& buff, float val)
+    {
+        constexpr auto tsz = sizeof(val);
+        
+        uint32_t* ptr = reinterpret_cast<uint32_t*>(&val);
+        for(int i = 0; i < tsz; i++)
+        {
+            uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
+            _buffer.push_back(byt);
+        }            
+    }
+
+    void Serializer::Internal_FillContractElemFloat32(std::vector<uint8_t>& buff, float val, int contract_elemidx, ContractElemType type)
+    {
+        CheckContractValidType(contract_elemidx, type);
+        Internal_SerializeFloat32(buff, val);
+    }
+
+    void Serializer::Internal_SerializeFloat64(std::vector<uint8_t>& buff, double val)
+    {
+        constexpr auto tsz = sizeof(val);
+        
+        uint64_t* ptr = reinterpret_cast<uint64_t*>(&val);
+        for(int i = 0; i < tsz; i++)
+        {
+            uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
+            _buffer.push_back(byt);
+        }            
+    }
+
+    void Serializer::Internal_FillContractElemFloat64(std::vector<uint8_t>& buff, double val, int contract_elemidx, ContractElemType type)
+    {
+        CheckContractValidType(contract_elemidx, type);
+        Internal_SerializeFloat64(buff, val);
     }
 
     void Serializer::CheckContractValidFixedSize(int elemidx, int cont_len)
@@ -78,16 +123,7 @@ namespace rvi::serialization
         {
             Throw_FixedSizeItemLengthOverflow(desc, cont_len);
         }
-    }    
-
-    void Serializer::CheckContractValidVarSize(int elemidx, int cont_len)
-    {
-        const ContractElemDesc& desc = _contract.GetElements().at(elemidx);
-        if(cont_len > std::numeric_limits<uint16_t>::max())
-        {
-            Throw_VarSizeItemLengthOverflow(desc, cont_len);
-        }
-    }
+    }  
 
     void Serializer::CheckMaxContainerLength(size_t cont_len)
     {
@@ -132,7 +168,7 @@ namespace rvi::serialization
         throw std::logic_error(ss.str());
     }
 
-    void Serializer::Throw_VarSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz)
+    void Serializer::Throw_VarSizeItemLengthOverflow(int cont_sz)
     {
         std::stringstream ss;
         ss << "Invalid container length for var size descriptor. Expected (maximum) size: "

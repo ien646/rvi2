@@ -30,11 +30,7 @@ namespace rvi::serialization
 
         // -- PACKED BOOL ARRAYS --
         BOOL_ARRAY_VARLEN  = 0x30,
-        BOOL_ARRAY_FIXLEN_8 = 0x31,
-        BOOL_ARRAY_FIXLEN_16 = 0x32,
-        BOOL_ARRAY_FIXLEN_32 = 0x33,
-        BOOL_ARRAY_FIXLEN_64 = 0x34,
-        BOOL_ARRAY_FIXLEN_ARBITRARY = 0x35,
+        BOOL_ARRAY_FIXLEN  = 0x31,
 
         // -- FLOATING POINT --
         SCALAR_FLOAT32 = 0x40,
