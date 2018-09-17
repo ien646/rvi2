@@ -32,19 +32,20 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	
 	rvi_log(${RVI_LIB_NAME} "DETECTED C++ COMPILER: [${CMAKE_CXX_COMPILER_ID}]")
 	
-	rvi_set_stdconf_mode(${RVI_LIB_NAME})
+	rvi_set_stdconf_mode(${RVI_LIB_NAME})	
 	
-	include_directories(include)
+	file(GLOB SOURCES src/*.cpp src/*.c src/*.hpp src/*.h)
+	file(GLOB HEADERS include/*)
 	
-	file(GLOB SOURCES src/*.cpp src/*.c include/*.hpp include/*.h)
 	add_library(${RVI_LIB_NAME} STATIC ${SOURCES})	
 	
 	set_property(TARGET ${RVI_LIB_NAME} PROPERTY CXX_STANDARD 17)
 	set_property(TARGET ${RVI_LIB_NAME} PROPERTY LINKER_LANGUAGE CXX)
-	
+	target_include_directories(${RVI_LIB_NAME} PUBLIC include)
 	cotire(${RVI_LIB_NAME})
 	
 	rvi_footer(${RVI_LIB_NAME})
+	file(COPY ${HEADERS} DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/include)
 endfunction()
 
 function("rvi_check_cmake_ver")
