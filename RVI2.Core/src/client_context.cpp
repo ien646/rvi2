@@ -17,16 +17,16 @@ namespace rvi
 
     void ClientContext::DrawLine(Vector2 from, Vector2 to)
     {
-        _selectedFrame.AddLine
+        _selectedFrame.get().AddLine
         (
-            Vertex(from, _selectedFrame.Color()),
-            Vertex(to, _selectedFrame.Color())
+            Vertex(from, _selectedFrame.get().Color()),
+            Vertex(to, _selectedFrame.get().Color())
         );
     }
 
     void ClientContext::DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor)
     {
-        _selectedFrame.AddLine
+        _selectedFrame.get().AddLine
         (
             Vertex(from, fromColor),
             Vertex(to, toColor)
@@ -35,31 +35,31 @@ namespace rvi
 
     void ClientContext::DrawLine(Vertex from, Vertex to)
     {
-        _selectedFrame.AddLine(from, to);
+        _selectedFrame.get().AddLine(from, to);
     }
 
     void ClientContext::SelectFrame(const std::string& name)
     {
-        if (!_selectedFrame.ContainsChildFrame(name))
+        if (!_selectedFrame.get().ContainsChildFrame(name))
         {
-            _selectedFrame = _selectedFrame.AddChildFrame(name);
+            _selectedFrame = _selectedFrame.get().AddChildFrame(name);
         }
         else
         {
-            _selectedFrame = _selectedFrame.GetChildFrame(name);
+            _selectedFrame = _selectedFrame.get().GetChildFrame(name);
         }
         _frameStack.push(_selectedFrame);
     }
 
     void ClientContext::SelectFrame(std::string&& name)
     {
-        if (!_selectedFrame.ContainsChildFrame(name))
+        if (!_selectedFrame.get().ContainsChildFrame(name))
         {
-            _selectedFrame = _selectedFrame.AddChildFrame(std::move(name));
+            _selectedFrame = _selectedFrame.get().AddChildFrame(std::move(name));
         }
         else
         {
-            _selectedFrame = _selectedFrame.GetChildFrame(name);
+            _selectedFrame = _selectedFrame.get().GetChildFrame(name);
         }
         _frameStack.push(_selectedFrame);
     }
@@ -72,57 +72,57 @@ namespace rvi
 
     void ClientContext::SetCurrentColor(ColorRGBA color)
     {
-        _selectedFrame.SetColor(color);
+        _selectedFrame.get().SetColor(color);
     }
 
     void ClientContext::SetCurrentTransform(const Transform2 & tform)
     {
-        _selectedFrame.SetTransform(tform);
+        _selectedFrame.get().SetTransform(tform);
     }
 
     void ClientContext::SetCurrentTransform(Transform2 && tform)
     {
-        _selectedFrame.SetTransform(std::move(tform));
+        _selectedFrame.get().SetTransform(std::move(tform));
     }
 
     const Transform2& ClientContext::GetCurrentTransform() const
     {
-        return _selectedFrame.Transform();
+        return _selectedFrame.get().Transform();
     }
 
     void ClientContext::SetCurrentOffset(Vector2 offset)
     {
-        _selectedFrame.SetOffset(offset);
+        _selectedFrame.get().SetOffset(offset);
     }
 
     void ClientContext::SetCurrentRotation(float rotation)
     {
-        _selectedFrame.SetRotation(rotation);
+        _selectedFrame.get().SetRotation(rotation);
     }
 
     void ClientContext::SetCurrentScale(Vector2 scale)
     {
-        _selectedFrame.SetScale(scale);
+        _selectedFrame.get().SetScale(scale);
     }
 
     Vector2 ClientContext::GetCurrentOffset() const
     {
-        return _selectedFrame.Transform().Position;
+        return _selectedFrame.get().Transform().Position;
     }
 
     float ClientContext::GetCurrentRotation() const
     {
-        return _selectedFrame.Transform().Rotation;
+        return _selectedFrame.get().Transform().Rotation;
     }
 
     Vector2 ClientContext::GetCurrentScale() const
     {
-        return _selectedFrame.Transform().Scale;
+        return _selectedFrame.get().Transform().Scale;
     }
 
     void ClientContext::ClearFrame()
     {
-        _selectedFrame.ClearLines();
+        _selectedFrame.get().ClearLines();
     }
 
     void ClientContext::AddDefinition(const std::string& name, const Definition& instruction)

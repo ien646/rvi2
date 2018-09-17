@@ -18,7 +18,7 @@ namespace rvi
         const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);
 
         Frame _mainFrame;
-        Frame& _selectedFrame;
+        std::reference_wrapper<Frame> _selectedFrame;
         std::stack<std::reference_wrapper<Frame>> _frameStack;
         U64 _contextId;
         std::unordered_map<std::string, Definition> _localDefinitions;
