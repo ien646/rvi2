@@ -6,9 +6,7 @@ namespace rvi
 		: Position(pos)
 		, Scale(scale)
 		, Rotation(rot)
-	{
-
-	}
+	{ }
 
 	void Transform2::ApplyTo(std::vector<Line>& vecs) const
 	{
@@ -26,5 +24,4 @@ namespace rvi
 		res.Scale *= other.Scale;
 		return res;
 	}
-
 }

@@ -14,10 +14,8 @@ namespace rvi
 		Vertex Start;
 		Vertex End;
 		
-		constexpr Line() noexcept { }
-		
-		Line(const Vertex& start, const Vertex& end);
-		
+		constexpr Line() noexcept { }		
+		Line(const Vertex& start, const Vertex& end);		
 		Line(Vertex&& start, Vertex&& end);
 
 		void ApplyTransform(const Transform2& tform);

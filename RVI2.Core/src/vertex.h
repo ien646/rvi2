@@ -13,8 +13,6 @@ namespace rvi
 		Vector2 Position;
 		Color VertexColor;
 		
-		// ------------ Constructors ------------
-		
 		constexpr Vertex() noexcept { }
 		
 		Vertex(float x, float y);

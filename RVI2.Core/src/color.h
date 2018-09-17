@@ -14,8 +14,7 @@ namespace rvi
 		U8 B = 0;
 		U8 A = 0;
 		
-		constexpr Color() noexcept { };
-		
+		constexpr Color() noexcept { };		
 		Color(U8 r, U8 g, U8 b, U8 a) noexcept;
 	};
 }

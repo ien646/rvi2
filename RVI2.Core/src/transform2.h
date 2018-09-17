@@ -7,13 +7,6 @@
 
 #include <vector>
 
-// -- SSE - NEON -----------------
- #ifdef X86
- #include <pmmintrin.h>
- #elif ARM
- #include <arm_neon.h>
- #endif
-
 namespace rvi
 {
 	class Transform2

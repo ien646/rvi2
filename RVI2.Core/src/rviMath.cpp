@@ -15,7 +15,6 @@ namespace rvi
 	Math::Matrix2x2 Math::Get2DRotationMatrix(float angle)
 	{
 		float angleRadians = Deg2Rad(angle);
-
 		return Matrix2x2
 		{
 			std::cos(angleRadians), -std::sin(angleRadians),
