@@ -52,4 +52,4 @@ namespace rvi::serialization
     };
 }
 
-#include "contract_elem_desc.ipp"
+#include "contract_elem_desc.inl.hpp"

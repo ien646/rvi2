@@ -95,4 +95,4 @@ namespace rvi::serialization
     };
 }
 
-#include "serializer.ipp"
+#include "serializer.inl.hpp"
