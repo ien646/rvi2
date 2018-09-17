@@ -15,7 +15,10 @@ namespace rvi
 
         constexpr Vector2() noexcept { }
 
-        constexpr Vector2(float x, float y) noexcept;
+        constexpr Vector2(float x, float y) noexcept 
+            : X(x)
+            , Y(y)
+        {  }
 
         float Magnitude() const noexcept;
 

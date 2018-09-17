@@ -4,12 +4,6 @@
 
 namespace rvi
 {
-    constexpr Vector2::Vector2(float x, float y) noexcept
-    {
-        X = x;
-        Y = y;
-    }
-
     float Vector2::Magnitude() const noexcept
     {
         return std::sqrtf(powf(X, 2) + powf(Y, 2));
