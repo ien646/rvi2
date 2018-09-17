@@ -34,6 +34,7 @@
     <ClInclude Include="src\frame.h" />
     <ClInclude Include="src\instruction_generator.h" />
     <ClInclude Include="src\line.h" />
+    <ClInclude Include="src\remote_cmd_headers.h" />
     <ClInclude Include="src\rvi_math.h" />
     <ClInclude Include="src\rvi_base.h" />
     <ClInclude Include="src\transform2.h" />
@@ -47,6 +48,8 @@
     <ClCompile Include="src\frame.cpp" />
     <ClCompile Include="src\instruction_generator.cpp" />
     <ClCompile Include="src\line.cpp" />
+    <ClCompile Include="src\remote_cmd_base.cpp" />
+    <ClCompile Include="src\remote_cmd_base.h" />
     <ClCompile Include="src\rvi_base.cpp" />
     <ClCompile Include="src\rvi_math.cpp" />
     <ClCompile Include="src\transform2.cpp" />

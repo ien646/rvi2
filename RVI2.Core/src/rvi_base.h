@@ -58,7 +58,7 @@ namespace rvi
         std::uniform_int_distribution<I16> _distributionI16;
 
         std::mt19937_64 _mTwisterEngine;
-
+		
     public:
 		#if RVI_COMPILER_MSVC
 			#pragma warning(suppress: 26439)
@@ -74,6 +74,8 @@ namespace rvi
         I64 GetSigned64();
         I32 GetSigned32();
         I16 GetSigned16();
+
+		static Random DefaultInstance;
     };
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

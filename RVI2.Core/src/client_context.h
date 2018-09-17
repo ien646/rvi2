@@ -76,6 +76,8 @@ namespace rvi
         void AddDefinition(const std::string& name, Definition&& instruction);
         void AddDefinition(std::string&& name, Definition&& instruction);
 
+		void DeleteDefinition(const std::string& name);
+
 		const std::string& GetCurrentFramePath();
 		const std::pair<Transform2, Frame&> ClientContext::FramePathToFrameWithTransform(const std::string& fPath);
 

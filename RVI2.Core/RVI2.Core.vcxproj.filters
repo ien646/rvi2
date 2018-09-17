@@ -51,6 +51,9 @@
     <ClInclude Include="src\instruction_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\remote_cmd_headers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\frame.cpp">
@@ -84,6 +87,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\instruction_generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\remote_cmd_base.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\remote_cmd_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

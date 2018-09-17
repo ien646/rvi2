@@ -173,6 +173,11 @@ namespace rvi
         DISCARD _localDefinitions.emplace(std::move(name), std::move(instruction));
     }
 
+	void ClientContext::DeleteDefinition(const std::string& name)
+	{
+		_localDefinitions.erase(name);
+	}
+
 	const std::string& ClientContext::GetCurrentFramePath()
 	{
 		if (_cachedFramePathNeedsRebuild)
