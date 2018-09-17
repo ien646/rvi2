@@ -41,9 +41,11 @@ namespace rvi
     {
         const float angleSin = std::sin(angle);
         const float angleCos = std::cos(angle);
-
-        const float rx = (X * +angleCos) + (Y * -angleSin);   // [rx] = [cos(a) , -sin(a)][x]
-        const float ry = (X * +angleSin) + (Y * +angleCos);   // [ry] = [sin(a) ,  cos(a)][y]
+	
+        // [rx] = [cos(a) , -sin(a)][x]
+        const float rx = (X * +angleCos) + (Y * -angleSin);
+	// [ry] = [sin(a) ,  cos(a)][y]
+        const float ry = (X * +angleSin) + (Y * +angleCos);   
 
         return Vector2(rx, ry);
     }
@@ -52,9 +54,11 @@ namespace rvi
     {
         const float angleSin = std::sin(angle);
         const float angleCos = std::cos(angle);
-
-        X = (X * +angleCos) + (Y * -angleSin);   // [rx] = [cos(a) , -sin(a)][x]
-        Y = (X * +angleSin) + (Y * +angleCos);   // [ry] = [sin(a) ,  cos(a)][y]
+	
+	// [rx] = [cos(a) , -sin(a)][x]
+        X = (X * +angleCos) + (Y * -angleSin);
+	// [ry] = [sin(a) ,  cos(a)][y]
+        Y = (X * +angleSin) + (Y * +angleCos);   
     }
 
     Vector2 Vector2::Reverse() const noexcept
