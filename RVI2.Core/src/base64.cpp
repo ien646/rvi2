@@ -1,6 +1,6 @@
 #include "base64.h"
 
-void rvi::Base64::Encode(std::istream & in, std::ostringstream & out)
+void rvi::Base64::Encode(std::istream& in, std::ostringstream& out)
 {
     char buff1[3];
     char buff2[4];
