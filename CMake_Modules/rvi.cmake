@@ -37,9 +37,10 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	include_directories(include)
 	
 	file(GLOB SOURCES src/*.cpp src/*.c include/*.hpp include/*.h)
-	add_library(${RVI_LIB_NAME} STATIC ${SOURCES})
+	add_library(${RVI_LIB_NAME} STATIC ${SOURCES})	
 	
 	set_property(TARGET ${RVI_LIB_NAME} PROPERTY CXX_STANDARD 17)
+	set_property(TARGET ${RVI_LIB_NAME} PROPERTY LINKER_LANGUAGE CXX)
 	
 	cotire(${RVI_LIB_NAME})
 	
