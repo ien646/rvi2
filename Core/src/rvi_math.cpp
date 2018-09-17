@@ -1,4 +1,4 @@
-#include "rvi_math.h"
+#include "rvi_math.hpp"
 
 namespace rvi
 {

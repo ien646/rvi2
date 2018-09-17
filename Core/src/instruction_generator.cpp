@@ -1,4 +1,4 @@
-#include "instruction_generator.h"
+#include "instruction_generator.hpp"
 
 #define CAPTURE_RVALUEREF(x) &x
 #define NOCAPTURE

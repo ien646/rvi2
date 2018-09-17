@@ -1,4 +1,4 @@
-#include "vertex.h"
+#include "vertex.hpp"
 
 namespace rvi
 {

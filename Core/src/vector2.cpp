@@ -1,5 +1,5 @@
-#include "vector2.h"
-#include "transform2.h"
+#include "vector2.hpp"
+#include "transform2.hpp"
 #include <cmath>
 
 namespace rvi
