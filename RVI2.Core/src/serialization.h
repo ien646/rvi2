@@ -12,16 +12,15 @@ namespace rvi
     FWD_DECL_CLASS(Vector2);
     FWD_DECL_CLASS(ColorRGBA);
     FWD_DECL_CLASS(Vertex);
-
-    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    // Serializer class
-    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    FWD_DECL_CLASS(Line);
+    
     class Serializer
     {
-        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        // Serialization
-        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    // Serialization
+    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     public:
+
         template<typename T, TEMPLATE_ENABLE_IF_IS_INTEGER(T)>
         static size_t SerializeInteger(std::vector<U8>& data_container, const T& val)
         {
@@ -40,6 +39,8 @@ namespace rvi
 
         static size_t SerializeVertex(std::vector<U8>& data_container, const Vertex& val);
 
+        static size_t SerializeLine(std::vector<U8>& data_container, const Line& val);
+
         static size_t SerializeString(std::vector<U8>& data_container, const std::string& val);
 
         static size_t SerializeU16String(std::vector<U8>& data_container, const std::u16string& val);
@@ -47,6 +48,7 @@ namespace rvi
         static size_t SerializeU32String(std::vector<U8>& data_container, const std::u32string& val);
 
     private:
+
         template<typename T, TEMPLATE_ENABLE_IF_IS_INTEGER(T)>
         static size_t SerializeInteger_Internal(std::vector<U8>& data_container, const T& int_obj)
         {
@@ -125,10 +127,11 @@ namespace rvi
             return bufflen;
         }
 
-        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        // Deserialization
-        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    // Deserialization
+    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     public:
+
         template<typename T, TEMPLATE_ENABLE_IF_IS_INTEGER(T)>
         static T DeserializeInteger(const std::vector<U8>& data_container, size_t& offset_ref)
         {
@@ -146,6 +149,8 @@ namespace rvi
         static ColorRGBA DeserializeColorRGBA(const std::vector<U8>& data_container, size_t& offset_ref);
 
         static Vertex DeserializeVertex(const std::vector<U8>& data_container, size_t& offset_ref);
+
+        static Line DeserializeLine(const std::vector<U8>& data_container, size_t& offset_ref);
 
         static std::string DeserializeString(const std::vector<U8>& data_container, size_t& offset_ref);
 

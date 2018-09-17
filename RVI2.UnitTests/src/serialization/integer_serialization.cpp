@@ -5,13 +5,13 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace UnitTests
+namespace Serialization_UnitTests
 {
     using namespace rvi;
     TEST_CLASS(IntegerSerializationTests)
     {
     public:
-        TEST_METHOD(Test_SerializeInteger)
+        TEST_METHOD(SerializeInteger)
         {
             U8 u8 = 0x43;
             U16 u16 = 0x3A71;
@@ -48,7 +48,7 @@ namespace UnitTests
             Assert::AreEqual(sz, (size_t)sizeof(u64));
         }
 
-        TEST_METHOD(Test_DeserializeInteger)
+        TEST_METHOD(DeserializeInteger)
         {
             std::vector<U8> dataContainer =
             {

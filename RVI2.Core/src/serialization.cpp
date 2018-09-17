@@ -3,6 +3,7 @@
 #include "vector2.h"
 #include "color_rgba.h"
 #include "vertex.h"
+#include "line.h"
 
 namespace rvi
 {
@@ -36,6 +37,16 @@ namespace rvi
         Serializer::SerializeColorRGBA(data_container, val.VertexColor);
 
         return (size_t)sizeof(Vertex);
+    }
+
+    size_t Serializer::SerializeLine(std::vector<U8>& data_container, const Line& val)
+    {
+        data_container.reserve(sizeof(Line));
+
+        Serializer::SerializeVertex(data_container, val.Start);
+        Serializer::SerializeVertex(data_container, val.End);
+
+        return sizeof(Line);
     }
 
     size_t Serializer::SerializeString(std::vector<U8>& data_container, const std::string& val)
@@ -84,6 +95,16 @@ namespace rvi
 
         result.Position = DeserializeVector2(data_container, offset);
         result.VertexColor = DeserializeColorRGBA(data_container, offset);
+
+        return result;
+    }
+
+    Line Serializer::DeserializeLine(const std::vector<U8>& data_container, size_t& offset_ref)
+    {
+        Line result;
+
+        result.Start = Serializer::DeserializeVertex(data_container, offset_ref);
+        result.End = Serializer::DeserializeVertex(data_container, offset_ref);
 
         return result;
     }

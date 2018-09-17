@@ -24,4 +24,14 @@ namespace rvi
     {
         Position.ApplyTransform(tform);
     }
+
+    bool Vertex::operator==(Vertex other) const noexcept
+    {
+        return (Position == other.Position) && (VertexColor == other.VertexColor);
+    }
+
+    bool Vertex::operator!=(Vertex other) const noexcept
+    {
+        return (Position != other.Position) || (VertexColor != other.VertexColor);
+    }
 }

@@ -32,6 +32,9 @@ namespace rvi
             return *((U32*)this);
         }
 
+        bool operator==(ColorRGBA other) const noexcept;
+        bool operator!=(ColorRGBA other) const noexcept;
+
         RVI_CRGBA_STANDARD_COLOR(TRANSPARENT,   00, 00, 00, FF);
         RVI_CRGBA_STANDARD_COLOR(WHITE,         FF, FF, FF, 00);
         RVI_CRGBA_STANDARD_COLOR(BLACK,         00, 00, 00, 00);

@@ -17,4 +17,14 @@ namespace rvi
         Start.ApplyTransform(tform);
         End.ApplyTransform(tform);
     }
+
+    bool Line::operator==(Line other) const noexcept
+    {
+        return (Start == other.Start) && (End == other.End);
+    }
+
+    bool Line::operator!=(Line other) const noexcept
+    {
+        return (Start != other.Start) || (End != other.End);
+    }
 }

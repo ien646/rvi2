@@ -47,6 +47,7 @@
   <ItemGroup>
     <ClCompile Include="src\base64.cpp" />
     <ClCompile Include="src\client_context.cpp" />
+    <ClCompile Include="src\color_rgba.cpp" />
     <ClCompile Include="src\commands.cpp" />
     <ClCompile Include="src\definition.cpp" />
     <ClCompile Include="src\frame.cpp" />

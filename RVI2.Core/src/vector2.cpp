@@ -170,4 +170,14 @@ namespace rvi
         X /= other.X;
         Y /= other.Y;
     }
+
+    bool Vector2::operator==(Vector2 other) const noexcept
+    {
+        return (X == other.X) && (Y == other.Y);
+    }
+
+    bool Vector2::operator!=(Vector2 other) const noexcept
+    {
+        return (X != other.X) || (Y != other.Y);
+    }
 }

@@ -19,5 +19,8 @@ namespace rvi
         Line(Vertex&& start, Vertex&& end) noexcept;
 
         void ApplyTransform(const Transform2& tform) noexcept;
+
+        bool operator==(Line other) const noexcept;
+        bool operator!=(Line other) const noexcept;
     };
 }

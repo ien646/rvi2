@@ -55,5 +55,8 @@ namespace rvi
         void operator*=(Vector2 other) noexcept;
         void operator/=(float other) noexcept;
         void operator/=(Vector2 other) noexcept;
+
+        bool operator==(Vector2 other) const noexcept;
+        bool operator!=(Vector2 other) const noexcept;
     };
 }

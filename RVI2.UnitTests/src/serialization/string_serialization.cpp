@@ -7,13 +7,13 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace UnitTests
+namespace Serialization_UnitTests
 {
     using namespace rvi;
     TEST_CLASS(StringSerializationTests)
     {
     public:
-        TEST_METHOD(Test_SerializeString)
+        TEST_METHOD(SerializeString)
         {
             std::string s = "This is a test string!";
             std::vector<U8> dataContainer;
@@ -25,7 +25,7 @@ namespace UnitTests
             }
         }
 
-        TEST_METHOD(Test_SerializeStringRoundtrip)
+        TEST_METHOD(SerializeStringRoundtrip)
         {
             std::string s = "This is a test string!";
             std::vector<U8> dataContainer;
@@ -35,7 +35,7 @@ namespace UnitTests
             Assert::AreEqual(s, deserialized);
         }
 
-        TEST_METHOD(Test_SerializeU16String)
+        TEST_METHOD(SerializeU16String)
         {
             std::u16string s(u"This is a test string!");
             std::vector<U8> dataContainer;
@@ -48,7 +48,7 @@ namespace UnitTests
             }
         }
 
-        TEST_METHOD(Test_SerializeU16StringRoundtrip)
+        TEST_METHOD(SerializeU16StringRoundtrip)
         {
             std::u16string s(u"This is a test string!");
             std::vector<U8> dataContainer;
@@ -58,7 +58,7 @@ namespace UnitTests
             Assert::IsTrue(s == deserialized);
         }
 
-        TEST_METHOD(Test_SerializeU32String)
+        TEST_METHOD(SerializeU32String)
         {
             std::u32string s(U"This is a test string!");
             std::vector<U8> dataContainer;
@@ -75,7 +75,7 @@ namespace UnitTests
             }
         }
 
-        TEST_METHOD(Test_SerializeU32StringRoundtrip)
+        TEST_METHOD(SerializeU32StringRoundtrip)
         {
             std::u32string s(U"This is a test string!");
             std::vector<U8> dataContainer;
