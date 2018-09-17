@@ -64,4 +64,52 @@ namespace rvi::serialization
 		}
 		return result;
 	}
+
+	ContractElemDesc ContractElemDesc::Internal_CreateString(bool fixed_len, int32_t cont_len)
+	{
+		ContractElemDesc result;
+		if(fixed_len)
+		{
+			result.ContainerLen = cont_len;
+			result.Type = ContractElemType::STRING_FIXLEN;
+		}
+		else
+		{
+			result.ContainerLen = UNDEFINED_SZ;
+			result.Type = ContractElemType::STRING_VARLEN;
+		}
+		return result;
+	}
+
+	ContractElemDesc ContractElemDesc::Internal_CreateStringUTF16(bool fixed_len, int32_t cont_len)
+	{
+		ContractElemDesc result;
+		if(fixed_len)
+		{
+			result.ContainerLen = cont_len;
+			result.Type = ContractElemType::STRING_UTF16_FIXLEN;
+		}
+		else
+		{
+			result.ContainerLen = UNDEFINED_SZ;
+			result.Type = ContractElemType::STRING_UTF16_VARLEN;
+		}
+		return result;
+	}
+
+	ContractElemDesc ContractElemDesc::Internal_CreateStringUTF32(bool fixed_len, int32_t cont_len)
+	{
+		ContractElemDesc result;
+		if(fixed_len)
+		{
+			result.ContainerLen = cont_len;
+			result.Type = ContractElemType::STRING_UTF32_FIXLEN;
+		}
+		else
+		{
+			result.ContainerLen = UNDEFINED_SZ;
+			result.Type = ContractElemType::STRING_UTF32_VARLEN;
+		}
+		return result;
+	}
 }

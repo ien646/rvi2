@@ -13,7 +13,7 @@ set(RVI_PROJ_NAME "rvi2")
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 
-#include(cotire)
+include(cotire)
 include(rvi)
 
 rvi_log(${RVI_PROJ_NAME} "MODULE PATH = ${CMAKE_MODULE_PATH}")

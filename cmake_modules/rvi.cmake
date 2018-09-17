@@ -42,7 +42,7 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	set_property(TARGET ${RVI_LIB_NAME} PROPERTY CXX_STANDARD 17)
 	set_property(TARGET ${RVI_LIB_NAME} PROPERTY LINKER_LANGUAGE CXX)
 	
-	#cotire(${RVI_LIB_NAME})
+	cotire(${RVI_LIB_NAME})
 	
 	rvi_footer(${RVI_LIB_NAME})
 endfunction()

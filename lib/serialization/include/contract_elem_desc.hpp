@@ -1,5 +1,6 @@
 #include <cinttypes>
 #include <type_traits>
+#include <string>
 
 #include "contract_elem_type.hpp"
 
@@ -58,6 +59,28 @@ namespace rvi::serialization
         static ContractElemDesc CreateStringUTF8(bool fixed_len, int32_t cont_len);
 
         static ContractElemDesc CreatePackedBoolArray(bool fixed_len, int32_t cont_len);
+
+        template<typename T, typename std::enable_if_t<
+            std::is_same_v<std::basic_string<typename T::value_type>, T>>>
+        static ContractElemDesc CreateString(bool fixed_len, int32_t cont_len)
+        {
+            if constexpr(std::is_same<typename T::value_type, std::string::value_type>::value)
+            {
+                return Internal_CreateString(fixed_len, cont_len);
+            }
+            else if constexpr(std::is_same<typename T::value_type, std::u16string::value_type>::value)
+            {
+                return Internal_CreateStringUTF16(fixed_len, cont_len);
+            }
+            else if constexpr(std::is_same<typename T::value_type, std::u32string::value_type>::value)
+            {
+                return Internal_CreateStringUTF32(fixed_len, cont_len);
+            }
+            else
+            {
+                return ContractElemDesc(ContractElemType::V_UNINITIALIZED);
+            }
+        }
 
     private:
         template<typename T>
@@ -121,5 +144,9 @@ namespace rvi::serialization
 
             return result;
         }
+
+        static ContractElemDesc Internal_CreateString(bool fixed_len, int32_t cont_len);
+        static ContractElemDesc Internal_CreateStringUTF16(bool fixed_len, int32_t cont_len);
+        static ContractElemDesc Internal_CreateStringUTF32(bool fixed_len, int32_t cont_len);
     };
 }
