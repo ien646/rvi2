@@ -144,4 +144,9 @@ namespace rvi
     {
         DISCARD _localDefinitions.emplace(std::move(name), std::move(instruction));
     }
+
+    void ClientContext::GetSnapshot(std::vector<Line>& result)
+    {
+        _mainFrame.GetModulatedLines(result, DEFAULT_TRANSFORM);
+    }
 }

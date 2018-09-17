@@ -15,6 +15,7 @@ namespace rvi
     {
     private:
         const std::string MAIN_FRAMENAME = "__MAINFRAME__";
+        const Transform2 DEFAULT_TRANSFORM = Transform2();
 
         Frame _mainFrame;
         Frame& _selectedFrame;
@@ -57,5 +58,7 @@ namespace rvi
         void AddDefinition(std::string&& name, const Definition& instruction);
         void AddDefinition(const std::string& name, Definition&& instruction);
         void AddDefinition(std::string&& name, Definition&& instruction);
+
+        void GetSnapshot(std::vector<Line>& result);
     };
 }
