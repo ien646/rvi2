@@ -16,13 +16,13 @@
 #define DISCARD auto UNIQUENAME(____trash_) =
 
 // Compiler conditional macros
-#if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
+#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) /* MSVC++ */
 	#define RVI_COMPILER_MSVC 1
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) || defined(__GNUG__) && !defined(__clang__) /* GNU GCC/G++ */
 	#define RVI_COMPILER_GNU 1
-#elif defined(__clang__)
+#elif defined(__clang__) /* CLANG */
 	#define RVI_COMPILER_CLANG 1
-#elif defined(__INTEL_COMPILER) || defined(__ICC)
+#elif defined(__INTEL_COMPILER) || defined(__ICC) /* INTEL C/C++ COMPILER */
 	#define RVI_COMPILER_INTEL 1
 #endif
 
