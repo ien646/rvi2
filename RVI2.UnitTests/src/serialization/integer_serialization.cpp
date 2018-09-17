@@ -25,26 +25,26 @@ namespace Serialization_UnitTests
             Assert::AreEqual(sz, (size_t)sizeof(u8));
 
             sz = rvi::Serializer::SerializeInteger<U16>(dataContainer, u16);
-            Assert::AreEqual(dataContainer[2], (U8)(u16 >> 0));
-            Assert::AreEqual(dataContainer[1], (U8)(u16 >> 8));
+            Assert::AreEqual(dataContainer[2], static_cast<U8>((u16 >> 0)));
+            Assert::AreEqual(dataContainer[1], static_cast<U8>((u16 >> 8)));
             Assert::AreEqual(sz, (size_t)sizeof(u16));
 
             sz = rvi::Serializer::SerializeInteger<U32>(dataContainer, u32);
-            Assert::AreEqual(dataContainer[6], (U8)(u32 >> 0));
-            Assert::AreEqual(dataContainer[5], (U8)(u32 >> 8));
-            Assert::AreEqual(dataContainer[4], (U8)(u32 >> 16));
-            Assert::AreEqual(dataContainer[3], (U8)(u32 >> 24));
+            Assert::AreEqual(dataContainer[6], static_cast<U8>((u32 >> 0)));
+            Assert::AreEqual(dataContainer[5], static_cast<U8>((u32 >> 8)));
+            Assert::AreEqual(dataContainer[4], static_cast<U8>((u32 >> 16)));
+            Assert::AreEqual(dataContainer[3], static_cast<U8>((u32 >> 24)));
             Assert::AreEqual(sz, (size_t)sizeof(u32));
 
             sz = rvi::Serializer::SerializeInteger<U64>(dataContainer, u64);
-            Assert::AreEqual(dataContainer[14], (U8)(u64 >> 0));
-            Assert::AreEqual(dataContainer[13], (U8)(u64 >> 8));
-            Assert::AreEqual(dataContainer[12], (U8)(u64 >> 16));
-            Assert::AreEqual(dataContainer[11], (U8)(u64 >> 24));
-            Assert::AreEqual(dataContainer[10], (U8)(u64 >> 32));
-            Assert::AreEqual(dataContainer[9], (U8)(u64 >> 40));
-            Assert::AreEqual(dataContainer[8], (U8)(u64 >> 48));
-            Assert::AreEqual(dataContainer[7], (U8)(u64 >> 56));
+            Assert::AreEqual(dataContainer[14], static_cast<U8>((u64 >> 0)));
+            Assert::AreEqual(dataContainer[13], static_cast<U8>((u64 >> 8)));
+            Assert::AreEqual(dataContainer[12], static_cast<U8>((u64 >> 16)));
+            Assert::AreEqual(dataContainer[11], static_cast<U8>((u64 >> 24)));
+            Assert::AreEqual(dataContainer[10], static_cast<U8>((u64 >> 32)));
+            Assert::AreEqual(dataContainer[9], static_cast<U8>((u64 >> 40)));
+            Assert::AreEqual(dataContainer[8], static_cast<U8>((u64 >> 48)));
+            Assert::AreEqual(dataContainer[7], static_cast<U8>((u64 >> 56)));
             Assert::AreEqual(sz, (size_t)sizeof(u64));
         }
 

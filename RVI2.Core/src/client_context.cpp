@@ -15,11 +15,6 @@ namespace rvi
         _frameStack.push_back(_mainFrame);
     }
 
-    ClientContext ClientContext::CreateNew()
-    {
-        return ClientContext();
-    }
-
     void ClientContext::DrawLine(Vector2 from, Vector2 to)
     {
         _selectedFrame.get().AddLine
@@ -170,6 +165,21 @@ namespace rvi
     void ClientContext::DeleteDefinition(const std::string& name)
     {
         _localDefinitions.erase(name);
+    }
+
+    bool ClientContext::ExecDefinition(const std::string& defName)
+    {
+        if (_localDefinitions.count(defName) == 0)
+        {
+            return false;
+        }
+        Definition def = _localDefinitions.at(defName);
+        def.ExecuteOnContext(*this);
+    }
+
+    bool ClientContext::ExistsDefinition(const std::string& defName)
+    {
+        return _localDefinitions.count(defName) > 0;
     }
 
     const std::string& ClientContext::GetCurrentFramePath()

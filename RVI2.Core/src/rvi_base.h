@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include <type_traits>
+#include <functional>
 
 namespace rvi
 {
@@ -31,7 +32,7 @@ namespace rvi
     #elif defined(__INTEL_COMPILER) || defined(__ICC) /* INTEL C/C++ COMPILER */
     #define RVI_COMPILER_INTEL 1
 
-    #endif
+    #endif    
 
     // Template helper macros
     #define TEMPLATE_ENABLE_IF_IS_POD(T)		typename = std::enable_if_t<std::is_pod_v<T>>
@@ -96,4 +97,7 @@ namespace rvi
 
         static Random DefaultInstance;
     };
+
+    FWD_DECL_CLASS(ClientContext);
+    typedef std::function<void(ClientContext&)> DefinitionInstruction;
 }

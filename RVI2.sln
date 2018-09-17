@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RVI2.Core", "RVI2.Core\RVI2
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RVI2.UnitTests", "RVI2.UnitTests\UnitTests.vcxproj", "{6152EE0B-50FE-48D4-A40B-629FB0E76BF8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RVI2.Server", "RVI2.Server\RVI2.Server.vcxproj", "{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -39,6 +41,16 @@ Global
 		{6152EE0B-50FE-48D4-A40B-629FB0E76BF8}.Release|x64.Build.0 = Release|x64
 		{6152EE0B-50FE-48D4-A40B-629FB0E76BF8}.Release|x86.ActiveCfg = Release|Win32
 		{6152EE0B-50FE-48D4-A40B-629FB0E76BF8}.Release|x86.Build.0 = Release|Win32
+		{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}.Debug|ARM.ActiveCfg = Debug|Win32
+		{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}.Debug|x64.ActiveCfg = Debug|x64
+		{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}.Debug|x64.Build.0 = Debug|x64
+		{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}.Debug|x86.ActiveCfg = Debug|Win32
+		{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}.Debug|x86.Build.0 = Debug|Win32
+		{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}.Release|ARM.ActiveCfg = Release|Win32
+		{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}.Release|x64.ActiveCfg = Release|x64
+		{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}.Release|x64.Build.0 = Release|x64
+		{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}.Release|x86.ActiveCfg = Release|Win32
+		{8BC2636F-BF69-46AA-ABBE-53B9B5F08AB0}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,10 +5,11 @@
 #include <vector>
 #include <queue>
 
+#include "rvi_base.h"
+
 namespace rvi
 {
-    class ClientContext;
-    typedef std::function<void(ClientContext&)> DefinitionInstruction;
+    class ClientContext;   
 
     class Definition
     {

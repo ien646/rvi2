@@ -33,10 +33,9 @@ namespace rvi
 
         bool _cachedFramePathNeedsRebuild = true;
         std::string _cachedFramePath = MAIN_FRAMENAME;
-
-        ClientContext();
+                
     public:
-        static ClientContext CreateNew();
+        ClientContext();
 
         void DrawLine(Vector2 from, Vector2 to);
         void DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor);
@@ -73,8 +72,12 @@ namespace rvi
 
         void DeleteDefinition(const std::string& name);
 
+        bool ExecDefinition(const std::string& defName);
+
+        bool ExistsDefinition(const std::string& defName);
+
         const std::string& GetCurrentFramePath();
-        const std::pair<Transform2, Frame&> ClientContext::FramePathToFrameWithTransform(const std::string& fPath);
+        const std::pair<Transform2, Frame&> FramePathToFrameWithTransform(const std::string& fPath);
 
         void MarkFrameAsModified();
 

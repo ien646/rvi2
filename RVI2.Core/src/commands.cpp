@@ -5,7 +5,7 @@ namespace rvi
 {
     Command_Nop::Command_Nop() noexcept
     {
-        Header = (U8)RVI_COMMAND_HEADER::NOP;
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::NOP);
     }
 
     void Command_Nop::BuildData()

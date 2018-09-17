@@ -106,7 +106,7 @@ namespace rvi
         template<typename T, TEMPLATE_ENABLE_IF_IS_STRING(T)>
         static size_t SerializeString_Internal(std::vector<U8>& data_container, const T& str_obj)
         {
-            const U8 char_sz = (U8)(sizeof(T::value_type));
+            const U8 char_sz = static_cast<U8>((sizeof(T::value_type)));
             const U16 bufflen = (U16)(sizeof(char_sz) + sizeof(U16) + (str_obj.size() * char_sz));
             const size_t stringlen = str_obj.size();
 
