@@ -175,6 +175,7 @@ namespace rvi
         }
         Definition def = _localDefinitions.at(defName);
         def.ExecuteOnContext(*this);
+        return true;
     }
 
     bool ClientContext::ExistsDefinition(const std::string& defName)
