@@ -8,14 +8,12 @@
 namespace rvi
 {
     class ClientContext;
+	typedef std::function<void(ClientContext&)> DefinitionInstruction;
 
     class Definition
-    {
-    public:
-        typedef std::function<void(ClientContext&)> Instruction;
-
+    { 
     private:
-        std::vector<Instruction> _instSequence;
+        std::vector<DefinitionInstruction> _instSequence;
         std::string _name;
         
     public:
@@ -23,7 +21,7 @@ namespace rvi
         Definition(const std::string& name);
         Definition(std::string&& name) noexcept;
 
-        void AddInstruction(Instruction&& inst);
+        void AddInstruction(DefinitionInstruction&& inst);
         void Clear() noexcept;
         void ExecuteOnContext(ClientContext& cCtx);
     };

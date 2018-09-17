@@ -4,7 +4,7 @@
 #define NOCAPTURE
 #define IGEN_LAMB_ARGS (ClientContext& c)
 
-#define INSTRUCTION rvi::Definition::Instruction
+typedef rvi::DefinitionInstruction INSTRUCTION;
 
 using std::string;
 
@@ -82,7 +82,7 @@ namespace rvi
         { c.AddDefinition(std::move(name),instruction); };
     }
 
-	INSTRUCTION rvi::InstructionGenerator::AddDefinition(string&& name, Definition&& instruction)
+	INSTRUCTION InstructionGenerator::AddDefinition(string&& name, Definition&& instruction)
     {
         return [CAPTURE_RVALUEREF(name), CAPTURE_RVALUEREF(instruction)]IGEN_LAMB_ARGS
         { c.AddDefinition(std::move(name), std::move(instruction)); };

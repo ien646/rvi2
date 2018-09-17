@@ -3,7 +3,7 @@
 namespace rvi
 { 
 #if RVI_COMPILER_MSVC
-/**/#pragma warning(suppress: 26439)
+	#pragma warning(suppress: 26439)
 #endif
     ClientContext::ClientContext()
         : _mainFrame(MAIN_FRAMENAME) 

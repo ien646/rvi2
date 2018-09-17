@@ -4,10 +4,10 @@
 #include <array>
 
 #if RVI_COMPILER_MSVC
-#pragma warning(disable: 26446)
-#pragma warning(disable: 26482)
-#pragma warning(disable: 26472)
-#pragma warning(disable: 26494)
+	#pragma warning(disable: 26446)
+	#pragma warning(disable: 26482)
+	#pragma warning(disable: 26472)
+	#pragma warning(disable: 26494)
 #endif
 
 void rvi::Base64::Encode(std::istream& in, std::ostringstream& out)

@@ -10,7 +10,7 @@ namespace rvi
         : _name(std::move(name))
     { }
 
-    void Definition::AddInstruction(Instruction&& inst)
+    void Definition::AddInstruction(DefinitionInstruction&& inst)
     {
         _instSequence.push_back(std::move(inst));
     }
@@ -22,7 +22,7 @@ namespace rvi
 
     void Definition::ExecuteOnContext(ClientContext& clientContext)
     {
-        for (const Instruction& inst : _instSequence)
+        for (const DefinitionInstruction& inst : _instSequence)
         {
             inst(clientContext);
         }

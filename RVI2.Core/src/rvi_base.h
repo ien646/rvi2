@@ -52,9 +52,9 @@ namespace rvi
         std::mt19937_64 _mTwisterEngine;
 
     public:
-#if RVI_COMPILER_MSVC
-/**/#pragma warning(suppress: 26439)
-#endif
+		#if RVI_COMPILER_MSVC
+			#pragma warning(suppress: 26439)
+		#endif
         Random()
             : _mTwisterEngine(_rnd_dev())
         { }
