@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.11)
+cmake_minimum_required (VERSION 3.7.0)
 
 set(CMAKE_SUPPRESS_REGENERATION true)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake_Modules")

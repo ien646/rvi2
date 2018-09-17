@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.11)
+cmake_minimum_required (VERSION 3.7.0)
 
 include_directories(include)
 file(GLOB SOURCES src/*.cpp src/*.c include/*.hpp include/*.h)
