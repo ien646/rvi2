@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <type_traits>
 
@@ -16,13 +17,25 @@ namespace rvi
     {
 	private:
         const std::string MAIN_FRAMENAME = "__MAINFRAME__";
+		const char FRAMEPATH_SEPARATOR = ':';
         const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);		
+
+		// Runtime-wise unique id
+		U64 _contextId;
 
         Frame _mainFrame;
         std::reference_wrapper<Frame> _selectedFrame;
-        std::vector<std::reference_wrapper<Frame>> _frameStack;
-        U64 _contextId;
+
+		// Current frame selection 'stack'
+        std::vector<std::reference_wrapper<Frame>> _frameStack;       
+
         std::unordered_map<std::string, Definition> _localDefinitions;
+
+		// Framepaths of altered frames since last full or partial snapshot
+		std::unordered_set<std::string> _modifiedFramePaths;
+
+		bool _cachedFramePathNeedsRebuild = true;
+		std::string _cachedFramePath = MAIN_FRAMENAME;
 
 		ClientContext();
     public:
@@ -63,6 +76,12 @@ namespace rvi
         void AddDefinition(const std::string& name, Definition&& instruction);
         void AddDefinition(std::string&& name, Definition&& instruction);
 
+		const std::string& GetCurrentFramePath();
+		const std::pair<Transform2, Frame&> ClientContext::FramePathToFrameWithTransform(const std::string& fPath);
+
+		void MarkFrameAsModified();
+
         std::vector<Line> GetFullSnapshot();
+		std::vector<Line> GetPartialSnapshot();
     };
 }

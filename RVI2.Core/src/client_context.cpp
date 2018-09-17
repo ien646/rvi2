@@ -1,5 +1,8 @@
 #include "client_context.h"
 
+#include <sstream>
+#include <iterator>
+
 namespace rvi
 {
 	#if RVI_COMPILER_MSVC
@@ -57,6 +60,7 @@ namespace rvi
             _selectedFrame = _selectedFrame.get().GetChildFrame(name);
         }
         _frameStack.push_back(_selectedFrame);
+		_cachedFramePathNeedsRebuild = true;
     }
 
     void ClientContext::SelectFrame(std::string&& name)
@@ -70,6 +74,7 @@ namespace rvi
             _selectedFrame = _selectedFrame.get().GetChildFrame(name);
         }
         _frameStack.push_back(_selectedFrame);
+		_cachedFramePathNeedsRebuild = true;
     }
 
     bool ClientContext::ReleaseFrame()
@@ -78,6 +83,7 @@ namespace rvi
         {
             return false;
         }
+		_cachedFramePathNeedsRebuild = true;
         _frameStack.pop_back();
         _selectedFrame = _frameStack.back();
         return true;
@@ -163,8 +169,68 @@ namespace rvi
         DISCARD _localDefinitions.emplace(std::move(name), std::move(instruction));
     }
 
-    std::vector<Line> ClientContext::GetFullSnapshot()
+	const std::string& ClientContext::GetCurrentFramePath()
+	{
+		if (_cachedFramePathNeedsRebuild)
+		{
+			_cachedFramePath.clear();
+			for (auto& frame : _frameStack)
+			{
+				_cachedFramePath += frame.get().Name();
+			}
+			_cachedFramePathNeedsRebuild = false;
+		}
+		return _cachedFramePath;
+	}
+
+	const std::pair<Transform2, Frame&> ClientContext::FramePathToFrameWithTransform(const std::string& fPath)
+	{
+		std::stringstream ss(fPath);
+		std::string aux;
+		Frame* currentFrame = nullptr;
+		Transform2 currentTransform;
+
+		currentFrame = &_mainFrame;
+		currentTransform = DEFAULT_TRANSFORM;
+
+		while (std::getline(ss, aux, FRAMEPATH_SEPARATOR))
+		{
+			if (aux != MAIN_FRAMENAME)
+			{
+				currentTransform = currentTransform.Merge(currentFrame->Transform());
+				currentFrame = &currentFrame->GetChildFrame(aux);				
+			}
+		}
+		return std::pair<Transform2, Frame&>(currentTransform, *currentFrame);
+	}
+
+	void ClientContext::MarkFrameAsModified()
+	{
+		const std::string& fPath = GetCurrentFramePath();
+		if (_modifiedFramePaths.count(fPath) == 0)
+		{
+			DISCARD _modifiedFramePaths.insert(fPath);
+		}
+	}
+
+	std::vector<Line> ClientContext::GetFullSnapshot()
     {
         return _mainFrame.GetModulatedLines(DEFAULT_TRANSFORM);
     }
+
+	std::vector<Line> ClientContext::GetPartialSnapshot()
+	{
+		std::vector<Line> result;
+		for (auto& fpath : _modifiedFramePaths)
+		{
+			const auto pair = FramePathToFrameWithTransform(fpath);
+			const Transform2 parentTform = pair.first;
+			const Frame& frame = pair.second;
+
+			std::vector<Line> lines = frame.GetModulatedLines(parentTform);
+			std::move(lines.begin(), lines.end(), std::back_inserter(result));
+		}
+		_modifiedFramePaths.clear();
+		return result;
+	}
 }
