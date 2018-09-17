@@ -144,7 +144,7 @@ namespace rvi
             // Check for char size mismatch
             assert(sizeof(T::value_type) == dataCharSz);
 
-            size_t resultLen = (dataBuffLen - sizeof(dataCharSz)) / dataCharSz;
+            size_t resultLen = (dataBuffLen - sizeof(dataCharSz) - sizeof(dataBuffLen)) / dataCharSz;
 
             T result;
             result.reserve(resultLen);
@@ -152,16 +152,16 @@ namespace rvi
             // If its an std::string just directly copy the data
             if (dataCharSz == 1)
             {
-                auto container_it_begin = (data_container.begin() + offset_ref);
-                auto container_it_end = container_it_begin + ((resultLen-1) * char_size);
-                DISCARD_RESULT std::copy(container_it_begin, container_it_end, std::back_inserter(result));
+				auto it_begin = (data_container.begin() + offset_ref);
+				auto it_end = it_begin + resultLen;
+				std::copy(it_begin, it_end, std::back_inserter(result));
+				offset_ref += resultLen;
             }
             else
             {
                 for (size_t i = 0; i < resultLen; i++)
                 {
                     result += Serializer::DeserializePOD_Internal<T::value_type>(data_container, offset_ref);
-                    offset_ref += char_size;
                 }
             }
             return result;

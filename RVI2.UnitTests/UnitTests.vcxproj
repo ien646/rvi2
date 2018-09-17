@@ -78,8 +78,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\ibozal\Documents\RVI2\RVI2.Core\src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\ibozal\Documents\RVI2\x64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\RVI2.Core\src;$(IncludePath)</IncludePath>
+    <LibraryPath>..\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -89,8 +89,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\ibozal\Documents\RVI2\RVI2.Core\src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\ibozal\Documents\RVI2\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\RVI2.Core\src;$(IncludePath)</IncludePath>
+    <LibraryPath>..\x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
