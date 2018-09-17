@@ -13,9 +13,15 @@ namespace rvi
         return;
     }
 
-    Command_RequestAck::Command_RequestAck(U16 reqId)
+    void Command_Nop::ConstructFromData(const std::vector<U8> data)
     {
-        Header = (U8)RVI_COMMAND_HEADER::REQUEST_ACK;
+        Header = data[0];
+        Checksum = data[1];
+    }
+
+    Command_RequestAck::Command_RequestAck(U16 reqId) noexcept
+    {
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::REQUEST_ACK);
         RequestId = reqId;
     }
 
@@ -24,9 +30,18 @@ namespace rvi
         Serializer::SerializeInteger(Data, RequestId);
     }
 
-    Command_ResponseAck::Command_ResponseAck(U16 reqId)
+    void Command_RequestAck::ConstructFromData(const std::vector<U8> data)
     {
-        Header = (U8)RVI_COMMAND_HEADER::RESPONSE_ACK;
+        size_t currentOffset = 0;
+
+        Header      = Serializer::DeserializeInteger<U8>(data, currentOffset);
+        RequestId   = Serializer::DeserializeInteger<U16>(data, currentOffset);
+        Checksum    = Serializer::DeserializeInteger<U8>(data, currentOffset);
+    }
+
+    Command_ResponseAck::Command_ResponseAck(U16 reqId) noexcept
+    {
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::RESPONSE_ACK);
         RequestId = reqId;
     }
 
@@ -35,16 +50,25 @@ namespace rvi
         Serializer::SerializeInteger(Data, RequestId);
     }
 
+    void Command_ResponseAck::ConstructFromData(const std::vector<U8> data)
+    {
+        size_t currentOffset = 0;
+
+        Header      = Serializer::DeserializeInteger<U8>(data, currentOffset);
+        RequestId   = Serializer::DeserializeInteger<U16>(data, currentOffset);
+        Checksum    = Serializer::DeserializeInteger<U8>(data, currentOffset);
+    }
+
     Command_DrawLine::Command_DrawLine(const Vertex& vxFrom, const Vertex& vxTo)
     {
-        Header = (U8)RVI_COMMAND_HEADER::DRAW_LINE;
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::DRAW_LINE);
         VxFrom = vxFrom;
         VxTo = vxTo;
     }
 
     Command_DrawLine::Command_DrawLine(Vertex&& vxFrom, Vertex&& vxTo)
     {
-        Header = (U8)RVI_COMMAND_HEADER::DRAW_LINE;
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::DRAW_LINE);
         VxFrom = std::move(vxFrom);
         VxTo = std::move(vxTo);
     }
@@ -55,15 +79,25 @@ namespace rvi
         Serializer::SerializeVertex(Data, VxTo);
     }
 
+    void Command_DrawLine::ConstructFromData(const std::vector<U8> data)
+    {
+        size_t currentOffset = 0;
+
+        Header      = Serializer::DeserializeInteger<U8>(data, currentOffset);
+        VxFrom      = Serializer::DeserializeVertex(data, currentOffset);
+        VxTo        = Serializer::DeserializeVertex(data, currentOffset);
+        Checksum    = Serializer::DeserializeInteger<U8>(data, currentOffset);
+    }
+
     Command_SelectFrame::Command_SelectFrame(const std::string& frameName)
     {
-        Header = (U8)RVI_COMMAND_HEADER::SELECT_FRAME;
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::SELECT_FRAME);
         FrameName = frameName;
     }
 
     Command_SelectFrame::Command_SelectFrame(std::string&& frameName)
     {
-        Header = (U8)RVI_COMMAND_HEADER::SELECT_FRAME;
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::SELECT_FRAME);
         FrameName = std::move(frameName);
     }
 
@@ -72,15 +106,23 @@ namespace rvi
         Serializer::SerializeString(Data, FrameName);
     }
 
+    void Command_SelectFrame::ConstructFromData(const std::vector<U8> data)
+    {
+        size_t currentOffset = 0;
+        Header      = Serializer::DeserializeInteger<U8>(data, currentOffset);
+        FrameName   = Serializer::DeserializeString(data, currentOffset);
+        Checksum    = Serializer::DeserializeInteger<U8>(data, currentOffset);
+    }
+
     Command_DeleteFrame::Command_DeleteFrame(const std::string& frameName)
     {
-        Header = (U8)RVI_COMMAND_HEADER::DELETE_FRAME;
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::DELETE_FRAME);
         FrameName = frameName;
     }
 
     Command_DeleteFrame::Command_DeleteFrame(std::string&& frameName)
     {
-        Header = (U8)RVI_COMMAND_HEADER::DELETE_FRAME;
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::DELETE_FRAME);
         FrameName = std::move(frameName);
     }
 
@@ -89,20 +131,49 @@ namespace rvi
         Serializer::SerializeString(Data, FrameName);
     }
 
+    void Command_DeleteFrame::ConstructFromData(const std::vector<U8> data)
+    {
+        size_t currentOffset = 0;
+        Header = Serializer::DeserializeInteger<U8>(data, currentOffset);
+        FrameName = Serializer::DeserializeString(data, currentOffset);
+        Checksum = Serializer::DeserializeInteger<U8>(data, currentOffset);
+    }
+
     Command_ClearFrame::Command_ClearFrame(const std::string & frameName)
     {
-        Header = (U8)RVI_COMMAND_HEADER::CLEAR_FRAME;
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::CLEAR_FRAME);
         FrameName = frameName;
     }
 
     Command_ClearFrame::Command_ClearFrame(std::string && frameName)
     {
-        Header = (U8)RVI_COMMAND_HEADER::CLEAR_FRAME;
+        Header = static_cast<U8>(RVI_COMMAND_HEADER::CLEAR_FRAME);
         FrameName = std::move(frameName);
     }
 
     void Command_ClearFrame::BuildData()
     {
         Serializer::SerializeString(Data, FrameName);
+    }
+
+    void Command_ClearFrame::ConstructFromData(const std::vector<U8> data)
+    {
+        size_t currentOffset = 0;
+        Header = Serializer::DeserializeInteger<U8>(data, currentOffset);
+        FrameName = Serializer::DeserializeString(data, currentOffset);
+        Checksum = Serializer::DeserializeInteger<U8>(data, currentOffset);
+    }
+
+    void Command_SendClick::BuildData()
+    {
+        Serializer::SerializeVector2(Data, ClickPosition);
+    }
+
+    void Command_SendClick::ConstructFromData(const std::vector<U8> data)
+    {
+        size_t currentOffset = 0;
+        Header = Serializer::DeserializeInteger<U8>(data, currentOffset);
+        ClickPosition = Serializer::DeserializeVector2(data, currentOffset);
+        Checksum = Serializer::DeserializeInteger<U8>(data, currentOffset);
     }
 }

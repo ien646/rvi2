@@ -21,5 +21,6 @@ namespace rvi
         void AppendData(std::vector<U8>&& data);
 
         virtual void BuildData() = 0;
+        virtual void ConstructFromData(const std::vector<U8> data) = 0;
     };
 }
