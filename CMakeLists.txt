@@ -11,7 +11,8 @@ message("")
 
 set(RVI_PROJ_NAME "rvi2")
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules/rvi"
+					  "${CMAKE_SOURCE_DIR}/cmake_modules/third_party")
 
 include(cotire)
 include(rvi)
