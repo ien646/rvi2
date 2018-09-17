@@ -9,3 +9,4 @@ CMakeFiles/
 cmake_install.cmake
 *CXX_cotire.cmake
 CMakeCache.txt
+build/
