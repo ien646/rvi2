@@ -17,22 +17,14 @@ namespace rvi
 		
 		constexpr Vertex() noexcept { }
 		
-		Vertex(float x, float y)
-			: Position(Vector2(x, y))
-		{ }
+		Vertex(float x, float y);
 		
-		Vertex(float x, float y, U8 r, U8 g, U8 b, U8 a)
-			: Position(Vector2(x, y))
-			, VertexColor(Color(r, g, b, a))
-		{ }
+		Vertex(float x, float y, U8 r, U8 g, U8 b, U8 a);
 		
-		Vertex(Vector2 pos)
-			: Position(pos)
-		{ }
+		Vertex(Vector2 pos);
 		
-		Vertex(Vector2 pos, Color vxColor)
-			: Position(pos)
-			, VertexColor(vxColor)
-		{ }
+		Vertex(Vector2 pos, Color vxColor);
+
+		void ApplyTransform(const Transform2& tform);
 	};
 }

@@ -15,4 +15,11 @@ namespace rvi
 	{
 
 	}
+
+	void Line::ApplyTransform(const Transform2& tform)
+	{
+		Start.ApplyTransform(tform);
+		End.ApplyTransform(tform);
+	}
+
 }

@@ -3,6 +3,7 @@
 
 #include "vector2.h"
 #include "rviMath.h"
+#include "line.h"
 
 #include <vector>
 
@@ -25,7 +26,7 @@ namespace rvi
 		Transform2() noexcept { }
 		Transform2(Vector2 pos, Vector2 scale, float rot);
 
-		void Apply(std::vector<Vector2>& vecs) const;
+		void ApplyTo(std::vector<Line>& vecs) const;
 
 		Transform2 Merge(const Transform2& other);
 	};

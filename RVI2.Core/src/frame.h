@@ -31,10 +31,6 @@ namespace rvi
 
 		void AddChildFrame(std::string&& name);
 
-		void GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform)
-		{
-			// First, add owned lines, applying own transform
-
-		}
+		void GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform);
 	};
 }

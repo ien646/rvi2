@@ -10,7 +10,7 @@ namespace rvi
 
 	}
 
-	void Transform2::Apply(std::vector<Vector2>& vecs) const
+	void Transform2::ApplyTo(std::vector<Line>& vecs) const
 	{
 		for (auto& v : vecs)
 		{

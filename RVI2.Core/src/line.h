@@ -19,5 +19,7 @@ namespace rvi
 		Line(const Vertex& start, const Vertex& end);
 		
 		Line(Vertex&& start, Vertex&& end);
+
+		void ApplyTransform(const Transform2& tform);
 	};
 }
