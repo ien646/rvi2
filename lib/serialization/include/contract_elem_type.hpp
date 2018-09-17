@@ -24,12 +24,6 @@ namespace rvi::serialization
         // -- ARRAYS --
         ARRAY_VARLEN = 0x10,
         ARRAY_FIXLEN_ARBITRARY = 0x11,
-        ARRAY_FIXLEN_2 = 0x12,
-        ARRAY_FIXLEN_4 = 0x13,
-        ARRAY_FIXLEN_8 = 0x14,
-        ARRAY_FIXLEN_16 = 0x15,
-        ARRAY_FIXLEN_32 = 0x16,
-        ARRAY_FIXLEN_64 = 0x17,
 
         // -- UTF8 STRINGS --
         STRING_UTF8 = 0x20,

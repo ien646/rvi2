@@ -4,20 +4,19 @@
 #include "contract_elem_type.hpp"
 
 namespace rvi::serialization
-{	
+{
     class ContractElemDescriptor
 	{
     public:
         ContractElemType Type   = ContractElemType::V_UNINITIALIZED;
         int32_t ItemSize        = -1;
         int32_t ContainerLen    = -1;
-        int32_t ArrayFixedLen   = -1;
 		
         ContractElemDescriptor() = default;
         ContractElemDescriptor(ContractElemType type);
 
         template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-        static ContractElemDescriptor CreateScalar()
+        static constexpr ContractElemDescriptor CreateScalar()
         {
             ContractElemDescriptor result;
 
@@ -55,6 +54,29 @@ namespace rvi::serialization
                 else if constexpr(sz == 8)
                     result.Type = ContractElemType::SCALAR_UINT64;
             }
+            return result;
+        }
+
+        static ContractElemDescriptor CreateBinary(bool fixed_len, int32_t cont_len);
+
+        template<typename T>
+        static constexpr ContractElemDescriptor CreateArray(bool fixed_len, int32_t cont_len)
+        {
+            constexpr auto sz = sizeof(T);
+
+            ContractElemDescriptor result;
+            result.ItemSize = sz;
+            result.ContainerLen = cont_len;
+
+            if (fixed_len)
+            {
+                result.Type = ContractElemType::ARRAY_FIXLEN_ARBITRARY;
+            }
+            else
+            {
+                result.Type = ContractElemType::ARRAY_VARLEN;
+            }
+
             return result;
         }
     };
