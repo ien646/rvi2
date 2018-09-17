@@ -1,16 +1,7 @@
 #include "serializer.hpp"
 
 namespace rvi::serialization
-{
-    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    void Internal_SerializeIntegral(T val)
-    {
-        constexpr auto sz = sizeof(val);
-        for(int i = 0; i < sz; i++)
-        {
-            _buffer.push_back(val << (i * 8));
-        }
-    }
+{ 
 
     void Serializer::operator<<(uint8_t val)
     {

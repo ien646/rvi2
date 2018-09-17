@@ -31,24 +31,7 @@ namespace rvi
     #elif defined(__INTEL_COMPILER) || defined(__ICC) /* INTEL C/C++ COMPILER */
     #define RVI_COMPILER_INTEL 1
 
-    #endif    
-
-    // Template helpers
-    template<typename T>
-    using TEMPLATE_ENABLE_IF_IS_POD = 
-        typename std::enable_if_t<std::is_pod_v<T>>;
-
-    template<typename T>
-    using TEMPLATE_ENABLE_IF_IS_INTEGER = 
-        typename std::enable_if_t<std::is_integral_v<T>>;
-
-    template<typename T>
-    using TEMPLATE_ENABLE_IF_IS_FLOAT = 
-        typename std::enable_if_t<std::is_floating_point_v<T>>;
-
-    template<typename T>
-    using TEMPLATE_ENABLE_IF_IS_STRING = 
-        typename std::enable_if_t<std::is_same_v<std::basic_string<T::value_type>, T>>;
+    #endif 
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Integer data typedefs

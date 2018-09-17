@@ -26,6 +26,17 @@ namespace rvi::serialization
         void operator<<(int64_t val);
 
         void operator<<(float val);
-        void operator<<(double val);        
+        void operator<<(double val);  
+
+    private:
+        template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+        void Internal_SerializeIntegral(T val)
+        {
+            constexpr auto sz = sizeof(val);
+            for(int i = 0; i < sz; i++)
+            {
+                _buffer.push_back(val << (i * 8));
+            }
+        }      
     };
 }
