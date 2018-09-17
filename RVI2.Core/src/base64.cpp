@@ -3,7 +3,7 @@
 
 #include <array>
 
-#if RVI_COMPILER_MSVC
+#ifdef RVI_COMPILER_MSVC
 	#pragma warning(disable: 26446)
 	#pragma warning(disable: 26482)
 	#pragma warning(disable: 26472)

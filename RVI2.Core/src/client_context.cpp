@@ -1,10 +1,10 @@
 #include "client_context.h"
 
 namespace rvi
-{ 
-#if RVI_COMPILER_MSVC
+{
+	#if RVI_COMPILER_MSVC
 	#pragma warning(suppress: 26439)
-#endif
+	#endif
     ClientContext::ClientContext()
         : _mainFrame(MAIN_FRAMENAME) 
         , _selectedFrame(_mainFrame)

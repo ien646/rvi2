@@ -15,8 +15,16 @@
 // Discard return value explicitly
 #define DISCARD auto UNIQUENAME(____trash_) =
 
-// Is compiler MSVC?
-#define RVI_COMPILER_MSVC _MSC_VER && !__INTEL_COMPILER
+// Compiler conditional macros
+#if defined(_MSC_VER) && !defined(__INTEL_COMPILER)
+	#define RVI_COMPILER_MSVC 1
+#elif defined(__GNUC__)
+	#define RVI_COMPILER_GNU 1
+#elif defined(__clang__)
+	#define RVI_COMPILER_CLANG 1
+#elif defined(__INTEL_COMPILER) || defined(__ICC)
+	#define RVI_COMPILER_INTEL 1
+#endif
 
 namespace rvi
 {
