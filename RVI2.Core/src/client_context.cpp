@@ -33,6 +33,7 @@ namespace rvi
             Vertex(from, _selectedFrame.get().Color()),
             Vertex(to, _selectedFrame.get().Color())
         );
+		MarkFrameAsModified();
     }
 
     void ClientContext::DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor)
@@ -42,11 +43,13 @@ namespace rvi
             Vertex(from, fromColor),
             Vertex(to, toColor)
         );
+		MarkFrameAsModified();
     }
 
     void ClientContext::DrawLine(Vertex from, Vertex to)
     {
         _selectedFrame.get().AddLine(from, to);
+		MarkFrameAsModified();
     }
 
     void ClientContext::SelectFrame(const std::string& name)
@@ -147,6 +150,7 @@ namespace rvi
     void ClientContext::ClearFrame() noexcept
     {
         _selectedFrame.get().ClearLines();
+		MarkFrameAsModified();
     }
 
     void ClientContext::AddDefinition(const std::string& name, const Definition& instruction)
