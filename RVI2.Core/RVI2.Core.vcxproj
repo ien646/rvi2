@@ -32,6 +32,7 @@
     <ClInclude Include="src\color_rgba.h" />
     <ClInclude Include="src\definition.h" />
     <ClInclude Include="src\frame.h" />
+    <ClInclude Include="src\instruction_generator.h" />
     <ClInclude Include="src\line.h" />
     <ClInclude Include="src\rvi_math.h" />
     <ClInclude Include="src\rvi_base.h" />
@@ -44,6 +45,7 @@
     <ClCompile Include="src\client_context.cpp" />
     <ClCompile Include="src\definition.cpp" />
     <ClCompile Include="src\frame.cpp" />
+    <ClCompile Include="src\instruction_generator.cpp" />
     <ClCompile Include="src\line.cpp" />
     <ClCompile Include="src\rvi_base.cpp" />
     <ClCompile Include="src\rvi_math.cpp" />

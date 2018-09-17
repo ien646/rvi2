@@ -5,9 +5,14 @@
 #include <random>
 
 #define CONCAT(x,y) x##y
+
+// Generate a unique prefixed name
 #define UNIQUENAME(prefix) CONCAT(prefix,__COUNTER__)
 
+// Discard return value explicitly
 #define DISCARD auto UNIQUENAME(____trash_) =
+
+
 
 namespace rvi
 {

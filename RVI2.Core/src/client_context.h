@@ -7,6 +7,7 @@
 #include "rvi_base.h"
 #include "frame.h"
 #include "line.h"
+#include "definition.h"
 
 namespace rvi
 {
@@ -19,6 +20,7 @@ namespace rvi
         Frame& _selectedFrame;
         std::stack<std::reference_wrapper<Frame>> _frameStack;
         U64 _contextId;
+        std::unordered_map<std::string, Definition> _localDefinitions;
 
     public:
         ClientContext() noexcept;
@@ -50,5 +52,10 @@ namespace rvi
         Vector2 GetCurrentScale() const;
 
         void ClearFrame();
+
+        void AddDefinition(const std::string& name, const Definition& instruction);
+        void AddDefinition(std::string&& name, const Definition& instruction);
+        void AddDefinition(const std::string& name, Definition&& instruction);
+        void AddDefinition(std::string&& name, Definition&& instruction);
     };
 }

@@ -48,6 +48,9 @@
     <ClInclude Include="src\definition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\instruction_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\frame.cpp">
@@ -78,6 +81,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\definition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\instruction_generator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

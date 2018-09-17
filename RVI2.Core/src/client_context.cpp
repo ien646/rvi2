@@ -124,4 +124,24 @@ namespace rvi
     {
         _selectedFrame.ClearLines();
     }
+
+    void ClientContext::AddDefinition(const std::string& name, const Definition& instruction)
+    {
+        DISCARD _localDefinitions.emplace(name, instruction);
+    }
+
+    void ClientContext::AddDefinition(std::string&& name, const Definition& instruction)
+    {
+        DISCARD _localDefinitions.emplace(std::move(name), instruction);
+    }
+
+    void ClientContext::AddDefinition(const std::string& name, Definition&& instruction)
+    {
+        DISCARD _localDefinitions.emplace(name, std::move(instruction));
+    }
+
+    void ClientContext::AddDefinition(std::string&& name, Definition&& instruction)
+    {
+        DISCARD _localDefinitions.emplace(std::move(name), std::move(instruction));
+    }
 }
