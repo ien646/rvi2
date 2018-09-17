@@ -149,22 +149,22 @@ namespace rvi
 
     void ClientContext::AddDefinition(const std::string& name, const Definition& instruction)
     {
-        DISCARD _localDefinitions.emplace(name, instruction);
+        DISCARD_RESULT _localDefinitions.emplace(name, instruction);
     }
 
     void ClientContext::AddDefinition(std::string&& name, const Definition& instruction)
     {
-        DISCARD _localDefinitions.emplace(std::move(name), instruction);
+        DISCARD_RESULT _localDefinitions.emplace(std::move(name), instruction);
     }
 
     void ClientContext::AddDefinition(const std::string& name, Definition&& instruction)
     {
-        DISCARD _localDefinitions.emplace(name, std::move(instruction));
+        DISCARD_RESULT _localDefinitions.emplace(name, std::move(instruction));
     }
 
     void ClientContext::AddDefinition(std::string&& name, Definition&& instruction)
     {
-        DISCARD _localDefinitions.emplace(std::move(name), std::move(instruction));
+        DISCARD_RESULT _localDefinitions.emplace(std::move(name), std::move(instruction));
     }
 
 	void ClientContext::DeleteDefinition(const std::string& name)
@@ -212,7 +212,7 @@ namespace rvi
 		const std::string& fPath = GetCurrentFramePath();
 		if (_modifiedFramePaths.count(fPath) == 0)
 		{
-			DISCARD _modifiedFramePaths.insert(fPath);
+			DISCARD_RESULT _modifiedFramePaths.insert(fPath);
 		}
 	}
 

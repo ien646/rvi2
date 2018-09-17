@@ -29,9 +29,4 @@ namespace rvi
         Serializer::SerializeColorRGBA(data_container, val.VertexColor);
         return sizeof(Vertex);
     }
-
-    size_t Serializer::SerializeString(std::vector<U8>& data_container, const std::string& val)
-    {
-        return Serializer::SerializeString(data_container, val);
-    }
 }

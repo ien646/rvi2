@@ -14,7 +14,7 @@ namespace rvi
 
 	void Frame::MoveIntoFrame(Frame& targetFrame)
 	{
-		DISCARD targetFrame._childFrames.emplace(_name, std::move(*this));
+		DISCARD_RESULT targetFrame._childFrames.emplace(_name, std::move(*this));
 	}
 
 	void Frame::ClearLines() noexcept

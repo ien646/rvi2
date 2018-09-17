@@ -16,7 +16,7 @@ namespace rvi
 	#define RVI_UNIQUENAME(prefix) RVI_CONCAT(prefix,__COUNTER__)
 
 	// Discard return value explicitly
-	#define DISCARD auto RVI_UNIQUENAME(_trash_) =
+	#define DISCARD_RESULT auto RVI_UNIQUENAME(_trash_) =
 
 	// Compiler conditional macros
 	#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) /* MSVC++ */
@@ -33,11 +33,11 @@ namespace rvi
 
 	#endif
 
-    // Template helpers
-    #define TEMPLATE_ENABLE_IF_IS_POD(T) typename = std::enable_if<std::is_pod<T>::value>::type
-    #define TEMPLATE_ENABLE_IF_IS_INTEGER(T) typename = std::enable_if<std::is_integral<T>::value>::type
-    #define TEMPLATE_ENABLE_IF_IS_FLOAT(T) typename = std::enable_if<std::is_floating_point<T>::value>::type
-    #define TEMPLATE_ENABLE_IF_IS_STRING(T) typename = std::enable_if<std::is_base_of<std::basic_string, T>::value>::type
+    // Template helper macros
+    #define TEMPLATE_ENABLE_IF_IS_POD(T)		typename = std::enable_if_t<std::is_pod<T>::value>
+    #define TEMPLATE_ENABLE_IF_IS_INTEGER(T)	typename = std::enable_if_t<std::is_integral<T>::value>
+    #define TEMPLATE_ENABLE_IF_IS_FLOAT(T)		typename = std::enable_if_t<std::is_floating_point<T>::value>
+    #define TEMPLATE_ENABLE_IF_IS_STRING(T)		typename = std::enable_if_t<std::is_same<std::basic_string<T::value_type>,T>::value>
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Integer data types
