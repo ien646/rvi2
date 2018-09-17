@@ -5,7 +5,7 @@
 #include <vector>
 #include <queue>
 
-#include "rvi_base.h"
+#include "rvi_base.hpp"
 
 namespace rvi
 {

@@ -1,8 +1,8 @@
 /* FILE: line.h */
 #pragma once
 
-#include "rvi_base.h"
-#include "vertex.h"
+#include "rvi_base.hpp"
+#include "vertex.hpp"
 
 #include <utility>
 

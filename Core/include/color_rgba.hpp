@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "rvi_base.h"
+#include "rvi_base.hpp"
 
 #define RVI_CRGBA_STANDARD_COLOR(name, r, g, b, a)\
     static constexpr ColorRGBA name() { return ColorRGBA(0x##r, 0x##g, 0x##b, 0x##a); }

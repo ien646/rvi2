@@ -1,7 +1,7 @@
 #pragma once
 
-#include "client_context.h"
-#include "definition.h"
+#include "client_context.hpp"
+#include "definition.hpp"
 
 namespace rvi
 {

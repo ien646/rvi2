@@ -1,8 +1,7 @@
 /* FILE: Vector2.h */
 #pragma once
 
-#include "rvi_base.h"
-#include "serialization.h"
+#include "rvi_base.hpp"
 
 namespace rvi
 {

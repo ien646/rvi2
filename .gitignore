@@ -1,13 +1,10 @@
 .vs/
 Debug/
 Release/
-strail/
-RVI2.json
-.sln
-.vcxproj
 CMakeFiles/
 *.vcxproj
 *.filters
 *.cmake
 *.txt
 *.sln
+*.user

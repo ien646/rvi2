@@ -6,9 +6,9 @@
 #include <string>
 #include <utility>
 
-#include "line.h"
-#include "transform2.h"
-#include "color_rgba.h"
+#include "line.hpp"
+#include "transform2.hpp"
+#include "color_rgba.hpp"
 
 namespace rvi
 {
