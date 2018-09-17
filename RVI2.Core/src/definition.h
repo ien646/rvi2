@@ -21,10 +21,10 @@ namespace rvi
     public:
         Definition() = delete;
         Definition(const std::string& name);
-        Definition(std::string&& name);
+        Definition(std::string&& name) noexcept;
 
         void AddInstruction(Instruction&& inst);
-        void Clear();
+        void Clear() noexcept;
         void ExecuteOnContext(ClientContext& cCtx);
     };
 }

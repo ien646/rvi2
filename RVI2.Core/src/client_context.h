@@ -24,9 +24,9 @@ namespace rvi
         std::unordered_map<std::string, Definition> _localDefinitions;
 
     public:
-        ClientContext() noexcept;
+        ClientContext();
 
-        U64 ContextId() const;
+        U64 ContextId() const noexcept;
 
         void DrawLine(Vector2 from, Vector2 to);
         void DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor);
@@ -39,20 +39,20 @@ namespace rvi
 
         bool DeleteFrame(const std::string& name);
 
-        void SetCurrentColor(ColorRGBA color);
+        void SetCurrentColor(ColorRGBA color) noexcept;
 
-        void SetCurrentTransform(const Transform2& tform);
-        void SetCurrentTransform(Transform2&& tform);
+        void SetCurrentTransform(const Transform2& tform) noexcept;
+        void SetCurrentTransform(Transform2&& tform) noexcept;
 
-        const Transform2& GetCurrentTransform() const;
+        const Transform2& GetCurrentTransform() const noexcept;
 
-        void SetCurrentOffset(Vector2 offset);
-        void SetCurrentRotation(float rotation);
-        void SetCurrentScale(Vector2 scale);
+        void SetCurrentOffset(Vector2 offset) noexcept;
+        void SetCurrentRotation(float rotation) noexcept;
+        void SetCurrentScale(Vector2 scale) noexcept;
 
-        Vector2 GetCurrentOffset() const;
-        float GetCurrentRotation() const;
-        Vector2 GetCurrentScale() const;
+        Vector2 GetCurrentOffset() const noexcept;
+        float GetCurrentRotation() const noexcept;
+        Vector2 GetCurrentScale() const noexcept;
 
         void ClearFrame() noexcept;
 

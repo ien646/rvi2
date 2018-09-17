@@ -6,7 +6,7 @@ namespace rvi
         : _name(name)
     { }
 
-    Definition::Definition(std::string&& name)
+    Definition::Definition(std::string&& name) noexcept
         : _name(std::move(name))
     { }
 
@@ -15,14 +15,14 @@ namespace rvi
         _instSequence.push_back(std::move(inst));
     }
 
-    void Definition::Clear()
+    void Definition::Clear() noexcept
     {
         _instSequence.clear();
     }
 
     void Definition::ExecuteOnContext(ClientContext& clientContext)
     {
-        for (Instruction& inst : _instSequence)
+        for (const Instruction& inst : _instSequence)
         {
             inst(clientContext);
         }

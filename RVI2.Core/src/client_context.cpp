@@ -1,16 +1,19 @@
 #include "client_context.h"
 
 namespace rvi
-{
-    ClientContext::ClientContext() noexcept
-        : _mainFrame(MAIN_FRAMENAME)
+{ 
+#if RVI_COMPILER_MSVC
+/**/#pragma warning(suppress: 26439)
+#endif
+    ClientContext::ClientContext()
+        : _mainFrame(MAIN_FRAMENAME) 
         , _selectedFrame(_mainFrame)
         , _contextId(Random().GetUnsigned64())
     { 
         _frameStack.push(_mainFrame);
     }
 
-    U64 ClientContext::ContextId() const
+    U64 ClientContext::ContextId() const noexcept
     {
         return _contextId;
     }
@@ -72,6 +75,7 @@ namespace rvi
         }
         _frameStack.pop();
         _selectedFrame = _frameStack.top();
+        return true;
     }
 
     bool ClientContext::DeleteFrame(const std::string& name)
@@ -79,52 +83,52 @@ namespace rvi
         return _selectedFrame.get().DeleteChildFrame(name);
     }
 
-    void ClientContext::SetCurrentColor(ColorRGBA color)
+    void ClientContext::SetCurrentColor(ColorRGBA color) noexcept
     {
         _selectedFrame.get().SetColor(color);
     }
 
-    void ClientContext::SetCurrentTransform(const Transform2 & tform)
+    void ClientContext::SetCurrentTransform(const Transform2& tform) noexcept
     {
         _selectedFrame.get().SetTransform(tform);
     }
 
-    void ClientContext::SetCurrentTransform(Transform2 && tform)
+    void ClientContext::SetCurrentTransform(Transform2&& tform) noexcept
     {
         _selectedFrame.get().SetTransform(std::move(tform));
     }
 
-    const Transform2& ClientContext::GetCurrentTransform() const
+    const Transform2& ClientContext::GetCurrentTransform() const noexcept
     {
         return _selectedFrame.get().Transform();
     }
 
-    void ClientContext::SetCurrentOffset(Vector2 offset)
+    void ClientContext::SetCurrentOffset(Vector2 offset) noexcept
     {
         _selectedFrame.get().SetOffset(offset);
     }
 
-    void ClientContext::SetCurrentRotation(float rotation)
+    void ClientContext::SetCurrentRotation(float rotation) noexcept
     {
         _selectedFrame.get().SetRotation(rotation);
     }
 
-    void ClientContext::SetCurrentScale(Vector2 scale)
+    void ClientContext::SetCurrentScale(Vector2 scale) noexcept
     {
         _selectedFrame.get().SetScale(scale);
     }
 
-    Vector2 ClientContext::GetCurrentOffset() const
+    Vector2 ClientContext::GetCurrentOffset() const noexcept
     {
         return _selectedFrame.get().Transform().Position;
     }
 
-    float ClientContext::GetCurrentRotation() const
+    float ClientContext::GetCurrentRotation() const noexcept
     {
         return _selectedFrame.get().Transform().Rotation;
     }
 
-    Vector2 ClientContext::GetCurrentScale() const
+    Vector2 ClientContext::GetCurrentScale() const noexcept
     {
         return _selectedFrame.get().Transform().Scale;
     }
@@ -156,8 +160,6 @@ namespace rvi
 
     std::vector<Line> ClientContext::GetSnapshot()
     {
-        std::vector<Line> result;
-        _mainFrame.GetModulatedLines(result, DEFAULT_TRANSFORM);
-        return result;
+        return _mainFrame.GetModulatedLines(DEFAULT_TRANSFORM);
     }
 }

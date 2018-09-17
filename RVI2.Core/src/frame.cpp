@@ -55,8 +55,10 @@ namespace rvi
         return (_childFrames.erase(name) < 0);
     }
 
-    void Frame::GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform)
+    std::vector<Line> Frame::GetModulatedLines(const Transform2& parentTform)
     {
+        std::vector<Line> result;
+
         // Current absolute transform
         const Transform2 absTform = _transform.Merge(parentTform);
 
@@ -70,8 +72,11 @@ namespace rvi
         for (auto& entry : _childFrames)
         {
             Frame& childFrame = entry.second;
-            childFrame.GetModulatedLines(result, absTform);
+            std::vector<Line> childLines = childFrame.GetModulatedLines(absTform);
+            std::move(childLines.begin(), childLines.end(), std::back_inserter(result));
         }
+
+        return result;
     }
 
     bool Frame::ContainsChildFrame(const std::string& name)
@@ -99,17 +104,17 @@ namespace rvi
         _transform = std::move(tform);
     }
 
-    void Frame::SetOffset(Vector2 offset)
+    void Frame::SetOffset(Vector2 offset) noexcept
     {
         _transform.Position = offset;
     }
 
-    void Frame::SetRotation(float rotation)
+    void Frame::SetRotation(float rotation) noexcept
     {
         _transform.Rotation = rotation;
     }
 
-    void Frame::SetScale(Vector2 scale)
+    void Frame::SetScale(Vector2 scale) noexcept
     {
         _transform.Scale = scale;
     }
@@ -142,5 +147,9 @@ namespace rvi
     Frame& Frame::GetChildFrame(const std::string& name)
     {
         return _childFrames.at(name);
+    }
+    size_t Frame::LineCount() const noexcept
+    {
+        return _lines.size();
     }
 }

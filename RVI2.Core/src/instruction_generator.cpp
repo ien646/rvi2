@@ -48,19 +48,19 @@ namespace rvi
 
 	INSTRUCTION InstructionGenerator::SetCurrentColor(ColorRGBA color)
     {
-        return [=]IGEN_LAMB_ARGS
+        return [=]IGEN_LAMB_ARGS noexcept
         { c.SetCurrentColor(color); };
     }
 
 	INSTRUCTION InstructionGenerator::SetCurrentTransform(const Transform2& tform)
     {
-        return [=]IGEN_LAMB_ARGS
+        return [=]IGEN_LAMB_ARGS noexcept
         { c.SetCurrentTransform(tform); };
     }
 
 	INSTRUCTION InstructionGenerator::SetCurrentTransform(Transform2&& tform)
     {
-        return [&]IGEN_LAMB_ARGS
+        return [&]IGEN_LAMB_ARGS noexcept
         { c.SetCurrentTransform(std::move(tform)); };
     }
 

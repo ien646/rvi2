@@ -42,7 +42,7 @@ namespace rvi
         
         bool DeleteChildFrame(const std::string& name);
 
-        void GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform);
+        std::vector<Line> GetModulatedLines(const Transform2& parentTform);
 
         bool ContainsChildFrame(const std::string& name);
 
@@ -53,15 +53,16 @@ namespace rvi
         const Transform2& Transform() const noexcept;
         ColorRGBA Color() const noexcept;
         Frame& GetChildFrame(const std::string& name);
+        size_t LineCount() const noexcept;
 
         // -- Setters --
         void SetColor(U8 r, U8 g, U8 b, U8 a) noexcept;
         void SetColor(ColorRGBA color) noexcept;
         void SetTransform(const Transform2& tform) noexcept;
         void SetTransform(Transform2&& tform) noexcept;
-        void SetOffset(Vector2 offset);
-        void SetRotation(float rotation);
-        void SetScale(Vector2 scale);
+        void SetOffset(Vector2 offset) noexcept;
+        void SetRotation(float rotation) noexcept;
+        void SetScale(Vector2 scale) noexcept;
 
     private:
     };

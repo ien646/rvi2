@@ -15,6 +15,9 @@
 // Discard return value explicitly
 #define DISCARD auto UNIQUENAME(____trash_) =
 
+// Is compiler MSVC?
+#define RVI_COMPILER_MSVC _MSC_VER && !__INTEL_COMPILER
+
 namespace rvi
 {
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -49,7 +52,10 @@ namespace rvi
         std::mt19937_64 _mTwisterEngine;
 
     public:
-        Random() noexcept
+#if RVI_COMPILER_MSVC
+/**/#pragma warning(suppress: 26439)
+#endif
+        Random()
             : _mTwisterEngine(_rnd_dev())
         { }
 

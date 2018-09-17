@@ -1,10 +1,21 @@
 #include "base64.h"
+#include "rvi_base.h"
+
+#include <array>
+
+#if RVI_COMPILER_MSVC
+#pragma warning(disable: 26446)
+#pragma warning(disable: 26482)
+#pragma warning(disable: 26472)
+#pragma warning(disable: 26494)
+#endif
 
 void rvi::Base64::Encode(std::istream& in, std::ostringstream& out)
 {
-    char buff1[3];
-    char buff2[4];
-    uint8_t i = 0, j;
+    std::array<char, 3> buff1;
+    std::array<char, 4> buff2;
+
+    uint8_t i = 0, j = 0;
     while (in.readsome(&buff1[i++], 1))
         if (i == 3)
         {
@@ -32,9 +43,10 @@ void rvi::Base64::Encode(std::istream& in, std::ostringstream& out)
 
 void rvi::Base64::Decode(std::istringstream & in, std::ostream & out)
 {
-    char buff1[4];
-    char buff2[4];
-    uint8_t i = 0, j;
+    std::array<char, 4> buff1;
+    std::array<char, 4> buff2;
+
+    uint8_t i = 0, j = 0;
 
     while (in.readsome(&buff2[i], 1) && buff2[i] != '=')
     {
