@@ -3,6 +3,7 @@
 #include <string>
 
 #include "contract_elem_type.hpp"
+#include "template_helpers.hpp"
 
 namespace rvi::serialization
 {
@@ -20,24 +21,19 @@ namespace rvi::serialization
             : Type(type)
         { }
 
-        template<typename T, 
-                 typename = std::enable_if_t<std::is_integral_v<T> 
-                 || std::is_floating_point_v<T>>>
+        template<typename T, typename = EnableIfFloatOrIntegral<T>>
         static constexpr ContractElemDesc CreateScalar();
 
         static constexpr ContractElemDesc CreateBinary(bool fixed_len, int32_t cont_len);
 
-        template<typename T, 
-                    typename = std::enable_if_t<std::is_integral_v<T> 
-                    || std::is_floating_point_v<T>>>
+        template<typename T, typename = EnableIfFloatOrIntegral<T>>
         static constexpr ContractElemDesc CreateArray(bool fixed_len, int32_t cont_len);
 
         // static constexpr ContractElemDesc CreateStringUTF8(bool fixed_len, int32_t cont_len);
 
         static constexpr ContractElemDesc CreatePackedBoolArray(bool fixed_len, int32_t cont_len);
 
-        template<typename T, typename std::enable_if_t<
-            std::is_same_v<std::basic_string<typename T::value_type>, std::decay_t<T>>>>
+        template<typename T, typename = EnableIfStdXString<T>>
         static constexpr ContractElemDesc CreateString(bool fixed_len, int32_t cont_len);
 
     private:
@@ -56,13 +52,11 @@ namespace rvi::serialization
     };
 
 ///////////////////////////////////////////////////////////////////////
-// TEMPLATE DEFINITIONS
+// INLINE/TEMPLATE DEFINITIONS
 ///////////////////////////////////////////////////////////////////////
 
-    template<typename T, 
-                 typename = std::enable_if_t<std::is_integral_v<T> 
-                 || std::is_floating_point_v<T>>>
-    static constexpr ContractElemDesc CreateScalar()
+    template<typename T, typename>
+    constexpr ContractElemDesc ContractElemDesc::CreateScalar()
     {
         if constexpr(std::is_integral_v<T>)
         {
@@ -75,7 +69,7 @@ namespace rvi::serialization
         return result;
     }
 
-    static constexpr ContractElemDesc CreateBinary(bool fixed_len, int32_t cont_len)
+    constexpr ContractElemDesc ContractElemDesc::CreateBinary(bool fixed_len, int32_t cont_len)
     {
         ContractElemDesc result;
         if(fixed_len)
@@ -91,10 +85,8 @@ namespace rvi::serialization
         return result;
     }
 
-    template<typename T, 
-                typename = std::enable_if_t<std::is_integral_v<T> 
-                || std::is_floating_point_v<T>>>
-    static constexpr ContractElemDesc CreateArray(bool fixed_len, int32_t cont_len)
+    template<typename T, typename>
+    constexpr ContractElemDesc ContractElemDesc::CreateArray(bool fixed_len, int32_t cont_len)
     {
         ContractElemDesc result;
         constexpr auto sz = static_cast<int32_t>(sizeof(T));
@@ -113,7 +105,7 @@ namespace rvi::serialization
         return result;
     }
 
-    static constexpr ContractElemDesc CreatePackedBoolArray(bool fixed_len, int32_t cont_len)
+    constexpr ContractElemDesc ContractElemDesc::CreatePackedBoolArray(bool fixed_len, int32_t cont_len)
     {
         ContractElemDesc result;
         if(fixed_len)
@@ -129,9 +121,8 @@ namespace rvi::serialization
         return result;
     }
 
-    template<typename T, typename std::enable_if_t<
-            std::is_same_v<std::basic_string<typename T::value_type>, std::decay_t<T>>>>
-    static constexpr ContractElemDesc CreateString(bool fixed_len, int32_t cont_len)
+    template<typename T, typename>
+    constexpr ContractElemDesc ContractElemDesc::CreateString(bool fixed_len, int32_t cont_len)
     {
         if constexpr(std::is_same_v<std::string::value_type, T::value_type>)
         {
@@ -151,7 +142,7 @@ namespace rvi::serialization
         }
     }
 
-    static constexpr ContractElemDesc I_CreateStringUTF32(bool fixed_len, int32_t cont_len)
+    constexpr ContractElemDesc ContractElemDesc::I_CreateStringUTF32(bool fixed_len, int32_t cont_len)
     {
         ContractElemDesc result;
         if(fixed_len)
@@ -167,7 +158,7 @@ namespace rvi::serialization
         return result;
     }        
 
-    static constexpr ContractElemDesc I_CreateStringUTF16(bool fixed_len, int32_t cont_len)
+    constexpr ContractElemDesc ContractElemDesc::I_CreateStringUTF16(bool fixed_len, int32_t cont_len)
     {
         ContractElemDesc result;
         if(fixed_len)
@@ -183,7 +174,7 @@ namespace rvi::serialization
         return result;
     }
 
-    static constexpr ContractElemDesc I_CreateString(bool fixed_len, int32_t cont_len)
+    constexpr ContractElemDesc ContractElemDesc::I_CreateString(bool fixed_len, int32_t cont_len)
     {
         ContractElemDesc result;
         if(fixed_len)
@@ -199,8 +190,8 @@ namespace rvi::serialization
         return result;
     }
 
-    template<typename T, typename = std::is_floating_point_v<T>>
-    static constexpr ContractElemDesc I_CreateScalar_Float()
+    template<typename T>
+    constexpr ContractElemDesc ContractElemDesc::I_CreateScalar_Float()
     {
         constexpr auto sz = sizeof(T);
 
@@ -220,7 +211,7 @@ namespace rvi::serialization
     }
 
     template<typename T>
-    static constexpr ContractElemDesc I_CreateScalar_Integer()
+    constexpr ContractElemDesc ContractElemDesc::I_CreateScalar_Integer()
     {
         static_assert(std::is_integral_v<T>, "Type is not integral");
         constexpr auto sz = sizeof(T);
