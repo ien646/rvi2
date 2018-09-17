@@ -4,6 +4,9 @@ namespace rvi::serialization
 {
 	enum class ContractElemType : uint8_t
     {
+        // -- UNINITIALIZED --
+        V_UNINITIALIZED = 0xFF,
+
         // -- SCALAR TYPES --
         SCALAR_UINT8  = 0x00,
         SCALAR_UINT16 = 0x01,
