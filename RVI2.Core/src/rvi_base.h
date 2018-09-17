@@ -88,20 +88,4 @@ namespace rvi
 
         static Random DefaultInstance;
     };
-
-    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    // Utilities
-    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    class Utils
-    {
-    public:
-        template<typename TKey, typename TVal>
-        static void GetValuesFromUnorderedMap(std::unordered_map<TKey, TVal> umap, std::vector<TVal&> result)
-        {
-            for (std::pair<TKey, TVal>& pair : umap)
-            {
-                result.push_back(pair.second);
-            }
-        }
-    };
 }
