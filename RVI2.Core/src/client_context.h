@@ -1,8 +1,9 @@
 #pragma once
 
 #include <string>
-#include <stack>
 #include <unordered_map>
+#include <vector>
+#include <type_traits>
 
 #include "rvi_base.h"
 #include "frame.h"
@@ -13,13 +14,13 @@ namespace rvi
 {
     class ClientContext
     {
-    private:
+	private:
         const std::string MAIN_FRAMENAME = "__MAINFRAME__";
-        const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);
+        const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);		
 
         Frame _mainFrame;
         std::reference_wrapper<Frame> _selectedFrame;
-        std::stack<std::reference_wrapper<Frame>> _frameStack;
+        std::vector<std::reference_wrapper<Frame>> _frameStack;
         U64 _contextId;
         std::unordered_map<std::string, Definition> _localDefinitions;
 
@@ -62,6 +63,6 @@ namespace rvi
         void AddDefinition(const std::string& name, Definition&& instruction);
         void AddDefinition(std::string&& name, Definition&& instruction);
 
-        std::vector<Line> GetSnapshot();
+        std::vector<Line> GetFullSnapshot();
     };
 }

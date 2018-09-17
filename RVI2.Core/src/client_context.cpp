@@ -10,7 +10,7 @@ namespace rvi
         , _selectedFrame(_mainFrame)
         , _contextId(Random().GetUnsigned64())
     { 
-        _frameStack.push(_mainFrame);
+        _frameStack.push_back(_mainFrame);
     }
 
 	ClientContext ClientContext::CreateNew()
@@ -56,7 +56,7 @@ namespace rvi
         {
             _selectedFrame = _selectedFrame.get().GetChildFrame(name);
         }
-        _frameStack.push(_selectedFrame);
+        _frameStack.push_back(_selectedFrame);
     }
 
     void ClientContext::SelectFrame(std::string&& name)
@@ -69,7 +69,7 @@ namespace rvi
         {
             _selectedFrame = _selectedFrame.get().GetChildFrame(name);
         }
-        _frameStack.push(_selectedFrame);
+        _frameStack.push_back(_selectedFrame);
     }
 
     bool ClientContext::ReleaseFrame()
@@ -78,8 +78,8 @@ namespace rvi
         {
             return false;
         }
-        _frameStack.pop();
-        _selectedFrame = _frameStack.top();
+        _frameStack.pop_back();
+        _selectedFrame = _frameStack.back();
         return true;
     }
 
@@ -163,7 +163,7 @@ namespace rvi
         DISCARD _localDefinitions.emplace(std::move(name), std::move(instruction));
     }
 
-    std::vector<Line> ClientContext::GetSnapshot()
+    std::vector<Line> ClientContext::GetFullSnapshot()
     {
         return _mainFrame.GetModulatedLines(DEFAULT_TRANSFORM);
     }

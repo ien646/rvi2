@@ -31,6 +31,8 @@ namespace rvi
 
         void ClearLines() noexcept;
 
+		size_t LineCount() const noexcept;
+
         void AddLine(const Line& ln);
         void AddLine(Line&& ln);
 
@@ -52,8 +54,7 @@ namespace rvi
         const std::unordered_map<std::string, Frame>& Frames() const noexcept;
         const Transform2& Transform() const noexcept;
         ColorRGBA Color() const noexcept;
-        Frame& GetChildFrame(const std::string& name);
-        size_t LineCount() const noexcept;
+        Frame& GetChildFrame(const std::string& name);        
 
         // -- Setters --
         void SetColor(U8 r, U8 g, U8 b, U8 a) noexcept;
@@ -63,7 +64,5 @@ namespace rvi
         void SetOffset(Vector2 offset) noexcept;
         void SetRotation(float rotation) noexcept;
         void SetScale(Vector2 scale) noexcept;
-
-    private:
     };
 }
