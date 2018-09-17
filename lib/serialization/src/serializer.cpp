@@ -44,12 +44,12 @@ namespace rvi::serialization
 
     void Serializer::FillContractScalarFP32(float val, int elemidx)
     {
-        Internal_FillContractElemFloat(_buffer, val, elemidx, ContractElemType::SCALAR_FLOAT32);
+        Internal_FillContractElemFloat32(_buffer, val, elemidx, ContractElemType::SCALAR_FLOAT32);
     }
 
     void Serializer::FillContractScalarFP64(double val, int elemidx)
     {
-        Internal_FillContractElemFloat(_buffer, val, elemidx, ContractElemType::SCALAR_FLOAT64);
+        Internal_FillContractElemFloat64(_buffer, val, elemidx, ContractElemType::SCALAR_FLOAT64);
     }
 
     void Serializer::FillContractBinary_FixLen(const std::vector<uint8_t>& val, int elemidx)
@@ -76,6 +76,17 @@ namespace rvi::serialization
         CheckContractValidType(contract_iidx, ContractElemType::BOOL_ARRAY_FIXLEN);
         CheckMaxContainerLength(val.size());
         CheckContractValidFixedSize(contract_iidx, val.size() / sizeof(uint8_t));
+
+        Internal_SerializeBoolArray(_buffer, val);
+    }
+
+    void Serializer::FillContractElemBoolArray_VarLen(const std::vector<bool>& val, int contract_iidx)
+    {
+        CheckContractValidType(contract_iidx, ContractElemType::BOOL_ARRAY_FIXLEN);
+        CheckMaxContainerLength(val.size());
+
+        uint16_t len = static_cast<uint16_t>(val.size());
+        Internal_SerializeIntegral<uint16_t>(_buffer, len);
 
         Internal_SerializeBoolArray(_buffer, val);
     }

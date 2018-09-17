@@ -69,25 +69,8 @@ namespace rvi::serialization
         // void FillContractElemUtf8String_FixLen(Utf8String val, int contract_iidx);
         // void FillContractElemUtf8String_VarLen(Utf8String val, int contract_iidx);
 
-        void FillContractElemBoolArray_FixLen(const std::vector<bool>& val, int contract_iidx)
-        {
-            CheckContractValidType(contract_iidx, ContractElemType::BOOL_ARRAY_FIXLEN);
-            CheckMaxContainerLength(val.size());
-            CheckContractValidFixedSize(contract_iidx, val.size() / sizeof(uint8_t));
-
-            Internal_SerializeBoolArray(_buffer, val);
-        }
-
-        void FillContractElemBoolArray_VarLen(const std::vector<bool>& val, int contract_iidx)
-        {
-            CheckContractValidType(contract_iidx, ContractElemType::BOOL_ARRAY_FIXLEN);
-            CheckMaxContainerLength(val.size());
-
-            uint16_t len = static_cast<uint16_t>(val.size());
-            Internal_SerializeIntegral<uint16_t>(_buffer, len);
-
-            Internal_SerializeBoolArray(_buffer, val);
-        }
+        void FillContractElemBoolArray_FixLen(const std::vector<bool>& val, int contract_iidx);
+        void FillContractElemBoolArray_VarLen(const std::vector<bool>& val, int contract_iidx);
 
     private:
         void CheckContractValidFixedSize(int contract_iidx, int cont_len);
@@ -148,9 +131,9 @@ namespace rvi::serialization
 
         void Internal_SerializeBoolArray(buff_t& buff, const std::vector<bool>& val)
         {            
-            const auto sz = val.size();
+            const size_t sz = val.size();
             uint8_t aux = 0x00;
-            for(int i = 0; i < sz; i++)
+            for(size_t i = 0; i < sz; i++)
             {
                 // Byte over
                 if((i % 8 == 0) && (i != 0))

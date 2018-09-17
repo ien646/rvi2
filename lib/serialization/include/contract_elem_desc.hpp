@@ -93,25 +93,13 @@ namespace rvi::serialization
             if(fixed_len)
             {
                 result.ContainerLen = cont_len;
-                switch (cont_len)
-                {
-                    case 8:	
-                        result.Type = ContractElemType::BOOL_ARRAY_FIXLEN_8;
-                        break;				
-                    case 16:
-                        result.Type = ContractElemType::BOOL_ARRAY_FIXLEN_16;
-                        break;
-                    case 32:
-                        result.Type = ContractElemType::BOOL_ARRAY_FIXLEN_32;
-                        break;
-                    case 64:
-                        result.Type = ContractElemType::BOOL_ARRAY_FIXLEN_64;
-                        break;
-                    default:
-                        result.Type = ContractElemType::BOOL_ARRAY_FIXLEN_ARBITRARY;
-                        break;
-                }
+                result.Type = ContractElemType::BOOL_ARRAY_FIXLEN;
 		    }
+            else
+            {
+                result.ContainerLen = UNDEFINED_SZ;
+                result.Type = ContractElemType::BOOL_ARRAY_VARLEN;
+            }
 		    return result;
         }
 
