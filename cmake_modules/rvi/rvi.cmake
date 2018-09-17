@@ -45,12 +45,18 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	message(">> [HEADERS]:")
 	foreach(ITEM ${HEADERS})
 		message("   - ${ITEM}")
-	endforeach()
+	endforeach()	
 	
 	add_library(${RVI_LIB_NAME} STATIC ${SOURCES})	
 	
 	set_property(TARGET ${RVI_LIB_NAME} PROPERTY CXX_STANDARD 17)
 	set_property(TARGET ${RVI_LIB_NAME} PROPERTY LINKER_LANGUAGE CXX)
+	
+	if(MSVC)
+	  target_compile_options(${RVI_LIB_NAME} PRIVATE /W4)
+	else(MSVC)
+	  target_compile_options(${RVI_LIB_NAME} PRIVATE -Wall -pedantic -Werror)
+	endif(MSVC)
 	
 	target_include_directories(${RVI_LIB_NAME} PUBLIC ./include)
 	

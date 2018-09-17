@@ -1,33 +1,17 @@
 #include "gtest/gtest.h"
 #include "vector2.hpp"
 #include "transform2.hpp"
+#include "random_gen.hpp"
 
-#include <random>
-#include <ctime>
 #include <cmath>
-
 
 static const int OP_TEST_ITER = 250000;
 
-static std::mt19937 Rand_Generator(static_cast<int>(time(0)));
-
-static std::uniform_real_distribution<float> Rand_Dist_Float(
-    -1000.0F, 1000.0F);
-
-static std::uniform_int_distribution<int> Rand_Dist_Int(
-    -1000, 1000);
-
 using rvi::Vector2;
 
-static float GetRandomFloat()
-{
-    return Rand_Dist_Float(Rand_Generator);
-}
-
-static int GetRandomInt()
-{    
-    return Rand_Dist_Int(Rand_Generator);
-}
+//////////////////////////////////////////////////////////////////////////
+// OPERATORS
+//////////////////////////////////////////////////////////////////////////
 
 TEST (VectorOperators, Add)
 {
@@ -121,7 +105,7 @@ TEST (VectorOperators, DivideScalar)
    
 }
 
-TEST(VectorOperators, MultiplyCrossProduct)
+TEST (VectorOperators, MultiplyCrossProduct)
 {
     float acc_x = 0;
     float acc_y = 0;
@@ -170,7 +154,11 @@ TEST (VectorOperators, Inequality)
     }
 }
 
-TEST(VectorFunctions, Magnitude)
+//////////////////////////////////////////////////////////////////////////
+// METHODS
+//////////////////////////////////////////////////////////////////////////
+
+TEST (VectorMethods, Magnitude)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -180,7 +168,7 @@ TEST(VectorFunctions, Magnitude)
     }
 }
 
-TEST(VectorFunctions, Offset)
+TEST (VectorMethods, Offset)
 {    
     float acc_x = 0;
     float acc_y = 0;
@@ -199,7 +187,7 @@ TEST(VectorFunctions, Offset)
     ASSERT_FLOAT_EQ(result.Y, acc_y);
 }
 
-TEST(VectorFunctions, OffsetInPlace)
+TEST (VectorMethods, OffsetInPlace)
 {
     float acc_x = 0;
     float acc_y = 0;
@@ -218,7 +206,7 @@ TEST(VectorFunctions, OffsetInPlace)
     ASSERT_FLOAT_EQ(result.Y, acc_y);
 }
 
-TEST(VectorFunctions, Rotate)
+TEST (VectorMethods, Rotate)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -255,7 +243,7 @@ TEST(VectorFunctions, Rotate)
     }
 }
 
-TEST(VectorFunctions, RotateInPlace)
+TEST (VectorMethods, RotateInPlace)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -292,7 +280,7 @@ TEST(VectorFunctions, RotateInPlace)
     }
 }
 
-TEST(VectorFunctions, Reverse)
+TEST (VectorMethods, Reverse)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -307,7 +295,7 @@ TEST(VectorFunctions, Reverse)
     }
 }
 
-TEST(VectorFunctions, ReverseInPlace)
+TEST (VectorMethods, ReverseInPlace)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -322,7 +310,7 @@ TEST(VectorFunctions, ReverseInPlace)
     }
 }
 
-TEST(VectorFunctions, Scale_Scalar)
+TEST (VectorMethods, Scale_Scalar)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -339,7 +327,7 @@ TEST(VectorFunctions, Scale_Scalar)
     }
 }
 
-TEST(VectorFunctions, Scale_CrossProduct)
+TEST (VectorMethods, Scale_CrossProduct)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -358,7 +346,7 @@ TEST(VectorFunctions, Scale_CrossProduct)
     }
 }
 
-TEST(VectorFunctions, ScaleInPlace_Scalar)
+TEST (VectorMethods, ScaleInPlace_Scalar)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -375,7 +363,7 @@ TEST(VectorFunctions, ScaleInPlace_Scalar)
     }
 }
 
-TEST(VectorFunctions, ScaleInPlace_CrossProduct)
+TEST (VectorMethods, ScaleInPlace_CrossProduct)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -394,7 +382,7 @@ TEST(VectorFunctions, ScaleInPlace_CrossProduct)
     }
 }
 
-TEST(VectorFunctions, Invert)
+TEST (VectorMethods, Invert)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -409,7 +397,7 @@ TEST(VectorFunctions, Invert)
     }
 }
 
-TEST(VectorFunctions, InverseInPlace)
+TEST (VectorMethods, InverseInPlace)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {

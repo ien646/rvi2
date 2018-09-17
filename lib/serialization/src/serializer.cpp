@@ -155,7 +155,7 @@ namespace rvi::serialization
         for(int i = 0; i < tsz; i++)
         {
             uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
-            _buffer.push_back(byt);
+            buff.push_back(byt);
         }            
     }
 
@@ -173,7 +173,7 @@ namespace rvi::serialization
         for(int i = 0; i < tsz; i++)
         {
             uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
-            _buffer.push_back(byt);
+            buff.push_back(byt);
         }            
     }    
 
@@ -283,6 +283,6 @@ namespace rvi::serialization
     void Serializer::SerializeContainerLen(std::vector<uint8_t>& buff, size_t cont_len)
     {
         uint16_t len = static_cast<uint16_t>(cont_len);
-        SerializeIntegral<uint16_t>(_buffer, len);
+        SerializeIntegral<uint16_t>(buff, len);
     }
 }

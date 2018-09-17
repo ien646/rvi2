@@ -27,7 +27,7 @@ namespace rvi
 
         U32 RGBA()
         {
-            return *((U32*)this);
+            return (R << 24) | (G << 16) | (B << 8) | (A);
         }
 
         bool operator==(ColorRGBA other) const noexcept;
