@@ -1,4 +1,3 @@
-/* FILE: Vector2.h */
 #pragma once
 
 #include "rvi_base.hpp"

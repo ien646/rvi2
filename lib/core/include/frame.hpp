@@ -1,4 +1,3 @@
-/* FILE: frame.h */
 #pragma once
 
 #include <vector>

@@ -1,10 +1,12 @@
-#include <ciinttypes>
+#include <cinttypes>
 #include <vector>
+
+#include "serialization_base.h"
 
 namespace rvi::serialization
 {
-	template<typename T, std::enable_if_t<std::is_integral_v<T>>>
-	std::vector<uint8_t> SerializeInteger(const T& val)
+	template<typename T, typename = std::enable_if_t<IsScalarType<T>()>>
+	std::vector<uint8_t> SerializeScalar(const T& val)
 	{
 		constexpr auto sz = sizeof(T);
 		std::vector<uint8_t> result;

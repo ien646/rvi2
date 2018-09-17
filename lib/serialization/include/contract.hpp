@@ -11,7 +11,7 @@ namespace rvi::serialization
         std::vector<ContractElemDesc> _contract;
 		
     public:
-        void AppendElem(const ContractElemDesc& elem);
-        void AppendElem(ContractElemDesc&& elem);
+        void Append(const ContractElemDesc& desc);
+        void Append(ContractElemDesc&& desc);
     };
 }

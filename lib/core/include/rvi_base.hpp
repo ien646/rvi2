@@ -1,4 +1,3 @@
-/* FILE: rvi_base.h */
 #pragma once
 
 #include <cstdint>
@@ -34,11 +33,22 @@ namespace rvi
 
     #endif    
 
-    // Template helper macros
-    #define TEMPLATE_ENABLE_IF_IS_POD(T)		typename = std::enable_if_t<std::is_pod_v<T>>
-    #define TEMPLATE_ENABLE_IF_IS_INTEGER(T)	typename = std::enable_if_t<std::is_integral_v<T>>
-    #define TEMPLATE_ENABLE_IF_IS_FLOAT(T)		typename = std::enable_if_t<std::is_floating_point_v<T>>
-    #define TEMPLATE_ENABLE_IF_IS_STRING(T)		typename = std::enable_if_t<std::is_same_v<std::basic_string<T::value_type>,T>>
+    // Template helpers
+    template<typename T>
+    using TEMPLATE_ENABLE_IF_IS_POD = 
+        typename std::enable_if_t<std::is_pod_v<T>>;
+
+    template<typename T>
+    using TEMPLATE_ENABLE_IF_IS_INTEGER = 
+        typename std::enable_if_t<std::is_integral_v<T>>;
+
+    template<typename T>
+    using TEMPLATE_ENABLE_IF_IS_FLOAT = 
+        typename std::enable_if_t<std::is_floating_point_v<T>>;
+
+    template<typename T>
+    using TEMPLATE_ENABLE_IF_IS_STRING = 
+        typename std::enable_if_t<std::is_same_v<std::basic_string<T::value_type>, T>>;
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Integer data typedefs

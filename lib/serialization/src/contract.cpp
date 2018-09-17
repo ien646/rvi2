@@ -1,14 +1,14 @@
 #include "contract.hpp"
 
 namespace rvi::serialization
-{
-    void Contract::AppendElem(const ContractElemDesc& elem)
+{    
+    void Contract::Append(const ContractElemDesc& desc)
     {
-        _contract.push_back(elem);
+        _contract.push_back(desc);
     }
 
-    void Contract::AppendElem(ContractElemDesc&& elem)
+    void Contract::Append(ContractElemDesc&& desc)
     {
-        _contract.push_back(std::move(elem));
+        _contract.push_back(std::move(desc));
     }
 }
