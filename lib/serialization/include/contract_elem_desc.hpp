@@ -52,7 +52,6 @@ namespace rvi::serialization
                 result.Type = ContractElemType::ARRAY_VARLEN;
                 result.ContainerLen = UNDEFINED_SZ;
             }
-
             return result;
         }
 
@@ -74,6 +73,7 @@ namespace rvi::serialization
                 sz == 8,
                 "Invalid scalar integer size for ContractElemDesc"
             );
+            
             ContractElemDesc result;
             result.ItemSize = sizeof(T);
             if constexpr(std::is_signed_v<T>)
