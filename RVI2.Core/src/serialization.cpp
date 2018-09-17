@@ -11,12 +11,12 @@ namespace rvi
     {
         data_container.reserve(data_container.size() + sizeof(Vector2));
 
-        Serializer::SerializeFloat(data_container, val.X);
-        Serializer::SerializeFloat(data_container, val.Y);
+        SerializeFloat(data_container, val.X);
+        SerializeFloat(data_container, val.Y);
 
         return (size_t)sizeof(Vector2);
     }
-
+  
     size_t Serializer::SerializeColorRGBA(std::vector<U8>& data_container, const ColorRGBA& val)
     {
         data_container.reserve(data_container.size() + sizeof(ColorRGBA));
@@ -33,8 +33,8 @@ namespace rvi
     {
         data_container.reserve(data_container.size() + sizeof(Vertex));
 
-        Serializer::SerializeVector2(data_container, val.Position);
-        Serializer::SerializeColorRGBA(data_container, val.VertexColor);
+        SerializeVector2(data_container, val.Position);
+        SerializeColorRGBA(data_container, val.VertexColor);
 
         return (size_t)sizeof(Vertex);
     }
@@ -43,8 +43,8 @@ namespace rvi
     {
         data_container.reserve(sizeof(Line));
 
-        Serializer::SerializeVertex(data_container, val.Start);
-        Serializer::SerializeVertex(data_container, val.End);
+        SerializeVertex(data_container, val.Start);
+        SerializeVertex(data_container, val.End);
 
         return sizeof(Line);
     }
@@ -103,8 +103,8 @@ namespace rvi
     {
         Line result;
 
-        result.Start = Serializer::DeserializeVertex(data_container, offset_ref);
-        result.End = Serializer::DeserializeVertex(data_container, offset_ref);
+        result.Start = DeserializeVertex(data_container, offset_ref);
+        result.End = DeserializeVertex(data_container, offset_ref);
 
         return result;
     }
