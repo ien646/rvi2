@@ -8,7 +8,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace UnitTests
 {
     using namespace rvi;
-    TEST_CLASS(SerializationTests)
+    TEST_CLASS(IntegerSerializationTests)
     {
     public:
         TEST_METHOD(Test_SerializeInteger)

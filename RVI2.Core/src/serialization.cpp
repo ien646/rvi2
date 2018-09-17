@@ -13,7 +13,7 @@ namespace rvi
         Serializer::SerializeFloat(data_container, val.X);
         Serializer::SerializeFloat(data_container, val.Y);
 
-        return sizeof(Vector2);
+        return (size_t)sizeof(Vector2);
     }
 
     size_t Serializer::SerializeColorRGBA(std::vector<U8>& data_container, const ColorRGBA& val)
@@ -25,7 +25,7 @@ namespace rvi
         data_container.push_back(val.B);
         data_container.push_back(val.A);
 
-        return sizeof(ColorRGBA);
+        return (size_t)sizeof(ColorRGBA);
     }
 
     size_t Serializer::SerializeVertex(std::vector<U8>& data_container, const Vertex& val)
@@ -35,7 +35,7 @@ namespace rvi
         Serializer::SerializeVector2(data_container, val.Position);
         Serializer::SerializeColorRGBA(data_container, val.VertexColor);
 
-        return sizeof(Vertex);
+        return (size_t)sizeof(Vertex);
     }
 
     size_t Serializer::SerializeString(std::vector<U8>& data_container, const std::string& val)

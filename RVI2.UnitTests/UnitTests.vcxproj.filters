@@ -15,7 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\serialization_tests.cpp">
+    <ClCompile Include="src\serialization\integer_serialization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\serialization\string_serialization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

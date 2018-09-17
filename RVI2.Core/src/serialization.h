@@ -68,12 +68,14 @@ namespace rvi
         static size_t SerializeString_Internal(std::vector<U8>& data_container, const T& str_obj)
         {
             const U8 char_sz = (U8)(sizeof(T::value_type));
-            const U16 bufflen = (U16)(sizeof(char_sz) + (str_obj.size() * char_sz));
+            const U16 bufflen = (U16)(sizeof(char_sz) + sizeof(U16) + (str_obj.size() * char_sz));
             const size_t stringlen = str_obj.size();
 
-            if (char_sz == 1)
+            SerializePOD_Internal<U16>(data_container, bufflen);
+            data_container.push_back(char_sz);
+
+            if constexpr(sizeof(T::value_type) == 1)
             {
-                static_assert(std::is_same_v<wchar_t, T::value_type> == false);
                 std::copy(str_obj.begin(), str_obj.end(), std::back_inserter(data_container));
             }
             else
@@ -132,15 +134,12 @@ namespace rvi
         static T DeserializeString_Internal(const std::vector<U8>& data_container, size_t& offset_ref)
         {
             // Check for out of bounds read attempts
-            assert(data_container.size() < (offset_ref + 3));
+            assert(data_container.size() > (offset_ref + 3));
 
             const size_t char_size = sizeof(T::value_type);
             
             U16 dataBuffLen = Serializer::DeserializePOD_Internal<U16>(data_container, offset_ref);
-            offset_ref += sizeof(dataBuffLen);
-
-            U8 dataCharSz = data_container[offset_ref];
-            offset_ref += sizeof(dataCharSz);
+            U8 dataCharSz = Serializer::DeserializePOD_Internal<U8>(data_container, offset_ref);
 
             // Check for char size mismatch
             assert(sizeof(T::value_type) == dataCharSz);
@@ -154,8 +153,8 @@ namespace rvi
             if (dataCharSz == 1)
             {
                 auto container_it_begin = (data_container.begin() + offset_ref);
-                auto container_it_end = container_it_begin + (resultLen * char_size);
-                DISCARD_RESULT std::copy(container_it_begin, container_it_end, result.begin());
+                auto container_it_end = container_it_begin + ((resultLen-1) * char_size);
+                DISCARD_RESULT std::copy(container_it_begin, container_it_end, std::back_inserter(result));
             }
             else
             {
