@@ -27,7 +27,9 @@ namespace rvi::serialization
 
         static constexpr ContractElemDesc CreateBinary(bool fixed_len, int32_t cont_len);
 
-        template<typename T>
+        template<typename T, 
+                    typename = std::enable_if_t<std::is_integral_v<T> 
+                    || std::is_floating_point_v<T>>>
         static constexpr ContractElemDesc CreateArray(bool fixed_len, int32_t cont_len);
 
         // static constexpr ContractElemDesc CreateStringUTF8(bool fixed_len, int32_t cont_len);
@@ -46,10 +48,12 @@ namespace rvi::serialization
         template<typename T>
         static constexpr ContractElemDesc I_CreateScalar_Float();
 
+        // static constexpr ContractElemDesc I_CreateStringUTF8(bool fixed_len, int32_t cont_len);
+
         static constexpr ContractElemDesc I_CreateString(bool fixed_len, int32_t cont_len);
         static constexpr ContractElemDesc I_CreateStringUTF16(bool fixed_len, int32_t cont_len);
         static constexpr ContractElemDesc I_CreateStringUTF32(bool fixed_len, int32_t cont_len);    
     };
 }
 
-#include "contract_elem_desc.inl.hpp"
+#include "contract_elem_desc.inl"

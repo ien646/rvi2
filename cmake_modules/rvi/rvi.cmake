@@ -34,7 +34,7 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	
 	rvi_set_stdconf_mode(${RVI_LIB_NAME})	
 	
-	file(GLOB SOURCES src/*.cpp src/*.c src/*.hpp src/*.h include/*.hpp include/*.h src/*.ipp include/*.ipp)
+	file(GLOB SOURCES src/*.cpp src/*.c src/*.hpp src/*.h include/*.hpp include/*.h src/*.inl include/*.inl)
 	file(GLOB HEADERS include/*)
 	
 	message(">> [SOURCES]:")
