@@ -12,8 +12,6 @@
 // Discard return value explicitly
 #define DISCARD auto UNIQUENAME(____trash_) =
 
-
-
 namespace rvi
 {
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

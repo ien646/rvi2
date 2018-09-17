@@ -35,7 +35,7 @@ namespace rvi
         void SelectFrame(const std::string& name);
         void SelectFrame(std::string&& name);
 
-        void ReleaseFrame();
+        bool ReleaseFrame();
 
         void SetCurrentColor(ColorRGBA color);
 

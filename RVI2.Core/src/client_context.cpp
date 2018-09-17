@@ -64,8 +64,12 @@ namespace rvi
         _frameStack.push(_selectedFrame);
     }
 
-    void ClientContext::ReleaseFrame()
+    bool ClientContext::ReleaseFrame()
     {
+        if (&_selectedFrame.get() == &_mainFrame)
+        {
+            return false;
+        }
         _frameStack.pop();
         _selectedFrame = _frameStack.top();
     }
