@@ -43,7 +43,7 @@ namespace UnitTests
             Assert::IsTrue(dataContainer.size() == (s.size() * sizeof(std::u16string::value_type)) + 3);
             for (int i = 3; i < dataContainer.size(); i += sizeof(char16_t))
             {
-                char16_t ch = (char16_t)(dataContainer[i] | (dataContainer[i + 1] << 8));
+                char16_t ch = (char16_t)(dataContainer[i+1] | (dataContainer[i] << 8));
                 Assert::IsTrue(s[(i - 3) / 2] == ch);
             }
         }
@@ -67,10 +67,10 @@ namespace UnitTests
             for (int i = 3; i < dataContainer.size(); i += sizeof(char32_t))
             {
                 char32_t ch =
-                    (char16_t)((dataContainer[i])
-                        | (dataContainer[i + 1] << 8)
-                        | (dataContainer[i + 2] << 16)
-                        | (dataContainer[i + 3] << 24));
+                    (char16_t)((dataContainer[i + 3])
+                        | (dataContainer[i + 2] << 8)
+                        | (dataContainer[i + 1] << 16)
+                        | (dataContainer[i] << 24));
                 Assert::IsTrue(s[(i - 3) / sizeof(ch)] == ch);
             }
         }

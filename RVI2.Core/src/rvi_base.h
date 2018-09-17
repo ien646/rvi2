@@ -57,8 +57,8 @@ namespace rvi
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
     static constexpr U16 _RVI_CEXPR_ENDIAN_MAGIC_NUMBER = 0x00FF;
-    static constexpr bool RVI_CEXPR_BIG_ENDIAN      = ((const uint8_t&)_RVI_ENDIAN_MAGIC_NUMBER) == 0x00;
-    static constexpr bool RVI_CEXPR_LITTLE_ENDIAN   = ((const uint8_t&)_RVI_ENDIAN_MAGIC_NUMBER) == 0xFF;
+    static constexpr bool RVI_CEXPR_BIG_ENDIAN      = ((const uint8_t&)_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0x00;
+    static constexpr bool RVI_CEXPR_LITTLE_ENDIAN   = ((const uint8_t&)_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0xFF;
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Random integer generator
