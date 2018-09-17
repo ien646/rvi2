@@ -122,7 +122,6 @@ namespace rvi
                     SerializeInteger_Internal<T::value_type>(data_container, str_obj[i]);
                 }
             }
-
             return bufflen;
         }
 

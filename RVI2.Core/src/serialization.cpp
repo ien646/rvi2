@@ -20,10 +20,10 @@ namespace rvi
     {
         data_container.reserve(data_container.size() + sizeof(ColorRGBA));
 
-        data_container.push_back(val.R);
-        data_container.push_back(val.G);
-        data_container.push_back(val.B);
-        data_container.push_back(val.A);
+        SerializeInteger_Internal(data_container, val.R);
+        SerializeInteger_Internal(data_container, val.G);
+        SerializeInteger_Internal(data_container, val.B);
+        SerializeInteger_Internal(data_container, val.A);
 
         return (size_t)sizeof(ColorRGBA);
     }
