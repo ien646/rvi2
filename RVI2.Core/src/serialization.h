@@ -58,6 +58,13 @@ namespace rvi
             return sizeof(T);
         }
 
+        template<>
+        static size_t SerializePOD_Internal<U8>(std::vector<U8>& data_container, const U8& pod_obj)
+        {
+            data_container.push_back(pod_obj);
+            return sizeof(U8);
+        }
+
         template<typename T, TEMPLATE_ENABLE_IF_IS_STRING(T)>
         static size_t SerializeString_Internal(std::vector<U8>& data_container, const T& str_obj)
         {
@@ -122,6 +129,12 @@ namespace rvi
             std::memcpy(&result, (data_container.data() + offset_ref), obj_sz);
             offset_ref += sizeof(T);
             return result;
+        }
+
+        template<>
+        static U8 DeserializePOD_Internal<U8>(const std::vector<U8>& data_container, size_t& offset_ref)
+        {
+            return data_container[offset_ref++];
         }
 
         template<typename T, TEMPLATE_ENABLE_IF_IS_STRING(T)>
