@@ -74,9 +74,9 @@ namespace rvi
         _selectedFrame = _frameStack.top();
     }
 
-    bool ClientContext::DeleteFrame(const std::string & name)
+    bool ClientContext::DeleteFrame(const std::string& name)
     {
-        _selectedFrame.get().DeleteChildFrame(name);
+        return _selectedFrame.get().DeleteChildFrame(name);
     }
 
     void ClientContext::SetCurrentColor(ColorRGBA color)
@@ -158,5 +158,6 @@ namespace rvi
     {
         std::vector<Line> result;
         _mainFrame.GetModulatedLines(result, DEFAULT_TRANSFORM);
+        return result;
     }
 }
