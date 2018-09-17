@@ -24,4 +24,14 @@ namespace rvi
 		Lines.push_back(std::move(ln));
 	}
 
+	void Frame::AddChildFrame(const std::string& name)
+	{
+		ChildFrames.emplace_back(name);
+	}
+
+	void Frame::AddChildFrame(std::string&& name)
+	{
+		ChildFrames.emplace_back(std::move(name));
+	}
+
 }

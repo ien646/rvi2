@@ -14,6 +14,7 @@ namespace rvi
 	public:
 		std::string Name;
 		std::vector<Line> Lines;
+		std::vector<Frame> ChildFrames;
 		Transform2 Transform;
 		
 		Frame() = delete;
@@ -24,6 +25,16 @@ namespace rvi
 		
 		void AddLine(const Line& ln);
 		
-		void AddLine(Line&& ln);		
+		void AddLine(Line&& ln);
+
+		void AddChildFrame(const std::string& name);
+
+		void AddChildFrame(std::string&& name);
+
+		void GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform)
+		{
+			// First, add owned lines, applying own transform
+
+		}
 	};
 }

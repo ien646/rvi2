@@ -17,11 +17,11 @@ namespace rvi
 		
 		constexpr Vertex() noexcept { }
 		
-		Vertex(FLOAT x, FLOAT y)
+		Vertex(float x, float y)
 			: Position(Vector2(x, y))
 		{ }
 		
-		Vertex(FLOAT x, FLOAT y, U8 r, U8 g, U8 b, U8 a)
+		Vertex(float x, float y, U8 r, U8 g, U8 b, U8 a)
 			: Position(Vector2(x, y))
 			, VertexColor(Color(r, g, b, a))
 		{ }

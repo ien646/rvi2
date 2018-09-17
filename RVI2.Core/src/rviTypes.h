@@ -14,6 +14,4 @@ namespace rvi
 	typedef std::int16_t	I16;
 	typedef std::int32_t	I32;
 	typedef std::int64_t	I64;
-	
-	typedef float			FLOAT;
 }

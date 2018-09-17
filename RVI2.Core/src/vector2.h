@@ -2,60 +2,57 @@
 #pragma once
 
 #include "rviTypes.h"
-#include "transform2.h"
 
 namespace rvi
 {
+	class Transform2;
+
 	class Vector2
 	{
 	public:
-		FLOAT X = 0.0F;
-		FLOAT Y = 0.0F;
+		float X = 0.0F;
+		float Y = 0.0F;
 		
 		constexpr Vector2() noexcept { }
 
-		Vector2(FLOAT x, FLOAT y) noexcept;
+		Vector2(float x, float y) noexcept;
 		
-		FLOAT Magnitude() const;
+		float Magnitude() const;
 		
-		Vector2 CrossProduct(Vector2 other);
-
+		Vector2 CrossProduct(Vector2 other) const;
 		void CrossProductInPlace(Vector2 other);
 
-		Vector2 Offset(Vector2 offset);
-
+		Vector2 Offset(Vector2 offset) const;
 		void OffsetInPlace(Vector2 offset);
 
-		Vector2 Rotate(FLOAT angle);
+		Vector2 Rotate(float angle) const;
+		void RotateInPlace(float angle);
 
-		void RotateInPlace(FLOAT angle);
+		Vector2 Reverse() const;
+		void ReverseInPlace();
 
-		Vector2 Scale(FLOAT scale);
+		Vector2 Inverse() const;
+		void InvertInPlace();
 
-		Vector2 Scale(Vector2 scaleVec);
-
-		void ScaleInPlace(FLOAT scale);
-
+		Vector2 Scale(float scale) const;
+		Vector2 Scale(Vector2 scaleVec) const;
+		void ScaleInPlace(float scale);
 		void ScaleInPlace(Vector2 scale);
 
-		Vector2 ApplyTransform(const Transform2& transform);
-
-		Vector2 ApplyTransformInPlace(const Transform2& transform);
+		void ApplyTransform(const Transform2& tform);
 		
-		Vector2 operator+(Vector2 other) const;
+		Vector2 operator+(Vector2 other) const;		
+		Vector2 operator-(Vector2 other) const;		
+		Vector2 operator*(float other) const;	
+		Vector2 operator*(Vector2 other) const;
+		Vector2 operator/(float other) const;
+		Vector2 operator/(Vector2 other) const;
 		
-		Vector2 operator-(Vector2 other) const;
-		
-		Vector2 operator*(FLOAT other) const;
-		
-		Vector2 operator/(FLOAT other) const;
-		
-		void operator+=(Vector2 other);
-		
-		void operator-=(Vector2 other);
-		
-		void operator*=(FLOAT other);
-		
-		void operator/=(FLOAT other);
+		void operator+=(Vector2 other);		
+		void operator-=(Vector2 other);		
+		void operator*=(float other);
+		void operator*=(Vector2 other);
+		void operator/=(float other);
+		void operator/=(Vector2 other);
 	};
 }
