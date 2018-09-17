@@ -4,22 +4,21 @@ namespace rvi::serialization
 {
 	enum class ContractElemType : uint8_t
     {
-        // -- UNINITIALIZED --
-        V_UNINITIALIZED = 0xFF,
+        V_UNDEFINED = 0xFF,
 
         // -- SCALAR TYPES --
-        SCALAR_UINT8  = 0x00,
-        SCALAR_UINT16 = 0x01,
-        SCALAR_UINT32 = 0x02,
-        SCALAR_UINT64 = 0x03,
-        SCALAR_INT8   = 0x04,
-        SCALAR_INT16  = 0x05,
-        SCALAR_INT32  = 0x06,
-        SCALAR_INT64  = 0x07,
+        SCALAR_UINT8  = 0x01,
+        SCALAR_UINT16 = 0x02,
+        SCALAR_UINT32 = 0x03,
+        SCALAR_UINT64 = 0x04,
+        SCALAR_INT8   = 0x05,
+        SCALAR_INT16  = 0x06,
+        SCALAR_INT32  = 0x07,
+        SCALAR_INT64  = 0x08,
         
         // -- RAW BINARY TYPES --
-        BINARY_FIXLEN = 0x08,
-        BINARY_VARLEN = 0x09,
+        BINARY_FIXLEN = 0x09,
+        BINARY_VARLEN = 0x0A,
 
         // -- ARRAYS --
         ARRAY_VARLEN = 0x10,
