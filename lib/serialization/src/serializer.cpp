@@ -159,7 +159,7 @@ namespace rvi::serialization
         }            
     }
 
-    void Serializer::I_FillContractFloat32(buff_t& buff, float val, int contract_iidx, ContractElemType type)
+    void Serializer::I_FillContractFloat32(std::vector<uint8_t>& buff, float val, int contract_iidx, ContractElemType type)
     {
         CheckContractValidType(contract_iidx, type);
         SerializeFloat32(buff, val);
@@ -177,7 +177,7 @@ namespace rvi::serialization
         }            
     }    
 
-    void Serializer::SerializeBoolArray(buff_t& buff, const std::vector<bool>& val)
+    void Serializer::SerializeBoolArray(std::vector<uint8_t>& buff, const std::vector<bool>& val)
     {            
         const size_t sz = val.size();
         uint8_t aux = 0x00;
@@ -193,7 +193,7 @@ namespace rvi::serialization
         }
     }
 
-    void Serializer::SerializeUtf16String(buff_t& buff, const std::u16string& val)
+    void Serializer::SerializeUtf16String(std::vector<uint8_t>& buff, const std::u16string& val)
     {
         for(size_t i = 0; i < val.size(); i++)
         {
@@ -202,7 +202,7 @@ namespace rvi::serialization
         }
     }
 
-    void Serializer::SerializeUtf32String(buff_t& buff, const std::u32string& val)
+    void Serializer::SerializeUtf32String(std::vector<uint8_t>& buff, const std::u32string& val)
     {
         for(size_t i = 0; i < val.size(); i++)
         {
@@ -280,7 +280,7 @@ namespace rvi::serialization
         throw std::logic_error(ss.str());
     }
 
-    void Serializer::SerializeContainerLen(buff_t& buff, size_t cont_len)
+    void Serializer::SerializeContainerLen(std::vector<uint8_t>& buff, size_t cont_len)
     {
         uint16_t len = static_cast<uint16_t>(cont_len);
         SerializeIntegral<uint16_t>(_buffer, len);
