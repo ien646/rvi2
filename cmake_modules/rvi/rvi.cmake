@@ -28,6 +28,7 @@ function("rvi_set_stdconf_mode" TARGETNAME)
 endfunction()
 
 function("rvi_static_lib" RVI_LIB_NAME)
+	
 	rvi_header(${RVI_LIB_NAME})
 	
 	rvi_log(${RVI_LIB_NAME} "DETECTED C++ COMPILER: [${CMAKE_CXX_COMPILER_ID}]")
