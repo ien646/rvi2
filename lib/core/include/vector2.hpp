@@ -19,24 +19,32 @@ namespace rvi
             , Y(y)
         {  }
 
+        [[nodiscard]]
         float Magnitude() const noexcept;
 
+        [[nodiscard]]
         Vector2 CrossProduct(Vector2 other) const noexcept;
         void CrossProductInPlace(Vector2 other) noexcept;
 
+        [[nodiscard]]
         Vector2 Offset(Vector2 offset) const noexcept;
         void OffsetInPlace(Vector2 offset) noexcept;
 
+        [[nodiscard]]
         Vector2 Rotate(float angle) const noexcept;
         void RotateInPlace(float angle) noexcept;
 
+        [[nodiscard]]
         Vector2 Reverse() const noexcept;
         void ReverseInPlace() noexcept;
 
+        [[nodiscard]]
         Vector2 Inverse() const noexcept;
         void InvertInPlace() noexcept;
 
+        [[nodiscard]]
         Vector2 Scale(float scale) const noexcept;
+        [[nodiscard]]
         Vector2 Scale(Vector2 scaleVec) const noexcept;
         void ScaleInPlace(float scale) noexcept;
         void ScaleInPlace(Vector2 scale) noexcept;
