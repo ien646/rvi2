@@ -33,8 +33,9 @@ namespace rvi
 
     Vector2 Vector2::Rotate(float angle) const noexcept
     {
-        const float angleSin = std::sin(angle);
-        const float angleCos = std::cos(angle);
+        float radAngle = rvi::Math::Deg2Rad(angle);
+        const float angleSin = std::sin(radAngle);
+        const float angleCos = std::cos(radAngle);
 	
         // [rx] = [cos(a) , -sin(a)][x]
         const float rx = (X * +angleCos) + (Y * -angleSin);
@@ -46,8 +47,9 @@ namespace rvi
 
     void Vector2::RotateInPlace(float angle) noexcept
     {
-        const float angleSin = std::sin(angle);
-        const float angleCos = std::cos(angle);
+        float radAngle = rvi::Math::Deg2Rad(angle);
+        const float angleSin = std::sin(radAngle);
+        const float angleCos = std::cos(radAngle);
 	
 	    // [rx] = [cos(a) , -sin(a)][x]
         X = (X * +angleCos) + (Y * -angleSin);
