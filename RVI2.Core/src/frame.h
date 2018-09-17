@@ -49,7 +49,7 @@ namespace rvi
         // -- Getters --
         const std::string& Name() const noexcept;
         const std::vector<Line>& Lines() const noexcept;
-        const std::unordered_map<std::string, Frame>& Frame::Frames() const noexcept;
+        const std::unordered_map<std::string, Frame>& Frames() const noexcept;
         const Transform2& Transform() const noexcept;
         ColorRGBA Color() const noexcept;
         Frame& GetChildFrame(const std::string& name);

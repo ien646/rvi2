@@ -23,8 +23,9 @@ namespace rvi
         U64 _contextId;
         std::unordered_map<std::string, Definition> _localDefinitions;
 
+		ClientContext();
     public:
-        ClientContext();
+		static ClientContext CreateNew();
 
         U64 ContextId() const noexcept;
 

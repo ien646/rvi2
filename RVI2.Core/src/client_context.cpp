@@ -13,6 +13,11 @@ namespace rvi
         _frameStack.push(_mainFrame);
     }
 
+	ClientContext ClientContext::CreateNew()
+	{
+		return ClientContext();
+	}
+
     U64 ClientContext::ContextId() const noexcept
     {
         return _contextId;
