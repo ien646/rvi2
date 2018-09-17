@@ -19,7 +19,7 @@ namespace rvi
 
         std::string _name;
         std::vector<Line> _lines;
-        std::unordered_map<std::string, Frame> _childFrames;
+        std::unordered_map<std::string, std::unique_ptr<Frame>> _childFrames;
         Transform2 _transform;
         ColorRGBA _color;
         
@@ -28,8 +28,6 @@ namespace rvi
 
         Frame(const std::string& name);
         Frame(std::string&& name);
-
-        void MoveIntoFrame(Frame& targetFrame);
 
         void ClearLines() noexcept;
 
@@ -53,7 +51,7 @@ namespace rvi
         // -- Getters --
         const std::string& Name() const noexcept;
         const std::vector<Line>& Lines() const noexcept;
-        const std::unordered_map<std::string, Frame>& Frames() const noexcept;
+        const std::unordered_map<std::string, std::unique_ptr<Frame>>& Frames() const noexcept;
         const Transform2& Transform() const noexcept;
         ColorRGBA Color() const noexcept;
         Frame& GetChildFrame(const std::string& name);

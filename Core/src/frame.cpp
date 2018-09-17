@@ -12,11 +12,6 @@ namespace rvi
         , _transform(DEFAULT_TRANSFORM)
     { }
 
-    void Frame::MoveIntoFrame(Frame& targetFrame)
-    {
-        DISCARD_RESULT targetFrame._childFrames.emplace(_name, std::move(*this));
-    }
-
     void Frame::ClearLines() noexcept
     {
         _lines.clear();
@@ -44,15 +39,15 @@ namespace rvi
 
     Frame& Frame::AddChildFrame(const std::string& name)
     {
-        auto& pair = _childFrames.emplace(name, Frame(name));
-        return pair.first->second;
+        auto& pair = _childFrames.emplace(name, std::unique_ptr<Frame>(new Frame(name)));
+        return *pair.first->second;
     }
 
     Frame& Frame::AddChildFrame(std::string&& name)
     {
         std::string nameCopy = name;
-        auto& pair = _childFrames.emplace(nameCopy, Frame(std::move(name)));
-        return pair.first->second;
+        auto& pair = _childFrames.emplace(nameCopy, std::unique_ptr<Frame>(new Frame(std::move(name))));
+        return *pair.first->second;
     }
 
     bool Frame::DeleteChildFrame(const std::string& name)
@@ -76,7 +71,7 @@ namespace rvi
         // Child frames
         for (auto& entry : _childFrames)
         {
-            const Frame& childFrame = entry.second;
+            const Frame& childFrame = *entry.second;
             std::vector<Line> childLines = childFrame.GetModulatedLines(absTform);
             std::move(childLines.begin(), childLines.end(), std::back_inserter(result));
         }
@@ -134,7 +129,7 @@ namespace rvi
         return _lines;
     }
 
-    const std::unordered_map<std::string, Frame>& Frame::Frames() const noexcept
+    const std::unordered_map<std::string, std::unique_ptr<Frame>>& Frame::Frames() const noexcept
     {
         return _childFrames;
     }
@@ -151,7 +146,7 @@ namespace rvi
 
     Frame& Frame::GetChildFrame(const std::string& name)
     {
-        return _childFrames.at(name);
+        return *_childFrames.at(name);
     }
     size_t Frame::LineCount() const noexcept
     {
