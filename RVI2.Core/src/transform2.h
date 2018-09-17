@@ -17,7 +17,11 @@ namespace rvi
         float Rotation = 0.0F;
 
         constexpr Transform2() noexcept { }
-        Transform2(Vector2 pos, Vector2 scale, float rot) noexcept;
+        constexpr Transform2(Vector2 pos, Vector2 scale, float rot) noexcept
+            : Position(pos)
+            , Scale(scale)
+            , Rotation(rot)
+        { }
 
         void ApplyTo(std::vector<Line>& vecs) const noexcept;
 
