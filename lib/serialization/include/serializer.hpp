@@ -91,14 +91,14 @@ namespace rvi::serialization
         void Throw_VarSizeItemLengthOverflow(int cont_sz);        
 
         template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-        void Internal_FillContractIntegral(buff_t& buff, T val, int contract_iidx, ContractElemType type)
+        void I_FillContractIntegral(buff_t& buff, T val, int contract_iidx, ContractElemType type)
         {
             CheckContractValidType(contract_iidx, type);
             SerializeIntegral(buff, val);
         }
 
-        void Internal_FillContractFloat32(buff_t& buff, float val, int contract_iidx, ContractElemType type);
-        void Internal_FillContractFloat64(buff_t& buff, double val, int contract_iidx, ContractElemType type);
+        void I_FillContractFloat32(buff_t& buff, float val, int contract_iidx, ContractElemType type);
+        void I_FillContractFloat64(buff_t& buff, double val, int contract_iidx, ContractElemType type);
 
         template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
         void SerializeIntegral(buff_t& buff, T val)
