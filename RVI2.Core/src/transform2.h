@@ -2,7 +2,7 @@
 #pragma once
 
 #include "vector2.h"
-#include "rviMath.h"
+#include "rvi_math.h"
 #include "line.h"
 
 #include <vector>

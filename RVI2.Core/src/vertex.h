@@ -1,9 +1,9 @@
 /* FILE: vertex2.h */
 #pragma once
 
-#include "rviBase.h"
+#include "rvi_base.h"
 #include "vector2.h"
-#include "colorRgba.h"
+#include "color_rgba.h"
 
 namespace rvi
 {

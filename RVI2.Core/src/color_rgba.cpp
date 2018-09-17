@@ -1,4 +1,4 @@
-#include "colorRgba.h"
+#include "color_rgba.h"
 
 namespace rvi
 {

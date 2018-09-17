@@ -8,7 +8,7 @@
 
 #include "line.h"
 #include "transform2.h"
-#include "colorRgba.h"
+#include "color_rgba.h"
 
 namespace rvi
 {

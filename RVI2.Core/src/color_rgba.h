@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "rviBase.h"
+#include "rvi_base.h"
 
 namespace rvi
 {
