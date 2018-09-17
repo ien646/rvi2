@@ -76,7 +76,7 @@ namespace rvi::serialization
         Internal_FillContractElemFloat(_buffer, val, elemidx, ContractElemType::SCALAR_FLOAT64);
     }
 
-    void Serializer::FillContractBinary_FixLen(const std::vector<uint8_t>& val, uint16_t len, int elemidx)
+    void Serializer::FillContractBinary_FixLen(const std::vector<uint8_t>& val, int elemidx)
     {
         CheckContractValidType(elemidx, ContractElemType::BINARY_FIXLEN);
         CheckContractValidFixedSize(elemidx, val.size());
@@ -110,6 +110,21 @@ namespace rvi::serialization
         if(cont_len > std::numeric_limits<uint16_t>::max())
         {
             Throw_VarSizeItemLengthOverflow(desc, cont_len);
+        }
+    }    
+
+    void Serializer::CheckMaxContainerLength(size_t cont_len)
+    {
+        const ContractElemDesc& desc = _contract.GetElements().at(elemidx);
+        if(cont_len > std::numeric_limits<uint16_t>::max())
+        {
+            std::stringstream ss;
+            ss  << "Invalid container length. Maximum container length: "
+                << std::numeric_limits<uint16_t>::max()
+                << ", given length: "
+                << cont_len
+                << std::endl;
+            throw std::logic_error(ss.str());
         }
     }
 

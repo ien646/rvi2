@@ -36,13 +36,15 @@ namespace rvi::serialization
         void FillContractScalarFP32(float val, int elemidx);
         void FillContractScalarFP64(double val, int elemidx);
 
-        void FillContractBinary_FixLen(const std::vector<uint8_t>& val, uint16_t len, int elemidx);
+        void FillContractBinary_FixLen(const std::vector<uint8_t>& val, int elemidx);
         void FillContractBinary_VarLen(const std::vector<uint8_t>& val, int elemidx);
 
         template<typename T, typename = std::enable_if_t<IsScalarType<T>()>>
-        void FillContractElemArray_FixLen(std::vector<T>& val, uint16_t len, int elemidx)
+        void FillContractElemArray_FixLen(std::vector<T>& val, int elemidx)
         {
-            static_assert(0, "Not implemented");
+            CheckContractValidType(elemidx, ContractElemType::ARRAY_SCALAR_FIXLEN);
+            CheckMaxContainerLength(val.size());            
+
         }
 
         template<typename T, typename = std::enable_if_t<IsScalarType<T>()>>
@@ -55,6 +57,7 @@ namespace rvi::serialization
         void CheckContractValidFixedSize(int elemidx, int cont_len);
         void CheckContractValidVarSize(int elemidx, int cont_len);
         void CheckContractValidType(int elemidx, ContractElemType type);
+        void CheckMaxContainerLength(size_t cont_len);
 
         void Throw_InvalidTypeForContract(const ContractElemDesc& descriptor);
         void Throw_FixedSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz);
