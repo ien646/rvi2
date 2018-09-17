@@ -39,7 +39,7 @@ namespace rvi::serialization
         template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
         void Internal_FillContractElemIntegral(T val, int elemidx, ContractElemType type)
         {
-
+            
         }
 
         template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
@@ -63,13 +63,22 @@ namespace rvi::serialization
         template<typename T>
         void CheckContractValidType(int elemidx, ContractElemType type)
         {
-
+            const ContractElemDesc& desc = _contract.GetElements().at(elemidx);
+            if(type != desc.Type)
+            {
+                Throw_InvalidTypeForContract<T>(desc);
+            }
         }
 
         template<typename T>
         void Throw_InvalidTypeForContract(const ContractElemDesc& descriptor)
         {
-
+            std::stringstream ss;
+            ss  << "Invalid type for contract. Expected:"
+                << descriptor.Type
+                << " , Actual:"
+                << typeid(T).name();
+            throw std::logic_error(ss.str());
         }
     };
 }
