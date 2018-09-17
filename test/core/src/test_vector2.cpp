@@ -1,12 +1,13 @@
 #include "gtest/gtest.h"
 #include "vector2.hpp"
+#include "transform2.hpp"
 
 #include <random>
 #include <ctime>
 #include <cmath>
 
 
-static const int OP_TEST_ITER = 2500000;
+static const int OP_TEST_ITER = 250000;
 
 static std::mt19937 Rand_Generator(static_cast<int>(time(0)));
 
@@ -96,25 +97,28 @@ TEST (VectorOperators, MultiplyScalar)
 
 TEST (VectorOperators, DivideScalar)
 {
-	float acc_x = 0;
-    float acc_y = 0;
-
-    Vector2 result(0, 0);
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
         float x = GetRandomFloat();
         float y = GetRandomFloat();
 
+        while(std::isnan(x) || std::isnan(y))
+        {
+            x = GetRandomFloat();
+            y = GetRandomFloat();
+        }
+
         Vector2 vec(x, y);
 
-        result /= vec;
+        float scale = GetRandomFloat();
 
-        acc_x /= x;
-        acc_y /= y;
+        vec /= scale;
+
+        ASSERT_FLOAT_EQ(vec.X, (x / scale));
+        ASSERT_FLOAT_EQ(vec.Y, (y / scale));
     }
 
-    ASSERT_FLOAT_EQ(result.X, acc_x);
-    ASSERT_FLOAT_EQ(result.Y, acc_y);
+   
 }
 
 TEST(VectorOperators, MultiplyCrossProduct)
@@ -387,5 +391,35 @@ TEST(VectorFunctions, ScaleInPlace_CrossProduct)
 
         ASSERT_FLOAT_EQ(x * scale_x, vec.X);
         ASSERT_FLOAT_EQ(y * scale_y, vec.Y);
+    }
+}
+
+TEST(VectorFunctions, Invert)
+{
+    for (int i = 0; i < OP_TEST_ITER; i++)
+    {
+        float x = GetRandomFloat();
+        float y = GetRandomFloat();
+        Vector2 vec(x, y);
+
+        vec = vec.Invert();
+
+        ASSERT_FLOAT_EQ((1.0F / x), vec.X);
+        ASSERT_FLOAT_EQ((1.0F / y), vec.Y);
+    }
+}
+
+TEST(VectorFunctions, InverseInPlace)
+{
+    for (int i = 0; i < OP_TEST_ITER; i++)
+    {
+        float x = GetRandomFloat();
+        float y = GetRandomFloat();
+        Vector2 vec(x, y);
+
+        vec.InvertInPlace();
+
+        ASSERT_FLOAT_EQ((1.0F / x), vec.X);
+        ASSERT_FLOAT_EQ((1.0F / y), vec.Y);
     }
 }
