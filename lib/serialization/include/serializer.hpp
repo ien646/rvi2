@@ -23,19 +23,53 @@ namespace rvi::serialization
             : _contract(std::move(contract))
         { }
 
-        void FillContractElem(uint8_t val, int elemidx)
+        void FillContractElem(uint8_t val, int elemidx);
+        void FillContractElem(uint16_t val, int elemidx);
+        void FillContractElem(uint32_t val, int elemidx);
+        void FillContractElem(uint64_t val, int elemidx);
+        void FillContractElem(int8_t  val, int elemidx);
+        void FillContractElem(int16_t val, int elemidx);
+        void FillContractElem(int32_t val, int elemidx);
+        void FillContractElem(int64_t val, int elemidx);
+
+        void FillContractElem(float val, int elemidx);
+        void FillContractElem(double val, int elemidx);
+
+    private:
+        template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+        void Internal_FillContractElemIntegral(T val, int elemidx, ContractElemType type)
         {
-            ContractElemDesc desc = _contract.GetElements().at(elemidx);
-            if(desc.Type != ContractElemType::SCALAR_UINT8)
-            {
-                std::stringstream ss;
-                ss  << "Invalid type for given contract index element. Expected type: " 
-                    << (uint8_t)desc.Type 
-                    << "; Actual type: " 
-                    << typeid(val).name();
-                throw std::logic_error(ss.str());
-            }
-            _buffer.push_back(val);
+
+        }
+
+        template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+        void Internal_FillContractElemFloat(T val, int elemidx, ContractElemType type)
+        {
+
+        }
+
+        template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+        void Internal_SerializeIntegral(T val)
+        {
+
+        }
+
+        template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+        void Internal_SerializeFloat(T val)
+        {
+
+        }
+
+        template<typename T>
+        void CheckContractValidType(int elemidx, ContractElemType type)
+        {
+
+        }
+
+        template<typename T>
+        void Throw_InvalidTypeForContract(const ContractElemDesc& descriptor)
+        {
+
         }
     };
 }
