@@ -13,12 +13,6 @@ namespace rvi
     FWD_DECL_CLASS(ColorRGBA);
     FWD_DECL_CLASS(Vertex);
 
-    struct SerializedStringInfo
-    {
-        size_t CharacterSize;
-        size_t StringLength;
-    };
-
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Serializer class
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
