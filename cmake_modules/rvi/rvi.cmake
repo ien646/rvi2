@@ -34,14 +34,13 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	
 	rvi_set_stdconf_mode(${RVI_LIB_NAME})	
 	
-	file(GLOB SOURCES src/*.cpp src/*.c src/*.hpp src/*.h include/*.hpp include/*.h src/*.inl include/*.inl)
+	file(GLOB SOURCES src/*.cpp src/*.c src/*.hpp src/*.h include/*.hpp include/*.h)
 	file(GLOB HEADERS include/*)
 	
 	message(">> [SOURCES]:")
 	foreach(ITEM ${SOURCES})
 		message("    - ${ITEM}")
-	endforeach()
-	
+	endforeach()	
 	message(">> [HEADERS]:")
 	foreach(ITEM ${HEADERS})
 		message("   - ${ITEM}")
@@ -57,7 +56,7 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	cotire(${RVI_LIB_NAME})
 	
 	rvi_footer(${RVI_LIB_NAME})
-	file(COPY ${HEADERS} DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/include/${RVI_LIB_NAME})
+	file(COPY ${HEADERS} DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/include)
 endfunction()
 
 function("rvi_check_cmake_ver")
