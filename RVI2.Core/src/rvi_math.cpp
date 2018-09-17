@@ -21,4 +21,9 @@ namespace rvi
             std::sin(angleRadians),  std::cos(angleRadians)
         };
     }
+
+    float Math::ClampAngleDeg(float angle) noexcept
+    {
+        return std::fabsf(std::fmodf(angle, 360.0F));
+    }
 }
