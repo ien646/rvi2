@@ -6,7 +6,7 @@
 #include <cmath>
 
 
-static const int OP_TEST_ITER = 99999;
+static const int OP_TEST_ITER = 2500000;
 
 static std::mt19937 Rand_Generator(static_cast<int>(time(0)));
 
@@ -315,5 +315,77 @@ TEST(VectorFunctions, ReverseInPlace)
 
         ASSERT_FLOAT_EQ(-x, vec.X);
         ASSERT_FLOAT_EQ(-y, vec.Y);
+    }
+}
+
+TEST(VectorFunctions, Scale_Scalar)
+{
+    for (int i = 0; i < OP_TEST_ITER; i++)
+    {
+        float x = GetRandomFloat();
+        float y = GetRandomFloat();
+        Vector2 vec(x, y);
+
+        float scale = GetRandomFloat();
+
+        vec = vec.Scale(scale);
+
+        ASSERT_FLOAT_EQ(x * scale, vec.X);
+        ASSERT_FLOAT_EQ(y * scale, vec.Y);
+    }
+}
+
+TEST(VectorFunctions, Scale_CrossProduct)
+{
+    for (int i = 0; i < OP_TEST_ITER; i++)
+    {
+        float x = GetRandomFloat();
+        float y = GetRandomFloat();
+        Vector2 vec(x, y);
+
+        float scale_x = GetRandomFloat();
+        float scale_y = GetRandomFloat();
+        Vector2 scale(scale_x, scale_y);
+
+        vec = vec.Scale(scale);
+
+        ASSERT_FLOAT_EQ(x * scale_x, vec.X);
+        ASSERT_FLOAT_EQ(y * scale_y, vec.Y);
+    }
+}
+
+TEST(VectorFunctions, ScaleInPlace_Scalar)
+{
+    for (int i = 0; i < OP_TEST_ITER; i++)
+    {
+        float x = GetRandomFloat();
+        float y = GetRandomFloat();
+        Vector2 vec(x, y);
+
+        float scale = GetRandomFloat();
+
+        vec.ScaleInPlace(scale);
+
+        ASSERT_FLOAT_EQ(x * scale, vec.X);
+        ASSERT_FLOAT_EQ(y * scale, vec.Y);
+    }
+}
+
+TEST(VectorFunctions, ScaleInPlace_CrossProduct)
+{
+    for (int i = 0; i < OP_TEST_ITER; i++)
+    {
+        float x = GetRandomFloat();
+        float y = GetRandomFloat();
+        Vector2 vec(x, y);
+
+        float scale_x = GetRandomFloat();
+        float scale_y = GetRandomFloat();
+        Vector2 scale(scale_x, scale_y);
+
+        vec.ScaleInPlace(scale);
+
+        ASSERT_FLOAT_EQ(x * scale_x, vec.X);
+        ASSERT_FLOAT_EQ(y * scale_y, vec.Y);
     }
 }
