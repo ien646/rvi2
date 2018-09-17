@@ -72,6 +72,15 @@ namespace rvi::serialization
         void FillContractElemBoolArray_FixLen(const std::vector<bool>& val, int contract_iidx);
         void FillContractElemBoolArray_VarLen(const std::vector<bool>& val, int contract_iidx);
 
+        void FillContractElemString_FixLen(const std::string& val, int contract_iidx);
+        void FillContractElemString_VarLen(const std::string& val, int contract_iidx);
+
+        void FillContractElemStringUtf16_FixLen(const std::u16string& val, int contract_iidx);
+        void FillContractElemStringUtf16_VarLen(const std::u16string& val, int contract_iidx);
+
+        void FillContractElemStringUtf32_FixLen(const std::u32string& val, int contract_iidx);
+        void FillContractElemStringUtf32_VarLen(const std::u32string& val, int contract_iidx);
+
     private:
         void CheckContractValidFixedSize(int contract_iidx, int cont_len);
         void CheckContractValidVarSize(int cont_len);
@@ -129,20 +138,12 @@ namespace rvi::serialization
             }
         }
 
-        void Internal_SerializeBoolArray(buff_t& buff, const std::vector<bool>& val)
-        {            
-            const size_t sz = val.size();
-            uint8_t aux = 0x00;
-            for(size_t i = 0; i < sz; i++)
-            {
-                // Byte over
-                if((i % 8 == 0) && (i != 0))
-                {
-                    buff.push_back(aux);
-                    aux &= 0x00;
-                }
-                aux |= ((val[i] ? 1 : 0) << (i % 8));
-            }
-        }
+        void Internal_SerializeBoolArray(buff_t& buff, const std::vector<bool>& val);
+
+        void Internal_SerializeUtf16String(buff_t& buff, const std::u16string& val);
+
+        void Internal_SerializeUtf32String(buff_t& buff, const std::u32string& val);
+
+        void Internal_SerializeContainerLen(buff_t& buff, size_t cont_len);
     };
 }
