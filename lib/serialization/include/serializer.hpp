@@ -2,6 +2,7 @@
 #include <vector>
 #include <type_traits>
 #include <sstream>
+#include <limits>
 
 #include "base.hpp"
 #include "contract.hpp"
@@ -23,62 +24,84 @@ namespace rvi::serialization
             : _contract(std::move(contract))
         { }
 
-        void FillContractElem(uint8_t val, int elemidx);
-        void FillContractElem(uint16_t val, int elemidx);
-        void FillContractElem(uint32_t val, int elemidx);
-        void FillContractElem(uint64_t val, int elemidx);
-        void FillContractElem(int8_t  val, int elemidx);
-        void FillContractElem(int16_t val, int elemidx);
-        void FillContractElem(int32_t val, int elemidx);
-        void FillContractElem(int64_t val, int elemidx);
+        void FillContractScalarU8(uint8_t val, int elemidx);
+        void FillContractScalarU16(uint16_t val, int elemidx);
+        void FillContractScalarU32(uint32_t val, int elemidx);
+        void FillContractScalarU64(uint64_t val, int elemidx);
+        void FillContractScalarI8(int8_t val, int elemidx);
+        void FillContractScalarI16(int16_t val, int elemidx);
+        void FillContractScalarI32(int32_t val, int elemidx);
+        void FillContractScalarI64(int64_t val, int elemidx);
 
-        void FillContractElem(float val, int elemidx);
-        void FillContractElem(double val, int elemidx);
+        void FillContractScalarFP32(float val, int elemidx);
+        void FillContractScalarFP64(double val, int elemidx);
+
+        void FillContractBinary_FixLen(const std::vector<uint8_t>& val, uint16_t len, int elemidx);
+        void FillContractBinary_VarLen(const std::vector<uint8_t>& val, int elemidx);
 
     private:
-        template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-        void Internal_FillContractElemIntegral(T val, int elemidx, ContractElemType type)
+        void CheckContractValidFixedSize(int elemidx, int cont_len);
+        void CheckContractValidVarSize(int elemidx, int cont_len);
+        void CheckContractValidType(int elemidx, ContractElemType type);
+
+        void Throw_InvalidTypeForContract(const ContractElemDesc& descriptor);
+        void Throw_FixedSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz);
+        void Throw_VarSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz);
+
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    void Internal_FillContractElemIntegral(std::vector<uint8_t>& buff, T val, int elemidx, ContractElemType type)
+    {
+        CheckContractValidType(elemidx, type);
+        Internal_SerializeIntegral(buff, val);
+    }
+
+    template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+    void Internal_FillContractElemFloat(std::vector<uint8_t>& buff, T val, int elemidx, ContractElemType type)
+    {
+        CheckContractValidType(elemidx, type);
+        Internal_SerializeFloat(buff, val);
+    }
+
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    void Internal_SerializeIntegral(std::vector<uint8_t>& buff, T val)
+    {
+        constexpr auto tsz = sizeof(T);
+        if constexpr(tsz == sizeof(uint8_t))
         {
-            
+            _buffer.push_back(val);
         }
-
-        template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
-        void Internal_FillContractElemFloat(T val, int elemidx, ContractElemType type)
+        else
         {
-
-        }
-
-        template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-        void Internal_SerializeIntegral(T val)
-        {
-
-        }
-
-        template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-        void Internal_SerializeFloat(T val)
-        {
-
-        }
-
-        template<typename T>
-        void CheckContractValidType(int elemidx, ContractElemType type)
-        {
-            const ContractElemDesc& desc = _contract.GetElements().at(elemidx);
-            if(type != desc.Type)
+            for(int i = 0; i < tsz; i++)
             {
-                Throw_InvalidTypeForContract<T>(desc);
+                uint8_t byt = static_cast<uint8_t>(val >> (i * 8));
+                _buffer.push_back(byt);
             }
         }
+    }
 
-        template<typename T>
-        void Throw_InvalidTypeForContract(const ContractElemDesc& descriptor)
+    template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+    void Internal_SerializeFloat(std::vector<uint8_t>& buff, T val)
+    {
+        constexpr auto tsz = sizeof(T);
+        if constexpr(tsz == sizeof(float))
         {
-            std::stringstream ss;
-            ss  << "Invalid type for contract. Expected:"
-                << descriptor.Type
-                << " , Actual:"
-                << typeid(T).name();
-            throw std::logic_error(ss.str());
+            uint32_t* ptr = reinterpret_cast<uint32_t*>(&val);
+            for(int i = 0; i < tsz; i++)
+            {
+                uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
+                _buffer.push_back(byt);
+            }
         }
+        else if constexpr(tsz == sizeof(double))
+        {
+            uint64_t* ptr = reinterpret_cast<uint64_t*>(&val);
+            for(int i = 0; i < tsz; i++)
+            {
+                uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
+                _buffer.push_back(byt);
+            }
+        }
+    }
     };
 }

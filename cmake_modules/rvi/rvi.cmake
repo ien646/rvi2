@@ -47,7 +47,7 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	cotire(${RVI_LIB_NAME})
 	
 	rvi_footer(${RVI_LIB_NAME})
-	file(COPY ${HEADERS} DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/include)
+	file(COPY ${HEADERS} DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/include/${RVI_LIB_NAME})
 endfunction()
 
 function("rvi_check_cmake_ver")
