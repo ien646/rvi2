@@ -46,3 +46,7 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	
 	rvi_footer(${RVI_LIB_NAME})
 endfunction()
+
+function("rvi_check_cmake_ver")
+	cmake_minimum_required (VERSION ${RVI_MIN_CMAKE_VER})
+endfunction()

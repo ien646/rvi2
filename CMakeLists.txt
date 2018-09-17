@@ -1,3 +1,6 @@
+set(RVI_MIN_CMAKE_VER "3.7.0")
+cmake_minimum_required (VERSION ${RVI_MIN_CMAKE_VER})
+
 message("")
 message("****************************************")
 message("**               ------               **")
@@ -5,8 +8,6 @@ message("**             -  RVI2  -             **")
 message("**               ------               **")
 message("****************************************")
 message("")
-
-cmake_minimum_required (VERSION 3.7.0)
 
 set(RVI_PROJ_NAME "rvi2")
 
