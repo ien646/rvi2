@@ -23,11 +23,12 @@ namespace rvi
         Transform2 _transform;
         ColorRGBA _color;
 
+		Frame(std::string&& name);
     public:
         Frame() = delete;
+        Frame(const std::string& name);    
 
-        Frame(const std::string& name);
-        Frame(std::string&& name);
+		void MoveIntoFrame(Frame& targetFrame);
 
         void ClearLines() noexcept;
 
