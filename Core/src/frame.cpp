@@ -39,14 +39,14 @@ namespace rvi
 
     Frame& Frame::AddChildFrame(const std::string& name)
     {
-        auto& pair = _childFrames.emplace(name, std::unique_ptr<Frame>(new Frame(name)));
+        auto pair = _childFrames.emplace(name, std::unique_ptr<Frame>(new Frame(name)));
         return *pair.first->second;
     }
 
     Frame& Frame::AddChildFrame(std::string&& name)
     {
         std::string nameCopy = name;
-        auto& pair = _childFrames.emplace(nameCopy, std::unique_ptr<Frame>(new Frame(std::move(name))));
+        auto pair = _childFrames.emplace(nameCopy, std::unique_ptr<Frame>(new Frame(std::move(name))));
         return *pair.first->second;
     }
 
