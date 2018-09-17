@@ -34,10 +34,10 @@ namespace rvi
     #endif
 
     // Template helper macros
-    #define TEMPLATE_ENABLE_IF_IS_POD(T)		typename = std::enable_if_t<std::is_pod<T>::value>
-    #define TEMPLATE_ENABLE_IF_IS_INTEGER(T)	typename = std::enable_if_t<std::is_integral<T>::value>
-    #define TEMPLATE_ENABLE_IF_IS_FLOAT(T)		typename = std::enable_if_t<std::is_floating_point<T>::value>
-    #define TEMPLATE_ENABLE_IF_IS_STRING(T)		typename = std::enable_if_t<std::is_same<std::basic_string<T::value_type>,T>::value>
+    #define TEMPLATE_ENABLE_IF_IS_POD(T)		typename = std::enable_if_t<std::is_pod_v<T>>
+    #define TEMPLATE_ENABLE_IF_IS_INTEGER(T)	typename = std::enable_if_t<std::is_integral_v<T>>
+    #define TEMPLATE_ENABLE_IF_IS_FLOAT(T)		typename = std::enable_if_t<std::is_floating_point_v<T>>
+    #define TEMPLATE_ENABLE_IF_IS_STRING(T)		typename = std::enable_if_t<std::is_same_v<std::basic_string<T::value_type>,T>>
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Integer data types

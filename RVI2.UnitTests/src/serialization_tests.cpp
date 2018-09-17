@@ -22,19 +22,19 @@ namespace UnitTests
 
             size_t sz = rvi::Serializer::SerializeInteger<U8>(dataContainer, u8);
             Assert::AreEqual(dataContainer[0], u8);
-            Assert::AreEqual(sz, sizeof(u8));
+            Assert::AreEqual(sz, (size_t)sizeof(u8));
 
             sz = rvi::Serializer::SerializeInteger<U16>(dataContainer, u16);
             Assert::AreEqual(dataContainer[1], (U8)(u16 >> 0));
             Assert::AreEqual(dataContainer[2], (U8)(u16 >> 8));
-            Assert::AreEqual(sz, sizeof(u16));
+            Assert::AreEqual(sz, (size_t)sizeof(u16));
 
             sz = rvi::Serializer::SerializeInteger<U32>(dataContainer, u32);
             Assert::AreEqual(dataContainer[3], (U8)(u32 >> 0));
             Assert::AreEqual(dataContainer[4], (U8)(u32 >> 8));
             Assert::AreEqual(dataContainer[5], (U8)(u32 >> 16));
             Assert::AreEqual(dataContainer[6], (U8)(u32 >> 24));
-            Assert::AreEqual(sz, sizeof(u32));
+            Assert::AreEqual(sz, (size_t)sizeof(u32));
 
             sz = rvi::Serializer::SerializeInteger<U64>(dataContainer, u64);
             Assert::AreEqual(dataContainer[7], (U8)(u64 >> 0));
@@ -45,7 +45,7 @@ namespace UnitTests
             Assert::AreEqual(dataContainer[12], (U8)(u64 >> 40));
             Assert::AreEqual(dataContainer[13], (U8)(u64 >> 48));
             Assert::AreEqual(dataContainer[14], (U8)(u64 >> 56));
-            Assert::AreEqual(sz, sizeof(u64));
+            Assert::AreEqual(sz, (size_t)sizeof(u64));
         }
 
         TEST_METHOD(Test_DeserializeInteger)
