@@ -5,6 +5,7 @@
 #include <ctime>
 #include <cmath>
 
+
 static const int OP_TEST_ITER = 99999;
 
 static std::mt19937 Rand_Generator(static_cast<int>(time(0)));
@@ -245,6 +246,43 @@ TEST(VectorFunctions, Rotate)
         ASSERT_FLOAT_EQ(vec.X, -vec.Y);
 
         vec = vec.Rotate(45.0F);
+        ASSERT_FLOAT_EQ(vec.X, mag);
+        ASSERT_FLOAT_EQ(vec.Y, 0.0F);
+    }
+}
+
+TEST(VectorFunctions, RotateInPlace)
+{
+    for (int i = 0; i < OP_TEST_ITER; i++)
+    {
+        float mag = GetRandomFloat();
+        Vector2 vec(mag, 0);
+
+        vec.RotateInPlace(45.0F);
+        ASSERT_FLOAT_EQ(vec.X, vec.Y);
+
+        vec.RotateInPlace(45.0F);
+        ASSERT_FLOAT_EQ(vec.X, 0.0F);
+        ASSERT_FLOAT_EQ(vec.Y, mag);
+
+        vec.RotateInPlace(45.0F);
+        ASSERT_FLOAT_EQ(-vec.X, vec.Y);
+
+        vec.RotateInPlace(45.0F);
+        ASSERT_FLOAT_EQ(vec.X, -mag);
+        ASSERT_FLOAT_EQ(vec.Y, 0.0F);
+
+        vec.RotateInPlace(45.0F);
+        ASSERT_FLOAT_EQ(-vec.X, -vec.Y);
+
+        vec.RotateInPlace(45.0F);
+        ASSERT_FLOAT_EQ(vec.X, 0.0F);
+        ASSERT_FLOAT_EQ(vec.Y, -mag);
+
+        vec.RotateInPlace(45.0F);
+        ASSERT_FLOAT_EQ(vec.X, -vec.Y);
+
+        vec.RotateInPlace(45.0F);
         ASSERT_FLOAT_EQ(vec.X, mag);
         ASSERT_FLOAT_EQ(vec.Y, 0.0F);
     }

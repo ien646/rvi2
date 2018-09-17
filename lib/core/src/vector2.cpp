@@ -51,10 +51,13 @@ namespace rvi
         const float angleSin = std::sin(radAngle);
         const float angleCos = std::cos(radAngle);
 	
+        const float aux_x = X;
+        const float aux_y = Y;
+
 	    // [rx] = [cos(a) , -sin(a)][x]
-        X = (X * +angleCos) + (Y * -angleSin);
+        X = (aux_x * +angleCos) + (aux_y * -angleSin);
 	    // [ry] = [sin(a) ,  cos(a)][y]
-        Y = (X * +angleSin) + (Y * +angleCos);   
+        Y = (aux_x * +angleSin) + (aux_y * +angleCos);
     }
 
     Vector2 Vector2::Reverse() const noexcept
