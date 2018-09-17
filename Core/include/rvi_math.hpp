@@ -2,7 +2,6 @@
 
 #include "rvi_base.hpp"
 #include <array>
-#include <cmath>
 
 namespace rvi
 {
@@ -10,11 +9,17 @@ namespace rvi
     {
         typedef std::array<float, 4> Matrix2x2;
 
-        const float PI = 3.141592653589793238F;
+        constexpr float PI = 3.141592653589793238F;
 
-        constexpr float Deg2Rad(float angleDeg);
+        constexpr float Deg2Rad(float angleDeg)
+        {
+            return angleDeg * PI / 180;
+        }
 
-        constexpr float Rad2Deg(float angleRad);
+        constexpr float Rad2Deg(float angleRad)
+        {
+            return angleRad * 180 / PI;
+        }
 
         Matrix2x2 Get2DRotationMatrix(float angle) noexcept;
 

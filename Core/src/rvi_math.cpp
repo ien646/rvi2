@@ -1,17 +1,9 @@
 #include "rvi_math.hpp"
 
+#include <cmath>
+
 namespace rvi
 {
-    constexpr float Math::Deg2Rad(float angleDeg)
-    {
-        return angleDeg * PI / 180;
-    }
-
-    constexpr float Math::Rad2Deg(float angleRad)
-    {
-        return angleRad * 180 / PI;
-    }
-
     Math::Matrix2x2 Math::Get2DRotationMatrix(float angle) noexcept
     {
         const float angleRadians = Deg2Rad(angle);
@@ -24,6 +16,6 @@ namespace rvi
 
     float Math::ClampAngleDeg(float angle) noexcept
     {
-        return std::fabsf(std::fmodf(angle, 360.0F));
+        return std::fabs(std::fmod(angle, 360.0F));
     }
 }
