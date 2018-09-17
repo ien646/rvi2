@@ -9,29 +9,29 @@
 
 namespace rvi
 {
-	#define RVI_CONCAT(x,y) x##y
+    #define RVI_CONCAT(x,y) x##y
     #define FWD_DECL_CLASS(X) class X
 
-	// Generate a unique prefixed name
-	#define RVI_UNIQUENAME(prefix) RVI_CONCAT(prefix,__COUNTER__)
+    // Generate a unique prefixed name
+    #define RVI_UNIQUENAME(prefix) RVI_CONCAT(prefix,__COUNTER__)
 
-	// Discard return value explicitly
-	#define DISCARD_RESULT auto RVI_UNIQUENAME(_trash_) =
+    // Discard return value explicitly
+    #define DISCARD_RESULT auto RVI_UNIQUENAME(_trash_) =
 
-	// Compiler conditional macros
-	#if defined(_MSC_VER) && !defined(__INTEL_COMPILER) /* MSVC++ */
-	    #define RVI_COMPILER_MSVC 1
+    // Compiler conditional macros
+    #if defined(_MSC_VER) && !defined(__INTEL_COMPILER) /* MSVC++ */
+    #define RVI_COMPILER_MSVC 1
 
-	#elif defined(__GNUC__) || defined(__GNUG__) && !defined(__clang__) /* GNU GCC/G++ */
-	    #define RVI_COMPILER_GNU 1
+    #elif defined(__GNUC__) || defined(__GNUG__) && !defined(__clang__) /* GNU GCC/G++ */
+    #define RVI_COMPILER_GNU 1
 
-	#elif defined(__clang__) /* CLANG */
-	    #define RVI_COMPILER_CLANG 1
+    #elif defined(__clang__) /* CLANG */
+    #define RVI_COMPILER_CLANG 1
 
-	#elif defined(__INTEL_COMPILER) || defined(__ICC) /* INTEL C/C++ COMPILER */
-	    #define RVI_COMPILER_INTEL 1
+    #elif defined(__INTEL_COMPILER) || defined(__ICC) /* INTEL C/C++ COMPILER */
+    #define RVI_COMPILER_INTEL 1
 
-	#endif
+    #endif
 
     // Template helper macros
     #define TEMPLATE_ENABLE_IF_IS_POD(T)		typename = std::enable_if_t<std::is_pod<T>::value>
@@ -42,15 +42,15 @@ namespace rvi
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Integer data types
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    using U8    = std::uint8_t;
-    using U16   = std::uint16_t;
-    using U32   = std::uint32_t;
-    using U64   = std::uint64_t;
+    using U8 = std::uint8_t;
+    using U16 = std::uint16_t;
+    using U32 = std::uint32_t;
+    using U64 = std::uint64_t;
 
-    using I8    = std::int8_t;
-    using I16   = std::int16_t;
-    using I32   = std::int32_t;
-    using I64   = std::int64_t;
+    using I8 = std::int8_t;
+    using I16 = std::int16_t;
+    using I32 = std::int32_t;
+    using I64 = std::int64_t;
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Random generator
@@ -69,11 +69,11 @@ namespace rvi
         std::uniform_int_distribution<I16> _distributionI16;
 
         std::mt19937_64 _mTwisterEngine;
-		
+
     public:
-		#if RVI_COMPILER_MSVC
-			#pragma warning(suppress: 26439)
-		#endif
+        #if RVI_COMPILER_MSVC
+        #pragma warning(suppress: 26439)
+        #endif
         Random()
             : _mTwisterEngine(_rnd_dev())
         { }
@@ -86,7 +86,7 @@ namespace rvi
         I32 GetSigned32();
         I16 GetSigned16();
 
-		static Random DefaultInstance;
+        static Random DefaultInstance;
     };
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

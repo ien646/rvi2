@@ -4,22 +4,22 @@
 
 namespace rvi
 {
-	class CommandBase
-	{
-	public:
-		U8 Header = 0;
-		std::vector<U8> Data;
-		U8 Checksum = 0;
+    class CommandBase
+    {
+    public:
+        U8 Header = 0;
+        std::vector<U8> Data;
+        U8 Checksum = 0;
 
-		std::vector<U8> GetSerialized();
+        std::vector<U8> GetSerialized();
 
-	private:
-		void BuildChecksum();
+    private:
+        void BuildChecksum();
 
-	protected:
-		void AppendData(const std::vector<U8>& data);
-		void AppendData(std::vector<U8>&& data);
+    protected:
+        void AppendData(const std::vector<U8>& data);
+        void AppendData(std::vector<U8>&& data);
 
-		virtual void BuildData() = 0;
-	};
+        virtual void BuildData() = 0;
+    };
 }

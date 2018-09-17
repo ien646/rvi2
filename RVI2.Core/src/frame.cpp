@@ -12,12 +12,12 @@ namespace rvi
         , _transform(DEFAULT_TRANSFORM)
     { }
 
-	void Frame::MoveIntoFrame(Frame& targetFrame)
-	{
-		DISCARD_RESULT targetFrame._childFrames.emplace(_name, std::move(*this));
-	}
+    void Frame::MoveIntoFrame(Frame& targetFrame)
+    {
+        DISCARD_RESULT targetFrame._childFrames.emplace(_name, std::move(*this));
+    }
 
-	void Frame::ClearLines() noexcept
+    void Frame::ClearLines() noexcept
     {
         _lines.clear();
     }

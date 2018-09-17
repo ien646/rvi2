@@ -23,16 +23,16 @@ namespace rvi
         Transform2 _transform;
         ColorRGBA _color;
 
-		Frame(std::string&& name);
+        Frame(std::string&& name);
     public:
         Frame() = delete;
-        Frame(const std::string& name);    
+        Frame(const std::string& name);
 
-		void MoveIntoFrame(Frame& targetFrame);
+        void MoveIntoFrame(Frame& targetFrame);
 
         void ClearLines() noexcept;
 
-		size_t LineCount() const noexcept;
+        size_t LineCount() const noexcept;
 
         void AddLine(const Line& ln);
         void AddLine(Line&& ln);
@@ -42,7 +42,7 @@ namespace rvi
 
         Frame& AddChildFrame(const std::string& name);
         Frame& AddChildFrame(std::string&& name);
-        
+
         bool DeleteChildFrame(const std::string& name);
 
         std::vector<Line> GetModulatedLines(const Transform2& parentTform) const;
@@ -55,7 +55,7 @@ namespace rvi
         const std::unordered_map<std::string, Frame>& Frames() const noexcept;
         const Transform2& Transform() const noexcept;
         ColorRGBA Color() const noexcept;
-        Frame& GetChildFrame(const std::string& name);        
+        Frame& GetChildFrame(const std::string& name);
 
         // -- Setters --
         void SetColor(U8 r, U8 g, U8 b, U8 a) noexcept;

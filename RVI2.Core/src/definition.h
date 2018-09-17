@@ -8,14 +8,14 @@
 namespace rvi
 {
     class ClientContext;
-	typedef std::function<void(ClientContext&)> DefinitionInstruction;
+    typedef std::function<void(ClientContext&)> DefinitionInstruction;
 
     class Definition
-    { 
+    {
     private:
         std::vector<DefinitionInstruction> _instSequence;
         std::string _name;
-        
+
     public:
         Definition() = delete;
         Definition(const std::string& name);

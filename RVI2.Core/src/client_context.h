@@ -15,28 +15,28 @@ namespace rvi
 {
     class ClientContext
     {
-	private:
+    private:
         const std::string MAIN_FRAMENAME = "__MAINFRAME__";
-		const char FRAMEPATH_SEPARATOR = ':';
-        const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);		
-        
+        const char FRAMEPATH_SEPARATOR = ':';
+        const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);
+
         Frame _mainFrame;
         std::reference_wrapper<Frame> _selectedFrame;
 
-		// Current frame selection 'stack'
-        std::vector<std::reference_wrapper<Frame>> _frameStack;       
+        // Current frame selection 'stack'
+        std::vector<std::reference_wrapper<Frame>> _frameStack;
 
         std::unordered_map<std::string, Definition> _localDefinitions;
 
-		// Framepaths of altered frames since last full or partial snapshot
-		std::unordered_set<std::string> _modifiedFramePaths;
+        // Framepaths of altered frames since last full or partial snapshot
+        std::unordered_set<std::string> _modifiedFramePaths;
 
-		bool _cachedFramePathNeedsRebuild = true;
-		std::string _cachedFramePath = MAIN_FRAMENAME;
+        bool _cachedFramePathNeedsRebuild = true;
+        std::string _cachedFramePath = MAIN_FRAMENAME;
 
-		ClientContext();
+        ClientContext();
     public:
-		static ClientContext CreateNew();
+        static ClientContext CreateNew();
 
         void DrawLine(Vector2 from, Vector2 to);
         void DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor);
@@ -71,14 +71,14 @@ namespace rvi
         void AddDefinition(const std::string& name, Definition&& instruction);
         void AddDefinition(std::string&& name, Definition&& instruction);
 
-		void DeleteDefinition(const std::string& name);
+        void DeleteDefinition(const std::string& name);
 
-		const std::string& GetCurrentFramePath();
-		const std::pair<Transform2, Frame&> ClientContext::FramePathToFrameWithTransform(const std::string& fPath);
+        const std::string& GetCurrentFramePath();
+        const std::pair<Transform2, Frame&> ClientContext::FramePathToFrameWithTransform(const std::string& fPath);
 
-		void MarkFrameAsModified();
+        void MarkFrameAsModified();
 
         std::vector<Line> GetFullSnapshot();
-		std::vector<Line> GetPartialSnapshot();
+        std::vector<Line> GetPartialSnapshot();
     };
 }
