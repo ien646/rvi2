@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include <random>
+#include <vector>
+#include <unordered_map>
 
 #define CONCAT(x,y) x##y
 
@@ -57,5 +59,18 @@ namespace rvi
         I64 GetSigned64();
         I32 GetSigned32();
         I16 GetSigned16();
+    };
+
+    class Utils
+    {
+    public:
+        template<typename TKey, typename TVal>
+        static void GetValuesFromUnorderedMap(std::unordered_map<TKey, TVal> umap, std::vector<TVal&> result)
+        {
+            for (std::pair<TKey, TVal>& pair : umap)
+            {
+                result.push_back(pair.second);
+            }
+        }
     };
 }
