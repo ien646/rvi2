@@ -11,7 +11,7 @@ namespace rvi
 	{
 	public:
 		Vector2 Position;
-		Color VertexColor;
+		ColorRGBA VertexColor;
 		
 		constexpr Vertex() noexcept { }
 		
@@ -21,7 +21,7 @@ namespace rvi
 		
 		Vertex(Vector2 pos);
 		
-		Vertex(Vector2 pos, Color vxColor);
+		Vertex(Vector2 pos, ColorRGBA vxColor);
 
 		void ApplyTransform(const Transform2& tform);
 	};

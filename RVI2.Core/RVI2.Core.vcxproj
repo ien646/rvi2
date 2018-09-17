@@ -27,7 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\color.h" />
+    <ClInclude Include="src\colorRgba.h" />
     <ClInclude Include="src\frame.h" />
     <ClInclude Include="src\line.h" />
     <ClInclude Include="src\rviMath.h" />
@@ -37,7 +37,7 @@
     <ClInclude Include="src\vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\color.cpp" />
+    <ClCompile Include="src\colorRgba.cpp" />
     <ClCompile Include="src\frame.cpp" />
     <ClCompile Include="src\line.cpp" />
     <ClCompile Include="src\rviMath.cpp" />

@@ -1,6 +1,6 @@
 #include "vertex.h"
 
-rvi::Vertex::Vertex(Vector2 pos, Color vxColor) 
+rvi::Vertex::Vertex(Vector2 pos, ColorRGBA vxColor) 
 	: Position(pos)
 	, VertexColor(vxColor)
 { }

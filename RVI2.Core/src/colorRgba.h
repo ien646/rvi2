@@ -6,7 +6,7 @@
 
 namespace rvi
 {
-	class Color
+	class ColorRGBA
 	{
 	public:
 		U8 R = 0;
@@ -14,7 +14,7 @@ namespace rvi
 		U8 B = 0;
 		U8 A = 0;
 		
-		constexpr Color() noexcept { };		
-		Color(U8 r, U8 g, U8 b, U8 a) noexcept;
+		constexpr ColorRGBA() noexcept { };		
+		ColorRGBA(U8 r, U8 g, U8 b, U8 a) noexcept;
 	};
 }
