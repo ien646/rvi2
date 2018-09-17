@@ -15,6 +15,5 @@ int main(int argc, char **argv)
     RVI_PRINT_TIMESTAMP();
 
     std::cout << "Press Enter to exit..." << std::endl;
-    return std::getchar();
-    
+    return std::getchar();    
 }

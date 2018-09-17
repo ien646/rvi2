@@ -287,3 +287,33 @@ TEST(VectorFunctions, RotateInPlace)
         ASSERT_FLOAT_EQ(vec.Y, 0.0F);
     }
 }
+
+TEST(VectorFunctions, Reverse)
+{
+    for (int i = 0; i < OP_TEST_ITER; i++)
+    {
+        float x = GetRandomFloat();
+        float y = GetRandomFloat();
+        Vector2 vec(x, y);
+
+        vec = vec.Reverse();
+
+        ASSERT_FLOAT_EQ(-x, vec.X);
+        ASSERT_FLOAT_EQ(-y, vec.Y);
+    }
+}
+
+TEST(VectorFunctions, ReverseInPlace)
+{
+    for (int i = 0; i < OP_TEST_ITER; i++)
+    {
+        float x = GetRandomFloat();
+        float y = GetRandomFloat();
+        Vector2 vec(x, y);
+
+        vec.ReverseInPlace();
+
+        ASSERT_FLOAT_EQ(-x, vec.X);
+        ASSERT_FLOAT_EQ(-y, vec.Y);
+    }
+}
