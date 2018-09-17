@@ -43,7 +43,5 @@ namespace rvi
         CRGBA_STANDARD_COLOR(FUCHSIA_LIGHT, 255, 127, 255, 0);
         CRGBA_STANDARD_COLOR(BROWN, 165, 42, 42, 0);
         CRGBA_STANDARD_COLOR(MAGENTA, 229, 9, 127, 0);
-
-        static constexpr 
     };
 }
