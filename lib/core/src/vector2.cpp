@@ -38,7 +38,7 @@ namespace rvi
 	
         // [rx] = [cos(a) , -sin(a)][x]
         const float rx = (X * +angleCos) + (Y * -angleSin);
-	// [ry] = [sin(a) ,  cos(a)][y]
+	    // [ry] = [sin(a) ,  cos(a)][y]
         const float ry = (X * +angleSin) + (Y * +angleCos);   
 
         return Vector2(rx, ry);
@@ -49,9 +49,9 @@ namespace rvi
         const float angleSin = std::sin(angle);
         const float angleCos = std::cos(angle);
 	
-	// [rx] = [cos(a) , -sin(a)][x]
+	    // [rx] = [cos(a) , -sin(a)][x]
         X = (X * +angleCos) + (Y * -angleSin);
-	// [ry] = [sin(a) ,  cos(a)][y]
+	    // [ry] = [sin(a) ,  cos(a)][y]
         Y = (X * +angleSin) + (Y * +angleCos);   
     }
 

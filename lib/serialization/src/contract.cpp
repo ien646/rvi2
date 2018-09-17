@@ -11,4 +11,9 @@ namespace rvi::serialization
     {
         _contract.push_back(std::move(desc));
     }
+
+    const std::vector<ContractElemDesc>& Contract::GetElements()
+    {
+        return _contract;
+    }
 }
