@@ -96,8 +96,7 @@ namespace rvi
 
     void Vector2::ScaleInPlace(Vector2 scale) noexcept
     {
-        X *= scale.X;
-        Y *= scale.Y;
+        CrossProductInPlace(scale);
     }
 
     void Vector2::ApplyTransform(const Transform2& tform) noexcept
