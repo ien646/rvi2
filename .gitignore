@@ -4,8 +4,8 @@ Release/
 CMakeFiles/
 *.vcxproj
 *.filters
-*.txt
 *.sln
 *.user
 cmake_install.cmake
 Core/RVI2.Core_CXX_cotire.cmake
+CMakeCache.txt
