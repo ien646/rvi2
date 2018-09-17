@@ -14,15 +14,16 @@ namespace rvi
     {
     private:
         const std::string MAIN_FRAMENAME = "__MAINFRAME__";
-        const std::string FRAME_HIERARCHY_SEPARATOR = "~";
 
         Frame _mainFrame;
         Frame& _selectedFrame;
-        std::stack<Frame&> _frameStack;
+        std::stack<std::reference_wrapper<Frame>> _frameStack;
         U64 _contextId;
 
     public:
         ClientContext() noexcept;
+
+        U64 ContextId() const;
 
         void DrawLine(Vector2 from, Vector2 to);
         void DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor);
@@ -38,18 +39,16 @@ namespace rvi
         void SetCurrentTransform(const Transform2& tform);
         void SetCurrentTransform(Transform2&& tform);
 
-        const Transform2& GetCurrentTransform();
+        const Transform2& GetCurrentTransform() const;
 
         void SetCurrentOffset(Vector2 offset);
         void SetCurrentRotation(float rotation);
         void SetCurrentScale(Vector2 scale);
 
-        Vector2 GetCurrentOffset();
-        float GetCurrentRotation();
-        Vector2 GetCurrentScale();
+        Vector2 GetCurrentOffset() const;
+        float GetCurrentRotation() const;
+        Vector2 GetCurrentScale() const;
 
         void ClearFrame();
-    private:
-
     };
 }

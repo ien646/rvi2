@@ -10,6 +10,11 @@ namespace rvi
         _frameStack.push(_mainFrame);
     }
 
+    U64 ClientContext::ContextId() const
+    {
+        return _contextId;
+    }
+
     void ClientContext::DrawLine(Vector2 from, Vector2 to)
     {
         _selectedFrame.AddLine
@@ -80,7 +85,7 @@ namespace rvi
         _selectedFrame.SetTransform(std::move(tform));
     }
 
-    const Transform2 & ClientContext::GetCurrentTransform()
+    const Transform2& ClientContext::GetCurrentTransform() const
     {
         return _selectedFrame.Transform();
     }
@@ -100,17 +105,17 @@ namespace rvi
         _selectedFrame.SetScale(scale);
     }
 
-    Vector2 ClientContext::GetCurrentOffset()
+    Vector2 ClientContext::GetCurrentOffset() const
     {
         return _selectedFrame.Transform().Position;
     }
 
-    float ClientContext::GetCurrentRotation()
+    float ClientContext::GetCurrentRotation() const
     {
         return _selectedFrame.Transform().Rotation;
     }
 
-    Vector2 ClientContext::GetCurrentScale()
+    Vector2 ClientContext::GetCurrentScale() const
     {
         return _selectedFrame.Transform().Scale;
     }
