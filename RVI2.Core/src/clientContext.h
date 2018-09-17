@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rviTypes.h"
+#include "rviBase.h"
 #include "frame.h"
 #include "line.h"
 
