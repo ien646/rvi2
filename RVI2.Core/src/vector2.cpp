@@ -4,7 +4,7 @@
 
 namespace rvi
 {
-    Vector2::Vector2(float x, float y) noexcept
+    constexpr Vector2::Vector2(float x, float y) noexcept
     {
         X = x;
         Y = y;
