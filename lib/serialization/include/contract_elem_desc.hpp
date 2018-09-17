@@ -7,7 +7,7 @@
 namespace rvi::serialization
 {
     class ContractElemDesc
-	{    
+	{
     public:
         ContractElemType Type   = ContractElemType::V_UNDEFINED;
         int32_t ItemSize        = -1;
@@ -18,7 +18,7 @@ namespace rvi::serialization
         constexpr ContractElemDesc() {};
         constexpr ContractElemDesc(ContractElemType type)
             : Type(type)
-        { } 
+        { }
 
         template<typename T, 
                  typename = std::enable_if_t<std::is_integral_v<T> 
@@ -60,12 +60,12 @@ namespace rvi::serialization
             
             if (fixed_len)
             {
-                result.Type = ContractElemType::ARRAY_FIXLEN_ARBITRARY;
+                result.Type = ContractElemType::ARRAY_SCALAR_FIXLEN;
                 result.ContainerLen = cont_len;
             }
             else
             {
-                result.Type = ContractElemType::ARRAY_VARLEN;
+                result.Type = ContractElemType::ARRAY_SCALAR_VARLEN;
                 result.ContainerLen = UNDEFINED_SZ;
             }
             return result;

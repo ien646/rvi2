@@ -39,6 +39,18 @@ namespace rvi::serialization
         void FillContractBinary_FixLen(const std::vector<uint8_t>& val, uint16_t len, int elemidx);
         void FillContractBinary_VarLen(const std::vector<uint8_t>& val, int elemidx);
 
+        template<typename T, typename = std::enable_if_t<IsScalarType<T>()>>
+        void FillContractElemArray_FixLen(std::vector<T>& val, uint16_t len, int elemidx)
+        {
+            static_assert(0, "Not implemented");
+        }
+
+        template<typename T, typename = std::enable_if_t<IsScalarType<T>()>>
+        void FillContractElemArray_VarLen(std::vector<T>& val, int elemidx)
+        {
+            static_assert(0, "Not implemented");
+        }
+
     private:
         void CheckContractValidFixedSize(int elemidx, int cont_len);
         void CheckContractValidVarSize(int elemidx, int cont_len);
@@ -46,62 +58,62 @@ namespace rvi::serialization
 
         void Throw_InvalidTypeForContract(const ContractElemDesc& descriptor);
         void Throw_FixedSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz);
-        void Throw_VarSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz);
+        void Throw_VarSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz);        
 
-    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    void Internal_FillContractElemIntegral(std::vector<uint8_t>& buff, T val, int elemidx, ContractElemType type)
-    {
-        CheckContractValidType(elemidx, type);
-        Internal_SerializeIntegral(buff, val);
-    }
-
-    template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
-    void Internal_FillContractElemFloat(std::vector<uint8_t>& buff, T val, int elemidx, ContractElemType type)
-    {
-        CheckContractValidType(elemidx, type);
-        Internal_SerializeFloat(buff, val);
-    }
-
-    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    void Internal_SerializeIntegral(std::vector<uint8_t>& buff, T val)
-    {
-        constexpr auto tsz = sizeof(T);
-        if constexpr(tsz == sizeof(uint8_t))
+        template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+        void Internal_FillContractElemIntegral(std::vector<uint8_t>& buff, T val, int elemidx, ContractElemType type)
         {
-            _buffer.push_back(val);
+            CheckContractValidType(elemidx, type);
+            Internal_SerializeIntegral(buff, val);
         }
-        else
+
+        template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+        void Internal_FillContractElemFloat(std::vector<uint8_t>& buff, T val, int elemidx, ContractElemType type)
         {
-            for(int i = 0; i < tsz; i++)
+            CheckContractValidType(elemidx, type);
+            Internal_SerializeFloat(buff, val);
+        }
+
+        template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+        void Internal_SerializeIntegral(std::vector<uint8_t>& buff, T val)
+        {
+            constexpr auto tsz = sizeof(T);
+            if constexpr(tsz == sizeof(uint8_t))
             {
-                uint8_t byt = static_cast<uint8_t>(val >> (i * 8));
-                _buffer.push_back(byt);
+                _buffer.push_back(val);
+            }
+            else
+            {
+                for(int i = 0; i < tsz; i++)
+                {
+                    uint8_t byt = static_cast<uint8_t>(val >> (i * 8));
+                    _buffer.push_back(byt);
+                }
             }
         }
-    }
 
-    template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
-    void Internal_SerializeFloat(std::vector<uint8_t>& buff, T val)
-    {
-        constexpr auto tsz = sizeof(T);
-        if constexpr(tsz == sizeof(float))
+        template<typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+        void Internal_SerializeFloat(std::vector<uint8_t>& buff, T val)
         {
-            uint32_t* ptr = reinterpret_cast<uint32_t*>(&val);
-            for(int i = 0; i < tsz; i++)
+            constexpr auto tsz = sizeof(T);
+            if constexpr(tsz == sizeof(float))
             {
-                uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
-                _buffer.push_back(byt);
+                uint32_t* ptr = reinterpret_cast<uint32_t*>(&val);
+                for(int i = 0; i < tsz; i++)
+                {
+                    uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
+                    _buffer.push_back(byt);
+                }
+            }
+            else if constexpr(tsz == sizeof(double))
+            {
+                uint64_t* ptr = reinterpret_cast<uint64_t*>(&val);
+                for(int i = 0; i < tsz; i++)
+                {
+                    uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
+                    _buffer.push_back(byt);
+                }
             }
         }
-        else if constexpr(tsz == sizeof(double))
-        {
-            uint64_t* ptr = reinterpret_cast<uint64_t*>(&val);
-            for(int i = 0; i < tsz; i++)
-            {
-                uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
-                _buffer.push_back(byt);
-            }
-        }
-    }
     };
 }

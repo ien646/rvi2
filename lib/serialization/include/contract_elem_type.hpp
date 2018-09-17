@@ -21,8 +21,8 @@ namespace rvi::serialization
         BINARY_VARLEN = 0x0A,
 
         // -- ARRAYS --
-        ARRAY_VARLEN = 0x10,
-        ARRAY_FIXLEN_ARBITRARY = 0x11,
+        ARRAY_SCALAR_VARLEN = 0x10,
+        ARRAY_SCALAR_FIXLEN = 0x11,
 
         // -- UTF8 STRINGS --
         STRING_UTF8_FIXLEN = 0x20,
