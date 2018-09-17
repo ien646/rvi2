@@ -2,30 +2,6 @@
 
 namespace rvi::serialization
 {
-    void Serializer::Throw_FixedSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz)
-    {
-        std::stringstream ss;
-        ss  << "Invalid container length for fixed size descriptor. Expected (maximum) size: "
-            << descriptor.ContainerLen
-            << ", given container size: "
-            << cont_sz
-            << std::endl;
-        throw std::logic_error(ss.str());
-    }
-
-    void Serializer::Throw_VarSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz)
-    {
-        std::stringstream ss;
-        ss  << "Invalid container length for var size descriptor. Expected (maximum) size: "
-            << std::numeric_limits<uint16_t>::max()
-            << ", given size: "
-            << cont_sz 
-            << std::endl;
-        throw std::logic_error(ss.str());
-    }
-
-    
-
     void Serializer::FillContractScalarU8(uint8_t val, int elemidx)
     {
         Internal_FillContractElemIntegral(_buffer, val, elemidx, ContractElemType::SCALAR_UINT8);
@@ -111,11 +87,10 @@ namespace rvi::serialization
         {
             Throw_VarSizeItemLengthOverflow(desc, cont_len);
         }
-    }    
+    }
 
     void Serializer::CheckMaxContainerLength(size_t cont_len)
     {
-        const ContractElemDesc& desc = _contract.GetElements().at(elemidx);
         if(cont_len > std::numeric_limits<uint16_t>::max())
         {
             std::stringstream ss;
@@ -142,6 +117,28 @@ namespace rvi::serialization
         std::stringstream ss;
         ss  << "Invalid type for contract. Expected:"
             << static_cast<uint8_t>(descriptor.Type)
+            << std::endl;
+        throw std::logic_error(ss.str());
+    }
+
+    void Serializer::Throw_FixedSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz)
+    {
+        std::stringstream ss;
+        ss << "Invalid container length for fixed size descriptor. Expected (maximum) size: "
+            << descriptor.ContainerLen
+            << ", given container size: "
+            << cont_sz
+            << std::endl;
+        throw std::logic_error(ss.str());
+    }
+
+    void Serializer::Throw_VarSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz)
+    {
+        std::stringstream ss;
+        ss << "Invalid container length for var size descriptor. Expected (maximum) size: "
+            << MAX_CONTAINER_LENGTH
+            << ", given size: "
+            << cont_sz
             << std::endl;
         throw std::logic_error(ss.str());
     }

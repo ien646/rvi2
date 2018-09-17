@@ -15,6 +15,9 @@ namespace rvi::serialization
         std::vector<uint8_t> _buffer;
     	Contract _contract;
 
+        const uint32_t MAX_CONTAINER_LENGTH = 
+            static_cast<uint32_t>(std::numeric_limits<uint16_t>::max());
+
     public:
         Serializer(const Contract& contract)
             : _contract(contract)
@@ -42,15 +45,23 @@ namespace rvi::serialization
         template<typename T, typename = std::enable_if_t<IsScalarType<T>()>>
         void FillContractElemArray_FixLen(std::vector<T>& val, int elemidx)
         {
+            const auto cont_len = val.size();
             CheckContractValidType(elemidx, ContractElemType::ARRAY_SCALAR_FIXLEN);
-            CheckMaxContainerLength(val.size());            
-
+            CheckMaxContainerLength(cont_len);
+            Internal_SerializeArray(_buffer, val);
         }
 
         template<typename T, typename = std::enable_if_t<IsScalarType<T>()>>
         void FillContractElemArray_VarLen(std::vector<T>& val, int elemidx)
         {
-            static_assert(0, "Not implemented");
+            const auto cont_len = val.size();
+            CheckContractValidType(elemidx, ContractElemType::ARRAY_SCALAR_VARLEN);
+            CheckMaxContainerLength(cont_len);
+            
+            uint16_t fxsz = static_cast<uint16_t>(cont_len);
+            Internal_SerializeIntegral(_buffer, fxsz);
+
+            Internal_SerializeArray(_buffer, val);
         }
 
     private:
@@ -115,6 +126,22 @@ namespace rvi::serialization
                 {
                     uint8_t byt = static_cast<uint8_t>((*ptr) >> (i * 8));
                     _buffer.push_back(byt);
+                }
+            }
+        }
+
+        template<typename T, typename = std::enable_if_t<IsScalarType<T>()>>
+        void Internal_SerializeArray(std::vector<uint8_t>& buff, std::vector<T>& val)
+        {
+            for (int i = 0; i < cont_len; i++)
+            {
+                if constexpr (std::is_floating_point_v<T>)
+                {
+                    Internal_SerializeFloat(buff, val[i]);
+                }
+                else
+                {
+                    Internal_SerializeIntegral(buff, val[i]);
                 }
             }
         }
