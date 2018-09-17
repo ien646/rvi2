@@ -13,12 +13,16 @@ set(RVI_PROJ_NAME "rvi2")
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 
-include(cotire)
+#include(cotire)
 include(rvi)
 
 rvi_log(${RVI_PROJ_NAME} "MODULE PATH = ${CMAKE_MODULE_PATH}")
 
 project(${RVI_PROJ_NAME} LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 rvi_log(${RVI_PROJ_NAME} "INIT PROJECT")
 

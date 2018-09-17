@@ -26,13 +26,16 @@ namespace rvi::serialization
         ARRAY_FIXLEN_ARBITRARY = 0x11,
 
         // -- UTF8 STRINGS --
-        STRING_UTF8 = 0x20,
+        STRING_UTF8_FIXLEN = 0x20,
+        STRING_UTF8_VARLEN = 0x21, 
 
         // -- PACKED BOOL ARRAYS --
-        BOOL_ARRAY_PACKED_VARLEN  = 0x30,
-        BOOL_ARRAY_PACKED_16 = 0x31,
-        BOOL_ARRAY_PACKED_32 = 0x32,
-        BOOL_ARRAY_PACKED_64 = 0x33,
+        BOOL_ARRAY_VARLEN  = 0x30,
+        BOOL_ARRAY_FIXLEN_8 = 0x31,
+        BOOL_ARRAY_FIXLEN_16 = 0x32,
+        BOOL_ARRAY_FIXLEN_32 = 0x33,
+        BOOL_ARRAY_FIXLEN_64 = 0x34,
+        BOOL_ARRAY_FIXLEN_ARBITRARY = 0x35,
 
         // -- FLOATING POINT --
         SCALAR_FLOAT32 = 0x40,

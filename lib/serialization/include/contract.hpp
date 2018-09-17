@@ -8,10 +8,10 @@ namespace rvi::serialization
 	class Contract
     {
     private:
-        std::vector<ContractElemDescriptor> _contract;
+        std::vector<ContractElemDesc> _contract;
 		
     public:
-        void AppendElem(const ContractElemDescriptor& elem);
-        void AppendElem(ContractElemDescriptor&& elem);
+        void AppendElem(const ContractElemDesc& elem);
+        void AppendElem(ContractElemDesc&& elem);
     };
 }
