@@ -46,13 +46,16 @@ namespace rvi
 
         static size_t SerializeVertex(std::vector<U8>& data_container, const Vertex& val);
 
+        static size_t SerializeString(std::vector<U8>& data_container, const std::string& val);
+
+        static size_t SerializeU16String(std::vector<U8>& data_container, const std::u16string& val);
+
+        static size_t SerializeU32String(std::vector<U8>& data_container, const std::u32string& val);
+
     private:
         template<typename T, TEMPLATE_ENABLE_IF_IS_POD(T)>
         static size_t SerializePOD_Internal(std::vector<U8>& data_container, const T& pod_obj)
         {
-            // Resize container to fit new data
-            data_container.reserve(data_container.size() + sizeof(T));
-
             U8* pod_obj_ptr = (U8*)&pod_obj;
             for (size_t i = 0; i < sizeof(pod_obj); ++i)
             {
@@ -61,50 +64,86 @@ namespace rvi
             return sizeof(T);
         }
 
+        template<typename T, TEMPLATE_ENABLE_IF_IS_STRING(T)>
+        static size_t SerializeString_Internal(std::vector<U8>& data_container, const T& str_obj)
+        {
+            const U8 char_sz = (U8)(sizeof(T::value_type));
+            const U16 bufflen = (U16)(sizeof(char_sz) + (str_obj.size() * char_sz));
+            const size_t stringlen = str_obj.size();
+
+            if (char_sz == 1)
+            {
+                static_assert(std::is_same_v<wchar_t, T::value_type> == false);
+                std::copy(str_obj.begin(), str_obj.end(), std::back_inserter(data_container));
+            }
+            else
+            {
+                for (size_t i = 0; i < stringlen; i++)
+                {
+                    SerializePOD_Internal<T::value_type>(data_container, str_obj[i]);
+                }
+            }
+
+            return bufflen;
+        }
+
         //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
         // Deserialization
         //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     public:
-        static std::string DeserializeString(const std::vector<U8>& data_container, size_t offset)
+        template<typename T, TEMPLATE_ENABLE_IF_IS_INTEGER(T)>
+        static T DeserializeInteger(const std::vector<U8>& data_container, size_t& offset_ref)
         {
-            return DeserializeString_Internal<std::string>(data_container, offset);
+            return DeserializePOD_Internal<T>(data_container, offset_ref);
         }
 
-        static std::wstring DeserializeWString(const std::vector<U8>& data_container, size_t offset)
+        template<typename T, TEMPLATE_ENABLE_IF_IS_FLOAT(T)>
+        static T DeserializeFloat(const std::vector<U8>& data_container, size_t& offset_ref)
         {
-            return DeserializeString_Internal<std::wstring>(data_container, offset);
+            return DeserializePOD_Internal<T>(data_container, offset_ref);
         }
+
+        static Vector2 DeserializeVector2(const std::vector<U8>& data_container, size_t& offset_ref);
+
+        static ColorRGBA DeserializeColorRGBA(const std::vector<U8>& data_container, size_t& offset_ref);
+
+        static Vertex DeserializeVertex(const std::vector<U8>& data_container, size_t& offset_ref);
+
+        static std::string DeserializeString(const std::vector<U8>& data_container, size_t& offset_ref);
+
+        static std::u16string DeserializeU16String(const std::vector<U8>& data_container, size_t& offset_ref);
+
+        static std::u32string DeserializeU32String(const std::vector<U8>& data_container, size_t& offset_ref);
 
     private:
 
         template<typename T, TEMPLATE_ENABLE_IF_IS_POD(T)>
-        static T DeserializePOD_Internal(const std::vector<U8>& data_container, size_t offset)
+        static T DeserializePOD_Internal(const std::vector<U8>& data_container, size_t& offset_ref)
         {
             size_t obj_sz = sizeof(T);
-            assert((offset + obj_sz) <= data_container.size());
+            assert((offset_ref + obj_sz) <= data_container.size());
             T result;
-            std::memcpy(&result, (data_container.data() + offset), obj_sz);
+            std::memcpy(&result, (data_container.data() + offset_ref), obj_sz);
+            offset_ref += sizeof(T);
             return result;
         }
 
         template<typename T, TEMPLATE_ENABLE_IF_IS_STRING(T)>
-        static T DeserializeString_Internal(const std::vector<U8>& data_container, size_t offset)
+        static T DeserializeString_Internal(const std::vector<U8>& data_container, size_t& offset_ref)
         {
             // Check for out of bounds read attempts
-            assert(data_container.size() < (offset + 3));
+            assert(data_container.size() < (offset_ref + 3));
 
             const size_t char_size = sizeof(T::value_type);
+            
+            U16 dataBuffLen = Serializer::DeserializePOD_Internal<U16>(data_container, offset_ref);
+            offset_ref += sizeof(dataBuffLen);
+
+            U8 dataCharSz = data_container[offset_ref];
+            offset_ref += sizeof(dataCharSz);
 
             // Check for char size mismatch
-            assert(sizeof(T::value_type) == char_size);
-
-            size_t currentOffset = offset;
-
-            U16 dataBuffLen = Serializer::DeserializePOD_Internal<U16>(data_container, currentOffset);
-            currentOffset += sizeof(dataBuffLen);
-
-            U8 dataCharSz = data_container[currentOffset];
-            currentOffset += sizeof(dataCharSz);
+            assert(sizeof(T::value_type) == dataCharSz);
 
             size_t resultLen = (dataBuffLen - sizeof(dataCharSz)) / dataCharSz;
 
@@ -114,7 +153,7 @@ namespace rvi
             // If its an std::string just directly copy the data
             if (dataCharSz == 1)
             {
-                auto container_it_begin = (data_container.begin() + currentOffset);
+                auto container_it_begin = (data_container.begin() + offset_ref);
                 auto container_it_end = container_it_begin + (resultLen * char_size);
                 DISCARD_RESULT std::copy(container_it_begin, container_it_end, result.begin());
             }
@@ -122,8 +161,8 @@ namespace rvi
             {
                 for (size_t i = 0; i < resultLen; i++)
                 {
-                    result += Serializer::DeserializePOD_Internal<T::value_type>(data_container, currentOffset);
-                    currentOffset += char_size;
+                    result += Serializer::DeserializePOD_Internal<T::value_type>(data_container, offset_ref);
+                    offset_ref += char_size;
                 }
             }
             return result;
