@@ -40,6 +40,8 @@ namespace rvi
         Frame& AddChildFrame(const std::string& name);
         Frame& AddChildFrame(std::string&& name);
         
+        bool DeleteChildFrame(const std::string& name);
+
         void GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform);
 
         bool ContainsChildFrame(const std::string& name);

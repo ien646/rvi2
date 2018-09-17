@@ -50,6 +50,11 @@ namespace rvi
         return pair.first->second;
     }
 
+    bool Frame::DeleteChildFrame(const std::string& name)
+    {
+        return (_childFrames.erase(name) < 0);
+    }
+
     void Frame::GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform)
     {
         // Current absolute transform

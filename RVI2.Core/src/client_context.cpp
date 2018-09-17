@@ -74,6 +74,11 @@ namespace rvi
         _selectedFrame = _frameStack.top();
     }
 
+    bool ClientContext::DeleteFrame(const std::string & name)
+    {
+        _selectedFrame.get().DeleteChildFrame(name);
+    }
+
     void ClientContext::SetCurrentColor(ColorRGBA color)
     {
         _selectedFrame.get().SetColor(color);
@@ -124,7 +129,7 @@ namespace rvi
         return _selectedFrame.get().Transform().Scale;
     }
 
-    void ClientContext::ClearFrame()
+    void ClientContext::ClearFrame() noexcept
     {
         _selectedFrame.get().ClearLines();
     }
@@ -149,8 +154,9 @@ namespace rvi
         DISCARD _localDefinitions.emplace(std::move(name), std::move(instruction));
     }
 
-    void ClientContext::GetSnapshot(std::vector<Line>& result)
+    std::vector<Line> ClientContext::GetSnapshot()
     {
+        std::vector<Line> result;
         _mainFrame.GetModulatedLines(result, DEFAULT_TRANSFORM);
     }
 }

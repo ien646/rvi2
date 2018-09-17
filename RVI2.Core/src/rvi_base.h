@@ -5,6 +5,7 @@
 #include <random>
 #include <vector>
 #include <unordered_map>
+#include <type_traits>
 
 #define CONCAT(x,y) x##y
 
@@ -61,6 +62,9 @@ namespace rvi
         I16 GetSigned16();
     };
 
+    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    // Utilities
+    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     class Utils
     {
     public:

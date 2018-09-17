@@ -37,10 +37,7 @@ namespace rvi
 
         bool ReleaseFrame();
 
-        bool DeleteFrame(const std::string& name)
-        {
-            
-        }
+        bool DeleteFrame(const std::string& name);
 
         void SetCurrentColor(ColorRGBA color);
 
@@ -57,13 +54,13 @@ namespace rvi
         float GetCurrentRotation() const;
         Vector2 GetCurrentScale() const;
 
-        void ClearFrame();
+        void ClearFrame() noexcept;
 
         void AddDefinition(const std::string& name, const Definition& instruction);
         void AddDefinition(std::string&& name, const Definition& instruction);
         void AddDefinition(const std::string& name, Definition&& instruction);
         void AddDefinition(std::string&& name, Definition&& instruction);
 
-        void GetSnapshot(std::vector<Line>& result);
+        std::vector<Line> GetSnapshot();
     };
 }
