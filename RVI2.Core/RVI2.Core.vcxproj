@@ -40,9 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\base64.cpp" />
-    <ClCompile Include="src\color_rgba.cpp" />
+    <ClCompile Include="src\client_context.cpp" />
     <ClCompile Include="src\frame.cpp" />
     <ClCompile Include="src\line.cpp" />
+    <ClCompile Include="src\rvi_base.cpp" />
     <ClCompile Include="src\rvi_math.cpp" />
     <ClCompile Include="src\transform2.cpp" />
     <ClCompile Include="src\vector2.cpp" />

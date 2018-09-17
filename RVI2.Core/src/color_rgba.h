@@ -15,6 +15,12 @@ namespace rvi
         U8 A = 0;
 
         constexpr ColorRGBA() noexcept { };
-        constexpr ColorRGBA(U8 r, U8 g, U8 b, U8 a) noexcept;
+        constexpr ColorRGBA(U8 r, U8 g, U8 b, U8 a) noexcept
+        {
+            R = r;
+            G = g;
+            B = b;
+            A = a;
+        }
     };
 }

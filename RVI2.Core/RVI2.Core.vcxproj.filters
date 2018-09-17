@@ -65,10 +65,13 @@
     <ClCompile Include="src\base64.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\color_rgba.cpp">
+    <ClCompile Include="src\rvi_math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rvi_math.cpp">
+    <ClCompile Include="src\client_context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rvi_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

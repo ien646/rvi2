@@ -25,16 +25,28 @@ namespace rvi
         _lines.push_back(std::move(ln));
     }
 
-    void Frame::AddChildFrame(const std::string& name)
+    void Frame::AddLine(const Vertex& from, const Vertex& to)
+    {
+        _lines.push_back(Line(from, to));
+    }
+
+    void Frame::AddLine(Vertex&& from, Vertex&& to)
+    {
+        _lines.push_back(Line(std::move(from), std::move(to)));
+    }
+
+    Frame& Frame::AddChildFrame(const std::string& name)
     {
         Frame& lastAdded = _childFrames.emplace_back(name);
         DISCARD _childFramesMap.emplace(name, lastAdded);
+        return lastAdded;
     }
 
-    void Frame::AddChildFrame(std::string&& name)
+    Frame& Frame::AddChildFrame(std::string&& name)
     {
         Frame& lastAdded = _childFrames.emplace_back(std::move(name));
         DISCARD _childFramesMap.emplace(lastAdded.Name(), lastAdded);
+        return lastAdded;
     }
 
     void Frame::GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform)
@@ -55,6 +67,11 @@ namespace rvi
         }
     }
 
+    bool Frame::ContainsChildFrame(const std::string& name)
+    {
+        return (_childFramesMap.count(name) > 0);
+    }
+
     void Frame::SetColor(U8 r, U8 g, U8 b, U8 a) noexcept
     {
         _color = ColorRGBA(r, g, b, a);
@@ -73,6 +90,21 @@ namespace rvi
     void Frame::SetTransform(Transform2&& tform) noexcept
     {
         _transform = std::move(tform);
+    }
+
+    void Frame::SetOffset(Vector2 offset)
+    {
+        _transform.Position = offset;
+    }
+
+    void Frame::SetRotation(float rotation)
+    {
+        _transform.Rotation = rotation;
+    }
+
+    void Frame::SetScale(Vector2 scale)
+    {
+        _transform.Scale = scale;
     }
 
     const std::string& Frame::Name() const noexcept

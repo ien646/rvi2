@@ -33,10 +33,15 @@ namespace rvi
         void AddLine(const Line& ln);
         void AddLine(Line&& ln);
 
-        void AddChildFrame(const std::string& name);
-        void AddChildFrame(std::string&& name);
+        void AddLine(const Vertex& from, const Vertex& to);
+        void AddLine(Vertex&& from, Vertex&& to);
+
+        Frame& AddChildFrame(const std::string& name);
+        Frame& AddChildFrame(std::string&& name);
 
         void GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform);
+
+        bool ContainsChildFrame(const std::string& name);
 
         // -- Getters --
         const std::string& Name() const noexcept;
@@ -51,5 +56,8 @@ namespace rvi
         void SetColor(ColorRGBA color) noexcept;
         void SetTransform(const Transform2& tform) noexcept;
         void SetTransform(Transform2&& tform) noexcept;
+        void SetOffset(Vector2 offset);
+        void SetRotation(float rotation);
+        void SetScale(Vector2 scale);
     };
 }
