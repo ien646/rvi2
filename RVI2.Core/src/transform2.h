@@ -9,18 +9,18 @@
 
 namespace rvi
 {
-	class Transform2
-	{
-	public:
-		Vector2 Position;
-		Vector2 Scale;
-		float Rotation = 0.0F;
-		
-		Transform2() noexcept { }
-		Transform2(Vector2 pos, Vector2 scale, float rot) noexcept;
+    class Transform2
+    {
+    public:
+        Vector2 Position;
+        Vector2 Scale;
+        float Rotation = 0.0F;
 
-		void ApplyTo(std::vector<Line>& vecs) const noexcept;
+        Transform2() noexcept { }
+        Transform2(Vector2 pos, Vector2 scale, float rot) noexcept;
 
-		Transform2 Merge(const Transform2& other) noexcept;
-	};
+        void ApplyTo(std::vector<Line>& vecs) const noexcept;
+
+        Transform2 Merge(const Transform2& other) noexcept;
+    };
 }

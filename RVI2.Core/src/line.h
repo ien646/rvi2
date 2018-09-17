@@ -8,16 +8,16 @@
 
 namespace rvi
 {
-	class Line
-	{
-	public:
-		Vertex Start;
-		Vertex End;
-		
-		constexpr Line() noexcept { }		
-		Line(const Vertex& start, const Vertex& end) noexcept;
-		Line(Vertex&& start, Vertex&& end) noexcept;
+    class Line
+    {
+    public:
+        Vertex Start;
+        Vertex End;
 
-		void ApplyTransform(const Transform2& tform) noexcept;
-	};
+        constexpr Line() noexcept { }
+        Line(const Vertex& start, const Vertex& end) noexcept;
+        Line(Vertex&& start, Vertex&& end) noexcept;
+
+        void ApplyTransform(const Transform2& tform) noexcept;
+    };
 }
