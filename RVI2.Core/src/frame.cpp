@@ -4,10 +4,12 @@ namespace rvi
 {
     Frame::Frame(const std::string& name)
         : _name(name)
+        , _transform(DEFAULT_TRANSFORM)
     { }
 
     Frame::Frame(std::string&& name)
         : _name(std::move(name))
+        , _transform(DEFAULT_TRANSFORM)
     { }
 
     void Frame::ClearLines() noexcept

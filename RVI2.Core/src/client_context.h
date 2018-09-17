@@ -15,7 +15,7 @@ namespace rvi
     {
     private:
         const std::string MAIN_FRAMENAME = "__MAINFRAME__";
-        const Transform2 DEFAULT_TRANSFORM = Transform2();
+        const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);
 
         Frame _mainFrame;
         Frame& _selectedFrame;

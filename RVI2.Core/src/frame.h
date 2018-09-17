@@ -15,6 +15,8 @@ namespace rvi
     class Frame
     {
     private:
+        const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);
+
         std::string _name;
         std::vector<Line> _lines;
         std::unordered_map<std::string, Frame&> _childFramesMap;
