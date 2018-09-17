@@ -6,7 +6,7 @@ namespace rvi
 {
     float Vector2::Magnitude() const noexcept
     {
-        return std::sqrtf(powf(X, 2) + powf(Y, 2));
+        return std::sqrt(powf(X, 2) + powf(Y, 2));
     }
 
     Vector2 Vector2::CrossProduct(Vector2 other) const noexcept
