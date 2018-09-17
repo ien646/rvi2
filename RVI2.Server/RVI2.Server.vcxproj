@@ -20,12 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\program.h" />
-    <ClInclude Include="src\interpreter.h" />
     <ClInclude Include="src\session.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\program.cpp" />
-    <ClCompile Include="src\interpreter.cpp" />
     <ClCompile Include="src\session.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -82,6 +80,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\Ien\source\repos\RVI2\RVI2.Core\src;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Ien\source\repos\RVI2\x64\Debug;$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -89,6 +89,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <Link>
       <AdditionalDependencies>RVI2.Core.lib;%(AdditionalDependencies)</AdditionalDependencies>

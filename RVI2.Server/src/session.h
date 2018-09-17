@@ -5,7 +5,6 @@
 #include "rvi_base.h"
 #include "client_context.h"
 #include "program.h"
-#include "interpreter.h"
 
 namespace rvi
 {
