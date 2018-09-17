@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rviTypes.h"
+#include "rviBase.h"
 #include <array>
 #include <cmath>
 

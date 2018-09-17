@@ -3,6 +3,12 @@
 
 #include <cstdint>
 
+#define CONCAT_(x,y) x##y
+#define CONCAT(x,y) CONCAT_(x,y)
+#define UNIQUENAME(prefix) CONCAT(prefix,__COUNTER__)
+
+#define DISCARD auto UNIQUENAME(____trash_) =
+
 namespace rvi
 {
     typedef std::uint8_t 	U8;

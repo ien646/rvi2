@@ -27,16 +27,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\base64.h" />
+    <ClInclude Include="src\clientContext.h" />
     <ClInclude Include="src\colorRgba.h" />
     <ClInclude Include="src\frame.h" />
     <ClInclude Include="src\line.h" />
     <ClInclude Include="src\rviMath.h" />
-    <ClInclude Include="src\rviTypes.h" />
+    <ClInclude Include="src\rviBase.h" />
     <ClInclude Include="src\transform2.h" />
     <ClInclude Include="src\vector2.h" />
     <ClInclude Include="src\vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\base64.cpp" />
     <ClCompile Include="src\colorRgba.cpp" />
     <ClCompile Include="src\frame.cpp" />
     <ClCompile Include="src\line.cpp" />
@@ -116,7 +119,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">

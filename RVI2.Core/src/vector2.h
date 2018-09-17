@@ -1,7 +1,7 @@
 /* FILE: Vector2.h */
 #pragma once
 
-#include "rviTypes.h"
+#include "rviBase.h"
 
 namespace rvi
 {

@@ -27,14 +27,14 @@ namespace rvi
 
     void Frame::AddChildFrame(const std::string& name)
     {
-        _childFrames.emplace_back(name);
-        _childFramesMap.emplace(name, *_childFrames.end());
+        Frame& lastAdded = _childFrames.emplace_back(name);
+        DISCARD _childFramesMap.emplace(name, lastAdded);
     }
 
     void Frame::AddChildFrame(std::string&& name)
     {
-        _childFrames.emplace_back(std::move(name));
-        _childFramesMap.emplace(_childFrames.end()->Name(), *_childFrames.end());
+        Frame& lastAdded = _childFrames.emplace_back(std::move(name));
+        DISCARD _childFramesMap.emplace(lastAdded.Name(), lastAdded);
     }
 
     void Frame::GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform)
@@ -98,5 +98,10 @@ namespace rvi
     ColorRGBA Frame::Color() const noexcept
     {
         return _color;
+    }
+
+    Frame& Frame::GetChildFrame(const std::string& name)
+    {
+        return _childFramesMap.at(name);
     }
 }

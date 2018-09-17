@@ -1,7 +1,7 @@
 /* FILE: vertex2.h */
 #pragma once
 
-#include "rviTypes.h"
+#include "rviBase.h"
 #include "vector2.h"
 #include "colorRgba.h"
 

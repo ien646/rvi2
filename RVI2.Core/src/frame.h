@@ -44,6 +44,7 @@ namespace rvi
         const std::vector<Frame>& Frames() const noexcept;
         const Transform2& Transform() const noexcept;
         ColorRGBA Color() const noexcept;
+        Frame& GetChildFrame(const std::string& name);
 
         // -- Setters --
         void SetColor(U8 r, U8 g, U8 b, U8 a) noexcept;
