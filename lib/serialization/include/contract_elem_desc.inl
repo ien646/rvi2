@@ -71,7 +71,7 @@ namespace rvi::serialization
     }
 
     template<typename T, typename std::enable_if_t<
-            std::is_same_v<std::basic_string<typename T::value_type>, T>>>
+            std::is_same_v<std::basic_string<typename T::value_type>, std::decay_t<T>>>>
     static constexpr ContractElemDesc CreateString(bool fixed_len, int32_t cont_len)
     {
         if constexpr(std::is_same_v<std::string::value_type, T::value_type>)
