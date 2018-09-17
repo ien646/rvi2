@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <string>
 #include <utility>
+#include <memory>
 
 #include "line.hpp"
 #include "transform2.hpp"
