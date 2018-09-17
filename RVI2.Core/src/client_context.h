@@ -37,6 +37,11 @@ namespace rvi
 
         bool ReleaseFrame();
 
+        bool DeleteFrame(const std::string& name)
+        {
+            
+        }
+
         void SetCurrentColor(ColorRGBA color);
 
         void SetCurrentTransform(const Transform2& tform);

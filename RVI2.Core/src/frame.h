@@ -19,8 +19,7 @@ namespace rvi
 
         std::string _name;
         std::vector<Line> _lines;
-        std::unordered_map<std::string, Frame&> _childFramesMap;
-        std::vector<Frame> _childFrames;
+        std::unordered_map<std::string, Frame> _childFrames;
         Transform2 _transform;
         ColorRGBA _color;
 
@@ -40,7 +39,7 @@ namespace rvi
 
         Frame& AddChildFrame(const std::string& name);
         Frame& AddChildFrame(std::string&& name);
-
+        
         void GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform);
 
         bool ContainsChildFrame(const std::string& name);
@@ -48,7 +47,7 @@ namespace rvi
         // -- Getters --
         const std::string& Name() const noexcept;
         const std::vector<Line>& Lines() const noexcept;
-        const std::vector<Frame>& Frames() const noexcept;
+        const std::unordered_map<std::string, Frame>& Frame::Frames() const noexcept;
         const Transform2& Transform() const noexcept;
         ColorRGBA Color() const noexcept;
         Frame& GetChildFrame(const std::string& name);
@@ -61,5 +60,7 @@ namespace rvi
         void SetOffset(Vector2 offset);
         void SetRotation(float rotation);
         void SetScale(Vector2 scale);
+
+    private:
     };
 }

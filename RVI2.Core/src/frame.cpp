@@ -39,16 +39,15 @@ namespace rvi
 
     Frame& Frame::AddChildFrame(const std::string& name)
     {
-        Frame& lastAdded = _childFrames.emplace_back(name);
-        DISCARD _childFramesMap.emplace(name, lastAdded);
-        return lastAdded;
+        auto& pair = _childFrames.emplace(name, Frame(name));
+        return pair.first->second;
     }
 
     Frame& Frame::AddChildFrame(std::string&& name)
     {
-        Frame& lastAdded = _childFrames.emplace_back(std::move(name));
-        DISCARD _childFramesMap.emplace(lastAdded.Name(), lastAdded);
-        return lastAdded;
+        std::string nameCopy = name;
+        auto& pair = _childFrames.emplace(nameCopy, Frame(std::move(name)));
+        return pair.first->second;
     }
 
     void Frame::GetModulatedLines(std::vector<Line>& result, const Transform2& parentTform)
@@ -63,15 +62,16 @@ namespace rvi
         std::move(ownLines.begin(), ownLines.end(), std::back_inserter(result));
 
         // Child frames
-        for (Frame& chFrame : _childFrames)
+        for (auto& entry : _childFrames)
         {
-            chFrame.GetModulatedLines(result, absTform);
+            Frame& childFrame = entry.second;
+            childFrame.GetModulatedLines(result, absTform);
         }
     }
 
     bool Frame::ContainsChildFrame(const std::string& name)
     {
-        return (_childFramesMap.count(name) > 0);
+        return (_childFrames.count(name) > 0);
     }
 
     void Frame::SetColor(U8 r, U8 g, U8 b, U8 a) noexcept
@@ -119,7 +119,7 @@ namespace rvi
         return _lines;
     }
 
-    const std::vector<Frame>& Frame::Frames() const noexcept
+    const std::unordered_map<std::string, Frame>& Frame::Frames() const noexcept
     {
         return _childFrames;
     }
@@ -136,6 +136,6 @@ namespace rvi
 
     Frame& Frame::GetChildFrame(const std::string& name)
     {
-        return _childFramesMap.at(name);
+        return _childFrames.at(name);
     }
 }
