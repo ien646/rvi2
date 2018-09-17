@@ -69,7 +69,7 @@ namespace rvi
 
 	void Command_SelectFrame::BuildData()
 	{
-        /*Serializer::SerializeString(Data, FrameName);*/
+        Serializer::SerializeString(Data, FrameName);
 	}
 
 	Command_DeleteFrame::Command_DeleteFrame(const std::string& frameName)
@@ -86,7 +86,7 @@ namespace rvi
 
 	void Command_DeleteFrame::BuildData()
 	{
-        /*Serializer::SerializeString(Data, FrameName);*/
+        Serializer::SerializeString(Data, FrameName);
 	}
 
 	Command_ClearFrame::Command_ClearFrame(const std::string & frameName)
@@ -103,6 +103,6 @@ namespace rvi
 
 	void Command_ClearFrame::BuildData()
 	{
-        /*Serializer::SerializeString(Data, FrameName);*/
+        Serializer::SerializeString(Data, FrameName);
 	}
 }
