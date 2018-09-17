@@ -4,52 +4,52 @@ namespace rvi::serialization
 {
     void Serializer::FillContractScalarU8(uint8_t val, int contract_iidx)
     {
-        Internal_FillContractElemIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_UINT8);
+        Internal_FillContractIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_UINT8);
     }
 
     void Serializer::FillContractScalarU16(uint16_t val, int contract_iidx)
     {
-        Internal_FillContractElemIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_UINT16);
+        Internal_FillContractIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_UINT16);
     }
 
     void Serializer::FillContractScalarU32(uint32_t val, int contract_iidx)
     {
-        Internal_FillContractElemIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_UINT32);
+        Internal_FillContractIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_UINT32);
     }
 
     void Serializer::FillContractScalarU64(uint64_t val, int contract_iidx)
     {
-        Internal_FillContractElemIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_UINT64);
+        Internal_FillContractIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_UINT64);
     }
 
     void Serializer::FillContractScalarI8(int8_t val, int contract_iidx)
     {
-        Internal_FillContractElemIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_INT8);
+        Internal_FillContractIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_INT8);
     }
 
     void Serializer::FillContractScalarI16(int16_t val, int contract_iidx)
     {
-        Internal_FillContractElemIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_INT16);
+        Internal_FillContractIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_INT16);
     }
 
     void Serializer::FillContractScalarI32(int32_t val, int contract_iidx)
     {
-        Internal_FillContractElemIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_INT32);
+        Internal_FillContractIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_INT32);
     }
 
     void Serializer::FillContractScalarI64(int64_t val, int contract_iidx)
     {
-        Internal_FillContractElemIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_INT64);
+        Internal_FillContractIntegral(_buffer, val, contract_iidx, ContractElemType::SCALAR_INT64);
     }
 
     void Serializer::FillContractScalarFP32(float val, int contract_iidx)
     {
-        Internal_FillContractElemFloat32(_buffer, val, contract_iidx, ContractElemType::SCALAR_FLOAT32);
+        Internal_FillContractFloat32(_buffer, val, contract_iidx, ContractElemType::SCALAR_FLOAT32);
     }
 
     void Serializer::FillContractScalarFP64(double val, int contract_iidx)
     {
-        Internal_FillContractElemFloat64(_buffer, val, contract_iidx, ContractElemType::SCALAR_FLOAT64);
+        Internal_FillContractFloat64(_buffer, val, contract_iidx, ContractElemType::SCALAR_FLOAT64);
     }
 
     void Serializer::FillContractBinary_FixLen(const std::vector<uint8_t>& val, int contract_iidx)
@@ -65,29 +65,29 @@ namespace rvi::serialization
         CheckContractValidType(contract_iidx, ContractElemType::BINARY_VARLEN);
         CheckMaxContainerLength(val.size());
 
-        Internal_SerializeContainerLen(_buffer, val.size());
+        SerializeContainerLen(_buffer, val.size());
         std::copy(val.begin(), val.end(), std::back_inserter(_buffer));
     }
 
-    void Serializer::FillContractElemBoolArray_FixLen(const std::vector<bool>& val, int contract_iidx)
+    void Serializer::FillContractBoolArray_FixLen(const std::vector<bool>& val, int contract_iidx)
     {
         CheckContractValidType(contract_iidx, ContractElemType::BOOL_ARRAY_FIXLEN);
         CheckMaxContainerLength(val.size());
         CheckContractValidFixedSize(contract_iidx, val.size() / sizeof(uint8_t));
 
-        Internal_SerializeBoolArray(_buffer, val);
+        SerializeBoolArray(_buffer, val);
     }
 
-    void Serializer::FillContractElemBoolArray_VarLen(const std::vector<bool>& val, int contract_iidx)
+    void Serializer::FillContractBoolArray_VarLen(const std::vector<bool>& val, int contract_iidx)
     {
         CheckContractValidType(contract_iidx, ContractElemType::BOOL_ARRAY_VARLEN);
         CheckMaxContainerLength(val.size());
 
-        Internal_SerializeContainerLen(_buffer, val.size());
-        Internal_SerializeBoolArray(_buffer, val);
+        SerializeContainerLen(_buffer, val.size());
+        SerializeBoolArray(_buffer, val);
     }
 
-    void Serializer::FillContractElemString_FixLen(const std::string& val, int contract_iidx)
+    void Serializer::FillContractString_FixLen(const std::string& val, int contract_iidx)
     {
         const size_t strsz = val.size();
         CheckContractValidType(contract_iidx, ContractElemType::STRING_FIXLEN);
@@ -97,57 +97,57 @@ namespace rvi::serialization
         std::copy(val.begin(), val.end(), std::back_inserter(_buffer));
     }
 
-    void Serializer::FillContractElemString_VarLen(const std::string& val, int contract_iidx)
+    void Serializer::FillContractString_VarLen(const std::string& val, int contract_iidx)
     {
         const size_t strsz = val.size();
         CheckContractValidType(contract_iidx, ContractElemType::STRING_VARLEN);
         CheckMaxContainerLength(strsz);
 
-        Internal_SerializeContainerLen(_buffer, strsz);
+        SerializeContainerLen(_buffer, strsz);
         std::copy(val.begin(), val.end(), std::back_inserter(_buffer));
     }
 
-    void Serializer::FillContractElemStringUtf16_FixLen(const std::u16string& val, int contract_iidx)
+    void Serializer::FillContractStringUtf16_FixLen(const std::u16string& val, int contract_iidx)
     {
         const size_t strsz = val.size();
         CheckContractValidType(contract_iidx, ContractElemType::STRING_UTF16_FIXLEN);
         CheckContractValidFixedSize(contract_iidx, strsz);
         CheckMaxContainerLength(strsz);
 
-        Internal_SerializeUtf16String(_buffer, val);
+        SerializeUtf16String(_buffer, val);
     }
 
-    void Serializer::FillContractElemStringUtf16_VarLen(const std::u16string& val, int contract_iidx)
+    void Serializer::FillContractStringUtf16_VarLen(const std::u16string& val, int contract_iidx)
     {
         const size_t strsz = val.size();
         CheckContractValidType(contract_iidx, ContractElemType::STRING_UTF16_VARLEN);
         CheckMaxContainerLength(strsz);
 
-        Internal_SerializeContainerLen(_buffer, strsz);
-        Internal_SerializeUtf16String(_buffer, val);
+        SerializeContainerLen(_buffer, strsz);
+        SerializeUtf16String(_buffer, val);
     }
 
-    void Serializer::FillContractElemStringUtf32_FixLen(const std::u32string& val, int contract_iidx)
+    void Serializer::FillContractStringUtf32_FixLen(const std::u32string& val, int contract_iidx)
     {
         const size_t strsz = val.size();
         CheckContractValidType(contract_iidx, ContractElemType::STRING_UTF32_FIXLEN);
         CheckContractValidFixedSize(contract_iidx, strsz);
         CheckMaxContainerLength(strsz);
 
-        Internal_SerializeUtf32String(_buffer, val);
+        SerializeUtf32String(_buffer, val);
     }
 
-    void Serializer::FillContractElemStringUtf32_VarLen(const std::u32string& val, int contract_iidx)
+    void Serializer::FillContractStringUtf32_VarLen(const std::u32string& val, int contract_iidx)
     {
         const size_t strsz = val.size();
         CheckContractValidType(contract_iidx, ContractElemType::STRING_UTF32_VARLEN);
         CheckMaxContainerLength(strsz);
 
-        Internal_SerializeContainerLen(_buffer, val.size());
-        Internal_SerializeUtf32String(_buffer, val);
+        SerializeContainerLen(_buffer, val.size());
+        SerializeUtf32String(_buffer, val);
     }
 
-    void Serializer::Internal_SerializeFloat32(std::vector<uint8_t>& buff, float val)
+    void Serializer::SerializeFloat32(std::vector<uint8_t>& buff, float val)
     {
         constexpr auto tsz = sizeof(val);
         
@@ -159,13 +159,13 @@ namespace rvi::serialization
         }            
     }
 
-    void Serializer::Internal_FillContractElemFloat32(std::vector<uint8_t>& buff, float val, int contract_iidx, ContractElemType type)
+    void Serializer::Internal_FillContractFloat32(buff_t& buff, float val, int contract_iidx, ContractElemType type)
     {
         CheckContractValidType(contract_iidx, type);
-        Internal_SerializeFloat32(buff, val);
+        SerializeFloat32(buff, val);
     }
 
-    void Serializer::Internal_SerializeFloat64(std::vector<uint8_t>& buff, double val)
+    void Serializer::SerializeFloat64(std::vector<uint8_t>& buff, double val)
     {
         constexpr auto tsz = sizeof(val);
         
@@ -177,7 +177,7 @@ namespace rvi::serialization
         }            
     }    
 
-    void Serializer::Internal_SerializeBoolArray(buff_t& buff, const std::vector<bool>& val)
+    void Serializer::SerializeBoolArray(buff_t& buff, const std::vector<bool>& val)
     {            
         const size_t sz = val.size();
         uint8_t aux = 0x00;
@@ -193,28 +193,28 @@ namespace rvi::serialization
         }
     }
 
-    void Serializer::Internal_SerializeUtf16String(buff_t& buff, const std::u16string& val)
+    void Serializer::SerializeUtf16String(buff_t& buff, const std::u16string& val)
     {
         for(size_t i = 0; i < val.size(); i++)
         {
             uint16_t ch = static_cast<uint16_t>(val[i]);
-            Internal_SerializeIntegral<uint16_t>(buff, ch);
+            SerializeIntegral<uint16_t>(buff, ch);
         }
     }
 
-    void Serializer::Internal_SerializeUtf32String(buff_t& buff, const std::u32string& val)
+    void Serializer::SerializeUtf32String(buff_t& buff, const std::u32string& val)
     {
         for(size_t i = 0; i < val.size(); i++)
         {
             uint32_t ch = static_cast<uint32_t>(val[i]);
-            Internal_SerializeIntegral<uint32_t>(buff, ch);
+            SerializeIntegral<uint32_t>(buff, ch);
         }
     }
 
-    void Serializer::Internal_FillContractElemFloat64(std::vector<uint8_t>& buff, double val, int contract_iidx, ContractElemType type)
+    void Serializer::Internal_FillContractFloat64(std::vector<uint8_t>& buff, double val, int contract_iidx, ContractElemType type)
     {
         CheckContractValidType(contract_iidx, type);
-        Internal_SerializeFloat64(buff, val);
+        SerializeFloat64(buff, val);
     }
 
     void Serializer::CheckContractValidFixedSize(int contract_iidx, int cont_len)
@@ -280,9 +280,9 @@ namespace rvi::serialization
         throw std::logic_error(ss.str());
     }
 
-    void Serializer::Internal_SerializeContainerLen(buff_t& buff, size_t cont_len)
+    void Serializer::SerializeContainerLen(buff_t& buff, size_t cont_len)
     {
         uint16_t len = static_cast<uint16_t>(cont_len);
-        Internal_SerializeIntegral<uint16_t>(_buffer, len);
+        SerializeIntegral<uint16_t>(_buffer, len);
     }
 }
