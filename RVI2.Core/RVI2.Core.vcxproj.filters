@@ -45,6 +45,9 @@
     <ClInclude Include="src\rvi_math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\definition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\frame.cpp">
@@ -72,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rvi_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\definition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
