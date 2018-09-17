@@ -30,13 +30,16 @@
     <ClInclude Include="src\base64.h" />
     <ClInclude Include="src\client_context.h" />
     <ClInclude Include="src\color_rgba.h" />
+    <ClInclude Include="src\command_base.h" />
     <ClInclude Include="src\definition.h" />
     <ClInclude Include="src\frame.h" />
     <ClInclude Include="src\instruction_generator.h" />
     <ClInclude Include="src\line.h" />
-    <ClInclude Include="src\remote_cmd_headers.h" />
+    <ClInclude Include="src\command_headers.h" />
+    <ClInclude Include="src\commands.h" />
     <ClInclude Include="src\rvi_math.h" />
     <ClInclude Include="src\rvi_base.h" />
+    <ClInclude Include="src\serializer.h" />
     <ClInclude Include="src\transform2.h" />
     <ClInclude Include="src\vector2.h" />
     <ClInclude Include="src\vertex.h" />
@@ -44,14 +47,15 @@
   <ItemGroup>
     <ClCompile Include="src\base64.cpp" />
     <ClCompile Include="src\client_context.cpp" />
+    <ClCompile Include="src\commands.cpp" />
     <ClCompile Include="src\definition.cpp" />
     <ClCompile Include="src\frame.cpp" />
     <ClCompile Include="src\instruction_generator.cpp" />
     <ClCompile Include="src\line.cpp" />
-    <ClCompile Include="src\remote_cmd_base.cpp" />
-    <ClCompile Include="src\remote_cmd_base.h" />
+    <ClCompile Include="src\command_base.cpp" />
     <ClCompile Include="src\rvi_base.cpp" />
     <ClCompile Include="src\rvi_math.cpp" />
+    <ClCompile Include="src\serializer.cpp" />
     <ClCompile Include="src\transform2.cpp" />
     <ClCompile Include="src\vector2.cpp" />
     <ClCompile Include="src\vertex.cpp" />

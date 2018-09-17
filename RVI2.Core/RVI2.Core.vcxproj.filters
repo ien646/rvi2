@@ -51,7 +51,16 @@
     <ClInclude Include="src\instruction_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\remote_cmd_headers.h">
+    <ClInclude Include="src\command_headers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\commands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\serializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\command_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,10 +98,13 @@
     <ClCompile Include="src\instruction_generator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\remote_cmd_base.h">
+    <ClCompile Include="src\command_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\remote_cmd_base.cpp">
+    <ClCompile Include="src\commands.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\serializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
