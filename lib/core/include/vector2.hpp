@@ -39,7 +39,7 @@ namespace rvi
         void ReverseInPlace() noexcept;
 
         [[nodiscard]]
-        Vector2 Inverse() const noexcept;
+        Vector2 Invert() const noexcept;
         void InvertInPlace() noexcept;
 
         [[nodiscard]]
@@ -48,8 +48,6 @@ namespace rvi
         Vector2 Scale(Vector2 scaleVec) const noexcept;
         void ScaleInPlace(float scale) noexcept;
         void ScaleInPlace(Vector2 scale) noexcept;
-
-        void ApplyTransform(const Transform2& tform) noexcept;
 
         Vector2 operator+(Vector2 other) const noexcept;
         Vector2 operator-(Vector2 other) const noexcept;
@@ -63,7 +61,6 @@ namespace rvi
         void operator*=(float other) noexcept;
         void operator*=(Vector2 other) noexcept;
         void operator/=(float other) noexcept;
-        void operator/=(Vector2 other) noexcept;
 
         bool operator==(Vector2 other) const noexcept;
         bool operator!=(Vector2 other) const noexcept;

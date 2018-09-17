@@ -18,8 +18,6 @@ namespace rvi
         Vertex(Vector2 pos) noexcept;
         Vertex(Vector2 pos, ColorRGBA vxColor) noexcept;
 
-        void ApplyTransform(const Transform2& tform) noexcept;
-
         bool operator==(Vertex other) const noexcept;
         bool operator!=(Vertex other) const noexcept;
     };

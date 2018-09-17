@@ -70,7 +70,7 @@ namespace rvi
         *this *= -1;
     }
 
-    Vector2 Vector2::Inverse() const noexcept
+    Vector2 Vector2::Invert() const noexcept
     {
         return Vector2(1 / X, 1 / Y);
     }
@@ -100,13 +100,6 @@ namespace rvi
     void Vector2::ScaleInPlace(Vector2 scale) noexcept
     {
         CrossProductInPlace(scale);
-    }
-
-    void Vector2::ApplyTransform(const Transform2& tform) noexcept
-    {
-        OffsetInPlace(tform.Position);
-        RotateInPlace(tform.Rotation);
-        ScaleInPlace(tform.Scale);
     }
 
     Vector2 Vector2::operator+(Vector2 other) const noexcept
@@ -166,12 +159,6 @@ namespace rvi
     {
         X /= other;
         Y /= other;
-    }
-
-    void Vector2::operator/=(Vector2 other) noexcept
-    {
-        X /= other.X;
-        Y /= other.Y;
     }
 
     bool Vector2::operator==(Vector2 other) const noexcept

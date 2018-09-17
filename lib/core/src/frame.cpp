@@ -65,7 +65,10 @@ namespace rvi
         // Owned lines
         std::vector<Line> ownLines;
         ownLines.reserve(_lines.size());
-        absTform.ApplyTo(ownLines);
+
+        std::for_each(ownLines.begin(), ownLines.end(), 
+            [&](Line& line){ line.ApplyTransform(absTform); });
+            
         std::move(ownLines.begin(), ownLines.end(), std::back_inserter(result));
 
         // Child frames

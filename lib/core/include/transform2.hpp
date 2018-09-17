@@ -22,8 +22,6 @@ namespace rvi
             , Rotation(rot)
         { }
 
-        void ApplyTo(std::vector<Line>& vecs) const noexcept;
-
         Transform2 Merge(const Transform2& other) const noexcept;
     };
 }
