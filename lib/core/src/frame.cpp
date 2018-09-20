@@ -61,7 +61,7 @@ namespace rvi
         const Transform2 absTform = _transform.Merge(parentTform);
 
         // Owned lines
-        std::vector<Line> ownLines;
+        std::vector<Line> ownLines = _lines;
         ownLines.reserve(_lines.size());
 
         std::for_each(ownLines.begin(), ownLines.end(), 

@@ -23,5 +23,10 @@ namespace rvi
         { }
 
         Transform2 Merge(const Transform2& other) const noexcept;
+
+        static constexpr Transform2 Default() 
+        { 
+            return Transform2(Vector2::Zero(), Vector2(1,1), 0); 
+        }
     };
 }

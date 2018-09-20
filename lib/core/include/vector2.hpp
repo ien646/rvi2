@@ -64,5 +64,7 @@ namespace rvi
 
         bool operator==(Vector2 other) const noexcept;
         bool operator!=(Vector2 other) const noexcept;
+
+        static constexpr Vector2 Zero() { return Vector2(0,0); }
     };
 }
