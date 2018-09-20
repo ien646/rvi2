@@ -36,9 +36,6 @@ namespace rvi
         void AddLine(const Line& ln);
         void AddLine(Line&& ln);
 
-        void AddLine(const Vertex& from, const Vertex& to);
-        void AddLine(Vertex&& from, Vertex&& to);
-
         Frame& AddChildFrame(const std::string& name);
         Frame& AddChildFrame(std::string&& name);
 

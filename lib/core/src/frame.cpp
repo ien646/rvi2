@@ -27,16 +27,6 @@ namespace rvi
         _lines.push_back(std::move(ln));
     }
 
-    void Frame::AddLine(const Vertex& from, const Vertex& to)
-    {
-        _lines.push_back(Line(from, to));
-    }
-
-    void Frame::AddLine(Vertex&& from, Vertex&& to)
-    {
-        _lines.push_back(Line(std::move(from), std::move(to)));
-    }
-
     Frame& Frame::AddChildFrame(const std::string& name)
     {
         auto pair = _childFrames.emplace(name, std::unique_ptr<Frame>(new Frame(name)));

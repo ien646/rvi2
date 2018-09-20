@@ -17,27 +17,22 @@ namespace rvi
 
     void ClientContext::DrawLine(Vector2 from, Vector2 to)
     {
-        _selectedFrame.get().AddLine
-        (
-            Vertex(from, _selectedFrame.get().Color()),
-            Vertex(to, _selectedFrame.get().Color())
-        );
+        Line ln(Vertex(from, _selectedFrame.get().Color()),
+                Vertex(to,  _selectedFrame.get().Color()));
+
+        _selectedFrame.get().AddLine(std::move(ln));
         MarkFrameAsModified();
     }
 
     void ClientContext::DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor)
     {
-        _selectedFrame.get().AddLine
-        (
-            Vertex(from, fromColor),
-            Vertex(to, toColor)
-        );
+        _selectedFrame.get().AddLine(Line(Vertex(from, fromColor), Vertex(to, toColor)));
         MarkFrameAsModified();
     }
 
     void ClientContext::DrawLine(Vertex from, Vertex to)
-    {
-        _selectedFrame.get().AddLine(from, to);
+    {        
+        _selectedFrame.get().AddLine(Line(from, to));
         MarkFrameAsModified();
     }
 
