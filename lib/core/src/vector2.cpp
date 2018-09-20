@@ -72,13 +72,15 @@ namespace rvi
 
     Vector2 Vector2::Invert() const noexcept
     {
-        return Vector2(1 / X, 1 / Y);
+        float x = (X == 0) ? 0 : (1 / X);
+        float y = (Y == 0) ? 0 : (1 / Y);
+        return Vector2(x, y);
     }
 
     void Vector2::InvertInPlace() noexcept
     {
-        X = 1 / X;
-        Y = 1 / Y;
+        X = (X == 0) ? 0 : (1 / X);
+        Y = (Y == 0) ? 0 : (1 / Y);
     }
 
     Vector2 Vector2::Scale(Vector2 scaleVec) const noexcept

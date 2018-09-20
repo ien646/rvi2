@@ -133,14 +133,14 @@ namespace rvi::serialization
         constexpr auto tsz = sizeof(T);
         if constexpr(tsz == sizeof(uint8_t))
         {
-            _buffer.push_back(val);
+            buff.push_back(val);
         }
         else
         {
             for(int i = 0; i < tsz; i++)
             {
                 uint8_t byt = static_cast<uint8_t>(val >> (i * 8));
-                _buffer.push_back(byt);
+                buff.push_back(byt);
             }
         }
     }

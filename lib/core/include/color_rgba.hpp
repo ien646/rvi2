@@ -30,6 +30,8 @@ namespace rvi
             return (R << 24) | (G << 16) | (B << 8) | (A);
         }
 
+        static ColorRGBA FromRGBA(uint32_t rgba);
+
         bool operator==(ColorRGBA other) const noexcept;
         bool operator!=(ColorRGBA other) const noexcept;
 

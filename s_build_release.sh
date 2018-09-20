@@ -1,5 +1,5 @@
-md build_release
+mkdir build_release
 cd build_release
 cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . --config Release
-pause
+read -n1 -r -p "Press any key to continue..." key

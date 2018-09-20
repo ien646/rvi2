@@ -1,6 +1,7 @@
-#include "gtest/gtest.h"
-#include "vector2.hpp"
-#include "transform2.hpp"
+#include <gtest/gtest.h>
+
+#include <vector2.hpp>
+#include <transform2.hpp>
 #include "random_gen.hpp"
 
 #include <cmath>
@@ -84,25 +85,17 @@ TEST (VectorOperators, DivideScalar)
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
         float x = GetRandomFloat();
-        float y = GetRandomFloat();
-
-        while(std::isnan(x) || std::isnan(y))
-        {
-            x = GetRandomFloat();
-            y = GetRandomFloat();
-        }
+        float y = GetRandomFloat();        
 
         Vector2 vec(x, y);
 
-        float scale = GetRandomFloat();
+        float scale = GetRandomFloat(true);
 
         vec /= scale;
 
         ASSERT_FLOAT_EQ(vec.X, (x / scale));
         ASSERT_FLOAT_EQ(vec.Y, (y / scale));
     }
-
-   
 }
 
 TEST (VectorOperators, MultiplyCrossProduct)
@@ -401,8 +394,8 @@ TEST (VectorMethods, InverseInPlace)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
+        float x = GetRandomFloat(true);
+        float y = GetRandomFloat(true);
         Vector2 vec(x, y);
 
         vec.InvertInPlace();

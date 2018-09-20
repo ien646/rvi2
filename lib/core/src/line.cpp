@@ -26,8 +26,14 @@ namespace rvi
 
     void Line::ApplyRotation(float rotation)
     {
-        // Start unnaffected, since it's the pivot
-        End.Position.RotateInPlace(rotation);
+        // Set the 'End' vertex relative to (0,0) and rotate
+        Vector2 diff = Start.Position;
+        Vector2 rotator = End.Position - diff;
+        rotator.RotateInPlace(rotation);
+
+        // Restore original offset
+        rotator += diff;
+        End.Position = rotator;
     }
 
     void Line::ApplyTransform(const Transform2& tform)
