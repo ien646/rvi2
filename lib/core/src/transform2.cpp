@@ -6,7 +6,7 @@ namespace rvi
     {
         Transform2 res = *this;
         res.Position += other.Position;
-        res.Rotation += Math::ClampAngleDeg(other.Rotation);
+        res.Rotation = Math::ClampAngleDeg(res.Rotation+ other.Rotation);
         res.Scale *= other.Scale;
         return res;
     }
