@@ -19,7 +19,7 @@ namespace rvi
             ,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
             -1,-1,-1 };
     public:
-        void Encode(std::istream &in, std::ostringstream &out);
-        void Decode(std::istringstream &in, std::ostream &out);
+        void Encode(std::istream& in, std::ostringstream& out);
+        void Decode(std::istringstream& in, std::ostream& out);
     };
 }
