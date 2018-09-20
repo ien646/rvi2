@@ -27,4 +27,9 @@ namespace rvi
             inst(clientContext);
         }
     }
+
+    const std::vector<DefinitionInstruction>& Definition::GetSequence()
+    {
+        return _instSequence;
+    }
 }

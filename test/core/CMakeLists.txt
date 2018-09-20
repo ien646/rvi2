@@ -1,5 +1,5 @@
 file(GLOB SOURCES src/*.cpp)
 add_executable(test.core ${SOURCES})
 target_include_directories(test.core PUBLIC ${CMAKE_BINARY_DIR}/lib/core/include)
-target_link_libraries(test.core rvi2.core gtest)
+target_link_libraries(test.core rvi2.core gtest gmock)
 add_test(NAME test.core COMMAND test.core)

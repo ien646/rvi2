@@ -25,5 +25,7 @@ namespace rvi
         void AddInstruction(DefinitionInstruction&& inst);
         void Clear() noexcept;
         void ExecuteOnContext(ClientContext& cCtx);
+
+        const std::vector<DefinitionInstruction>& GetSequence();
     };
 }
