@@ -142,3 +142,35 @@ TEST(Line, ApplyScale)
         ASSERT_EQ(line.End, expect_vx2);
     }
 }
+
+TEST(Line, ApplyTransform)
+{
+    for(int i = 0; i < OP_TEST_ITER; i++)
+    {
+        Vector2 pos1, pos2;
+        ColorRGBA color1, color2;
+        const Vertex vx1 = GetRandomVertex(pos1, color1);
+        const Vertex vx2 = GetRandomVertex(pos2, color2);
+
+        Line line(vx1, vx2);
+
+        const Vector2 pos(GetRandomFloat(), GetRandomFloat());
+        const Vector2 scale(GetRandomFloat(), GetRandomFloat());
+        const float rotation = GetRandomFloat();
+        const rvi::Transform2 tform(pos, scale, rotation);
+        
+        line.ApplyTransform(tform);
+        
+        Vertex expected_vx1 = vx1;
+        Vertex expected_vx2 = vx2;
+        expected_vx1.Position += pos;
+        expected_vx2.Position.ScaleInPlace(scale);
+        expected_vx2.Position -= vx1.Position;
+        expected_vx2.Position.RotateInPlace(rotation);
+        expected_vx2.Position += vx1.Position;
+        expected_vx2.Position += pos;
+
+        ASSERT_EQ(line.Start, expected_vx1);
+        ASSERT_EQ(line.End, expected_vx2);
+    }
+}
