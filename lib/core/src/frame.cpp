@@ -62,7 +62,6 @@ namespace rvi
 
         // Owned lines
         std::vector<Line> ownLines = _lines;
-        ownLines.reserve(_lines.size());
 
         std::for_each(ownLines.begin(), ownLines.end(), 
             [&](Line& line){ line.ApplyTransform(absTform); });
