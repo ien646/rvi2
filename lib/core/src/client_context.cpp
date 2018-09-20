@@ -222,12 +222,12 @@ namespace rvi
         }
     }
 
-    std::vector<Line> ClientContext::GetFullSnapshot()
+    std::vector<Line> ClientContext::GetFlattenedFullSnapshot()
     {
-        return _mainFrame.GetModulatedLines(DEFAULT_TRANSFORM);
+        return _mainFrame.GetFlattenedModulatedLines(DEFAULT_TRANSFORM);
     }
 
-    std::vector<Line> ClientContext::GetPartialSnapshot()
+    std::vector<Line> ClientContext::GetFlattenedPartialSnapshot()
     {
         std::vector<Line> result;
         for (auto& fpath : _modifiedFramePaths)
@@ -236,7 +236,7 @@ namespace rvi
             const Transform2 parentTform = pair.first;
             const Frame& frame = pair.second;
 
-            std::vector<Line> lines = frame.GetModulatedLines(parentTform);
+            std::vector<Line> lines = frame.GetFlattenedModulatedLines(parentTform);
             std::move(lines.begin(), lines.end(), std::back_inserter(result));
         }
         _modifiedFramePaths.clear();

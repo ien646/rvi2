@@ -53,7 +53,7 @@ namespace rvi
         return (_childFrames.erase(name) < 0);
     }
 
-    std::vector<Line> Frame::GetModulatedLines(const Transform2& parentTform) const
+    std::vector<Line> Frame::GetFlattenedModulatedLines(const Transform2& parentTform) const
     {
         std::vector<Line> result;
 
@@ -73,7 +73,7 @@ namespace rvi
         for (auto& entry : _childFrames)
         {
             const Frame& childFrame = *entry.second;
-            std::vector<Line> childLines = childFrame.GetModulatedLines(absTform);
+            std::vector<Line> childLines = childFrame.GetFlattenedModulatedLines(absTform);
             std::move(childLines.begin(), childLines.end(), std::back_inserter(result));
         }
 

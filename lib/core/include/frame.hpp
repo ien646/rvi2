@@ -41,7 +41,7 @@ namespace rvi
 
         bool DeleteChildFrame(const std::string& name);
 
-        std::vector<Line> GetModulatedLines(const Transform2& parentTform) const;
+        std::vector<Line> GetFlattenedModulatedLines(const Transform2& parentTform) const;
 
         bool ContainsChildFrame(const std::string& name);
 

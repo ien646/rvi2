@@ -81,7 +81,7 @@ namespace rvi
 
         void MarkFrameAsModified();
 
-        std::vector<Line> GetFullSnapshot();
-        std::vector<Line> GetPartialSnapshot();
+        std::vector<Line> GetFlattenedFullSnapshot();
+        std::vector<Line> GetFlattenedPartialSnapshot();
     };
 }
