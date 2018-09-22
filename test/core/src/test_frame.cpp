@@ -115,10 +115,10 @@ TEST(Frame, GetFlattenedModulatedLines_Simple)
     frame.SetTransform(tform);
 
     Vertex vx1, vx2, vx3, vx4, vx5, vx6;
-    vx3.Position.OffsetInPlace(Vector2(1, 2));
-    vx4.Position.OffsetInPlace(Vector2(3, 4));
-    vx5.Position.OffsetInPlace(Vector2(5, 6));
-    vx6.Position.OffsetInPlace(Vector2(7, 8));
+    vx3.Position.OffsetInPlace(Vector2(GetRandomFloat(true), GetRandomFloat(true)));
+    vx4.Position.OffsetInPlace(Vector2(GetRandomFloat(true), GetRandomFloat(true)));
+    vx5.Position.OffsetInPlace(Vector2(GetRandomFloat(true), GetRandomFloat(true)));
+    vx6.Position.OffsetInPlace(Vector2(GetRandomFloat(true), GetRandomFloat(true)));
     frame.AddLine(Line(vx1, vx2));
     frame.AddLine(Line(vx3, vx4));
     frame.AddLine(Line(vx5, vx6));

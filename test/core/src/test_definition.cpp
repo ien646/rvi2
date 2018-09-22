@@ -18,7 +18,7 @@ TEST(Definition, AddInstruction)
 {
     bool mock_flag = false;
     Vertex vx1, vx2;
-    DefinitionInstruction inst = [&](ClientContext& ctx){ mock_flag = true ;};
+    DefinitionInstruction inst = [&](ClientContext& ctx){ mock_flag = true; };
 
     Definition def("test_def");
     def.AddInstruction(std::move(std::move(inst)));

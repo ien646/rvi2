@@ -390,7 +390,7 @@ TEST (VectorMethods, Invert)
     }
 }
 
-TEST (VectorMethods, InverseInPlace)
+TEST (VectorMethods, InvertInPlace)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
