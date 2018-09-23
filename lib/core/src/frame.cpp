@@ -166,6 +166,7 @@ namespace rvi
     {
         return *_childFrames.at(name);
     }
+
     size_t Frame::LineCount() const noexcept
     {
         return _lines.size();

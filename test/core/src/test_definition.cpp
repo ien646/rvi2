@@ -61,10 +61,10 @@ TEST(Definition, ExecuteOnContext)
         mctx->MockCall();
     };
 
-    size_t icount = static_cast<size_t>(std::max(10, std::abs(GetRandomInt())));
+    int icount = std::max(10, std::abs(GetRandomInt()));
     EXPECT_CALL(ctx, MockCall()).Times(icount);
 
-    for(size_t i = 0; i < icount; i++)
+    for(int i = 0; i < icount; i++)
     {
         auto copy = inst;
         def.AddInstruction(std::move(copy));
