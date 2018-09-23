@@ -242,4 +242,19 @@ namespace rvi
         _modifiedFramePaths.clear();
         return result;
     }
+
+    std::unordered_map<std::string, std::vector<Line>> ClientContext::GetRelativePartialSnapshot()
+    {
+        std::unordered_map<std::string, std::vector<Line>> result;
+        for (auto& fpath : _modifiedFramePaths)
+        {
+            const auto pair = FramePathToFrameWithTransform(fpath);
+            const Transform2 parentTform = pair.first;
+            const Frame& frame = pair.second;
+
+            auto entry = std::make_pair(fpath, frame.GetFlattenedModulatedLines(parentTform));
+        }
+        _modifiedFramePaths.clear();
+        return result;
+    }
 }

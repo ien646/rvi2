@@ -33,7 +33,7 @@ namespace rvi
 
         bool _cachedFramePathNeedsRebuild = true;
         std::string _cachedFramePath = MAIN_FRAMENAME;
-                
+
     public:
         ClientContext();
 
@@ -83,5 +83,7 @@ namespace rvi
 
         std::vector<Line> GetFlattenedFullSnapshot();
         std::vector<Line> GetFlattenedPartialSnapshot();
+
+        std::unordered_map<std::string, std::vector<Line>> ClientContext::GetRelativePartialSnapshot();
     };
 }
