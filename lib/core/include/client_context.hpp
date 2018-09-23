@@ -92,8 +92,5 @@ namespace rvi
         std::vector<Line> GetFlattenedPartialSnapshot();
 
         std::unordered_map<std::string, std::vector<Line>> ClientContext::GetRelativePartialSnapshot();
-    };    
-
-    const char ClientContext::FRAMEPATH_SEPARATOR = ':';
-    const std::string ClientContext::MAIN_FRAMENAME = "__MAINFRAME__";
+    };        
 }

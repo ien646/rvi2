@@ -5,6 +5,9 @@
 
 namespace rvi
 { 
+    const char ClientContext::FRAMEPATH_SEPARATOR = ':';
+    const std::string ClientContext::MAIN_FRAMENAME = "__MAINFRAME__";
+
     #if RVI_COMPILER_MSVC
     #pragma warning(suppress: 26439)
     #endif
