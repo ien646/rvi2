@@ -50,6 +50,7 @@ namespace rvi
         bool DeleteFrame(const std::string& name);
 
         const Frame& SelectedFrame() const noexcept;
+        bool IsDefaultFrameSelected() const noexcept;
 
         void SetCurrentColor(ColorRGBA color) noexcept;
 

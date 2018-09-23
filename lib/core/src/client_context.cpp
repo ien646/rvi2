@@ -91,6 +91,11 @@ namespace rvi
         return _selectedFrame;
     }
 
+    bool ClientContext::IsDefaultFrameSelected() const noexcept
+    {
+        return &_mainFrame == &_selectedFrame.get();
+    }
+
     void ClientContext::SetCurrentColor(ColorRGBA color) noexcept
     {
         _selectedFrame.get().SetColor(color);
