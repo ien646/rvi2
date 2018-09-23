@@ -4,7 +4,7 @@
 #include <iterator>
 
 namespace rvi
-{
+{ 
     #if RVI_COMPILER_MSVC
     #pragma warning(suppress: 26439)
     #endif

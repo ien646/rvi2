@@ -15,9 +15,7 @@ namespace rvi
 {
     class ClientContext
     {
-    private:
-        const std::string MAIN_FRAMENAME = "__MAINFRAME__";
-        const char FRAMEPATH_SEPARATOR = ':';
+    private:        
         const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);        
 
         Frame _mainFrame;
@@ -35,6 +33,9 @@ namespace rvi
         std::string _cachedFramePath = MAIN_FRAMENAME;
 
     public:
+        static const std::string MAIN_FRAMENAME;
+        static const char FRAMEPATH_SEPARATOR;
+
         ClientContext();
 
         void DrawLine(Vector2 from, Vector2 to);
@@ -91,5 +92,8 @@ namespace rvi
         std::vector<Line> GetFlattenedPartialSnapshot();
 
         std::unordered_map<std::string, std::vector<Line>> ClientContext::GetRelativePartialSnapshot();
-    };
+    };    
+
+    const char ClientContext::FRAMEPATH_SEPARATOR = ':';
+    const std::string ClientContext::MAIN_FRAMENAME = "__MAINFRAME__";
 }
