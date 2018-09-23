@@ -18,7 +18,7 @@ namespace rvi
     private:
         const std::string MAIN_FRAMENAME = "__MAINFRAME__";
         const char FRAMEPATH_SEPARATOR = ':';
-        const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);
+        const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);        
 
         Frame _mainFrame;
         std::reference_wrapper<Frame> _selectedFrame;
@@ -63,6 +63,8 @@ namespace rvi
         float GetCurrentRotation() const noexcept;
         Vector2 GetCurrentScale() const noexcept;
 
+        size_t FrameCount() const noexcept;
+
         void ClearFrame() noexcept;
 
         void AddDefinition(const std::string& name, const Definition& instruction);
@@ -81,7 +83,7 @@ namespace rvi
 
         void MarkFrameAsModified();
 
-        std::vector<Line> GetFlattenedFullSnapshot();
+        std::vector<Line> GetFlattenedFullSnapshot() const;
         std::vector<Line> GetFlattenedPartialSnapshot();
 
         std::unordered_map<std::string, std::vector<Line>> ClientContext::GetRelativePartialSnapshot();

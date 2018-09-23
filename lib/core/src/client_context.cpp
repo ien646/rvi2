@@ -131,6 +131,13 @@ namespace rvi
         return _selectedFrame.get().Transform().Scale;
     }
 
+    size_t ClientContext::FrameCount() const noexcept
+    {
+        size_t result = 1;
+        result += _mainFrame.ChildFrameCount(true);
+        return result;
+    }
+
     void ClientContext::ClearFrame() noexcept
     {
         _selectedFrame.get().ClearLines();
@@ -222,7 +229,7 @@ namespace rvi
         }
     }
 
-    std::vector<Line> ClientContext::GetFlattenedFullSnapshot()
+    std::vector<Line> ClientContext::GetFlattenedFullSnapshot() const
     {
         return _mainFrame.GetFlattenedModulatedLines(DEFAULT_TRANSFORM);
     }
@@ -253,6 +260,7 @@ namespace rvi
             const Frame& frame = pair.second;
 
             auto entry = std::make_pair(fpath, frame.GetFlattenedModulatedLines(parentTform));
+            result.insert(std::move(entry));
         }
         _modifiedFramePaths.clear();
         return result;
