@@ -36,6 +36,11 @@ namespace rvi
         MarkFrameAsModified();
     }
 
+    void ClientContext::DrawLine(Line&& ln)
+    {
+        _selectedFrame.get().AddLine(std::move(ln));
+    }
+
     void ClientContext::SelectFrame(const std::string& name)
     {
         if (!_selectedFrame.get().ContainsChildFrame(name))
@@ -79,6 +84,11 @@ namespace rvi
     bool ClientContext::DeleteFrame(const std::string& name)
     {
         return _selectedFrame.get().DeleteChildFrame(name);
+    }
+
+    const rvi::Frame& ClientContext::SelectedFrame() const noexcept
+    {
+        return _selectedFrame;
     }
 
     void ClientContext::SetCurrentColor(ColorRGBA color) noexcept

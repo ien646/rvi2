@@ -40,6 +40,7 @@ namespace rvi
         void DrawLine(Vector2 from, Vector2 to);
         void DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor);
         void DrawLine(Vertex from, Vertex to);
+        void DrawLine(Line&& ln);
 
         void SelectFrame(const std::string& name);
         void SelectFrame(std::string&& name);
@@ -47,6 +48,8 @@ namespace rvi
         bool ReleaseFrame();
 
         bool DeleteFrame(const std::string& name);
+
+        const Frame& SelectedFrame() const noexcept;
 
         void SetCurrentColor(ColorRGBA color) noexcept;
 
