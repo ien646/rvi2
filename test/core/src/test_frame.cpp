@@ -6,7 +6,7 @@
 
 using namespace rvi;
 
-static const int OP_TEST_ITER = 25000;
+static const int OP_TEST_ITER = 2500;
 
 TEST(Frame, AddLine)
 {
@@ -211,3 +211,50 @@ TEST(Frame, GetFlattenedModulatedLines_Complex)
         ASSERT_TRUE(std::find(lines.begin(), lines.end(), expected_3) != lines.end());
     }
 }
+
+TEST(Frame, FrameChildCount_Shallow)
+{
+    // Parent
+    Frame frame("test_frame");
+
+    // First child
+    frame.AddChildFrame("child1");
+    frame.AddChildFrame("child2");
+    frame.AddChildFrame("child3");
+
+    // Child's child
+    frame.GetChildFrame("child1").AddChildFrame("child11");
+    frame.GetChildFrame("child1").AddChildFrame("child12");
+    frame.GetChildFrame("child1").AddChildFrame("child13");
+    frame.GetChildFrame("child1").AddChildFrame("child14");
+
+    size_t expectedCount = 3;
+
+    size_t count = frame.ChildFrameCount(false);
+
+    ASSERT_EQ(expectedCount, count);
+}
+
+TEST(Frame, FrameChildCount_Deep)
+{
+    // Parent
+    Frame frame("test_frame");
+
+    // First child
+    frame.AddChildFrame("child1");
+    frame.AddChildFrame("child2");
+    frame.AddChildFrame("child3");
+
+    // Child's child
+    frame.GetChildFrame("child1").AddChildFrame("child11");
+    frame.GetChildFrame("child1").AddChildFrame("child12");
+    frame.GetChildFrame("child1").AddChildFrame("child13");
+    frame.GetChildFrame("child1").AddChildFrame("child14");
+
+    size_t expectedCount = 7;
+
+    size_t count = frame.ChildFrameCount(true);
+
+    ASSERT_EQ(expectedCount, count);
+}
+

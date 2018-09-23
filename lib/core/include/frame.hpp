@@ -45,6 +45,8 @@ namespace rvi
 
         bool ContainsChildFrame(const std::string& name);
 
+        size_t ChildFrameCount(bool deep = false) const noexcept;
+
         // -- Getters --
         const std::string& Name() const noexcept;
         const std::vector<Line>& Lines() const noexcept;

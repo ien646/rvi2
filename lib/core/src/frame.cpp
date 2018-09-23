@@ -84,6 +84,24 @@ namespace rvi
         return (_childFrames.count(name) > 0);
     }
 
+    size_t Frame::ChildFrameCount(bool deep) const noexcept
+    {
+        if (!deep)
+        {
+            return _childFrames.size();
+        }
+        else
+        {
+            size_t result = 0;
+            for (const auto& f : _childFrames)
+            {
+                result++;
+                result += f.second->ChildFrameCount(true);
+            }
+            return result;
+        }
+    }
+
     void Frame::SetColor(U8 r, U8 g, U8 b, U8 a) noexcept
     {
         _color = ColorRGBA(r, g, b, a);
