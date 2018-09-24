@@ -13,82 +13,82 @@
 
 namespace rvi
 {
-    class ClientContext
+    class client_context
     {
     private:        
-        const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);        
+        const transform2 DEFAULT_TRANSFORM = transform2(vector2(0, 0), vector2(1, 1), 0);        
 
-        Frame _mainFrame;
-        std::reference_wrapper<Frame> _selectedFrame;
+        frame _main_frame;
+        std::reference_wrapper<frame> _selected_frame;
 
         // Current frame selection 'stack'
-        std::vector<std::reference_wrapper<Frame>> _frameStack;
+        std::vector<std::reference_wrapper<frame>> _frame_stack;
 
-        std::unordered_map<std::string, Definition> _localDefinitions;
+        std::unordered_map<std::string, definition> _local_definitions;
 
         // Framepaths of altered frames since last full or partial snapshot
-        std::unordered_set<std::string> _modifiedFramePaths;
+        std::unordered_set<std::string> _modified_fpaths;
 
-        bool _cachedFramePathNeedsRebuild = true;
-        std::string _cachedFramePath = MAIN_FRAMENAME;
+        bool _cached_fpath_rebuild = true;
+        std::string _cached_fpath = MAIN_FRAMENAME;
 
     public:
         static const std::string MAIN_FRAMENAME;
         static const char FRAMEPATH_SEPARATOR;
 
-        ClientContext();
+        client_context();
 
-        void DrawLine(Vector2 from, Vector2 to);
-        void DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor);
-        void DrawLine(Vertex from, Vertex to);
-        void DrawLine(Line&& ln);
+        void draw_line(vector2 from, vector2 to);
+        void draw_line(vector2 from, color_rgba fromColor, vector2 to, color_rgba toColor);
+        void draw_line(vertex from, vertex to);
+        void draw_line(line&& ln);
 
-        void SelectFrame(const std::string& name);
-        void SelectFrame(std::string&& name);
+        void select_frame(const std::string& name);
+        void select_frame(std::string&& name);
 
-        bool ReleaseFrame();
+        bool release_frame();
 
-        bool DeleteFrame(const std::string& name);
+        bool delete_frame(const std::string& name);
 
-        const Frame& SelectedFrame() const noexcept;
-        bool IsDefaultFrameSelected() const noexcept;
+        const frame& selected_frame() const noexcept;
+        bool is_root_frame_selected() const noexcept;
 
-        void SetCurrentColor(ColorRGBA color) noexcept;
+        void set_color(color_rgba color) noexcept;
 
-        void SetCurrentTransform(const Transform2& tform) noexcept;
-        void SetCurrentTransform(Transform2&& tform) noexcept;
+        void set_transform(const transform2& tform) noexcept;
+        void set_transform(transform2&& tform) noexcept;
 
-        const Transform2& GetCurrentTransform() const noexcept;
+        const transform2& transform() const noexcept;
 
-        void SetCurrentOffset(Vector2 offset) noexcept;
-        void SetCurrentRotation(float rotation) noexcept;
-        void SetCurrentScale(Vector2 scale) noexcept;
+        void set_position(vector2 offset) noexcept;
+        void set_rotation(float rotation) noexcept;
+        void set_scale(vector2 scale) noexcept;
 
-        Vector2 GetCurrentOffset() const noexcept;
-        float GetCurrentRotation() const noexcept;
-        Vector2 GetCurrentScale() const noexcept;
+        vector2 position() const noexcept;
+        float rotation() const noexcept;
+        vector2 scale() const noexcept;
 
-        size_t FrameCount() const noexcept;
+        size_t frame_count() const noexcept;
 
-        void ClearFrame() noexcept;
+        void clear_frame() noexcept;
 
-        void AddDefinition(const Definition& instruction);
-        void AddDefinition(Definition&& instruction);
+        void add_definition(const definition& instruction);
+        void add_definition(definition&& instruction);
 
-        void DeleteDefinition(const std::string& name);
+        void delete_definition(const std::string& name);
 
-        bool ExecDefinition(const std::string& defName);
+        bool execute_definition(const std::string& defName);
 
-        bool ExistsDefinition(const std::string& defName);
+        bool contains_definition(const std::string& defName);
 
-        const std::string& GetCurrentFramePath();
-        const std::pair<Transform2, Frame&> FramePathToFrameWithTransform(const std::string& fPath);
+        const std::string& get_fpath();
+        const std::pair<transform2, frame&> extract_fpath_with_transform(const std::string& fPath);
 
-        void MarkFrameAsModified();
+        void mark_frame_modified();
 
-        std::vector<Line> GetFlattenedFullSnapshot() const;
-        std::vector<Line> GetFlattenedPartialSnapshot();
+        std::vector<line> snapshot_full_flat() const;
+        std::vector<line> snapshot_diff_flat();
 
-        std::unordered_map<std::string, std::vector<Line>> ClientContext::GetRelativePartialSnapshot();
+        std::unordered_map<std::string, std::vector<line>> client_context::snapshot_diff_relative();        
     };        
 }

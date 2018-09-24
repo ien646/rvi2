@@ -6,19 +6,19 @@
 
 namespace rvi
 {
-    class Vertex
+    class vertex
     {
     public:
-        Vector2 Position;
-        ColorRGBA VertexColor;
+        vector2 position;
+        color_rgba color;
 
-        constexpr Vertex() noexcept { }
-        Vertex(float x, float y) noexcept;
-        Vertex(float x, float y, U8 r, U8 g, U8 b, U8 a) noexcept;
-        Vertex(Vector2 pos) noexcept;
-        Vertex(Vector2 pos, ColorRGBA vxColor) noexcept;
+        constexpr vertex() noexcept { }
+        vertex(float x, float y) noexcept;
+        vertex(float x, float y, u8 r, u8 g, u8 b, u8 a) noexcept;
+        vertex(vector2 pos) noexcept;
+        vertex(vector2 pos, color_rgba vx_color) noexcept;
 
-        bool operator==(Vertex other) const noexcept;
-        bool operator!=(Vertex other) const noexcept;
+        bool operator==(vertex other) const noexcept;
+        bool operator!=(vertex other) const noexcept;
     };
 }

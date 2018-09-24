@@ -2,172 +2,172 @@
 
 namespace rvi
 {
-    Frame::Frame(const std::string& name)
+    frame::frame(const std::string& name)
         : _name(name)
         , _transform(DEFAULT_TRANSFORM)
     { }
 
-    Frame::Frame(std::string&& name)
+    frame::frame(std::string&& name)
         : _name(std::move(name))
         , _transform(DEFAULT_TRANSFORM)
     { }
 
-    void Frame::ClearLines() noexcept
+    void frame::clear_lines() noexcept
     {
         _lines.clear();
     }
 
-    void Frame::AddLine(const Line& ln)
+    void frame::add_line(const line& ln)
     {
         _lines.push_back(ln);
     }
 
-    void Frame::AddLine(Line&& ln)
+    void frame::add_line(line&& ln)
     {
         _lines.push_back(std::move(ln));
     }
 
-    Frame& Frame::AddChildFrame(const std::string& name)
+    frame& frame::add_child(const std::string& name)
     {
-        if(_childFrames.count(name) > 0)
+        if(_child_frames.count(name) > 0)
         {
-            return *_childFrames.at(name);
+            return *_child_frames.at(name);
         }
-        auto pair = _childFrames.emplace(name, std::unique_ptr<Frame>(new Frame(name)));
+        auto pair = _child_frames.emplace(name, std::unique_ptr<frame>(new frame(name)));
         return *pair.first->second;
     }
 
-    Frame& Frame::AddChildFrame(std::string&& name)
+    frame& frame::add_child(std::string&& name)
     {
-        if(_childFrames.count(name) > 0)
+        if(_child_frames.count(name) > 0)
         {
-            return *_childFrames.at(name);
+            return *_child_frames.at(name);
         }
         std::string nameCopy = name;
-        auto pair = _childFrames.emplace(nameCopy, std::unique_ptr<Frame>(new Frame(std::move(name))));
+        auto pair = _child_frames.emplace(nameCopy, std::unique_ptr<frame>(new frame(std::move(name))));
         return *pair.first->second;
     }
 
-    bool Frame::DeleteChildFrame(const std::string& name)
+    bool frame::delete_child(const std::string& name)
     {
-        return (_childFrames.erase(name) < 0);
+        return (_child_frames.erase(name) < 0);
     }
 
-    std::vector<Line> Frame::GetFlattenedModulatedLines(const Transform2& parentTform) const
+    std::vector<line> frame::get_flat_modulated_lines(const transform2& parentTform) const
     {
-        std::vector<Line> result;
+        std::vector<line> result;
 
         // Current absolute transform
-        const Transform2 absTform = _transform.Merge(parentTform);
+        const transform2 absTform = _transform.merge(parentTform);
 
         // Owned lines
-        std::vector<Line> ownLines = _lines;
+        std::vector<line> ownLines = _lines;
 
         std::for_each(ownLines.begin(), ownLines.end(), 
-            [&](Line& line){ line.ApplyTransform(absTform); });
+            [&](line& line){ line.apply_transform(absTform); });
             
         std::move(ownLines.begin(), ownLines.end(), std::back_inserter(result));
 
         // Child frames
-        for (auto& entry : _childFrames)
+        for (auto& entry : _child_frames)
         {
-            const Frame& childFrame = *entry.second;
-            std::vector<Line> childLines = childFrame.GetFlattenedModulatedLines(absTform);
+            const frame& childFrame = *entry.second;
+            std::vector<line> childLines = childFrame.get_flat_modulated_lines(absTform);
             std::move(childLines.begin(), childLines.end(), std::back_inserter(result));
         }
 
         return result;
     }
 
-    bool Frame::ContainsChildFrame(const std::string& name)
+    bool frame::contains_child(const std::string& name)
     {
-        return (_childFrames.count(name) > 0);
+        return (_child_frames.count(name) > 0);
     }
 
-    size_t Frame::ChildFrameCount(bool deep) const noexcept
+    size_t frame::child_count(bool deep) const noexcept
     {
         if (!deep)
         {
-            return _childFrames.size();
+            return _child_frames.size();
         }
         else
         {
             size_t result = 0;
-            for (const auto& f : _childFrames)
+            for (const auto& f : _child_frames)
             {
                 result++;
-                result += f.second->ChildFrameCount(true);
+                result += f.second->child_count(true);
             }
             return result;
         }
     }
 
-    void Frame::SetColor(U8 r, U8 g, U8 b, U8 a) noexcept
+    void frame::set_color(u8 r, u8 g, u8 b, u8 a) noexcept
     {
-        _color = ColorRGBA(r, g, b, a);
+        _color = color_rgba(r, g, b, a);
     }
 
-    void Frame::SetColor(ColorRGBA color) noexcept
+    void frame::set_color(color_rgba color) noexcept
     {
         _color = color;
     }
 
-    void Frame::SetTransform(const Transform2& tform) noexcept
+    void frame::set_transform(const transform2& tform) noexcept
     {
         _transform = tform;
     }
 
-    void Frame::SetTransform(Transform2&& tform) noexcept
+    void frame::set_transform(transform2&& tform) noexcept
     {
         _transform = std::move(tform);
     }
 
-    void Frame::SetOffset(Vector2 offset) noexcept
+    void frame::set_position(vector2 offset) noexcept
     {
-        _transform.Position = offset;
+        _transform.position = offset;
     }
 
-    void Frame::SetRotation(float rotation) noexcept
+    void frame::set_rotation(float rotation) noexcept
     {
-        _transform.Rotation = rotation;
+        _transform.rotation = rotation;
     }
 
-    void Frame::SetScale(Vector2 scale) noexcept
+    void frame::set_scale(vector2 scale) noexcept
     {
-        _transform.Scale = scale;
+        _transform.scale = scale;
     }
 
-    const std::string& Frame::Name() const noexcept
+    const std::string& frame::name() const noexcept
     {
         return _name;
     }
 
-    const std::vector<Line>& Frame::Lines() const noexcept
+    const std::vector<line>& frame::lines() const noexcept
     {
         return _lines;
     }
 
-    const std::unordered_map<std::string, std::unique_ptr<Frame>>& Frame::Frames() const noexcept
+    const std::unordered_map<std::string, std::unique_ptr<frame>>& frame::children() const noexcept
     {
-        return _childFrames;
+        return _child_frames;
     }
 
-    const Transform2& Frame::Transform() const noexcept
+    const transform2& frame::transform() const noexcept
     {
         return _transform;
     }
 
-    ColorRGBA Frame::Color() const noexcept
+    color_rgba frame::color() const noexcept
     {
         return _color;
     }
 
-    Frame& Frame::GetChildFrame(const std::string& name)
+    frame& frame::get_child(const std::string& name)
     {
-        return *_childFrames.at(name);
+        return *_child_frames.at(name);
     }
 
-    size_t Frame::LineCount() const noexcept
+    size_t frame::line_count() const noexcept
     {
         return _lines.size();
     }

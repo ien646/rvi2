@@ -8,29 +8,29 @@
 
 namespace rvi
 {
-    class Transform2
+    class transform2
     {
     public:
-        Vector2 Position;
-        Vector2 Scale;
-        float Rotation = 0.0F;
+        vector2 position;
+        vector2 scale;
+        float rotation = 0.0F;
 
-        constexpr Transform2() noexcept { }
-        constexpr Transform2(Vector2 pos, Vector2 scale, float rot) noexcept
-            : Position(pos)
-            , Scale(scale)
-            , Rotation(rot)
+        constexpr transform2() noexcept { }
+        constexpr transform2(vector2 pos, vector2 scale, float rot) noexcept
+            : position(pos)
+            , scale(scale)
+            , rotation(rot)
         { }
 
-        Transform2 Merge(const Transform2& other) const noexcept;
-        void MergeInPlace(const Transform2& other) noexcept;
+        transform2 merge(const transform2& other) const noexcept;
+        void merge_in_place(const transform2& other) noexcept;
 
-        static constexpr Transform2 Default() 
+        static constexpr transform2 default_value() 
         { 
-            return Transform2(Vector2::Zero(), Vector2(1,1), 0); 
+            return transform2(vector2::zero(), vector2(1,1), 0); 
         }
 
-        bool operator==(const Transform2& other) const noexcept;
-        bool operator!=(const Transform2& other) const noexcept;
+        bool operator==(const transform2& other) const noexcept;
+        bool operator!=(const transform2& other) const noexcept;
     };
 }

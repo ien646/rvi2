@@ -5,7 +5,7 @@
 
 namespace rvi
 {
-    class Base64
+    class base64
     {
     private:
         const char ENCODE_TABLE[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -19,7 +19,7 @@ namespace rvi
             ,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
             -1,-1,-1 };
     public:
-        void Encode(std::istream& in, std::ostringstream& out);
-        void Decode(std::istringstream& in, std::ostream& out);
+        void encode(std::istream& in, std::ostringstream& out);
+        void decode(std::istringstream& in, std::ostream& out);
     };
 }

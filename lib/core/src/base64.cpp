@@ -10,7 +10,7 @@
 	#pragma warning(disable: 26494)
 #endif
 
-void rvi::Base64::Encode(std::istream& in, std::ostringstream& out)
+void rvi::base64::encode(std::istream& in, std::ostringstream& out)
 {
     std::array<char, 3> buff1;
     std::array<char, 4> buff2;
@@ -41,7 +41,7 @@ void rvi::Base64::Encode(std::istream& in, std::ostringstream& out)
     }
 }
 
-void rvi::Base64::Decode(std::istringstream & in, std::ostream & out)
+void rvi::base64::decode(std::istringstream & in, std::ostream & out)
 {
     std::array<char, 4> buff1;
     std::array<char, 4> buff2;

@@ -9,23 +9,23 @@
 
 namespace rvi
 {
-    class Line
+    class line
     {
     public:
-        Vertex Start;
-        Vertex End;
+        vertex start;
+        vertex end;
 
-        constexpr Line() noexcept { }
-        Line(const Vertex& start, const Vertex& end) noexcept;
-        Line(Vertex&& start, Vertex&& end) noexcept;
+        constexpr line() noexcept { }
+        line(const vertex& start, const vertex& end) noexcept;
+        line(vertex&& start, vertex&& end) noexcept;
 
-        void ApplyOffset(Vector2 offset);
-        void ApplyScale(Vector2 scale);
-        void ApplyRotation(float rotation);
+        void apply_position(vector2 offset);
+        void apply_scale(vector2 scale);
+        void apply_rotation(float rotation);
 
-        void ApplyTransform(const Transform2& tform);
+        void apply_transform(const transform2& tform);
 
-        bool operator==(Line other) const noexcept;
-        bool operator!=(Line other) const noexcept;
+        bool operator==(line other) const noexcept;
+        bool operator!=(line other) const noexcept;
     };
 }

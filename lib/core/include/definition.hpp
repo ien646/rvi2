@@ -10,25 +10,25 @@
 
 namespace rvi
 {
-    class ClientContext;   
+    class client_context;   
 
-    class Definition
+    class definition
     {
     private:
-        std::vector<DefinitionInstruction> _instSequence;
+        std::vector<definition_inst> _inst_seq;
         std::string _name;
 
     public:
-        Definition() = delete;
-        Definition(const std::string& name);
-        Definition(std::string&& name) noexcept;
+        definition() = delete;
+        definition(const std::string& name);
+        definition(std::string&& name) noexcept;
 
-        void AddInstruction(DefinitionInstruction&& inst);
-        void Clear() noexcept;
-        void ExecuteOnContext(ClientContext& cCtx);
+        void add_instruction(definition_inst&& inst);
+        void clear() noexcept;
+        void execute_on_context(client_context& cCtx);
 
-        const std::string& Name() const noexcept;
+        const std::string& name() const noexcept;
 
-        const std::vector<DefinitionInstruction>& GetSequence();
+        const std::vector<definition_inst>& get_sequence();
     };
 }

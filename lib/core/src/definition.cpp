@@ -2,39 +2,39 @@
 
 namespace rvi
 {
-    Definition::Definition(const std::string& name)
+    definition::definition(const std::string& name)
         : _name(name)
     { }
 
-    Definition::Definition(std::string&& name) noexcept
+    definition::definition(std::string&& name) noexcept
         : _name(std::move(name))
     { }
 
-    void Definition::AddInstruction(DefinitionInstruction&& inst)
+    void definition::add_instruction(definition_inst&& inst)
     {
-        _instSequence.push_back(std::move(inst));
+        _inst_seq.push_back(std::move(inst));
     }
 
-    void Definition::Clear() noexcept
+    void definition::clear() noexcept
     {
-        _instSequence.clear();
+        _inst_seq.clear();
     }
 
-    void Definition::ExecuteOnContext(ClientContext& clientContext)
+    void definition::execute_on_context(client_context& ctx)
     {
-        for (const DefinitionInstruction& inst : _instSequence)
+        for (const definition_inst& inst : _inst_seq)
         {
-            inst(clientContext);
+            inst(ctx);
         }
     }
 
-    const std::string& Definition::Name() const noexcept
+    const std::string& definition::name() const noexcept
     {
         return _name;
     }
 
-    const std::vector<DefinitionInstruction>& Definition::GetSequence()
+    const std::vector<definition_inst>& definition::get_sequence()
     {
-        return _instSequence;
+        return _inst_seq;
     }
 }

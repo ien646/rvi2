@@ -3,35 +3,35 @@
 #include <line.hpp>
 #include "random_gen.hpp"
 
-using rvi::Line;
-using rvi::Vector2;
-using rvi::ColorRGBA;
-using rvi::Vertex;
+using rvi::line;
+using rvi::vector2;
+using rvi::color_rgba;
+using rvi::vertex;
 
 static const int OP_TEST_ITER = 5000;
 
-static Vertex GetRandomVertex(Vector2& out_pos, ColorRGBA out_color)
+static vertex get_rand_vertex(vector2& out_pos, color_rgba out_color)
 {
-	out_pos = Vector2(GetRandomFloat(), GetRandomFloat());
-	out_color = ColorRGBA::FromRGBA(GetRandomInt());
-	return Vertex(out_pos, out_color);
+	out_pos = vector2(get_random_float(), get_random_float());
+	out_color = color_rgba::from_rgba(get_random_int());
+	return vertex(out_pos, out_color);
 }
 
-TEST(Line, EqualityOperator)
+TEST(line, equality_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Vector2 pos;
-        ColorRGBA color;
-        Vertex vx1 = GetRandomVertex(pos, color);
-        Vertex vx2 = GetRandomVertex(pos, color);
+        vector2 pos;
+        color_rgba color;
+        vertex vx1 = get_rand_vertex(pos, color);
+        vertex vx2 = get_rand_vertex(pos, color);
 
-        Line l1(vx1, vx2);
-        Line l2(vx1, vx2);
-        vx1.Position += Vector2(GetRandomFloat(), GetRandomFloat());
-        Line l3(vx1, vx2);
-        vx2.Position += Vector2(GetRandomFloat(), GetRandomFloat());
-        Line l4(vx1, vx2);
+        line l1(vx1, vx2);
+        line l2(vx1, vx2);
+        vx1.position += vector2(get_random_float(), get_random_float());
+        line l3(vx1, vx2);
+        vx2.position += vector2(get_random_float(), get_random_float());
+        line l4(vx1, vx2);
 
         ASSERT_TRUE(l1 == l2);
         ASSERT_FALSE(l2 == l3);
@@ -39,21 +39,21 @@ TEST(Line, EqualityOperator)
     }
 }
 
-TEST(Line, InequalityOperator)
+TEST(line, inequality_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Vector2 pos1, pos2;
-        ColorRGBA color1, color2;
-        Vertex vx1 = GetRandomVertex(pos1, color1);
-        Vertex vx2 = GetRandomVertex(pos2, color2);
+        vector2 pos1, pos2;
+        color_rgba color1, color2;
+        vertex vx1 = get_rand_vertex(pos1, color1);
+        vertex vx2 = get_rand_vertex(pos2, color2);
 
-        Line l1(vx1, vx2);
-        Line l2(vx1, vx2);
-        vx1.Position += Vector2(GetRandomFloat(), GetRandomFloat());
-        Line l3(vx1, vx2);
-        vx2.Position += Vector2(GetRandomFloat(), GetRandomFloat());
-        Line l4(vx1, vx2);
+        line l1(vx1, vx2);
+        line l2(vx1, vx2);
+        vx1.position += vector2(get_random_float(), get_random_float());
+        line l3(vx1, vx2);
+        vx2.position += vector2(get_random_float(), get_random_float());
+        line l4(vx1, vx2);
 
         ASSERT_FALSE(l1 != l2);
         ASSERT_TRUE(l2 != l3);
@@ -61,116 +61,116 @@ TEST(Line, InequalityOperator)
     }
 }
 
-TEST(Line, ApplyOffset)
+TEST(line, apply_position)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Vector2 pos1, pos2;
-        ColorRGBA color1, color2;
-        Vertex vx1 = GetRandomVertex(pos1, color1);
-        Vertex vx2 = GetRandomVertex(pos2, color2);
+        vector2 pos1, pos2;
+        color_rgba color1, color2;
+        vertex vx1 = get_rand_vertex(pos1, color1);
+        vertex vx2 = get_rand_vertex(pos2, color2);
 
-        Line line(vx1, vx2);
+        line line(vx1, vx2);
 
-        float offset_x = GetRandomFloat();
-        float offset_y = GetRandomFloat();
+        float offset_x = get_random_float();
+        float offset_y = get_random_float();
 
-        Vector2 offset(offset_x, offset_y);
+        vector2 offset(offset_x, offset_y);
 
-        line.ApplyOffset(offset);
+        line.apply_position(offset);
 
-        Vertex expect_vx1 = vx1;
-        Vertex expect_vx2 = vx2;
-        expect_vx1.Position += offset;
-        expect_vx2.Position += offset;
+        vertex expect_vx1 = vx1;
+        vertex expect_vx2 = vx2;
+        expect_vx1.position += offset;
+        expect_vx2.position += offset;
 
-        ASSERT_EQ(line.Start, expect_vx1);
-        ASSERT_EQ(line.End, expect_vx2);
+        ASSERT_EQ(line.start, expect_vx1);
+        ASSERT_EQ(line.end, expect_vx2);
     }
 }
 
-TEST(Line, ApplyRotation)
+TEST(line, apply_rotation)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Vector2 pos1, pos2;
-        ColorRGBA color1, color2;
-        Vertex vx1 = GetRandomVertex(pos1, color1);
-        Vertex vx2 = GetRandomVertex(pos2, color2);
+        vector2 pos1, pos2;
+        color_rgba color1, color2;
+        vertex vx1 = get_rand_vertex(pos1, color1);
+        vertex vx2 = get_rand_vertex(pos2, color2);
 
-        Line line(vx1, vx2);
+        line line(vx1, vx2);
 
-        float angle = GetRandomFloat();;
+        float angle = get_random_float();;
 
-        line.ApplyRotation(angle);
+        line.apply_rotation(angle);
 
-        Vertex expect_vx1 = vx1;
-        Vertex expect_vx2 = vx2;
+        vertex expect_vx1 = vx1;
+        vertex expect_vx2 = vx2;
 
         // Since Start is the scale/rotation pivot, it is left untouched
-        expect_vx2.Position -= expect_vx1.Position;
-        expect_vx2.Position.RotateInPlace(angle);
-        expect_vx2.Position += expect_vx1.Position;
+        expect_vx2.position -= expect_vx1.position;
+        expect_vx2.position.rotate_in_place(angle);
+        expect_vx2.position += expect_vx1.position;
 
-        ASSERT_EQ(line.Start, expect_vx1);
-        ASSERT_EQ(line.End, expect_vx2);
+        ASSERT_EQ(line.start, expect_vx1);
+        ASSERT_EQ(line.end, expect_vx2);
     }
 }
 
-TEST(Line, ApplyScale)
+TEST(line, apply_scale)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Vector2 pos1, pos2;
-        ColorRGBA color1, color2;
-        Vertex vx1 = GetRandomVertex(pos1, color1);
-        Vertex vx2 = GetRandomVertex(pos2, color2);
+        vector2 pos1, pos2;
+        color_rgba color1, color2;
+        vertex vx1 = get_rand_vertex(pos1, color1);
+        vertex vx2 = get_rand_vertex(pos2, color2);
 
-        Line line(vx1, vx2);
+        line line(vx1, vx2);
 
-        const Vector2 scale(GetRandomFloat(), GetRandomFloat());
+        const vector2 scale(get_random_float(), get_random_float());
 
-        line.ApplyScale(scale);
+        line.apply_scale(scale);
 
-        Vertex expect_vx1 = vx1;
-        Vertex expect_vx2 = vx2;
+        vertex expect_vx1 = vx1;
+        vertex expect_vx2 = vx2;
 
         // Since Start is the scale/rotation pivot, it is left untouched
-        expect_vx2.Position.ScaleInPlace(scale);
+        expect_vx2.position.scale_in_place(scale);
 
-        ASSERT_EQ(line.Start, expect_vx1);
-        ASSERT_EQ(line.End, expect_vx2);
+        ASSERT_EQ(line.start, expect_vx1);
+        ASSERT_EQ(line.end, expect_vx2);
     }
 }
 
-TEST(Line, ApplyTransform)
+TEST(line, apply_transform)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Vector2 pos1, pos2;
-        ColorRGBA color1, color2;
-        const Vertex vx1 = GetRandomVertex(pos1, color1);
-        const Vertex vx2 = GetRandomVertex(pos2, color2);
+        vector2 pos1, pos2;
+        color_rgba color1, color2;
+        const vertex vx1 = get_rand_vertex(pos1, color1);
+        const vertex vx2 = get_rand_vertex(pos2, color2);
 
-        Line line(vx1, vx2);
+        line line(vx1, vx2);
 
-        const Vector2 pos(GetRandomFloat(), GetRandomFloat());
-        const Vector2 scale(GetRandomFloat(), GetRandomFloat());
-        const float rotation = GetRandomFloat();
-        const rvi::Transform2 tform(pos, scale, rotation);
+        const vector2 pos(get_random_float(), get_random_float());
+        const vector2 scale(get_random_float(), get_random_float());
+        const float rotation = get_random_float();
+        const rvi::transform2 tform(pos, scale, rotation);
         
-        line.ApplyTransform(tform);
+        line.apply_transform(tform);
         
-        Vertex expected_vx1 = vx1;
-        Vertex expected_vx2 = vx2;
-        expected_vx1.Position += pos;
-        expected_vx2.Position.ScaleInPlace(scale);
-        expected_vx2.Position -= vx1.Position;
-        expected_vx2.Position.RotateInPlace(rotation);
-        expected_vx2.Position += vx1.Position;
-        expected_vx2.Position += pos;
+        vertex expected_vx1 = vx1;
+        vertex expected_vx2 = vx2;
+        expected_vx1.position += pos;
+        expected_vx2.position.scale_in_place(scale);
+        expected_vx2.position -= vx1.position;
+        expected_vx2.position.rotate_in_place(rotation);
+        expected_vx2.position += vx1.position;
+        expected_vx2.position += pos;
 
-        ASSERT_EQ(line.Start, expected_vx1);
-        ASSERT_EQ(line.End, expected_vx2);
+        ASSERT_EQ(line.start, expected_vx1);
+        ASSERT_EQ(line.end, expected_vx2);
     }
 }

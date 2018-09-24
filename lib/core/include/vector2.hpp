@@ -4,67 +4,67 @@
 
 namespace rvi
 {
-    class Transform2;
+    class transform2;
 
-    class Vector2
+    class vector2
     {
     public:
-        float X = 0.0F;
-        float Y = 0.0F;
+        float x = 0.0F;
+        float y = 0.0F;
 
-        constexpr Vector2() noexcept { }
+        constexpr vector2() noexcept { }
 
-        constexpr Vector2(float x, float y) noexcept 
-            : X(x)
-            , Y(y)
+        constexpr vector2(float x, float y) noexcept 
+            : x(x)
+            , y(y)
         {  }
 
         [[nodiscard]]
-        float Magnitude() const noexcept;
+        float magnitude() const noexcept;
 
         [[nodiscard]]
-        Vector2 CrossProduct(Vector2 other) const noexcept;
-        void CrossProductInPlace(Vector2 other) noexcept;
+        vector2 cross_product(vector2 other) const noexcept;
+        void cross_product_in_place(vector2 other) noexcept;
 
         [[nodiscard]]
-        Vector2 Offset(Vector2 offset) const noexcept;
-        void OffsetInPlace(Vector2 offset) noexcept;
+        vector2 offset(vector2 offset) const noexcept;
+        void offset_in_place(vector2 offset) noexcept;
 
         [[nodiscard]]
-        Vector2 Rotate(float angle) const noexcept;
-        void RotateInPlace(float angle) noexcept;
+        vector2 rotate(float angle) const noexcept;
+        void rotate_in_place(float angle) noexcept;
 
         [[nodiscard]]
-        Vector2 Reverse() const noexcept;
-        void ReverseInPlace() noexcept;
+        vector2 reverse() const noexcept;
+        void reverse_in_place() noexcept;
 
         [[nodiscard]]
-        Vector2 Invert() const noexcept;
-        void InvertInPlace() noexcept;
+        vector2 invert() const noexcept;
+        void invert_in_place() noexcept;
 
         [[nodiscard]]
-        Vector2 Scale(float scale) const noexcept;
+        vector2 scale(float scale) const noexcept;
         [[nodiscard]]
-        Vector2 Scale(Vector2 scaleVec) const noexcept;
-        void ScaleInPlace(float scale) noexcept;
-        void ScaleInPlace(Vector2 scale) noexcept;
+        vector2 scale(vector2 scale_vec) const noexcept;
+        void scale_in_place(float scale) noexcept;
+        void scale_in_place(vector2 scale) noexcept;
 
-        Vector2 operator+(Vector2 other) const noexcept;
-        Vector2 operator-(Vector2 other) const noexcept;
-        Vector2 operator*(float other) const noexcept;
-        Vector2 operator*(Vector2 other) const noexcept;
-        Vector2 operator/(float other) const noexcept;
-        Vector2 operator/(Vector2 other) const noexcept;
+        vector2 operator+(vector2 other) const noexcept;
+        vector2 operator-(vector2 other) const noexcept;
+        vector2 operator*(float other) const noexcept;
+        vector2 operator*(vector2 other) const noexcept;
+        vector2 operator/(float other) const noexcept;
+        vector2 operator/(vector2 other) const noexcept;
 
-        void operator+=(Vector2 other) noexcept;
-        void operator-=(Vector2 other) noexcept;
+        void operator+=(vector2 other) noexcept;
+        void operator-=(vector2 other) noexcept;
         void operator*=(float other) noexcept;
-        void operator*=(Vector2 other) noexcept;
+        void operator*=(vector2 other) noexcept;
         void operator/=(float other) noexcept;
 
-        bool operator==(Vector2 other) const noexcept;
-        bool operator!=(Vector2 other) const noexcept;
+        bool operator==(vector2 other) const noexcept;
+        bool operator!=(vector2 other) const noexcept;
 
-        static constexpr Vector2 Zero() { return Vector2(0,0); }
+        static constexpr vector2 zero() { return vector2(0,0); }
     };
 }

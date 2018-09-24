@@ -12,56 +12,56 @@
 
 namespace rvi
 {
-    class Frame
+    class frame
     {
     private:
-        const Transform2 DEFAULT_TRANSFORM = Transform2(Vector2(0, 0), Vector2(1, 1), 0);
+        const transform2 DEFAULT_TRANSFORM = transform2(vector2(0, 0), vector2(1, 1), 0);
 
         std::string _name;
-        std::vector<Line> _lines;
-        std::unordered_map<std::string, std::unique_ptr<Frame>> _childFrames;
-        Transform2 _transform;
-        ColorRGBA _color;
+        std::vector<line> _lines;
+        std::unordered_map<std::string, std::unique_ptr<frame>> _child_frames;
+        transform2 _transform;
+        color_rgba _color;
         
     public:
-        Frame() = delete;
+        frame() = delete;
 
-        Frame(const std::string& name);
-        Frame(std::string&& name);
+        frame(const std::string& name);
+        frame(std::string&& name);
 
-        void ClearLines() noexcept;
+        void clear_lines() noexcept;
 
-        size_t LineCount() const noexcept;
+        size_t line_count() const noexcept;
 
-        void AddLine(const Line& ln);
-        void AddLine(Line&& ln);
+        void add_line(const line& ln);
+        void add_line(line&& ln);
 
-        Frame& AddChildFrame(const std::string& name);
-        Frame& AddChildFrame(std::string&& name);
+        frame& add_child(const std::string& name);
+        frame& add_child(std::string&& name);
 
-        bool DeleteChildFrame(const std::string& name);
+        bool delete_child(const std::string& name);
 
-        std::vector<Line> GetFlattenedModulatedLines(const Transform2& parentTform) const;
+        std::vector<line> get_flat_modulated_lines(const transform2& parentTform) const;
 
-        bool ContainsChildFrame(const std::string& name);
+        bool contains_child(const std::string& name);
 
-        size_t ChildFrameCount(bool deep = false) const noexcept;
+        size_t child_count(bool deep = false) const noexcept;
 
         // -- Getters --
-        const std::string& Name() const noexcept;
-        const std::vector<Line>& Lines() const noexcept;
-        const std::unordered_map<std::string, std::unique_ptr<Frame>>& Frames() const noexcept;
-        const Transform2& Transform() const noexcept;
-        ColorRGBA Color() const noexcept;
-        Frame& GetChildFrame(const std::string& name);
+        const std::string& name() const noexcept;
+        const std::vector<line>& lines() const noexcept;
+        const std::unordered_map<std::string, std::unique_ptr<frame>>& children() const noexcept;
+        const transform2& transform() const noexcept;
+        color_rgba color() const noexcept;
+        frame& get_child(const std::string& name);
 
         // -- Setters --
-        void SetColor(U8 r, U8 g, U8 b, U8 a) noexcept;
-        void SetColor(ColorRGBA color) noexcept;
-        void SetTransform(const Transform2& tform) noexcept;
-        void SetTransform(Transform2&& tform) noexcept;
-        void SetOffset(Vector2 offset) noexcept;
-        void SetRotation(float rotation) noexcept;
-        void SetScale(Vector2 scale) noexcept;
+        void set_color(u8 r, u8 g, u8 b, u8 a) noexcept;
+        void set_color(color_rgba color) noexcept;
+        void set_transform(const transform2& tform) noexcept;
+        void set_transform(transform2&& tform) noexcept;
+        void set_position(vector2 offset) noexcept;
+        void set_rotation(float rotation) noexcept;
+        void set_scale(vector2 scale) noexcept;
     };
 }

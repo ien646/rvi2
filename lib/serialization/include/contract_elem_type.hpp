@@ -2,7 +2,7 @@
 
 namespace rvi::serialization
 {
-	enum class ContractElemType : uint8_t
+	enum class contract_elem_type : uint8_t
     {
         V_UNDEFINED = 0xFF,
 

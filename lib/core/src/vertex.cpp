@@ -2,31 +2,31 @@
 
 namespace rvi
 {
-    Vertex::Vertex(Vector2 pos, ColorRGBA vxColor) noexcept
-        : Position(pos)
-        , VertexColor(vxColor)
+    vertex::vertex(vector2 pos, color_rgba vx_color) noexcept
+        : position(pos)
+        , color(vx_color)
     { }
 
-    Vertex::Vertex(float x, float y) noexcept
-        : Position(Vector2(x, y))
+    vertex::vertex(float x, float y) noexcept
+        : position(vector2(x, y))
     { }
 
-    Vertex::Vertex(float x, float y, U8 r, U8 g, U8 b, U8 a) noexcept
-        : Position(Vector2(x, y))
-        , VertexColor(ColorRGBA(r, g, b, a))
+    vertex::vertex(float x, float y, u8 r, u8 g, u8 b, u8 a) noexcept
+        : position(vector2(x, y))
+        , color(color_rgba(r, g, b, a))
     { }
 
-    Vertex::Vertex(Vector2 pos) noexcept
-        : Position(pos)
+    vertex::vertex(vector2 pos) noexcept
+        : position(pos)
     { }
 
-    bool Vertex::operator==(Vertex other) const noexcept
+    bool vertex::operator==(vertex other) const noexcept
     {
-        return (Position == other.Position) && (VertexColor == other.VertexColor);
+        return (position == other.position) && (color == other.color);
     }
 
-    bool Vertex::operator!=(Vertex other) const noexcept
+    bool vertex::operator!=(vertex other) const noexcept
     {
-        return (Position != other.Position) || (VertexColor != other.VertexColor);
+        return (position != other.position) || (color != other.color);
     }
 }

@@ -5,15 +5,15 @@
 
 namespace rvi::serialization
 {
-	class Contract
+	class contract
     {
     private:
-        std::vector<ContractElemDesc> _contract;
+        std::vector<contract_elem_desc> _contract;
 		
     public:
-        void Append(const ContractElemDesc& desc);
-        void Append(ContractElemDesc&& desc);
+        void append(const contract_elem_desc& desc);
+        void append(contract_elem_desc&& desc);
 
-        const std::vector<ContractElemDesc>& GetElements();
+        const std::vector<contract_elem_desc>& get_elements();
     };
 }

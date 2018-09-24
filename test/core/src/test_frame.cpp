@@ -8,143 +8,143 @@ using namespace rvi;
 
 static const int OP_TEST_ITER = 5000;
 
-TEST(Frame, AddLine)
+TEST(frame, AddLine)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Frame f("test_frame");
+        frame f("test_frame");
 
-        Vertex vx1, vx2;
-        const Line ln1(vx1, vx2);
+        vertex vx1, vx2;
+        const line ln1(vx1, vx2);
 
-        vx1.Position.OffsetInPlace(Vector2(GetRandomFloat(),GetRandomFloat()));
-        vx1.Position.RotateInPlace(GetRandomFloat());
-        const Line ln2(vx1, vx2);
-        Line ln2_cp = ln2;
+        vx1.position.offset_in_place(vector2(get_random_float(),get_random_float()));
+        vx1.position.rotate_in_place(get_random_float());
+        const line ln2(vx1, vx2);
+        line ln2_cp = ln2;
 
-        ASSERT_EQ(f.Lines().size(), 0);
+        ASSERT_EQ(f.lines().size(), 0);
 
-        f.AddLine(ln1);
-        ASSERT_EQ(f.Lines().size(), 1);
-        ASSERT_EQ(f.Lines()[0], ln1);
+        f.add_line(ln1);
+        ASSERT_EQ(f.lines().size(), 1);
+        ASSERT_EQ(f.lines()[0], ln1);
 
-        f.AddLine(std::move(ln2_cp));
-        ASSERT_EQ(f.Lines().size(), 2);
-        ASSERT_EQ(f.Lines()[0], ln1);
-        ASSERT_EQ(f.Lines()[1], ln2);
+        f.add_line(std::move(ln2_cp));
+        ASSERT_EQ(f.lines().size(), 2);
+        ASSERT_EQ(f.lines()[0], ln1);
+        ASSERT_EQ(f.lines()[1], ln2);
     }
 }
 
-TEST(Frame, LineCount)
+TEST(frame, line_count)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Frame f("test_frame");
+        frame f("test_frame");
 
-        int icount = std::max(10, std::abs(GetRandomInt()));
+        int icount = std::max(10, std::abs(get_random_int()));
         for(int i = 0; i < icount; i++)
         {
-            Vertex vx1, vx2;
-            f.AddLine(Line(vx1,vx2));
+            vertex vx1, vx2;
+            f.add_line(line(vx1,vx2));
         }
 
-        ASSERT_EQ(f.LineCount(), icount);
+        ASSERT_EQ(f.line_count(), icount);
     }
 }
 
-TEST(Frame, ClearLines)
+TEST(frame, clear_lines)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Frame f("test_frame");
+        frame f("test_frame");
 
-        int icount = std::max(10, std::abs(GetRandomInt()));
+        int icount = std::max(10, std::abs(get_random_int()));
         for(int i = 0; i < icount; i++)
         {
-            Vertex vx1, vx2;
-            f.AddLine(Line(vx1,vx2));
+            vertex vx1, vx2;
+            f.add_line(line(vx1,vx2));
         }    
-        ASSERT_EQ(f.LineCount(), icount);
+        ASSERT_EQ(f.line_count(), icount);
 
-        f.ClearLines();
-        ASSERT_EQ(f.LineCount(), 0);
+        f.clear_lines();
+        ASSERT_EQ(f.line_count(), 0);
     }
 }
 
-TEST(Frame, ContainsChildFrame)
+TEST(frame, contains_child)
 {
-    Frame parent("test_frame");
-    parent.AddChildFrame("child_1");
-    parent.AddChildFrame("child_2");
-    parent.AddChildFrame("child_3");
-    parent.AddChildFrame("child_4");
+    frame parent("test_frame");
+    parent.add_child("child_1");
+    parent.add_child("child_2");
+    parent.add_child("child_3");
+    parent.add_child("child_4");
     
-    ASSERT_TRUE(parent.ContainsChildFrame("child_1"));
-    ASSERT_TRUE(parent.ContainsChildFrame("child_2"));
-    ASSERT_TRUE(parent.ContainsChildFrame("child_3"));
-    ASSERT_TRUE(parent.ContainsChildFrame("child_4"));
-    ASSERT_FALSE(parent.ContainsChildFrame("child_5"));
+    ASSERT_TRUE(parent.contains_child("child_1"));
+    ASSERT_TRUE(parent.contains_child("child_2"));
+    ASSERT_TRUE(parent.contains_child("child_3"));
+    ASSERT_TRUE(parent.contains_child("child_4"));
+    ASSERT_FALSE(parent.contains_child("child_5"));
 }
 
-TEST(Frame, DeleteChildFrame)
+TEST(frame, delete_child)
 {
-    Frame parent("test_frame");
-    parent.AddChildFrame("child_1");
-    parent.AddChildFrame("child_2");
-    parent.AddChildFrame("child_3");
-    parent.AddChildFrame("child_4");
+    frame parent("test_frame");
+    parent.add_child("child_1");
+    parent.add_child("child_2");
+    parent.add_child("child_3");
+    parent.add_child("child_4");
     
-    ASSERT_TRUE(parent.ContainsChildFrame("child_1"));
-    ASSERT_TRUE(parent.ContainsChildFrame("child_2"));
-    ASSERT_TRUE(parent.ContainsChildFrame("child_3"));
-    ASSERT_TRUE(parent.ContainsChildFrame("child_4"));
+    ASSERT_TRUE(parent.contains_child("child_1"));
+    ASSERT_TRUE(parent.contains_child("child_2"));
+    ASSERT_TRUE(parent.contains_child("child_3"));
+    ASSERT_TRUE(parent.contains_child("child_4"));
 
-    parent.DeleteChildFrame("child_2");
+    parent.delete_child("child_2");
 
-    ASSERT_TRUE(parent.ContainsChildFrame("child_1"));
-    ASSERT_FALSE(parent.ContainsChildFrame("child_2"));
-    ASSERT_TRUE(parent.ContainsChildFrame("child_3"));
-    ASSERT_TRUE(parent.ContainsChildFrame("child_4"));
+    ASSERT_TRUE(parent.contains_child("child_1"));
+    ASSERT_FALSE(parent.contains_child("child_2"));
+    ASSERT_TRUE(parent.contains_child("child_3"));
+    ASSERT_TRUE(parent.contains_child("child_4"));
 
-    parent.DeleteChildFrame("child_1");
-    parent.DeleteChildFrame("child_3");
-    parent.DeleteChildFrame("child_4");
+    parent.delete_child("child_1");
+    parent.delete_child("child_3");
+    parent.delete_child("child_4");
 
-    ASSERT_FALSE(parent.ContainsChildFrame("child_1"));
-    ASSERT_FALSE(parent.ContainsChildFrame("child_2"));
-    ASSERT_FALSE(parent.ContainsChildFrame("child_3"));
-    ASSERT_FALSE(parent.ContainsChildFrame("child_4"));
+    ASSERT_FALSE(parent.contains_child("child_1"));
+    ASSERT_FALSE(parent.contains_child("child_2"));
+    ASSERT_FALSE(parent.contains_child("child_3"));
+    ASSERT_FALSE(parent.contains_child("child_4"));
 }
 
-TEST(Frame, GetFlattenedModulatedLines_Simple)
+TEST(frame, get_flat_modulated_lines_simple)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Frame frame("test_frame");
-        Vector2 pos(GetRandomFloat(true), GetRandomFloat(true));
-        Vector2 scl(GetRandomFloat(true), GetRandomFloat(true));
-        float rot = GetRandomFloat();
-        Transform2 tform(pos, scl, rot);
-        frame.SetTransform(tform);
+        frame frame("test_frame");
+        vector2 pos(get_random_float(true), get_random_float(true));
+        vector2 scl(get_random_float(true), get_random_float(true));
+        float rot = get_random_float();
+        transform2 tform(pos, scl, rot);
+        frame.set_transform(tform);
 
-        Vertex vx1, vx2, vx3, vx4, vx5, vx6;
-        vx3.Position.OffsetInPlace(Vector2(GetRandomFloat(true), GetRandomFloat(true)));
-        vx4.Position.OffsetInPlace(Vector2(GetRandomFloat(true), GetRandomFloat(true)));
-        vx5.Position.OffsetInPlace(Vector2(GetRandomFloat(true), GetRandomFloat(true)));
-        vx6.Position.OffsetInPlace(Vector2(GetRandomFloat(true), GetRandomFloat(true)));
-        frame.AddLine(Line(vx1, vx2));
-        frame.AddLine(Line(vx3, vx4));
-        frame.AddLine(Line(vx5, vx6));
+        vertex vx1, vx2, vx3, vx4, vx5, vx6;
+        vx3.position.offset_in_place(vector2(get_random_float(true), get_random_float(true)));
+        vx4.position.offset_in_place(vector2(get_random_float(true), get_random_float(true)));
+        vx5.position.offset_in_place(vector2(get_random_float(true), get_random_float(true)));
+        vx6.position.offset_in_place(vector2(get_random_float(true), get_random_float(true)));
+        frame.add_line(line(vx1, vx2));
+        frame.add_line(line(vx3, vx4));
+        frame.add_line(line(vx5, vx6));
 
-        auto lines = frame.GetFlattenedModulatedLines(Transform2::Default());
+        auto lines = frame.get_flat_modulated_lines(transform2::default_value());
         ASSERT_EQ(lines.size(), 3);
 
-        Line expected_ln1(vx1, vx2);
-        Line expected_ln2(vx3, vx4);
-        Line expected_ln3(vx5, vx6);
-        expected_ln1.ApplyTransform(Transform2::Default().Merge(tform));
-        expected_ln2.ApplyTransform(Transform2::Default().Merge(tform));
-        expected_ln3.ApplyTransform(Transform2::Default().Merge(tform));
+        line expected_ln1(vx1, vx2);
+        line expected_ln2(vx3, vx4);
+        line expected_ln3(vx5, vx6);
+        expected_ln1.apply_transform(transform2::default_value().merge(tform));
+        expected_ln2.apply_transform(transform2::default_value().merge(tform));
+        expected_ln3.apply_transform(transform2::default_value().merge(tform));
 
         ASSERT_TRUE(std::find(lines.begin(), lines.end(), expected_ln1) != lines.end());
         ASSERT_TRUE(std::find(lines.begin(), lines.end(), expected_ln2) != lines.end());
@@ -152,57 +152,57 @@ TEST(Frame, GetFlattenedModulatedLines_Simple)
     }
 }
 
-TEST(Frame, GetFlattenedModulatedLines_Complex)
+TEST(frame, get_flat_modulated_lines_complex)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
         // Parent
-        Frame frame("test_frame");
+        frame frame("test_frame");
         // First child
-        frame.AddChildFrame("child1");
+        frame.add_child("child1");
         // Child's child
-        frame.GetChildFrame("child1").AddChildFrame("child2");
+        frame.get_child("child1").add_child("child2");
 
-        Vector2 pos1(1, 1);
-        Vector2 scl1(2, 2);
+        vector2 pos1(1, 1);
+        vector2 scl1(2, 2);
         float rot1 = 0;
-        Transform2 tform1(pos1, scl1, rot1);
+        transform2 tform1(pos1, scl1, rot1);
 
-        Vector2 pos2(2, 2);
-        Vector2 scl2(3, 3);
+        vector2 pos2(2, 2);
+        vector2 scl2(3, 3);
         float rot2 = 90;
-        Transform2 tform2(pos2, scl2, rot2);
+        transform2 tform2(pos2, scl2, rot2);
 
-        Vector2 pos3(3, 3);
-        Vector2 scl3(4, 4);
+        vector2 pos3(3, 3);
+        vector2 scl3(4, 4);
         float rot3 = 180;
-        Transform2 tform3(pos3, scl3, rot3);
+        transform2 tform3(pos3, scl3, rot3);
 
-        frame.SetTransform(tform1);
-        frame.GetChildFrame("child1").SetTransform(tform2);
-        frame.GetChildFrame("child1").GetChildFrame("child2").SetTransform(tform3);
+        frame.set_transform(tform1);
+        frame.get_child("child1").set_transform(tform2);
+        frame.get_child("child1").get_child("child2").set_transform(tform3);
 
-        Vertex vx1, vx2, vx3, vx4, vx5, vx6;
-        vx3.Position.OffsetInPlace(Vector2(1, 1));
-        vx4.Position.OffsetInPlace(Vector2(2, 2));
-        vx5.Position.OffsetInPlace(Vector2(3, 3));
-        vx6.Position.OffsetInPlace(Vector2(4, 4));
-        frame.AddLine(Line(vx1, vx2));
-        frame.GetChildFrame("child1").AddLine(Line(vx3, vx4));
-        frame.GetChildFrame("child1").GetChildFrame("child2").AddLine(Line(vx5, vx6));
+        vertex vx1, vx2, vx3, vx4, vx5, vx6;
+        vx3.position.offset_in_place(vector2(1, 1));
+        vx4.position.offset_in_place(vector2(2, 2));
+        vx5.position.offset_in_place(vector2(3, 3));
+        vx6.position.offset_in_place(vector2(4, 4));
+        frame.add_line(line(vx1, vx2));
+        frame.get_child("child1").add_line(line(vx3, vx4));
+        frame.get_child("child1").get_child("child2").add_line(line(vx5, vx6));
 
-        Line expected_1 = Line(vx1, vx2);
-        Line expected_2 = Line(vx3, vx4);
-        Line expected_3 = Line(vx5, vx6);
-        Transform2 expected_tform1 = Transform2::Default().Merge(tform1);
-        Transform2 expected_tform2 = Transform2::Default().Merge(tform1).Merge(tform2);
-        Transform2 expected_tform3 = Transform2::Default().Merge(tform1).Merge(tform2).Merge(tform3);
+        line expected_1 = line(vx1, vx2);
+        line expected_2 = line(vx3, vx4);
+        line expected_3 = line(vx5, vx6);
+        transform2 expected_tform1 = transform2::default_value().merge(tform1);
+        transform2 expected_tform2 = transform2::default_value().merge(tform1).merge(tform2);
+        transform2 expected_tform3 = transform2::default_value().merge(tform1).merge(tform2).merge(tform3);
 
-        expected_1.ApplyTransform(expected_tform1);
-        expected_2.ApplyTransform(expected_tform2);
-        expected_3.ApplyTransform(expected_tform3);
+        expected_1.apply_transform(expected_tform1);
+        expected_2.apply_transform(expected_tform2);
+        expected_3.apply_transform(expected_tform3);
 
-        auto lines = frame.GetFlattenedModulatedLines(Transform2::Default());
+        auto lines = frame.get_flat_modulated_lines(transform2::default_value());
 
         ASSERT_EQ(lines.size(), 3);
 
@@ -212,48 +212,48 @@ TEST(Frame, GetFlattenedModulatedLines_Complex)
     }
 }
 
-TEST(Frame, FrameChildCount_Shallow)
+TEST(frame, child_count_shallow)
 {
     // Parent
-    Frame frame("test_frame");
+    frame frame("test_frame");
 
     // First child
-    frame.AddChildFrame("child1");
-    frame.AddChildFrame("child2");
-    frame.AddChildFrame("child3");
+    frame.add_child("child1");
+    frame.add_child("child2");
+    frame.add_child("child3");
 
     // Child's child
-    frame.GetChildFrame("child1").AddChildFrame("child11");
-    frame.GetChildFrame("child1").AddChildFrame("child12");
-    frame.GetChildFrame("child1").AddChildFrame("child13");
-    frame.GetChildFrame("child1").AddChildFrame("child14");
+    frame.get_child("child1").add_child("child11");
+    frame.get_child("child1").add_child("child12");
+    frame.get_child("child1").add_child("child13");
+    frame.get_child("child1").add_child("child14");
 
     size_t expectedCount = 3;
 
-    size_t count = frame.ChildFrameCount(false);
+    size_t count = frame.child_count(false);
 
     ASSERT_EQ(expectedCount, count);
 }
 
-TEST(Frame, FrameChildCount_Deep)
+TEST(frame, child_count_deep)
 {
     // Parent
-    Frame frame("test_frame");
+    frame frame("test_frame");
 
     // First child
-    frame.AddChildFrame("child1");
-    frame.AddChildFrame("child2");
-    frame.AddChildFrame("child3");
+    frame.add_child("child1");
+    frame.add_child("child2");
+    frame.add_child("child3");
 
     // Child's child
-    frame.GetChildFrame("child1").AddChildFrame("child11");
-    frame.GetChildFrame("child1").AddChildFrame("child12");
-    frame.GetChildFrame("child1").AddChildFrame("child13");
-    frame.GetChildFrame("child1").AddChildFrame("child14");
+    frame.get_child("child1").add_child("child11");
+    frame.get_child("child1").add_child("child12");
+    frame.get_child("child1").add_child("child13");
+    frame.get_child("child1").add_child("child14");
 
     size_t expectedCount = 7;
 
-    size_t count = frame.ChildFrameCount(true);
+    size_t count = frame.child_count(true);
 
     ASSERT_EQ(expectedCount, count);
 }

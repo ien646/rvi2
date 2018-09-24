@@ -4,9 +4,9 @@
 
 namespace rvi
 {
-    Math::Matrix2x2 Math::Get2DRotationMatrix(float angle) noexcept
+    math::Matrix2x2 math::get_2d_rot_matrix(float angle) noexcept
     {
-        const float angleRadians = Deg2Rad(angle);
+        const float angleRadians = deg2rad(angle);
         return Matrix2x2
         {
             std::cos(angleRadians), -std::sin(angleRadians),
@@ -14,7 +14,7 @@ namespace rvi
         };
     }
 
-    float Math::ClampAngleDeg(float angle) noexcept
+    float math::clamp_angle_deg(float angle) noexcept
     {
         return std::fabs(std::fmod(angle, 360.0F));
     }

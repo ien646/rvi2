@@ -8,24 +8,24 @@
 
 static const int OP_TEST_ITER = 5000;
 
-using rvi::Vector2;
+using rvi::vector2;
 
 //////////////////////////////////////////////////////////////////////////
 // OPERATORS
 //////////////////////////////////////////////////////////////////////////
 
-TEST (VectorOperators, Add)
+TEST (vector_operators, add)
 {
     float acc_x = 0;
     float acc_y = 0;
 
-    Vector2 result(0, 0);
+    vector2 result(0, 0);
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
+        float x = get_random_float();
+        float y = get_random_float();
 
-        Vector2 vec(x, y);
+        vector2 vec(x, y);
 
         result += vec;
 
@@ -33,22 +33,22 @@ TEST (VectorOperators, Add)
         acc_y += y;
     }
 
-    ASSERT_FLOAT_EQ(result.X, acc_x);
-    ASSERT_FLOAT_EQ(result.Y, acc_y);
+    ASSERT_FLOAT_EQ(result.x, acc_x);
+    ASSERT_FLOAT_EQ(result.y, acc_y);
 }
 
-TEST (VectorOperators, Sub)
+TEST (vector_operators, sub)
 {
 	float acc_x = 0;
     float acc_y = 0;
 
-    Vector2 result(0, 0);
+    vector2 result(0, 0);
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
+        float x = get_random_float();
+        float y = get_random_float();
 
-        Vector2 vec(x, y);
+        vector2 vec(x, y);
 
         result -= vec;
 
@@ -56,19 +56,19 @@ TEST (VectorOperators, Sub)
         acc_y -= y;
     }
     
-    ASSERT_FLOAT_EQ(result.X, acc_x);
-    ASSERT_FLOAT_EQ(result.Y, acc_y);
+    ASSERT_FLOAT_EQ(result.x, acc_x);
+    ASSERT_FLOAT_EQ(result.y, acc_y);
 }
 
-TEST (VectorOperators, MultiplyScalar)
+TEST (vector_operators, multiply_scalar_op)
 {
 	float acc_x = 0;
     float acc_y = 0;
 
-    Vector2 result(0, 0);
+    vector2 result(0, 0);
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float mul = GetRandomFloat();
+        float mul = get_random_float();
 
         result *= mul;
 
@@ -76,40 +76,40 @@ TEST (VectorOperators, MultiplyScalar)
         acc_y *= mul;
     }
 
-    ASSERT_FLOAT_EQ(result.X, acc_x);
-    ASSERT_FLOAT_EQ(result.Y, acc_y);
+    ASSERT_FLOAT_EQ(result.x, acc_x);
+    ASSERT_FLOAT_EQ(result.y, acc_y);
 }
 
-TEST (VectorOperators, DivideScalar)
+TEST (vector_operators, divide_scalar_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();        
+        float x = get_random_float();
+        float y = get_random_float();        
 
-        Vector2 vec(x, y);
+        vector2 vec(x, y);
 
-        float scale = GetRandomFloat(true);
+        float scale = get_random_float(true);
 
         vec /= scale;
 
-        ASSERT_FLOAT_EQ(vec.X, (x / scale));
-        ASSERT_FLOAT_EQ(vec.Y, (y / scale));
+        ASSERT_FLOAT_EQ(vec.x, (x / scale));
+        ASSERT_FLOAT_EQ(vec.y, (y / scale));
     }
 }
 
-TEST (VectorOperators, MultiplyCrossProduct)
+TEST (vector_operators, multiply_cross_op)
 {
     float acc_x = 0;
     float acc_y = 0;
 
-    Vector2 result(0, 0);
+    vector2 result(0, 0);
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
+        float x = get_random_float();
+        float y = get_random_float();
 
-        Vector2 vec(x, y);
+        vector2 vec(x, y);
 
         result *= vec;
 
@@ -117,30 +117,30 @@ TEST (VectorOperators, MultiplyCrossProduct)
         acc_y *= y;
     }
 
-    ASSERT_FLOAT_EQ(result.X, acc_x);
-    ASSERT_FLOAT_EQ(result.Y, acc_y);
+    ASSERT_FLOAT_EQ(result.x, acc_x);
+    ASSERT_FLOAT_EQ(result.y, acc_y);
 }
 
-TEST (VectorOperators, Equality)
+TEST (vector_operators, equality_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Vector2 a(GetRandomFloat(), GetRandomFloat());
-        Vector2 b(a.X, a.Y);
-        Vector2 c(GetRandomFloat(), GetRandomFloat());
+        vector2 a(get_random_float(), get_random_float());
+        vector2 b(a.x, a.y);
+        vector2 c(get_random_float(), get_random_float());
 
         ASSERT_TRUE(a == b);
         ASSERT_FALSE(a == c);
     }
 }
 
-TEST (VectorOperators, Inequality)
+TEST (vector_operators, inequality_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        Vector2 a(GetRandomFloat(), GetRandomFloat());
-        Vector2 b(a.X, a.Y);
-        Vector2 c(GetRandomFloat(), GetRandomFloat());
+        vector2 a(get_random_float(), get_random_float());
+        vector2 b(a.x, a.y);
+        vector2 c(get_random_float(), get_random_float());
 
         ASSERT_FALSE(a != b);
         ASSERT_TRUE(a != c);
@@ -151,256 +151,256 @@ TEST (VectorOperators, Inequality)
 // METHODS
 //////////////////////////////////////////////////////////////////////////
 
-TEST (VectorMethods, Magnitude)
+TEST (vector_methods, Magnitude)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        Vector2 vec(GetRandomFloat(), GetRandomFloat());        
-        float manualMagnitude = std::sqrtf(std::powf(vec.X, 2) + std::powf(vec.Y, 2));
-        ASSERT_FLOAT_EQ(manualMagnitude, vec.Magnitude());
+        vector2 vec(get_random_float(), get_random_float());        
+        float manualMagnitude = std::sqrtf(std::powf(vec.x, 2) + std::powf(vec.y, 2));
+        ASSERT_FLOAT_EQ(manualMagnitude, vec.magnitude());
     }
 }
 
-TEST (VectorMethods, Offset)
+TEST (vector_methods, offset)
 {    
     float acc_x = 0;
     float acc_y = 0;
-    Vector2 result(0, 0);
+    vector2 result(0, 0);
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
+        float x = get_random_float();
+        float y = get_random_float();
         acc_x += x;
         acc_y += y;
-        Vector2 offs(x, y);       
-        result = result.Offset(offs);
+        vector2 offs(x, y);       
+        result = result.offset(offs);
     }
 
-    ASSERT_FLOAT_EQ(result.X, acc_x);
-    ASSERT_FLOAT_EQ(result.Y, acc_y);
+    ASSERT_FLOAT_EQ(result.x, acc_x);
+    ASSERT_FLOAT_EQ(result.y, acc_y);
 }
 
-TEST (VectorMethods, OffsetInPlace)
+TEST (vector_methods, offset_in_place)
 {
     float acc_x = 0;
     float acc_y = 0;
-    Vector2 result(0, 0);
+    vector2 result(0, 0);
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
+        float x = get_random_float();
+        float y = get_random_float();
         acc_x += x;
         acc_y += y;
-        Vector2 offs(x, y);
-        result.OffsetInPlace(offs);
+        vector2 offs(x, y);
+        result.offset_in_place(offs);
     }
 
-    ASSERT_FLOAT_EQ(result.X, acc_x);
-    ASSERT_FLOAT_EQ(result.Y, acc_y);
+    ASSERT_FLOAT_EQ(result.x, acc_x);
+    ASSERT_FLOAT_EQ(result.y, acc_y);
 }
 
-TEST (VectorMethods, Rotate)
+TEST (vector_methods, Rotate)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float mag = GetRandomFloat();
-        Vector2 vec(mag, 0);
+        float mag = get_random_float();
+        vector2 vec(mag, 0);
 
-        vec = vec.Rotate(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, vec.Y);
+        vec = vec.rotate(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, vec.y);
 
-        vec = vec.Rotate(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, 0.0F);
-        ASSERT_FLOAT_EQ(vec.Y, mag);
+        vec = vec.rotate(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, 0.0F);
+        ASSERT_FLOAT_EQ(vec.y, mag);
 
-        vec = vec.Rotate(45.0F);
-        ASSERT_FLOAT_EQ(-vec.X, vec.Y);
+        vec = vec.rotate(45.0F);
+        ASSERT_FLOAT_EQ(-vec.x, vec.y);
 
-        vec = vec.Rotate(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, -mag);
-        ASSERT_FLOAT_EQ(vec.Y, 0.0F);
+        vec = vec.rotate(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, -mag);
+        ASSERT_FLOAT_EQ(vec.y, 0.0F);
 
-        vec = vec.Rotate(45.0F);
-        ASSERT_FLOAT_EQ(-vec.X, -vec.Y);
+        vec = vec.rotate(45.0F);
+        ASSERT_FLOAT_EQ(-vec.x, -vec.y);
 
-        vec = vec.Rotate(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, 0.0F);
-        ASSERT_FLOAT_EQ(vec.Y, -mag);
+        vec = vec.rotate(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, 0.0F);
+        ASSERT_FLOAT_EQ(vec.y, -mag);
 
-        vec = vec.Rotate(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, -vec.Y);
+        vec = vec.rotate(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, -vec.y);
 
-        vec = vec.Rotate(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, mag);
-        ASSERT_FLOAT_EQ(vec.Y, 0.0F);
+        vec = vec.rotate(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, mag);
+        ASSERT_FLOAT_EQ(vec.y, 0.0F);
     }
 }
 
-TEST (VectorMethods, RotateInPlace)
+TEST (vector_methods, rotate_in_place)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float mag = GetRandomFloat();
-        Vector2 vec(mag, 0);
+        float mag = get_random_float();
+        vector2 vec(mag, 0);
 
-        vec.RotateInPlace(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, vec.Y);
+        vec.rotate_in_place(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, vec.y);
 
-        vec.RotateInPlace(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, 0.0F);
-        ASSERT_FLOAT_EQ(vec.Y, mag);
+        vec.rotate_in_place(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, 0.0F);
+        ASSERT_FLOAT_EQ(vec.y, mag);
 
-        vec.RotateInPlace(45.0F);
-        ASSERT_FLOAT_EQ(-vec.X, vec.Y);
+        vec.rotate_in_place(45.0F);
+        ASSERT_FLOAT_EQ(-vec.x, vec.y);
 
-        vec.RotateInPlace(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, -mag);
-        ASSERT_FLOAT_EQ(vec.Y, 0.0F);
+        vec.rotate_in_place(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, -mag);
+        ASSERT_FLOAT_EQ(vec.y, 0.0F);
 
-        vec.RotateInPlace(45.0F);
-        ASSERT_FLOAT_EQ(-vec.X, -vec.Y);
+        vec.rotate_in_place(45.0F);
+        ASSERT_FLOAT_EQ(-vec.x, -vec.y);
 
-        vec.RotateInPlace(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, 0.0F);
-        ASSERT_FLOAT_EQ(vec.Y, -mag);
+        vec.rotate_in_place(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, 0.0F);
+        ASSERT_FLOAT_EQ(vec.y, -mag);
 
-        vec.RotateInPlace(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, -vec.Y);
+        vec.rotate_in_place(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, -vec.y);
 
-        vec.RotateInPlace(45.0F);
-        ASSERT_FLOAT_EQ(vec.X, mag);
-        ASSERT_FLOAT_EQ(vec.Y, 0.0F);
+        vec.rotate_in_place(45.0F);
+        ASSERT_FLOAT_EQ(vec.x, mag);
+        ASSERT_FLOAT_EQ(vec.y, 0.0F);
     }
 }
 
-TEST (VectorMethods, Reverse)
+TEST (vector_methods, reverse)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
-        Vector2 vec(x, y);
+        float x = get_random_float();
+        float y = get_random_float();
+        vector2 vec(x, y);
 
-        vec = vec.Reverse();
+        vec = vec.reverse();
 
-        ASSERT_FLOAT_EQ(-x, vec.X);
-        ASSERT_FLOAT_EQ(-y, vec.Y);
+        ASSERT_FLOAT_EQ(-x, vec.x);
+        ASSERT_FLOAT_EQ(-y, vec.y);
     }
 }
 
-TEST (VectorMethods, ReverseInPlace)
+TEST (vector_methods, reverse_in_place)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
-        Vector2 vec(x, y);
+        float x = get_random_float();
+        float y = get_random_float();
+        vector2 vec(x, y);
 
-        vec.ReverseInPlace();
+        vec.reverse_in_place();
 
-        ASSERT_FLOAT_EQ(-x, vec.X);
-        ASSERT_FLOAT_EQ(-y, vec.Y);
+        ASSERT_FLOAT_EQ(-x, vec.x);
+        ASSERT_FLOAT_EQ(-y, vec.y);
     }
 }
 
-TEST (VectorMethods, Scale_Scalar)
+TEST (vector_methods, scale_scalar)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
-        Vector2 vec(x, y);
+        float x = get_random_float();
+        float y = get_random_float();
+        vector2 vec(x, y);
 
-        float scale = GetRandomFloat();
+        float scale = get_random_float();
 
-        vec = vec.Scale(scale);
+        vec = vec.scale(scale);
 
-        ASSERT_FLOAT_EQ(x * scale, vec.X);
-        ASSERT_FLOAT_EQ(y * scale, vec.Y);
+        ASSERT_FLOAT_EQ(x * scale, vec.x);
+        ASSERT_FLOAT_EQ(y * scale, vec.y);
     }
 }
 
-TEST (VectorMethods, Scale_CrossProduct)
+TEST (vector_methods, scale_cross)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
-        Vector2 vec(x, y);
+        float x = get_random_float();
+        float y = get_random_float();
+        vector2 vec(x, y);
 
-        float scale_x = GetRandomFloat();
-        float scale_y = GetRandomFloat();
-        Vector2 scale(scale_x, scale_y);
+        float scale_x = get_random_float();
+        float scale_y = get_random_float();
+        vector2 scale(scale_x, scale_y);
 
-        vec = vec.Scale(scale);
+        vec = vec.scale(scale);
 
-        ASSERT_FLOAT_EQ(x * scale_x, vec.X);
-        ASSERT_FLOAT_EQ(y * scale_y, vec.Y);
+        ASSERT_FLOAT_EQ(x * scale_x, vec.x);
+        ASSERT_FLOAT_EQ(y * scale_y, vec.y);
     }
 }
 
-TEST (VectorMethods, ScaleInPlace_Scalar)
+TEST (vector_methods, scale_in_place_scalar)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
-        Vector2 vec(x, y);
+        float x = get_random_float();
+        float y = get_random_float();
+        vector2 vec(x, y);
 
-        float scale = GetRandomFloat();
+        float scale = get_random_float();
 
-        vec.ScaleInPlace(scale);
+        vec.scale_in_place(scale);
 
-        ASSERT_FLOAT_EQ(x * scale, vec.X);
-        ASSERT_FLOAT_EQ(y * scale, vec.Y);
+        ASSERT_FLOAT_EQ(x * scale, vec.x);
+        ASSERT_FLOAT_EQ(y * scale, vec.y);
     }
 }
 
-TEST (VectorMethods, ScaleInPlace_CrossProduct)
+TEST (vector_methods, scale_in_place_cross)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
-        Vector2 vec(x, y);
+        float x = get_random_float();
+        float y = get_random_float();
+        vector2 vec(x, y);
 
-        float scale_x = GetRandomFloat();
-        float scale_y = GetRandomFloat();
-        Vector2 scale(scale_x, scale_y);
+        float scale_x = get_random_float();
+        float scale_y = get_random_float();
+        vector2 scale(scale_x, scale_y);
 
-        vec.ScaleInPlace(scale);
+        vec.scale_in_place(scale);
 
-        ASSERT_FLOAT_EQ(x * scale_x, vec.X);
-        ASSERT_FLOAT_EQ(y * scale_y, vec.Y);
+        ASSERT_FLOAT_EQ(x * scale_x, vec.x);
+        ASSERT_FLOAT_EQ(y * scale_y, vec.y);
     }
 }
 
-TEST (VectorMethods, Invert)
+TEST (vector_methods, invert)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat();
-        float y = GetRandomFloat();
-        Vector2 vec(x, y);
+        float x = get_random_float();
+        float y = get_random_float();
+        vector2 vec(x, y);
 
-        vec = vec.Invert();
+        vec = vec.invert();
 
-        ASSERT_FLOAT_EQ((1.0F / x), vec.X);
-        ASSERT_FLOAT_EQ((1.0F / y), vec.Y);
+        ASSERT_FLOAT_EQ((1.0F / x), vec.x);
+        ASSERT_FLOAT_EQ((1.0F / y), vec.y);
     }
 }
 
-TEST (VectorMethods, InvertInPlace)
+TEST (vector_methods, invert_in_place)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = GetRandomFloat(true);
-        float y = GetRandomFloat(true);
-        Vector2 vec(x, y);
+        float x = get_random_float(true);
+        float y = get_random_float(true);
+        vector2 vec(x, y);
 
-        vec.InvertInPlace();
+        vec.invert_in_place();
 
-        ASSERT_FLOAT_EQ((1.0F / x), vec.X);
-        ASSERT_FLOAT_EQ((1.0F / y), vec.Y);
+        ASSERT_FLOAT_EQ((1.0F / x), vec.x);
+        ASSERT_FLOAT_EQ((1.0F / y), vec.y);
     }
 }

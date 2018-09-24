@@ -8,67 +8,67 @@
 
 using namespace rvi;
 
-class Mock_ClientContext : public ClientContext
+class mock_client_context : public client_context
 {
 public:
-    MOCK_METHOD0(MockCall, void());
+    MOCK_METHOD0(mock_call, void());
 };
 
-TEST(Definition, AddInstruction)
+TEST(definition, add_instruction)
 {
     bool mock_flag = false;
-    Vertex vx1, vx2;
-    DefinitionInstruction inst = [&](ClientContext& ctx){ mock_flag = true; };
+    vertex vx1, vx2;
+    definition_inst inst = [&](client_context& ctx){ mock_flag = true; };
 
-    Definition def("test_def");
-    def.AddInstruction(std::move(std::move(inst)));
+    definition def("test_def");
+    def.add_instruction(std::move(std::move(inst)));
 
-    auto& sequence = def.GetSequence();
-    testing::NiceMock<Mock_ClientContext> ctx;
+    auto& sequence = def.get_sequence();
+    testing::NiceMock<mock_client_context> ctx;
     sequence.at(0)(ctx);
 
     ASSERT_EQ(1, sequence.size());
     ASSERT_TRUE(mock_flag);
 }
 
-TEST(Definition, Clear)
+TEST(definition, clear)
 {
-    Definition def("test_def");
-    DefinitionInstruction inst = [&](ClientContext& ctx){ return; };
-    size_t icount = static_cast<size_t>(std::max(10, std::abs(GetRandomInt())));
+    definition def("test_def");
+    definition_inst inst = [&](client_context& ctx){ return; };
+    size_t icount = static_cast<size_t>(std::max(10, std::abs(get_random_int())));
     for(size_t i = 0; i < icount; i++)
     {
-        def.AddInstruction(std::move(std::move(inst)));
+        def.add_instruction(std::move(std::move(inst)));
     }
 
-    auto& sequence = def.GetSequence();
+    auto& sequence = def.get_sequence();
     ASSERT_EQ(sequence.size(), icount);
 
-    def.Clear();
+    def.clear();
 
     ASSERT_EQ(sequence.size(), 0);
 }
 
-TEST(Definition, ExecuteOnContext)
+TEST(definition, execute_on_context)
 {
-    testing::NiceMock<Mock_ClientContext> ctx;
-    Definition def("test_def");
-    Vertex vxf, vxt;
-    DefinitionInstruction inst = [&](ClientContext& ctx)
+    testing::NiceMock<mock_client_context> ctx;
+    definition def("test_def");
+    vertex vxf, vxt;
+    definition_inst inst = [&](client_context& ctx)
     {
         // Just cheat a little bit
-        Mock_ClientContext* mctx = reinterpret_cast<Mock_ClientContext*>(&ctx);
-        mctx->MockCall();
+        mock_client_context* mctx = reinterpret_cast<mock_client_context*>(&ctx);
+        mctx->mock_call();
     };
 
-    int icount = std::max(10, std::abs(GetRandomInt()));
-    EXPECT_CALL(ctx, MockCall()).Times(icount);
+    int icount = std::max(10, std::abs(get_random_int()));
+    EXPECT_CALL(ctx, mock_call()).Times(icount);
 
     for(int i = 0; i < icount; i++)
     {
         auto copy = inst;
-        def.AddInstruction(std::move(copy));
+        def.add_instruction(std::move(copy));
     }
 
-    def.ExecuteOnContext(*reinterpret_cast<ClientContext*>(&ctx));
+    def.execute_on_context(*reinterpret_cast<client_context*>(&ctx));
 }

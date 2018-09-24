@@ -2,33 +2,33 @@
 
 namespace rvi
 {
-    Transform2 Transform2::Merge(const Transform2& other) const noexcept
+    transform2 transform2::merge(const transform2& other) const noexcept
     {
-        Transform2 res = *this;
-        res.Position += other.Position;
-        res.Rotation = Math::ClampAngleDeg(res.Rotation + other.Rotation);
-        res.Scale *= other.Scale;
+        transform2 res = *this;
+        res.position += other.position;
+        res.rotation = math::clamp_angle_deg(res.rotation + other.rotation);
+        res.scale *= other.scale;
         return res;
     }
 
-    void Transform2::MergeInPlace(const Transform2& other) noexcept
+    void transform2::merge_in_place(const transform2& other) noexcept
     {
-        Position += other.Position;
-        Rotation = Math::ClampAngleDeg(Rotation + other.Rotation);
-        Scale *= other.Scale;
+        position += other.position;
+        rotation = math::clamp_angle_deg(rotation + other.rotation);
+        scale *= other.scale;
     }
 
-    bool Transform2::operator==(const Transform2& other) const noexcept
+    bool transform2::operator==(const transform2& other) const noexcept
     {
-        return (Position == other.Position) 
-            && (Scale == other.Scale) 
-            && (Rotation == other.Rotation);
+        return (position == other.position) 
+            && (scale == other.scale) 
+            && (rotation == other.rotation);
     }
 
-    bool Transform2::operator!=(const Transform2& other) const noexcept
+    bool transform2::operator!=(const transform2& other) const noexcept
     {
-        return (Position != other.Position) 
-            || (Scale != other.Scale) 
-            || (Rotation != other.Rotation);
+        return (position != other.position) 
+            || (scale != other.scale) 
+            || (rotation != other.rotation);
     }
 }

@@ -7,48 +7,44 @@
 
 namespace rvi::serialization
 {
-    class ContractElemDesc
+    class contract_elem_desc
 	{
     public:
-        ContractElemType Type   = ContractElemType::V_UNDEFINED;
-        int32_t ItemSize        = -1;
-        int32_t ContainerLen    = -1;
+        contract_elem_type type   = contract_elem_type::V_UNDEFINED;
+        int32_t item_size        = -1;
+        int32_t container_len    = -1;
 		
         static constexpr int32_t UNDEFINED_SZ = -1;
 
-        constexpr ContractElemDesc() {};
-        constexpr ContractElemDesc(ContractElemType type)
-            : Type(type)
+        constexpr contract_elem_desc() {};
+        constexpr contract_elem_desc(contract_elem_type type)
+            : type(type)
         { }
 
-        template<typename T, typename = EnableIfFloatOrIntegral<T>>
-        static constexpr ContractElemDesc CreateScalar();
+        template<typename T, typename = enable_if_float_or_integral<T>>
+        static constexpr contract_elem_desc create_scalar();
 
-        static constexpr ContractElemDesc CreateBinary(bool fixed_len, int32_t cont_len);
+        static constexpr contract_elem_desc create_binary(bool fixed_len, int32_t cont_len);
 
-        template<typename T, typename = EnableIfFloatOrIntegral<T>>
-        static constexpr ContractElemDesc CreateArray(bool fixed_len, int32_t cont_len);
+        template<typename T, typename = enable_if_float_or_integral<T>>
+        static constexpr contract_elem_desc create_array(bool fixed_len, int32_t cont_len);
 
-        // static constexpr ContractElemDesc CreateStringUTF8(bool fixed_len, int32_t cont_len);
+        static constexpr contract_elem_desc create_packed_bool_array(bool fixed_len, int32_t cont_len);
 
-        static constexpr ContractElemDesc CreatePackedBoolArray(bool fixed_len, int32_t cont_len);
-
-        template<typename T, typename = EnableIfStdXString<T>>
-        static constexpr ContractElemDesc CreateString(bool fixed_len, int32_t cont_len);
+        template<typename T, typename = enable_if_std_xstring<T>>
+        static constexpr contract_elem_desc create_string(bool fixed_len, int32_t cont_len);
 
     private:
 
         template<typename T>
-        static constexpr ContractElemDesc I_CreateScalar_Integer();
+        static constexpr contract_elem_desc i_create_scalar_integer();
 
         template<typename T>
-        static constexpr ContractElemDesc I_CreateScalar_Float();
+        static constexpr contract_elem_desc i_create_scalar_float();
 
-        // static constexpr ContractElemDesc I_CreateStringUTF8(bool fixed_len, int32_t cont_len);
-
-        static constexpr ContractElemDesc I_CreateString(bool fixed_len, int32_t cont_len);
-        static constexpr ContractElemDesc I_CreateStringUTF16(bool fixed_len, int32_t cont_len);
-        static constexpr ContractElemDesc I_CreateStringUTF32(bool fixed_len, int32_t cont_len);
+        static constexpr contract_elem_desc i_create_string(bool fixed_len, int32_t cont_len);
+        static constexpr contract_elem_desc i_create_string_utf16(bool fixed_len, int32_t cont_len);
+        static constexpr contract_elem_desc i_create_string_utf32(bool fixed_len, int32_t cont_len);
     };
 
 ///////////////////////////////////////////////////////////////////////
@@ -56,7 +52,7 @@ namespace rvi::serialization
 ///////////////////////////////////////////////////////////////////////
 
     template<typename T, typename>
-    constexpr ContractElemDesc ContractElemDesc::CreateScalar()
+    constexpr contract_elem_desc contract_elem_desc::create_scalar()
     {
         if constexpr(std::is_integral_v<T>)
         {
@@ -69,72 +65,72 @@ namespace rvi::serialization
         return result;
     }
 
-    constexpr ContractElemDesc ContractElemDesc::CreateBinary(bool fixed_len, int32_t cont_len)
+    constexpr contract_elem_desc contract_elem_desc::create_binary(bool fixed_len, int32_t cont_len)
     {
-        ContractElemDesc result;
+        contract_elem_desc result;
         if(fixed_len)
         {
-            result.ContainerLen = cont_len;
-            result.Type = ContractElemType::BINARY_FIXLEN;
+            result.container_len = cont_len;
+            result.type = contract_elem_type::BINARY_FIXLEN;
         }
         else
         {
-            result.ContainerLen= ContractElemDesc::UNDEFINED_SZ; 
-            result.Type = ContractElemType::BINARY_VARLEN;
+            result.container_len= contract_elem_desc::UNDEFINED_SZ; 
+            result.type = contract_elem_type::BINARY_VARLEN;
         }
         return result;
     }
 
     template<typename T, typename>
-    constexpr ContractElemDesc ContractElemDesc::CreateArray(bool fixed_len, int32_t cont_len)
+    constexpr contract_elem_desc contract_elem_desc::create_array(bool fixed_len, int32_t cont_len)
     {
-        ContractElemDesc result;
+        contract_elem_desc result;
         constexpr auto sz = static_cast<int32_t>(sizeof(T));
-        result.ItemSize = sz;
+        result.item_size = sz;
 
         if(fixed_len)
         {
-            result.ContainerLen = cont_len;
-            result.Type = ContractElemType::ARRAY_SCALAR_FIXLEN;
+            result.container_len = cont_len;
+            result.type = contract_elem_type::ARRAY_SCALAR_FIXLEN;
         }
         else
         {
-            result.ContainerLen = ContractElemDesc::UNDEFINED_SZ;
-            result.Type = ContractElemType::ARRAY_SCALAR_VARLEN;
+            result.container_len = contract_elem_desc::UNDEFINED_SZ;
+            result.type = contract_elem_type::ARRAY_SCALAR_VARLEN;
         }        
         return result;
     }
 
-    constexpr ContractElemDesc ContractElemDesc::CreatePackedBoolArray(bool fixed_len, int32_t cont_len)
+    constexpr contract_elem_desc contract_elem_desc::create_packed_bool_array(bool fixed_len, int32_t cont_len)
     {
-        ContractElemDesc result;
+        contract_elem_desc result;
         if(fixed_len)
         {
-            result.ContainerLen = cont_len;
-            result.Type = ContractElemType::BOOL_ARRAY_FIXLEN;
+            result.container_len = cont_len;
+            result.type = contract_elem_type::BOOL_ARRAY_FIXLEN;
         }
         else
         {
-            result.ContainerLen = ContractElemDesc::UNDEFINED_SZ;
-            result.Type = ContractElemType::BOOL_ARRAY_VARLEN;
+            result.container_len = contract_elem_desc::UNDEFINED_SZ;
+            result.type = contract_elem_type::BOOL_ARRAY_VARLEN;
         }
         return result;
     }
 
     template<typename T, typename>
-    constexpr ContractElemDesc ContractElemDesc::CreateString(bool fixed_len, int32_t cont_len)
+    constexpr contract_elem_desc contract_elem_desc::create_string(bool fixed_len, int32_t cont_len)
     {
         if constexpr(std::is_same_v<std::string::value_type, T::value_type>)
         {
-            I_CreateString(fixed_len, cont_len);
+            i_create_string(fixed_len, cont_len);
         }
-        else if constexpr(std::is_same_v<std::ju16string::value_type, T::value_type>)
+        else if constexpr(std::is_same_v<std::u16string::value_type, T::value_type>)
         {
-            I_CreateStringUTF16(fixed_len, cont_len);
+            i_create_string_utf16(fixed_len, cont_len);
         }
         else if constexpr(std::is_same_v<std::u32string::value_type, T::value_type>)
         {
-            I_CreateStringUTF32(fixed_len, cont_len);
+            i_create_string_utf32(fixed_len, cont_len);
         }
         else
         {
@@ -142,56 +138,56 @@ namespace rvi::serialization
         }
     }
 
-    constexpr ContractElemDesc ContractElemDesc::I_CreateStringUTF32(bool fixed_len, int32_t cont_len)
+    constexpr contract_elem_desc contract_elem_desc::i_create_string_utf32(bool fixed_len, int32_t cont_len)
     {
-        ContractElemDesc result;
+        contract_elem_desc result;
         if(fixed_len)
         {
-            result.ContainerLen = cont_len;
-            result.Type = ContractElemType::STRING_UTF32_FIXLEN;
+            result.container_len = cont_len;
+            result.type = contract_elem_type::STRING_UTF32_FIXLEN;
         }
         else
         {
-            result.ContainerLen = ContractElemDesc::UNDEFINED_SZ;
-            result.Type = ContractElemType::STRING_UTF32_VARLEN;
+            result.container_len = contract_elem_desc::UNDEFINED_SZ;
+            result.type = contract_elem_type::STRING_UTF32_VARLEN;
         }
         return result;
     }        
 
-    constexpr ContractElemDesc ContractElemDesc::I_CreateStringUTF16(bool fixed_len, int32_t cont_len)
+    constexpr contract_elem_desc contract_elem_desc::i_create_string_utf16(bool fixed_len, int32_t cont_len)
     {
-        ContractElemDesc result;
+        contract_elem_desc result;
         if(fixed_len)
         {
-            result.ContainerLen = cont_len;
-            result.Type = ContractElemType::STRING_UTF16_FIXLEN;
+            result.container_len = cont_len;
+            result.type = contract_elem_type::STRING_UTF16_FIXLEN;
         }
         else
         {
-            result.ContainerLen = ContractElemDesc::UNDEFINED_SZ;
-            result.Type = ContractElemType::STRING_UTF16_VARLEN;
+            result.container_len = contract_elem_desc::UNDEFINED_SZ;
+            result.type = contract_elem_type::STRING_UTF16_VARLEN;
         }
         return result;
     }
 
-    constexpr ContractElemDesc ContractElemDesc::I_CreateString(bool fixed_len, int32_t cont_len)
+    constexpr contract_elem_desc contract_elem_desc::i_create_string(bool fixed_len, int32_t cont_len)
     {
-        ContractElemDesc result;
+        contract_elem_desc result;
         if(fixed_len)
         {
-            result.ContainerLen = cont_len;
-            result.Type = ContractElemType::STRING_FIXLEN;
+            result.container_len = cont_len;
+            result.type = contract_elem_type::STRING_FIXLEN;
         }
         else
         {
-            result.ContainerLen = ContractElemDesc::UNDEFINED_SZ;
-            result.Type = ContractElemType::STRING_VARLEN;
+            result.container_len = contract_elem_desc::UNDEFINED_SZ;
+            result.type = contract_elem_type::STRING_VARLEN;
         }
         return result;
     }
 
     template<typename T>
-    constexpr ContractElemDesc ContractElemDesc::I_CreateScalar_Float()
+    constexpr contract_elem_desc contract_elem_desc::i_create_scalar_float()
     {
         constexpr auto sz = sizeof(T);
 
@@ -201,17 +197,17 @@ namespace rvi::serialization
             "Invalid scalar floating-point size for ContractElemDesc"
         );
 
-        ContractElemDesc result;
+        contract_elem_desc result;
         if constexpr(sz == 4)
-            result.Type = ContractElemType::SCALAR_FLOAT32;
+            result.type = contract_elem_type::SCALAR_FLOAT32;
         else if constexpr(sz == 8)
-            result.Type = ContractElemType::SCALAR_FLOAT64;
+            result.type = contract_elem_type::SCALAR_FLOAT64;
 
         return result;
     }
 
     template<typename T>
-    constexpr ContractElemDesc ContractElemDesc::I_CreateScalar_Integer()
+    constexpr contract_elem_desc contract_elem_desc::i_create_scalar_integer()
     {
         static_assert(std::is_integral_v<T>, "Type is not integral");
         constexpr auto sz = sizeof(T);
@@ -224,29 +220,29 @@ namespace rvi::serialization
             "Invalid scalar integer size for ContractElemDesc"
         );
         
-        ContractElemDesc result;
-        result.ItemSize = sizeof(T);
+        contract_elem_desc result;
+        result.item_size = sizeof(T);
         if constexpr(std::is_signed_v<T>)
         {
             if constexpr(sz == 1)
-                result.Type = ContractElemType::SCALAR_INT8;
+                result.type = contract_elem_type::SCALAR_INT8;
             else if constexpr(sz == 2)
-                result.Type = ContractElemType::SCALAR_INT16;
+                result.type = contract_elem_type::SCALAR_INT16;
             else if constexpr(sz == 4)
-                result.Type = ContractElemType::SCALAR_INT32;
+                result.type = contract_elem_type::SCALAR_INT32;
             else if constexpr(sz == 8)
-                result.Type = ContractElemType::SCALAR_INT64;
+                result.type = contract_elem_type::SCALAR_INT64;
         }
         else
         {
             if constexpr(sz == 1)
-                result.Type = ContractElemType::SCALAR_UINT8;
+                result.type = contract_elem_type::SCALAR_UINT8;
             else if constexpr(sz == 2)
-                result.Type = ContractElemType::SCALAR_UINT16;
+                result.type = contract_elem_type::SCALAR_UINT16;
             else if constexpr(sz == 4)
-                result.Type = ContractElemType::SCALAR_UINT32;
+                result.type = contract_elem_type::SCALAR_UINT32;
             else if constexpr(sz == 8)
-                result.Type = ContractElemType::SCALAR_UINT64;
+                result.type = contract_elem_type::SCALAR_UINT64;
         }
         return result;
     }

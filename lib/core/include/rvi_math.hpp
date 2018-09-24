@@ -5,24 +5,24 @@
 
 namespace rvi
 {
-    namespace Math
+    namespace math
     {
         typedef std::array<float, 4> Matrix2x2;
 
         constexpr float PI = 3.141592653589793238F;
 
-        constexpr float Deg2Rad(float angleDeg)
+        constexpr float deg2rad(float angle_deg)
         {
-            return angleDeg * PI / 180;
+            return angle_deg * PI / 180;
         }
 
-        constexpr float Rad2Deg(float angleRad)
+        constexpr float rad2deg(float angle_rad)
         {
-            return angleRad * 180 / PI;
+            return angle_rad * 180 / PI;
         }
 
-        Matrix2x2 Get2DRotationMatrix(float angle) noexcept;
+        Matrix2x2 get_2d_rot_matrix(float angle) noexcept;
 
-        float ClampAngleDeg(float angle) noexcept;
+        float clamp_angle_deg(float angle) noexcept;
     }
 }

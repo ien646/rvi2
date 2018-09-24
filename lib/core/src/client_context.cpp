@@ -5,277 +5,277 @@
 
 namespace rvi
 { 
-    const char ClientContext::FRAMEPATH_SEPARATOR = ':';
-    const std::string ClientContext::MAIN_FRAMENAME = "__MAINFRAME__";
+    const char client_context::FRAMEPATH_SEPARATOR = ':';
+    const std::string client_context::MAIN_FRAMENAME = "__MAINFRAME__";
 
     #if RVI_COMPILER_MSVC
     #pragma warning(suppress: 26439)
     #endif
-    ClientContext::ClientContext()
-        : _mainFrame(MAIN_FRAMENAME)
-        , _selectedFrame(_mainFrame)
+    client_context::client_context()
+        : _main_frame(MAIN_FRAMENAME)
+        , _selected_frame(_main_frame)
     {
-        _frameStack.push_back(_mainFrame);
+        _frame_stack.push_back(_main_frame);
     }
 
-    void ClientContext::DrawLine(Vector2 from, Vector2 to)
+    void client_context::draw_line(vector2 from, vector2 to)
     {
-        Line ln(Vertex(from, _selectedFrame.get().Color()),
-                Vertex(to,  _selectedFrame.get().Color()));
+        line ln(vertex(from, _selected_frame.get().color()),
+                vertex(to,  _selected_frame.get().color()));
 
-        _selectedFrame.get().AddLine(std::move(ln));
-        MarkFrameAsModified();
+        _selected_frame.get().add_line(std::move(ln));
+        mark_frame_modified();
     }
 
-    void ClientContext::DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor)
+    void client_context::draw_line(vector2 from, color_rgba from_color, vector2 to, color_rgba to_color)
     {
-        _selectedFrame.get().AddLine(Line(Vertex(from, fromColor), Vertex(to, toColor)));
-        MarkFrameAsModified();
+        _selected_frame.get().add_line(line(vertex(from, from_color), vertex(to, to_color)));
+        mark_frame_modified();
     }
 
-    void ClientContext::DrawLine(Vertex from, Vertex to)
+    void client_context::draw_line(vertex from, vertex to)
     {        
-        _selectedFrame.get().AddLine(Line(from, to));
-        MarkFrameAsModified();
+        _selected_frame.get().add_line(line(from, to));
+        mark_frame_modified();
     }
 
-    void ClientContext::DrawLine(Line&& ln)
+    void client_context::draw_line(line&& ln)
     {
-        _selectedFrame.get().AddLine(std::move(ln));
+        _selected_frame.get().add_line(std::move(ln));
     }
 
-    void ClientContext::SelectFrame(const std::string& name)
+    void client_context::select_frame(const std::string& name)
     {
-        if (!_selectedFrame.get().ContainsChildFrame(name))
+        if (!_selected_frame.get().contains_child(name))
         {
-            _selectedFrame = _selectedFrame.get().AddChildFrame(name);
+            _selected_frame = _selected_frame.get().add_child(name);
         }
         else
         {
-            _selectedFrame = _selectedFrame.get().GetChildFrame(name);
+            _selected_frame = _selected_frame.get().get_child(name);
         }
-        _frameStack.push_back(_selectedFrame);
-        _cachedFramePathNeedsRebuild = true;
+        _frame_stack.push_back(_selected_frame);
+        _cached_fpath_rebuild = true;
     }
 
-    void ClientContext::SelectFrame(std::string&& name)
+    void client_context::select_frame(std::string&& name)
     {
-        if (!_selectedFrame.get().ContainsChildFrame(name))
+        if (!_selected_frame.get().contains_child(name))
         {
-            _selectedFrame = _selectedFrame.get().AddChildFrame(std::move(name));
+            _selected_frame = _selected_frame.get().add_child(std::move(name));
         }
         else
         {
-            _selectedFrame = _selectedFrame.get().GetChildFrame(name);
+            _selected_frame = _selected_frame.get().get_child(name);
         }
-        _frameStack.push_back(_selectedFrame);
-        _cachedFramePathNeedsRebuild = true;
+        _frame_stack.push_back(_selected_frame);
+        _cached_fpath_rebuild = true;
     }
 
-    bool ClientContext::ReleaseFrame()
+    bool client_context::release_frame()
     {
-        if (&_selectedFrame.get() == &_mainFrame)
+        if (&_selected_frame.get() == &_main_frame)
         {
             return false;
         }
-        _cachedFramePathNeedsRebuild = true;
-        _frameStack.pop_back();
-        _selectedFrame = _frameStack.back();
+        _cached_fpath_rebuild = true;
+        _frame_stack.pop_back();
+        _selected_frame = _frame_stack.back();
         return true;
     }
 
-    bool ClientContext::DeleteFrame(const std::string& name)
+    bool client_context::delete_frame(const std::string& name)
     {
-        return _selectedFrame.get().DeleteChildFrame(name);
+        return _selected_frame.get().delete_child(name);
     }
 
-    const rvi::Frame& ClientContext::SelectedFrame() const noexcept
+    const rvi::frame& client_context::selected_frame() const noexcept
     {
-        return _selectedFrame;
+        return _selected_frame;
     }
 
-    bool ClientContext::IsDefaultFrameSelected() const noexcept
+    bool client_context::is_root_frame_selected() const noexcept
     {
-        return &_mainFrame == &_selectedFrame.get();
+        return &_main_frame == &_selected_frame.get();
     }
 
-    void ClientContext::SetCurrentColor(ColorRGBA color) noexcept
+    void client_context::set_color(color_rgba color) noexcept
     {
-        _selectedFrame.get().SetColor(color);
+        _selected_frame.get().set_color(color);
     }
 
-    void ClientContext::SetCurrentTransform(const Transform2& tform) noexcept
+    void client_context::set_transform(const transform2& tform) noexcept
     {
-        _selectedFrame.get().SetTransform(tform);
+        _selected_frame.get().set_transform(tform);
     }
 
-    void ClientContext::SetCurrentTransform(Transform2&& tform) noexcept
+    void client_context::set_transform(transform2&& tform) noexcept
     {
-        _selectedFrame.get().SetTransform(std::move(tform));
+        _selected_frame.get().set_transform(std::move(tform));
     }
 
-    const Transform2& ClientContext::GetCurrentTransform() const noexcept
+    const transform2& client_context::transform() const noexcept
     {
-        return _selectedFrame.get().Transform();
+        return _selected_frame.get().transform();
     }
 
-    void ClientContext::SetCurrentOffset(Vector2 offset) noexcept
+    void client_context::set_position(vector2 offset) noexcept
     {
-        _selectedFrame.get().SetOffset(offset);
+        _selected_frame.get().set_position(offset);
     }
 
-    void ClientContext::SetCurrentRotation(float rotation) noexcept
+    void client_context::set_rotation(float rotation) noexcept
     {
-        _selectedFrame.get().SetRotation(rotation);
+        _selected_frame.get().set_rotation(rotation);
     }
 
-    void ClientContext::SetCurrentScale(Vector2 scale) noexcept
+    void client_context::set_scale(vector2 scale) noexcept
     {
-        _selectedFrame.get().SetScale(scale);
+        _selected_frame.get().set_scale(scale);
     }
 
-    Vector2 ClientContext::GetCurrentOffset() const noexcept
+    vector2 client_context::position() const noexcept
     {
-        return _selectedFrame.get().Transform().Position;
+        return _selected_frame.get().transform().position;
     }
 
-    float ClientContext::GetCurrentRotation() const noexcept
+    float client_context::rotation() const noexcept
     {
-        return _selectedFrame.get().Transform().Rotation;
+        return _selected_frame.get().transform().rotation;
     }
 
-    Vector2 ClientContext::GetCurrentScale() const noexcept
+    vector2 client_context::scale() const noexcept
     {
-        return _selectedFrame.get().Transform().Scale;
+        return _selected_frame.get().transform().scale;
     }
 
-    size_t ClientContext::FrameCount() const noexcept
+    size_t client_context::frame_count() const noexcept
     {
         size_t result = 1;
-        result += _mainFrame.ChildFrameCount(true);
+        result += _main_frame.child_count(true);
         return result;
     }
 
-    void ClientContext::ClearFrame() noexcept
+    void client_context::clear_frame() noexcept
     {
-        _selectedFrame.get().ClearLines();
-        MarkFrameAsModified();
+        _selected_frame.get().clear_lines();
+        mark_frame_modified();
     }
 
-    void ClientContext::AddDefinition(const Definition& instruction)
+    void client_context::add_definition(const definition& instruction)
     {
-        DISCARD_RESULT _localDefinitions.emplace(instruction.Name(), instruction);
+        DISCARD_RESULT _local_definitions.emplace(instruction.name(), instruction);
     }
 
-    void ClientContext::AddDefinition(Definition&& instruction)
+    void client_context::add_definition(definition&& instruction)
     {
-        auto name = instruction.Name();
-        DISCARD_RESULT _localDefinitions.emplace(name, instruction);
+        auto name = instruction.name();
+        DISCARD_RESULT _local_definitions.emplace(name, instruction);
     }    
 
-    void ClientContext::DeleteDefinition(const std::string& name)
+    void client_context::delete_definition(const std::string& name)
     {
-        _localDefinitions.erase(name);
+        _local_definitions.erase(name);
     }
 
-    bool ClientContext::ExecDefinition(const std::string& defName)
+    bool client_context::execute_definition(const std::string& def_name)
     {
-        if (_localDefinitions.count(defName) == 0)
+        if (_local_definitions.count(def_name) == 0)
         {
             return false;
         }
-        Definition def = _localDefinitions.at(defName);
-        def.ExecuteOnContext(*this);
+        definition def = _local_definitions.at(def_name);
+        def.execute_on_context(*this);
         return true;
     }
 
-    bool ClientContext::ExistsDefinition(const std::string& defName)
+    bool client_context::contains_definition(const std::string& def_name)
     {
-        return _localDefinitions.count(defName) > 0;
+        return _local_definitions.count(def_name) > 0;
     }
 
-    const std::string& ClientContext::GetCurrentFramePath()
+    const std::string& client_context::get_fpath()
     {
         static const std::string separator = std::string(1, FRAMEPATH_SEPARATOR);
 
-        if (_cachedFramePathNeedsRebuild)
+        if (_cached_fpath_rebuild)
         {
-            _cachedFramePath.clear();
-            _cachedFramePath = _frameStack[0].get().Name();
-            for (size_t i = 1; i < _frameStack.size(); i++)
+            _cached_fpath.clear();
+            _cached_fpath = _frame_stack[0].get().name();
+            for (size_t i = 1; i < _frame_stack.size(); i++)
             {
-                _cachedFramePath.append(separator);
-                _cachedFramePath.append(_frameStack[i].get().Name());
+                _cached_fpath.append(separator);
+                _cached_fpath.append(_frame_stack[i].get().name());
             }
-            _cachedFramePathNeedsRebuild = false;
+            _cached_fpath_rebuild = false;
         }
-        return _cachedFramePath;
+        return _cached_fpath;
     }
 
-    const std::pair<Transform2, Frame&> ClientContext::FramePathToFrameWithTransform(const std::string& fPath)
+    const std::pair<transform2, frame&> client_context::extract_fpath_with_transform(const std::string& fpath)
     {
-        std::stringstream ss(fPath);
+        std::stringstream ss(fpath);
         std::string aux;
-        Frame* currentFrame = nullptr;
-        Transform2 currentTransform;
+        frame* currentFrame = nullptr;
+        transform2 currentTransform;
 
-        currentFrame = &_mainFrame;
-        currentTransform = currentFrame->Transform();
+        currentFrame = &_main_frame;
+        currentTransform = currentFrame->transform();
 
         while (std::getline(ss, aux, FRAMEPATH_SEPARATOR))
         {
             if (aux != MAIN_FRAMENAME)
             {
-                currentFrame = &currentFrame->GetChildFrame(aux);
-                currentTransform.MergeInPlace(currentFrame->Transform());
+                currentFrame = &currentFrame->get_child(aux);
+                currentTransform.merge_in_place(currentFrame->transform());
             }
         }
-        return std::pair<Transform2, Frame&>(currentTransform, *currentFrame);
+        return std::pair<transform2, frame&>(currentTransform, *currentFrame);
     }
 
-    void ClientContext::MarkFrameAsModified()
+    void client_context::mark_frame_modified()
     {
-        const std::string& fPath = GetCurrentFramePath();
-        if (_modifiedFramePaths.count(fPath) == 0)
+        const std::string& fpath = get_fpath();
+        if (_modified_fpaths.count(fpath) == 0)
         {
-            DISCARD_RESULT _modifiedFramePaths.insert(fPath);
+            DISCARD_RESULT _modified_fpaths.insert(fpath);
         }
     }
 
-    std::vector<Line> ClientContext::GetFlattenedFullSnapshot() const
+    std::vector<line> client_context::snapshot_full_flat() const
     {
-        return _mainFrame.GetFlattenedModulatedLines(DEFAULT_TRANSFORM);
+        return _main_frame.get_flat_modulated_lines(DEFAULT_TRANSFORM);
     }
 
-    std::vector<Line> ClientContext::GetFlattenedPartialSnapshot()
+    std::vector<line> client_context::snapshot_diff_flat()
     {
-        std::vector<Line> result;
-        for (auto& fpath : _modifiedFramePaths)
+        std::vector<line> result;
+        for (auto& fpath : _modified_fpaths)
         {
-            const auto pair = FramePathToFrameWithTransform(fpath);
-            const Transform2 parentTform = pair.first;
-            const Frame& frame = pair.second;
+            const auto pair = extract_fpath_with_transform(fpath);
+            const transform2 parentTform = pair.first;
+            const frame& frame = pair.second;
 
-            std::vector<Line> lines = frame.GetFlattenedModulatedLines(parentTform);
+            std::vector<line> lines = frame.get_flat_modulated_lines(parentTform);
             std::move(lines.begin(), lines.end(), std::back_inserter(result));
         }
-        _modifiedFramePaths.clear();
+        _modified_fpaths.clear();
         return result;
     }
 
-    std::unordered_map<std::string, std::vector<Line>> ClientContext::GetRelativePartialSnapshot()
+    std::unordered_map<std::string, std::vector<line>> client_context::snapshot_diff_relative()
     {
-        std::unordered_map<std::string, std::vector<Line>> result;
-        for (auto& fpath : _modifiedFramePaths)
+        std::unordered_map<std::string, std::vector<line>> result;
+        for (auto& fpath : _modified_fpaths)
         {
-            const auto pair = FramePathToFrameWithTransform(fpath);
-            const Transform2 parentTform = pair.first;
-            const Frame& frame = pair.second;
+            const auto pair = extract_fpath_with_transform(fpath);
+            const transform2 parentTform = pair.first;
+            const frame& frame = pair.second;
 
-            auto entry = std::make_pair(fpath, frame.GetFlattenedModulatedLines(parentTform));
+            auto entry = std::make_pair(fpath, frame.get_flat_modulated_lines(parentTform));
             result.insert(std::move(entry));
         }
-        _modifiedFramePaths.clear();
+        _modified_fpaths.clear();
         return result;
     }
 }

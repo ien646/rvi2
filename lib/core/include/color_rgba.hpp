@@ -3,37 +3,37 @@
 #include "rvi_base.hpp"
 
 #define RVI_CRGBA_STANDARD_COLOR(name, r, g, b, a)\
-    static constexpr ColorRGBA name() { return ColorRGBA(0x##r, 0x##g, 0x##b, 0x##a); }
+    static constexpr color_rgba name() { return color_rgba(0x##r, 0x##g, 0x##b, 0x##a); }
 
 namespace rvi
 {
-    class ColorRGBA
+    class color_rgba
     {
     public:
-        U8 R = 0;
-        U8 G = 0;
-        U8 B = 0;
-        U8 A = 0;
+        u8 r = 0;
+        u8 g = 0;
+        u8 b = 0;
+        u8 a = 0;
 
-        constexpr ColorRGBA() noexcept { };
+        constexpr color_rgba() noexcept { };
 
-        constexpr ColorRGBA(U8 r, U8 g, U8 b, U8 a) noexcept
+        constexpr color_rgba(u8 r, u8 g, u8 b, u8 a) noexcept
         {
-            R = r;
-            G = g;
-            B = b;
-            A = a;
+            this->r = r;
+            this->g = g;
+            this->b = b;
+            this->a = a;
         }
 
-        U32 RGBA()
+        u32 rgba()
         {
-            return (R << 24) | (G << 16) | (B << 8) | (A);
+            return (r << 24) | (g << 16) | (b << 8) | (a);
         }
 
-        static ColorRGBA FromRGBA(uint32_t rgba);
+        static color_rgba from_rgba(uint32_t rgba);
 
-        bool operator==(ColorRGBA other) const noexcept;
-        bool operator!=(ColorRGBA other) const noexcept;
+        bool operator==(color_rgba other) const noexcept;
+        bool operator!=(color_rgba other) const noexcept;
 
         RVI_CRGBA_STANDARD_COLOR(TRANSPARENT,   00, 00, 00, FF);
         RVI_CRGBA_STANDARD_COLOR(WHITE,         FF, FF, FF, 00);

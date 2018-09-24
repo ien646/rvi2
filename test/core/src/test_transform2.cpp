@@ -8,77 +8,77 @@ using namespace rvi;
 
 static const int OP_TEST_ITER = 5000;
 
-TEST(Transform2, Merge)
+TEST(transform2, merge)
 {
-    Vector2 offset1(GetRandomFloat(), GetRandomFloat());
-    Vector2 scale1(GetRandomFloat(), GetRandomFloat());
-    float rot1 = GetRandomFloat();
+    vector2 offset1(get_random_float(), get_random_float());
+    vector2 scale1(get_random_float(), get_random_float());
+    float rot1 = get_random_float();
 
-    Vector2 offset2(GetRandomFloat(), GetRandomFloat());
-    Vector2 scale2(GetRandomFloat(), GetRandomFloat());
-    float rot2 = GetRandomFloat();
+    vector2 offset2(get_random_float(), get_random_float());
+    vector2 scale2(get_random_float(), get_random_float());
+    float rot2 = get_random_float();
 
-    Transform2 tform1(offset1, scale1, rot1);
-    Transform2 tform2(offset2, scale2, rot2);
+    transform2 tform1(offset1, scale1, rot1);
+    transform2 tform2(offset2, scale2, rot2);
 
-    Transform2 finalTform = tform1.Merge(tform2);
+    transform2 finalTform = tform1.merge(tform2);
 
-    Transform2 expectedTform((offset1 + offset2), (scale1 * scale2), (Math::ClampAngleDeg(rot1 + rot2)));
+    transform2 expectedTform((offset1 + offset2), (scale1 * scale2), (math::clamp_angle_deg(rot1 + rot2)));
 
     ASSERT_EQ(finalTform, expectedTform);
 }
 
-TEST(Transform2, MergeInPlace)
+TEST(transform2, merge_in_place)
 {
-    Vector2 offset1(GetRandomFloat(), GetRandomFloat());
-    Vector2 scale1(GetRandomFloat(), GetRandomFloat());
-    float rot1 = GetRandomFloat();
+    vector2 offset1(get_random_float(), get_random_float());
+    vector2 scale1(get_random_float(), get_random_float());
+    float rot1 = get_random_float();
 
-    Vector2 offset2(GetRandomFloat(), GetRandomFloat());
-    Vector2 scale2(GetRandomFloat(), GetRandomFloat());
-    float rot2 = GetRandomFloat();
+    vector2 offset2(get_random_float(), get_random_float());
+    vector2 scale2(get_random_float(), get_random_float());
+    float rot2 = get_random_float();
 
-    Transform2 tform1(offset1, scale1, rot1);
-    Transform2 tform2(offset2, scale2, rot2);
+    transform2 tform1(offset1, scale1, rot1);
+    transform2 tform2(offset2, scale2, rot2);
 
-    tform1.MergeInPlace(tform2);
+    tform1.merge_in_place(tform2);
 
-    Transform2 expectedTform((offset1 + offset2), (scale1 * scale2), (Math::ClampAngleDeg(rot1 + rot2)));
+    transform2 expectedTform((offset1 + offset2), (scale1 * scale2), (math::clamp_angle_deg(rot1 + rot2)));
 
     ASSERT_EQ(tform1, expectedTform);
 }
 
-TEST(Transform2, EqualityOperator)
+TEST(transform2, equality_op)
 {
-    Vector2 offset1(GetRandomFloat(), GetRandomFloat());
-    Vector2 scale1(GetRandomFloat(), GetRandomFloat());
-    float rot1 = GetRandomFloat();
+    vector2 offset1(get_random_float(), get_random_float());
+    vector2 scale1(get_random_float(), get_random_float());
+    float rot1 = get_random_float();
 
-    Vector2 offset2(GetRandomFloat(), GetRandomFloat());
-    Vector2 scale2(GetRandomFloat(), GetRandomFloat());
-    float rot2 = GetRandomFloat();
+    vector2 offset2(get_random_float(), get_random_float());
+    vector2 scale2(get_random_float(), get_random_float());
+    float rot2 = get_random_float();
 
-    Transform2 tform1(offset1, scale1, rot1);
-    Transform2 tform2(offset1, scale1, rot1);
-    Transform2 tform3(offset2, scale2, rot2);
+    transform2 tform1(offset1, scale1, rot1);
+    transform2 tform2(offset1, scale1, rot1);
+    transform2 tform3(offset2, scale2, rot2);
 
     ASSERT_TRUE(tform1 == tform2);
     ASSERT_FALSE(tform1 == tform3);
 }
 
-TEST(Transform2, InequalityOperator)
+TEST(transform2, inequality_op)
 {
-    Vector2 offset1(GetRandomFloat(), GetRandomFloat());
-    Vector2 scale1(GetRandomFloat(), GetRandomFloat());
-    float rot1 = GetRandomFloat();
+    vector2 offset1(get_random_float(), get_random_float());
+    vector2 scale1(get_random_float(), get_random_float());
+    float rot1 = get_random_float();
 
-    Vector2 offset2(GetRandomFloat(), GetRandomFloat());
-    Vector2 scale2(GetRandomFloat(), GetRandomFloat());
-    float rot2 = GetRandomFloat();
+    vector2 offset2(get_random_float(), get_random_float());
+    vector2 scale2(get_random_float(), get_random_float());
+    float rot2 = get_random_float();
 
-    Transform2 tform1(offset1, scale1, rot1);
-    Transform2 tform2(offset1, scale1, rot1);
-    Transform2 tform3(offset2, scale2, rot2);
+    transform2 tform1(offset1, scale1, rot1);
+    transform2 tform2(offset1, scale1, rot1);
+    transform2 tform3(offset2, scale2, rot2);
 
     ASSERT_FALSE(tform1 != tform2);
     ASSERT_TRUE(tform1 != tform3);

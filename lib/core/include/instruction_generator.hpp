@@ -5,24 +5,25 @@
 
 namespace rvi
 {
-    class InstructionGenerator
+    class instruction_generator
     {
-    public:
-        static DefinitionInstruction DrawLine(Vector2 from, Vector2 to);
-        static DefinitionInstruction DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor);
-        static DefinitionInstruction DrawLine(Vertex from, Vertex to);
+    public:       
 
-        static DefinitionInstruction SelectFrame(const std::string& name);
-        static DefinitionInstruction SelectFrame(std::string&& name);
+        static definition_inst draw_line(vector2 from, vector2 to);
+        static definition_inst draw_line(vector2 from, color_rgba fromColor, vector2 to, color_rgba toColor);
+        static definition_inst draw_line(vertex from, vertex to);
 
-        static DefinitionInstruction ReleaseFrame();
+        static definition_inst select_frame(const std::string& name);
+        static definition_inst select_frame(std::string&& name);
 
-        static DefinitionInstruction SetCurrentColor(ColorRGBA color);
+        static definition_inst release_frame();
 
-        static DefinitionInstruction SetCurrentTransform(const Transform2& tform);
-        static DefinitionInstruction SetCurrentTransform(Transform2&& tform);
+        static definition_inst set_color(color_rgba color);
 
-        static DefinitionInstruction AddDefinition(const Definition& instruction);
-        static DefinitionInstruction AddDefinition(Definition&& instruction);
+        static definition_inst set_transform(const transform2& tform);
+        static definition_inst set_transform(transform2&& tform);
+
+        static definition_inst add_definition(const definition& instruction);
+        static definition_inst add_definition(definition&& instruction);
     };
 }

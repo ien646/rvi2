@@ -3,31 +3,31 @@
 
 #include "random_gen.hpp"
 
-using rvi::Vector2;
-using rvi::ColorRGBA;
-using rvi::Vertex;
+using rvi::vector2;
+using rvi::color_rgba;
+using rvi::vertex;
 
 static const int OP_TEST_ITER = 5000;
 
-TEST (Vertex, Equality_Operator)
+TEST (vertex, equality_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float pos_x = GetRandomFloat();
-        float pos_y = GetRandomFloat();
-        uint32_t rgba = GetRandomInt();
+        float pos_x = get_random_float();
+        float pos_y = get_random_float();
+        uint32_t rgba = get_random_int();
 
-        Vector2 vpos(pos_x, pos_y);
-        ColorRGBA color = ColorRGBA::FromRGBA(rgba);
+        vector2 vpos(pos_x, pos_y);
+        color_rgba color = color_rgba::from_rgba(rgba);
         
-        Vertex vx1(vpos, color);
-        Vertex vx2(vpos, color);
+        vertex vx1(vpos, color);
+        vertex vx2(vpos, color);
 
-        vpos += Vector2(1,1);
-        Vertex vx3(vpos, color);
+        vpos += vector2(1,1);
+        vertex vx3(vpos, color);
 
-        color.R += 1;
-        Vertex vx4(vpos, color);
+        color.r += 1;
+        vertex vx4(vpos, color);
 
         ASSERT_TRUE(vx1 == vx2);
         ASSERT_FALSE(vx1 == vx3);
@@ -35,25 +35,25 @@ TEST (Vertex, Equality_Operator)
     }
 }
 
-TEST (Vertex, Inequality_Operator)
+TEST (vertex, inequality_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float pos_x = GetRandomFloat();
-        float pos_y = GetRandomFloat();
-        uint32_t rgba = GetRandomInt();
+        float pos_x = get_random_float();
+        float pos_y = get_random_float();
+        uint32_t rgba = get_random_int();
 
-        Vector2 vpos(pos_x, pos_y);
-        ColorRGBA color = ColorRGBA::FromRGBA(rgba);
+        vector2 vpos(pos_x, pos_y);
+        color_rgba color = color_rgba::from_rgba(rgba);
         
-        Vertex vx1(vpos, color);
-        Vertex vx2(vpos, color);
+        vertex vx1(vpos, color);
+        vertex vx2(vpos, color);
 
-        vpos += Vector2(1,1);
-        Vertex vx3(vpos, color);
+        vpos += vector2(1,1);
+        vertex vx3(vpos, color);
 
-        color.R += 1;
-        Vertex vx4(vpos, color);
+        color.r += 1;
+        vertex vx4(vpos, color);
 
         ASSERT_FALSE(vx1 != vx2);
         ASSERT_TRUE(vx1 != vx3);

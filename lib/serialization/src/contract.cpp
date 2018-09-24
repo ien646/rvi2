@@ -2,17 +2,17 @@
 
 namespace rvi::serialization
 {    
-    void Contract::Append(const ContractElemDesc& desc)
+    void contract::append(const contract_elem_desc& desc)
     {
         _contract.push_back(desc);
     }
 
-    void Contract::Append(ContractElemDesc&& desc)
+    void contract::append(contract_elem_desc&& desc)
     {
         _contract.push_back(std::move(desc));
     }
 
-    const std::vector<ContractElemDesc>& Contract::GetElements()
+    const std::vector<contract_elem_desc>& contract::get_elements()
     {
         return _contract;
     }

@@ -3,75 +3,73 @@
 #define CAPTURE_RVALUEREF(x) &x
 #define NOCAPTURE
 
-typedef rvi::DefinitionInstruction INSTRUCTION;
-
 using std::string;
 
 namespace rvi
 {
-    INSTRUCTION InstructionGenerator::DrawLine(Vector2 from, Vector2 to)
+    definition_inst instruction_generator::draw_line(vector2 from, vector2 to)
     {
-        return[=](ClientContext& c)
-        { c.DrawLine(from, to); };
+        return[=](client_context& c)
+        { c.draw_line(from, to); };
     }
 
-    INSTRUCTION InstructionGenerator::DrawLine(Vector2 from, ColorRGBA fromColor, Vector2 to, ColorRGBA toColor)
+    definition_inst instruction_generator::draw_line(vector2 from, color_rgba from_color, vector2 to, color_rgba to_color)
     {
-        return[=](ClientContext& c)
-        { c.DrawLine(from, fromColor, to, toColor); };
+        return[=](client_context& c)
+        { c.draw_line(from, from_color, to, to_color); };
     }
 
-    INSTRUCTION InstructionGenerator::DrawLine(Vertex from, Vertex to)
+    definition_inst instruction_generator::draw_line(vertex from, vertex to)
     {
-        return[=](ClientContext& c)
-        { c.DrawLine(from, to); };
+        return[=](client_context& c)
+        { c.draw_line(from, to); };
     }
 
-    INSTRUCTION InstructionGenerator::SelectFrame(const string& name)
+    definition_inst instruction_generator::select_frame(const string& name)
     {
-        return[=](ClientContext& c)
-        { c.SelectFrame(name); };
+        return[=](client_context& c)
+        { c.select_frame(name); };
     }
 
-    INSTRUCTION InstructionGenerator::SelectFrame(string&& name)
+    definition_inst instruction_generator::select_frame(string&& name)
     {
-        return[&](ClientContext& c)
-        { c.SelectFrame(std::move(name)); };
+        return[&](client_context& c)
+        { c.select_frame(std::move(name)); };
     }
 
-    INSTRUCTION InstructionGenerator::ReleaseFrame()
+    definition_inst instruction_generator::release_frame()
     {
-        return[NOCAPTURE](ClientContext& c)
-        { c.ReleaseFrame(); };
+        return[NOCAPTURE](client_context& c)
+        { c.release_frame(); };
     }
 
-    INSTRUCTION InstructionGenerator::SetCurrentColor(ColorRGBA color)
+    definition_inst instruction_generator::set_color(color_rgba color)
     {
-        return[=](ClientContext& c) noexcept
-        { c.SetCurrentColor(color); };
+        return[=](client_context& c) noexcept
+        { c.set_color(color); };
     }
 
-    INSTRUCTION InstructionGenerator::SetCurrentTransform(const Transform2& tform)
+    definition_inst instruction_generator::set_transform(const transform2& tform)
     {
-        return[=](ClientContext& c) noexcept
-        { c.SetCurrentTransform(tform); };
+        return[=](client_context& c) noexcept
+        { c.set_transform(tform); };
     }
 
-    INSTRUCTION InstructionGenerator::SetCurrentTransform(Transform2&& tform)
+    definition_inst instruction_generator::set_transform(transform2&& tform)
     {
-        return[&](ClientContext& c) noexcept
-        { c.SetCurrentTransform(std::move(tform)); };
+        return[&](client_context& c) noexcept
+        { c.set_transform(std::move(tform)); };
     }
 
-    INSTRUCTION InstructionGenerator::AddDefinition(const Definition& instruction)
+    definition_inst instruction_generator::add_definition(const definition& instruction)
     {
-        return[instruction](ClientContext& c)
-        { c.AddDefinition(instruction); };
+        return[instruction](client_context& c)
+        { c.add_definition(instruction); };
     }
 
-    INSTRUCTION InstructionGenerator::AddDefinition(Definition&& instruction)
+    definition_inst instruction_generator::add_definition(definition&& instruction)
     {
-        return[CAPTURE_RVALUEREF(instruction)](ClientContext& c)
-        { c.AddDefinition(std::move(instruction)); };
+        return[CAPTURE_RVALUEREF(instruction)](client_context& c)
+        { c.add_definition(std::move(instruction)); };
     }
 }

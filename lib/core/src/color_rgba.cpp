@@ -2,31 +2,31 @@
 
 namespace rvi
 {
-    ColorRGBA ColorRGBA::FromRGBA(uint32_t rgba)
+    color_rgba color_rgba::from_rgba(uint32_t rgba)
     {
-        ColorRGBA res;
+        color_rgba res;
 
-        res.R = static_cast<U8>(rgba >> 24);
-        res.G = static_cast<U8>(rgba >> 16);
-        res.B = static_cast<U8>(rgba >> 8);
-        res.A = static_cast<U8>(rgba);
+        res.r = static_cast<u8>(rgba >> 24);
+        res.g = static_cast<u8>(rgba >> 16);
+        res.b = static_cast<u8>(rgba >> 8);
+        res.a = static_cast<u8>(rgba);
         
         return res;
     }
 
-    bool ColorRGBA::operator==(ColorRGBA other) const noexcept
+    bool color_rgba::operator==(color_rgba other) const noexcept
     {
-        return (R == other.R) 
-            && (G == other.G) 
-            && (B == other.B) 
-            && (A == other.A);
+        return (r == other.r) 
+            && (g == other.g) 
+            && (b == other.b) 
+            && (a == other.a);
     }
 
-    bool ColorRGBA::operator!=(ColorRGBA other) const noexcept
+    bool color_rgba::operator!=(color_rgba other) const noexcept
     {
-        return (R != other.R)
-            || (G != other.G)
-            || (B != other.B)
-            || (A != other.A);
+        return (r != other.r)
+            || (g != other.g)
+            || (b != other.b)
+            || (a != other.a);
     }
 }

@@ -36,61 +36,24 @@ namespace rvi
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Integer data typedefs
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    using U8  = std::uint8_t;
-    using U16 = std::uint16_t;
-    using U32 = std::uint32_t;
-    using U64 = std::uint64_t;
+    using u8  = std::uint8_t;
+    using u16 = std::uint16_t;
+    using u32 = std::uint32_t;
+    using u64 = std::uint64_t;
 
-    using I8  = std::int8_t;
-    using I16 = std::int16_t;
-    using I32 = std::int32_t;
-    using I64 = std::int64_t;
+    using i8  = std::int8_t;
+    using i16 = std::int16_t;
+    using i32 = std::int32_t;
+    using i64 = std::int64_t;
    
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // Endianess constant expressions
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-    static constexpr U16 _RVI_CEXPR_ENDIAN_MAGIC_NUMBER = 0x00FF;
+    static constexpr u16 _RVI_CEXPR_ENDIAN_MAGIC_NUMBER = 0x00FF;
     static constexpr bool RVI_CEXPR_BIG_ENDIAN      = ((const uint8_t&)_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0x00;
     static constexpr bool RVI_CEXPR_LITTLE_ENDIAN   = ((const uint8_t&)_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0xFF;
 
-    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    // Random integer generator
-    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    class Random
-    {
-    private:
-        std::random_device _rnd_dev;
-
-        std::uniform_int_distribution<U64> _distributionU64;
-        std::uniform_int_distribution<U32> _distributionU32;
-        std::uniform_int_distribution<U16> _distributionU16;
-
-        std::uniform_int_distribution<I64> _distributionI64;
-        std::uniform_int_distribution<I32> _distributionI32;
-        std::uniform_int_distribution<I16> _distributionI16;
-
-        std::mt19937_64 _mTwisterEngine;
-
-    public:
-        #if RVI_COMPILER_MSVC
-        #pragma warning(suppress: 26439)
-        #endif
-        Random()
-            : _mTwisterEngine(_rnd_dev())
-        { }
-
-        U64 GetUnsigned64();
-        U32 GetUnsigned32();
-        U16 GetUnsigned16();
-
-        I64 GetSigned64();
-        I32 GetSigned32();
-        I16 GetSigned16();
-
-        static Random DefaultInstance;
-    };
-
-    FWD_DECL_CLASS(ClientContext);
-    typedef std::function<void(ClientContext&)> DefinitionInstruction;
+    FWD_DECL_CLASS(client_context);
+    typedef std::function<void(client_context&)> definition_inst;
 }

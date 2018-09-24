@@ -4,172 +4,172 @@
 
 namespace rvi
 {
-    float Vector2::Magnitude() const noexcept
+    float vector2::magnitude() const noexcept
     {
-        return std::sqrt(powf(X, 2) + powf(Y, 2));
+        return std::sqrt(powf(x, 2) + powf(y, 2));
     }
 
-    Vector2 Vector2::CrossProduct(Vector2 other) const noexcept
+    vector2 vector2::cross_product(vector2 other) const noexcept
     {
-        return Vector2(X * other.X, Y * other.Y);
+        return vector2(x * other.x, y * other.y);
     }
 
-    void Vector2::CrossProductInPlace(Vector2 other) noexcept
+    void vector2::cross_product_in_place(vector2 other) noexcept
     {
-        X *= other.X;
-        Y *= other.Y;
+        x *= other.x;
+        y *= other.y;
     }
 
-    Vector2 Vector2::Offset(Vector2 offset) const noexcept
+    vector2 vector2::offset(vector2 offset) const noexcept
     {
-        return Vector2(X + offset.X, Y + offset.Y);
+        return vector2(x + offset.x, y + offset.y);
     }
 
-    void Vector2::OffsetInPlace(Vector2 offset) noexcept
+    void vector2::offset_in_place(vector2 offset) noexcept
     {
-        X += offset.X;
-        Y += offset.Y;
+        x += offset.x;
+        y += offset.y;
     }
 
-    Vector2 Vector2::Rotate(float angle) const noexcept
+    vector2 vector2::rotate(float angle) const noexcept
     {
-        float radAngle = rvi::Math::Deg2Rad(angle);
+        float radAngle = rvi::math::deg2rad(angle);
         const float angleSin = std::sin(radAngle);
         const float angleCos = std::cos(radAngle);
 	
         // [rx] = [cos(a) , -sin(a)][x]
-        const float rx = (X * +angleCos) + (Y * -angleSin);
+        const float rx = (x * +angleCos) + (y * -angleSin);
 	    // [ry] = [sin(a) ,  cos(a)][y]
-        const float ry = (X * +angleSin) + (Y * +angleCos);   
+        const float ry = (x * +angleSin) + (y * +angleCos);   
 
-        return Vector2(rx, ry);
+        return vector2(rx, ry);
     }
 
-    void Vector2::RotateInPlace(float angle) noexcept
+    void vector2::rotate_in_place(float angle) noexcept
     {
-        float radAngle = rvi::Math::Deg2Rad(angle);
+        float radAngle = rvi::math::deg2rad(angle);
         const float angleSin = std::sin(radAngle);
         const float angleCos = std::cos(radAngle);
 	
-        const float aux_x = X;
-        const float aux_y = Y;
+        const float aux_x = x;
+        const float aux_y = y;
 
 	    // [rx] = [cos(a) , -sin(a)][x]
-        X = (aux_x * +angleCos) + (aux_y * -angleSin);
+        x = (aux_x * +angleCos) + (aux_y * -angleSin);
 	    // [ry] = [sin(a) ,  cos(a)][y]
-        Y = (aux_x * +angleSin) + (aux_y * +angleCos);
+        y = (aux_x * +angleSin) + (aux_y * +angleCos);
     }
 
-    Vector2 Vector2::Reverse() const noexcept
+    vector2 vector2::reverse() const noexcept
     {
         return (*this) * -1;
     }
 
-    void Vector2::ReverseInPlace() noexcept
+    void vector2::reverse_in_place() noexcept
     {
         *this *= -1;
     }
 
-    Vector2 Vector2::Invert() const noexcept
+    vector2 vector2::invert() const noexcept
     {
-        float x = (X == 0) ? 0 : (1 / X);
-        float y = (Y == 0) ? 0 : (1 / Y);
-        return Vector2(x, y);
+        float fx = (x == 0) ? 0 : (1 / x);
+        float fy = (y == 0) ? 0 : (1 / y);
+        return vector2(fx, fy);
     }
 
-    void Vector2::InvertInPlace() noexcept
+    void vector2::invert_in_place() noexcept
     {
-        X = (X == 0) ? 0 : (1 / X);
-        Y = (Y == 0) ? 0 : (1 / Y);
+        x = (x == 0) ? 0 : (1 / x);
+        y = (y == 0) ? 0 : (1 / y);
     }
 
-    Vector2 Vector2::Scale(Vector2 scaleVec) const noexcept
+    vector2 vector2::scale(vector2 scaleVec) const noexcept
     {
-        return this->CrossProduct(scaleVec);
+        return this->cross_product(scaleVec);
     }
 
-    Vector2 Vector2::Scale(float scale) const noexcept
+    vector2 vector2::scale(float scale) const noexcept
     {
-        return Vector2(X * scale, Y * scale);
+        return vector2(x * scale, y * scale);
     }
 
-    void Vector2::ScaleInPlace(float scale) noexcept
+    void vector2::scale_in_place(float scale) noexcept
     {
-        X *= scale;
-        Y *= scale;
+        x *= scale;
+        y *= scale;
     }
 
-    void Vector2::ScaleInPlace(Vector2 scale) noexcept
+    void vector2::scale_in_place(vector2 scale) noexcept
     {
-        CrossProductInPlace(scale);
+        cross_product_in_place(scale);
     }
 
-    Vector2 Vector2::operator+(Vector2 other) const noexcept
+    vector2 vector2::operator+(vector2 other) const noexcept
     {
-        return Vector2(X + other.X, Y + other.Y);
+        return vector2(x + other.x, y + other.y);
     }
 
-    Vector2 Vector2::operator-(Vector2 other) const noexcept
+    vector2 vector2::operator-(vector2 other) const noexcept
     {
-        return Vector2(X - other.X, Y - other.Y);
+        return vector2(x - other.x, y - other.y);
     }
 
-    Vector2 Vector2::operator*(float other) const noexcept
+    vector2 vector2::operator*(float other) const noexcept
     {
-        return Vector2(X * other, Y * other);
+        return vector2(x * other, y * other);
     }
 
-    Vector2 Vector2::operator*(Vector2 other) const noexcept
+    vector2 vector2::operator*(vector2 other) const noexcept
     {
-        return this->CrossProduct(other);
+        return this->cross_product(other);
     }
 
-    Vector2 Vector2::operator/(float other) const noexcept
+    vector2 vector2::operator/(float other) const noexcept
     {
-        return Vector2(X / other, Y / other);
+        return vector2(x / other, y / other);
     }
 
-    Vector2 Vector2::operator/(Vector2 other) const noexcept
+    vector2 vector2::operator/(vector2 other) const noexcept
     {
-        return Vector2((X / other.X), (Y / other.Y));
+        return vector2((x / other.x), (y / other.y));
     }
 
-    void Vector2::operator-=(Vector2 other) noexcept
+    void vector2::operator-=(vector2 other) noexcept
     {
-        X -= other.X;
-        Y -= other.Y;
+        x -= other.x;
+        y -= other.y;
     }
 
-    void Vector2::operator+=(Vector2 other) noexcept
+    void vector2::operator+=(vector2 other) noexcept
     {
-        X += other.X;
-        Y += other.Y;
+        x += other.x;
+        y += other.y;
     }
 
-    void Vector2::operator*=(float other) noexcept
+    void vector2::operator*=(float other) noexcept
     {
-        X *= other;
-        Y *= other;
+        x *= other;
+        y *= other;
     }
 
-    void Vector2::operator*=(Vector2 other) noexcept
+    void vector2::operator*=(vector2 other) noexcept
     {
-        this->CrossProductInPlace(other);
+        this->cross_product_in_place(other);
     }
 
-    void Vector2::operator/=(float other) noexcept
+    void vector2::operator/=(float other) noexcept
     {
-        X /= other;
-        Y /= other;
+        x /= other;
+        y /= other;
     }
 
-    bool Vector2::operator==(Vector2 other) const noexcept
+    bool vector2::operator==(vector2 other) const noexcept
     {
-        return (X == other.X) && (Y == other.Y);
+        return (x == other.x) && (y == other.y);
     }
 
-    bool Vector2::operator!=(Vector2 other) const noexcept
+    bool vector2::operator!=(vector2 other) const noexcept
     {
-        return (X != other.X) || (Y != other.Y);
+        return (x != other.x) || (y != other.y);
     }
 }

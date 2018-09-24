@@ -9,89 +9,86 @@
 
 namespace rvi::serialization
 {
-    class Serializer
+    class serializer
     {
     private:
         std::vector<uint8_t> _buffer;
-    	Contract _contract;
+    	contract _contract;
 
         const uint32_t MAX_CONTAINER_LENGTH = 
             static_cast<uint32_t>(std::numeric_limits<uint16_t>::max());
 
     public:
-        Serializer(const Contract& contract)
+        serializer(const contract& contract)
             : _contract(contract)
         { }
 
-        Serializer(Contract&& contract)
+        serializer(contract&& contract)
             : _contract(std::move(contract))
         { }
 
-        void FillContractScalarU8(uint8_t val, int contract_iidx);
-        void FillContractScalarU16(uint16_t val, int contract_iidx);
-        void FillContractScalarU32(uint32_t val, int contract_iidx);
-        void FillContractScalarU64(uint64_t val, int contract_iidx);
-        void FillContractScalarI8(int8_t val, int contract_iidx);
-        void FillContractScalarI16(int16_t val, int contract_iidx);
-        void FillContractScalarI32(int32_t val, int contract_iidx);
-        void FillContractScalarI64(int64_t val, int contract_iidx);
+        void fill_contract_scalar_u8(uint8_t val, int contract_iidx);
+        void fill_contract_scalar_u16(uint16_t val, int contract_iidx);
+        void fill_contract_scalar_u32(uint32_t val, int contract_iidx);
+        void fill_contract_scalar_u64(uint64_t val, int contract_iidx);
+        void fill_contract_scalar_i8(int8_t val, int contract_iidx);
+        void fill_contract_scalar_i16(int16_t val, int contract_iidx);
+        void fill_contract_scalar_i32(int32_t val, int contract_iidx);
+        void fill_contract_scalar_i64(int64_t val, int contract_iidx);
 
-        void FillContractScalarFP32(float val, int contract_iidx);
-        void FillContractScalarFP64(double val, int contract_iidx);
+        void fill_contract_scalar_fp32(float val, int contract_iidx);
+        void fill_contract_scalar_fp64(double val, int contract_iidx);
 
-        void FillContractBinary_FixLen(const std::vector<uint8_t>& val, int contract_iidx);
-        void FillContractBinary_VarLen(const std::vector<uint8_t>& val, int contract_iidx);
+        void fill_contract_binary_fixlen(const std::vector<uint8_t>& val, int contract_iidx);
+        void fill_contract_binary_varlen(const std::vector<uint8_t>& val, int contract_iidx);
 
-        template<typename T, typename = EnableIfFloatOrIntegral<T>>
-        void FillContractArray_FixLen(const std::vector<T>& val, int contract_iidx);
+        template<typename T, typename = enable_if_float_or_integral<T>>
+        void fill_contract_array_fixlen(const std::vector<T>& val, int contract_iidx);
 
-        template<typename T, typename = EnableIfFloatOrIntegral<T>>
-        void FillContractArray_VarLen(const std::vector<T>& val, int contract_iidx);
+        template<typename T, typename = enable_if_float_or_integral<T>>
+        void fill_contract_array_varlen(const std::vector<T>& val, int contract_iidx);
 
-        // void FillContractElemUtf8String_FixLen(Utf8String val, int contract_iidx);
-        // void FillContractElemUtf8String_VarLen(Utf8String val, int contract_iidx);
+        void fill_contract_bool_array_fixlen(const std::vector<bool>& val, int contract_iidx);
+        void fill_contract_bool_array_varlen(const std::vector<bool>& val, int contract_iidx);
 
-        void FillContractBoolArray_FixLen(const std::vector<bool>& val, int contract_iidx);
-        void FillContractBoolArray_VarLen(const std::vector<bool>& val, int contract_iidx);
+        void fill_contract_string_fixlen(const std::string& val, int contract_iidx);
+        void fill_contract_string_varlen(const std::string& val, int contract_iidx);
 
-        void FillContractString_FixLen(const std::string& val, int contract_iidx);
-        void FillContractString_VarLen(const std::string& val, int contract_iidx);
+        void fill_contract_u16string_fixlen(const std::u16string& val, int contract_iidx);
+        void fill_contract_u16string_varlen(const std::u16string& val, int contract_iidx);
 
-        void FillContractStringUtf16_FixLen(const std::u16string& val, int contract_iidx);
-        void FillContractStringUtf16_VarLen(const std::u16string& val, int contract_iidx);
-
-        void FillContractStringUtf32_FixLen(const std::u32string& val, int contract_iidx);
-        void FillContractStringUtf32_VarLen(const std::u32string& val, int contract_iidx);
+        void fill_contract_u32string_fixlen(const std::u32string& val, int contract_iidx);
+        void fill_contract_u32string_varlen(const std::u32string& val, int contract_iidx);
 
     private:
-        void CheckContractValidFixedSize(int contract_iidx, int cont_len);
-        void CheckContractValidVarSize(int cont_len);
-        void CheckContractValidType(int contract_iidx, ContractElemType type);
-        void CheckMaxContainerLength(size_t cont_len);
+        void check_contract_valid_fixed_size(int contract_iidx, int cont_len);
+        void check_contract_valid_var_size(int cont_len);
+        void check_contract_valid_type(int contract_iidx, contract_elem_type type);
+        void check_max_container_len(size_t cont_len);
 
-        void Throw_InvalidTypeForContract(const ContractElemDesc& descriptor);
-        void Throw_FixedSizeItemLengthOverflow(const ContractElemDesc& descriptor, int cont_sz);
-        void Throw_VarSizeItemLengthOverflow(int cont_sz);
+        void throw_invalid_contract_type(const contract_elem_desc& descriptor);
+        void throw_fixed_item_size_overflow(const contract_elem_desc& descriptor, int cont_sz);
+        void throw_var_item_size_overflow(int cont_sz);
 
-        template<typename T, typename = EnableIfIntegral<T>>
-        void I_FillContractIntegral(std::vector<uint8_t>& buff, T val, int contract_iidx, ContractElemType type);
+        template<typename T, typename = enable_if_integral<T>>
+        void i_fill_contract_integral(std::vector<uint8_t>& buff, T val, int contract_iidx, contract_elem_type type);
 
-        void I_FillContractFloat32(std::vector<uint8_t>& buff, float val, int contract_iidx, ContractElemType type);
-        void I_FillContractFloat64(std::vector<uint8_t>& buff, double val, int contract_iidx, ContractElemType type);
+        void i_fill_contract_fp32(std::vector<uint8_t>& buff, float val, int contract_iidx, contract_elem_type type);
+        void i_fill_contract_fp64(std::vector<uint8_t>& buff, double val, int contract_iidx, contract_elem_type type);
 
-        template<typename T, typename = EnableIfIntegral<T>>
-        void SerializeIntegral(std::vector<uint8_t>& buff, T val);
+        template<typename T, typename = enable_if_integral<T>>
+        void serialize_integral(std::vector<uint8_t>& buff, T val);
 
-        void SerializeFloat32(std::vector<uint8_t>& buff, float val);
-        void SerializeFloat64(std::vector<uint8_t>& buff, double val);
+        void serialize_fp32(std::vector<uint8_t>& buff, float val);
+        void serialize_fp64(std::vector<uint8_t>& buff, double val);
 
-        template<typename T, typename = EnableIfFloatOrIntegral<T>>
-        void SerializeArray(std::vector<uint8_t>& buff, const std::vector<T>& val);
+        template<typename T, typename = enable_if_float_or_integral<T>>
+        void serialize_array(std::vector<uint8_t>& buff, const std::vector<T>& val);
 
-        void SerializeBoolArray(std::vector<uint8_t>& buff, const std::vector<bool>& val);
-        void SerializeUtf16String(std::vector<uint8_t>& buff, const std::u16string& val);
-        void SerializeUtf32String(std::vector<uint8_t>& buff, const std::u32string& val);
-        void SerializeContainerLen(std::vector<uint8_t>& buff, size_t cont_len);
+        void serialize_bool_array(std::vector<uint8_t>& buff, const std::vector<bool>& val);
+        void serialize_u16string(std::vector<uint8_t>& buff, const std::u16string& val);
+        void serialize_u32string(std::vector<uint8_t>& buff, const std::u32string& val);
+        void serialize_container_len(std::vector<uint8_t>& buff, size_t cont_len);
     };
 
 
@@ -100,35 +97,35 @@ namespace rvi::serialization
 ///////////////////////////////////////////////////////////////////////
 
     template<typename T, typename>
-    void Serializer::FillContractArray_FixLen(const std::vector<T>& val, int contract_iidx)
+    void serializer::fill_contract_array_fixlen(const std::vector<T>& val, int contract_iidx)
     {
         const auto cont_len = val.size();
-        CheckContractValidType(contract_iidx, ContractElemType::ARRAY_SCALAR_FIXLEN);
-        CheckMaxContainerLength(cont_len);
+        check_contract_valid_type(contract_iidx, contract_elem_type::ARRAY_SCALAR_FIXLEN);
+        check_max_container_len(cont_len);
 
-        SerializeArray(_buffer, val);
+        serialize_array(_buffer, val);
     }
 
     template<typename T, typename>
-    void Serializer::FillContractArray_VarLen(const std::vector<T>& val, int contract_iidx)
+    void serializer::fill_contract_array_varlen(const std::vector<T>& val, int contract_iidx)
     {
         const auto cont_len = val.size();
-        CheckContractValidType(contract_iidx, ContractElemType::ARRAY_SCALAR_VARLEN);
-        CheckMaxContainerLength(cont_len);
+        check_contract_valid_type(contract_iidx, contract_elem_type::ARRAY_SCALAR_VARLEN);
+        check_max_container_len(cont_len);
         
-        SerializeContainerLen(_buffer, cont_len);
-        SerializeArray(_buffer, val);
+        serialize_container_len(_buffer, cont_len);
+        serialize_array(_buffer, val);
     }
 
     template<typename T, typename>
-    void Serializer::I_FillContractIntegral(std::vector<uint8_t>& buff, T val, int contract_iidx, ContractElemType type)
+    void serializer::i_fill_contract_integral(std::vector<uint8_t>& buff, T val, int contract_iidx, contract_elem_type type)
     {
-        CheckContractValidType(contract_iidx, type);
-        SerializeIntegral(buff, val);
+        check_contract_valid_type(contract_iidx, type);
+        serialize_integral(buff, val);
     }
 
     template<typename T, typename>
-    void Serializer::SerializeIntegral(std::vector<uint8_t>& buff, T val)
+    void serializer::serialize_integral(std::vector<uint8_t>& buff, T val)
     {
         constexpr auto tsz = sizeof(T);
         if constexpr(tsz == sizeof(uint8_t))
@@ -146,7 +143,7 @@ namespace rvi::serialization
     }
 
     template<typename T, typename>
-    void Serializer::SerializeArray(std::vector<uint8_t>& buff, const std::vector<T>& val)
+    void serializer::serialize_array(std::vector<uint8_t>& buff, const std::vector<T>& val)
     {
         for (int i = 0; i < cont_len; i++)
         {
@@ -156,7 +153,7 @@ namespace rvi::serialization
             }
             else
             {
-                SerializeIntegral(buff, val[i]);
+                serialize_integral(buff, val[i]);
             }
         }
     }

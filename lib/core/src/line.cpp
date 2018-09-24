@@ -2,54 +2,54 @@
 
 namespace rvi
 {
-    Line::Line(const Vertex& start, const Vertex& end) noexcept
-        : Start(start)
-        , End(end)
+    line::line(const vertex& start, const vertex& end) noexcept
+        : start(start)
+        , end(end)
     { }
 
-    Line::Line(Vertex&& start, Vertex&& end) noexcept
-        : Start(std::move(start))
-        , End(std::move(end))
+    line::line(vertex&& start, vertex&& end) noexcept
+        : start(std::move(start))
+        , end(std::move(end))
     { }
     
-    void Line::ApplyOffset(Vector2 offset)
+    void line::apply_position(vector2 offset)
     {
-        Start.Position.OffsetInPlace(offset);
-        End.Position.OffsetInPlace(offset);
+        start.position.offset_in_place(offset);
+        end.position.offset_in_place(offset);
     }
 
-    void Line::ApplyScale(Vector2 scale)
+    void line::apply_scale(vector2 scale)
     {
         // Start unnaffected, since it's the pivot
-        End.Position.ScaleInPlace(scale);
+        end.position.scale_in_place(scale);
     }
 
-    void Line::ApplyRotation(float rotation)
+    void line::apply_rotation(float rotation)
     {
         // Set the 'End' vertex relative to (0,0) and rotate
-        Vector2 diff = Start.Position;
-        Vector2 rotator = End.Position - diff;
-        rotator.RotateInPlace(rotation);
+        vector2 diff = start.position;
+        vector2 rotator = end.position - diff;
+        rotator.rotate_in_place(rotation);
 
         // Restore original offset
         rotator += diff;
-        End.Position = rotator;
+        end.position = rotator;
     }
 
-    void Line::ApplyTransform(const Transform2& tform)
+    void line::apply_transform(const transform2& tform)
     {
-        ApplyScale(tform.Scale);
-        ApplyRotation(tform.Rotation);
-        ApplyOffset(tform.Position);
+        apply_scale(tform.scale);
+        apply_rotation(tform.rotation);
+        apply_position(tform.position);
     }
 
-    bool Line::operator==(Line other) const noexcept
+    bool line::operator==(line other) const noexcept
     {
-        return (Start == other.Start) && (End == other.End);
+        return (start == other.start) && (end == other.end);
     }
 
-    bool Line::operator!=(Line other) const noexcept
+    bool line::operator!=(line other) const noexcept
     {
-        return (Start != other.Start) || (End != other.End);
+        return (start != other.start) || (end != other.end);
     }
 }

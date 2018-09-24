@@ -6,293 +6,293 @@
 
 using namespace rvi;
 
-TEST(ClientContext, Ctor_DefaultFrame)
+TEST(client_context, ctor_default_frame)
 {
-    ClientContext ctx;
-    auto name = ctx.SelectedFrame().Name();
-    ASSERT_EQ(name, ClientContext::MAIN_FRAMENAME);
+    client_context ctx;
+    auto name = ctx.selected_frame().name();
+    ASSERT_EQ(name, client_context::MAIN_FRAMENAME);
 }
 
-TEST(ClientContext, IsDefaultFrameSelected)
+TEST(client_context, is_root_frame_selected)
 {
-    ClientContext ctx;
+    client_context ctx;
 
-    ASSERT_TRUE(ctx.IsDefaultFrameSelected());
-    ctx.SelectFrame("test_frame");
-    ASSERT_FALSE(ctx.IsDefaultFrameSelected());
-    ctx.ReleaseFrame();
-    ASSERT_TRUE(ctx.IsDefaultFrameSelected());
+    ASSERT_TRUE(ctx.is_root_frame_selected());
+    ctx.select_frame("test_frame");
+    ASSERT_FALSE(ctx.is_root_frame_selected());
+    ctx.release_frame();
+    ASSERT_TRUE(ctx.is_root_frame_selected());
 }
 
-TEST(ClientContext, SelectFrame_CreatesNew)
+TEST(client_context, select_frame)
 {
-    ClientContext ctx;
-    ASSERT_EQ(ctx.FrameCount(), 1);
-    auto icount = std::max(10, std::abs(GetRandomInt()));
+    client_context ctx;
+    ASSERT_EQ(ctx.frame_count(), 1);
+    auto icount = std::max(10, std::abs(get_random_int()));
     for (auto i = 0; i < icount; i++)
     {
-        ctx.SelectFrame("test_frame" + i);
+        ctx.select_frame("test_frame" + i);
     }
-    ASSERT_EQ(ctx.FrameCount(), 1 + icount);
+    ASSERT_EQ(ctx.frame_count(), 1 + icount);
 }
 
-TEST(ClientContext, SelectFrame_Dupe_NoClearLines)
+TEST(client_context, select_frame_dupe_noclear)
 {
-    ClientContext ctx;
-    ASSERT_EQ(ctx.FrameCount(), 1);
-    ctx.SelectFrame("test_frame");
-    auto icount = std::max(10, std::abs(GetRandomInt()));
+    client_context ctx;
+    ASSERT_EQ(ctx.frame_count(), 1);
+    ctx.select_frame("test_frame");
+    auto icount = std::max(10, std::abs(get_random_int()));
     for (auto i = 0; i < icount; i++)
     {
-        Vertex vx1, vx2;
-        ctx.DrawLine(vx1, vx2);
+        vertex vx1, vx2;
+        ctx.draw_line(vx1, vx2);
     }
-    ctx.ReleaseFrame();
-    ctx.SelectFrame("test_frame");
-    ASSERT_EQ(icount, ctx.SelectedFrame().LineCount());
+    ctx.release_frame();
+    ctx.select_frame("test_frame");
+    ASSERT_EQ(icount, ctx.selected_frame().line_count());
 }
 
-TEST(ClientContext, DrawLine_MainFrame)
+TEST(client_context, draw_line_main_frame)
 {
-    ClientContext ctx;
+    client_context ctx;
 
-    auto startCount = ctx.SelectedFrame().LineCount();
+    auto startCount = ctx.selected_frame().line_count();
     ASSERT_EQ(startCount, 0);
 
-    ctx.DrawLine(Line(Vector2(1, 2), Vector2(3, 4)));
-    ctx.DrawLine(Vertex(Vector2(0, 0)), Vertex(Vector2(0, 0)));
-    ctx.DrawLine(Vector2(5, 6), ColorRGBA::RED(), Vector2(7, 8), ColorRGBA::BLUE());
-    ctx.DrawLine(Vector2(9, 10), Vector2(11, 12));
+    ctx.draw_line(line(vector2(1, 2), vector2(3, 4)));
+    ctx.draw_line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
+    ctx.draw_line(vector2(5, 6), color_rgba::RED(), vector2(7, 8), color_rgba::BLUE());
+    ctx.draw_line(vector2(9, 10), vector2(11, 12));
 
-    auto lcount = ctx.SelectedFrame().LineCount();
+    auto lcount = ctx.selected_frame().line_count();
     ASSERT_EQ(lcount, 4);
 
-    Line expected_ln1 = Line(Vector2(1, 2), Vector2(3, 4));
-    Line expected_ln2 = Line(Vertex(Vector2(0, 0)), Vertex(Vector2(0, 0)));
-    Line expected_ln3 = Line(Vertex(Vector2(5, 6), ColorRGBA::RED()), Vertex(Vector2(7, 8), ColorRGBA::BLUE()));
-    Line expected_ln4 = Line(Vector2(9, 10), Vector2(11, 12));
+    line expected_ln1 = line(vector2(1, 2), vector2(3, 4));
+    line expected_ln2 = line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
+    line expected_ln3 = line(vertex(vector2(5, 6), color_rgba::RED()), vertex(vector2(7, 8), color_rgba::BLUE()));
+    line expected_ln4 = line(vector2(9, 10), vector2(11, 12));
 
-    auto lines = ctx.SelectedFrame().Lines();
+    auto lines = ctx.selected_frame().lines();
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln1) != std::end(lines));
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln2) != std::end(lines));
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln3) != std::end(lines));
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln4) != std::end(lines));
 }
 
-TEST(ClientContext, SetCurrentOffset)
+TEST(client_context, set_position)
 {
-    ClientContext ctx;
-    Vector2 offset(GetRandomFloat(), GetRandomFloat());
-    ctx.SetCurrentOffset(offset);
+    client_context ctx;
+    vector2 offset(get_random_float(), get_random_float());
+    ctx.set_position(offset);
     
-    ASSERT_EQ(ctx.GetCurrentOffset(), offset);
+    ASSERT_EQ(ctx.position(), offset);
 }
 
-TEST(ClientContext, SetCurrentScale)
+TEST(client_context, set_scale)
 {
-    ClientContext ctx;
-    Vector2 scale(GetRandomFloat(), GetRandomFloat());
-    ctx.SetCurrentScale(scale);
+    client_context ctx;
+    vector2 scale(get_random_float(), get_random_float());
+    ctx.set_scale(scale);
     
-    ASSERT_EQ(ctx.GetCurrentScale(), scale);
+    ASSERT_EQ(ctx.scale(), scale);
 }
 
-TEST(ClientContext, SetCurrentRotation)
+TEST(client_context, set_rotation)
 {
-    ClientContext ctx;
-    float rot = GetRandomFloat();
-    ctx.SetCurrentRotation(rot);
+    client_context ctx;
+    float rot = get_random_float();
+    ctx.set_rotation(rot);
 
-    ASSERT_EQ(ctx.GetCurrentRotation(), rot);
+    ASSERT_EQ(ctx.rotation(), rot);
 }
 
-TEST(ClientContext, SetCurrentTransform)
+TEST(client_context, set_transform)
 {
-    ClientContext ctx;
-    Vector2 offset(GetRandomFloat(), GetRandomFloat());
-    Vector2 scale(GetRandomFloat(), GetRandomFloat());
-    float rot = GetRandomFloat();
-    Transform2 tform(offset, scale, rot);
+    client_context ctx;
+    vector2 offset(get_random_float(), get_random_float());
+    vector2 scale(get_random_float(), get_random_float());
+    float rot = get_random_float();
+    transform2 tform(offset, scale, rot);
     
-    ctx.SetCurrentTransform(tform);
+    ctx.set_transform(tform);
 
-    ASSERT_EQ(ctx.GetCurrentTransform(), tform);
+    ASSERT_EQ(ctx.transform(), tform);
 }
 
-TEST(ClientContext, Select_Release_Frame)
+TEST(client_context, select_release_frame)
 {
-    ClientContext ctx;
+    client_context ctx;
 
-    ASSERT_EQ(ctx.SelectedFrame().Name(), ClientContext::MAIN_FRAMENAME);
+    ASSERT_EQ(ctx.selected_frame().name(), client_context::MAIN_FRAMENAME);
 
-    ctx.ReleaseFrame();
-    ASSERT_EQ(ctx.SelectedFrame().Name(), ClientContext::MAIN_FRAMENAME);
+    ctx.release_frame();
+    ASSERT_EQ(ctx.selected_frame().name(), client_context::MAIN_FRAMENAME);
 
-    ctx.SelectFrame("test_frame_1");
-    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_1");
+    ctx.select_frame("test_frame_1");
+    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_1");
 
-    ctx.ReleaseFrame();
-    ASSERT_EQ(ctx.SelectedFrame().Name(), ClientContext::MAIN_FRAMENAME);
+    ctx.release_frame();
+    ASSERT_EQ(ctx.selected_frame().name(), client_context::MAIN_FRAMENAME);
 
-    ctx.SelectFrame("test_frame_2");
-    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2");
+    ctx.select_frame("test_frame_2");
+    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2");
 
-    ctx.SelectFrame("test_frame_2_1");
-    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2_1");
+    ctx.select_frame("test_frame_2_1");
+    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2_1");
 
-    ctx.ReleaseFrame();
-    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2");
+    ctx.release_frame();
+    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2");
 
-    ctx.SelectFrame("test_frame_2_2");
-    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2_2");
+    ctx.select_frame("test_frame_2_2");
+    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2_2");
 
-    ctx.SelectFrame("test_frame_2_2_1");
-    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2_2_1");
+    ctx.select_frame("test_frame_2_2_1");
+    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2_2_1");
 
-    ctx.SelectFrame("test_frame_2_2_1_1");
-    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2_2_1_1");
+    ctx.select_frame("test_frame_2_2_1_1");
+    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2_2_1_1");
     
 }
 
-TEST(ClientContext, FrameCount)
+TEST(client_context, frame_count)
 {
-    ClientContext ctx;
-    ctx.SelectFrame("test_frame_1");
-    ctx.ReleaseFrame();
-    ctx.SelectFrame("test_frame_2");
-    ctx.SelectFrame("test_frame_2_1");
-    ctx.ReleaseFrame();
-    ctx.SelectFrame("test_frame_2_2");
-    ctx.SelectFrame("test_frame_2_2_1");
-    ctx.SelectFrame("test_frame_2_2_1_1");
+    client_context ctx;
+    ctx.select_frame("test_frame_1");
+    ctx.release_frame();
+    ctx.select_frame("test_frame_2");
+    ctx.select_frame("test_frame_2_1");
+    ctx.release_frame();
+    ctx.select_frame("test_frame_2_2");
+    ctx.select_frame("test_frame_2_2_1");
+    ctx.select_frame("test_frame_2_2_1_1");
 
-    ASSERT_EQ(ctx.FrameCount(), 7);
+    ASSERT_EQ(ctx.frame_count(), 7);
 }
 
-TEST(ClientContext, ExistsDefinition)
+TEST(client_context, contains_definition)
 {
-    ClientContext ctx;
-    Definition def("test_def");
+    client_context ctx;
+    definition def("test_def");
 
-    ASSERT_FALSE(ctx.ExistsDefinition(def.Name()));
+    ASSERT_FALSE(ctx.contains_definition(def.name()));
 
-    ctx.AddDefinition(def);
-    ASSERT_TRUE(ctx.ExistsDefinition(def.Name()));
+    ctx.add_definition(def);
+    ASSERT_TRUE(ctx.contains_definition(def.name()));
 }
 
-TEST(ClientContext, AddDefinition)
+TEST(client_context, add_definition)
 {
-    ClientContext ctx;
-    Definition def("test_def");
+    client_context ctx;
+    definition def("test_def");
 
-    ASSERT_FALSE(ctx.ExistsDefinition(def.Name()));
+    ASSERT_FALSE(ctx.contains_definition(def.name()));
 
-    ctx.AddDefinition(def);
-    ASSERT_TRUE(ctx.ExistsDefinition(def.Name()));
+    ctx.add_definition(def);
+    ASSERT_TRUE(ctx.contains_definition(def.name()));
 
-    Definition def2("test_def2");
-    ctx.AddDefinition(def2);
-    ASSERT_TRUE(ctx.ExistsDefinition(def2.Name()));
+    definition def2("test_def2");
+    ctx.add_definition(def2);
+    ASSERT_TRUE(ctx.contains_definition(def2.name()));
 }
 
-TEST(ClientContext, DeleteDefinition)
+TEST(client_context, delete_definition)
 {
-    ClientContext ctx;
-    Definition def("test_def");
+    client_context ctx;
+    definition def("test_def");
 
-    ASSERT_FALSE(ctx.ExistsDefinition(def.Name()));
+    ASSERT_FALSE(ctx.contains_definition(def.name()));
 
-    ctx.AddDefinition(def);
-    ASSERT_TRUE(ctx.ExistsDefinition(def.Name()));
+    ctx.add_definition(def);
+    ASSERT_TRUE(ctx.contains_definition(def.name()));
 
-    Definition def2("test_def2");
-    ctx.AddDefinition(def2);
-    ASSERT_TRUE(ctx.ExistsDefinition(def2.Name()));
+    definition def2("test_def2");
+    ctx.add_definition(def2);
+    ASSERT_TRUE(ctx.contains_definition(def2.name()));
 
-    ctx.DeleteDefinition(def.Name());
-    ASSERT_FALSE(ctx.ExistsDefinition(def.Name()));
-    ASSERT_TRUE(ctx.ExistsDefinition(def2.Name()));
+    ctx.delete_definition(def.name());
+    ASSERT_FALSE(ctx.contains_definition(def.name()));
+    ASSERT_TRUE(ctx.contains_definition(def2.name()));
 
-    ctx.DeleteDefinition(def2.Name());
-    ASSERT_FALSE(ctx.ExistsDefinition(def.Name()));
-    ASSERT_FALSE(ctx.ExistsDefinition(def2.Name()));
+    ctx.delete_definition(def2.name());
+    ASSERT_FALSE(ctx.contains_definition(def.name()));
+    ASSERT_FALSE(ctx.contains_definition(def2.name()));
 }
 
-TEST(ClientContext, ExecDefinition)
+TEST(client_context, execute_definition)
 {
-    ClientContext ctx;
-    Definition def("test_def");
+    client_context ctx;
+    definition def("test_def");
 
     bool execOk = false;
-    def.AddInstruction([&execOk](ClientContext& ctx) { execOk = true; });
+    def.add_instruction([&execOk](client_context& ctx) { execOk = true; });
 
-    ctx.AddDefinition(def);
+    ctx.add_definition(def);
 
     ASSERT_FALSE(execOk);
-    ctx.ExecDefinition(def.Name());
+    ctx.execute_definition(def.name());
     ASSERT_TRUE(execOk);
 }
 
-TEST(ClientContext, GetCurrentFramePath)
+TEST(client_context, get_fpath)
 {
-    ClientContext ctx;
+    client_context ctx;
 
-    ASSERT_EQ(ctx.GetCurrentFramePath(), ClientContext::MAIN_FRAMENAME);
-    ctx.SelectFrame("A");
-    auto expected = ClientContext::MAIN_FRAMENAME 
-        + ClientContext::FRAMEPATH_SEPARATOR 
+    ASSERT_EQ(ctx.get_fpath(), client_context::MAIN_FRAMENAME);
+    ctx.select_frame("A");
+    auto expected = client_context::MAIN_FRAMENAME 
+        + client_context::FRAMEPATH_SEPARATOR 
         + "A";
-    ASSERT_EQ(ctx.GetCurrentFramePath(), expected);
+    ASSERT_EQ(ctx.get_fpath(), expected);
 
-    ctx.SelectFrame("B");
-    expected = ClientContext::MAIN_FRAMENAME 
-        + ClientContext::FRAMEPATH_SEPARATOR 
+    ctx.select_frame("B");
+    expected = client_context::MAIN_FRAMENAME 
+        + client_context::FRAMEPATH_SEPARATOR 
         + "A"
-        + ClientContext::FRAMEPATH_SEPARATOR 
+        + client_context::FRAMEPATH_SEPARATOR 
         + "B";
-    ASSERT_EQ(ctx.GetCurrentFramePath(), expected);
+    ASSERT_EQ(ctx.get_fpath(), expected);
 }
 
-TEST(ClientContext, FramePathToFrameWithTransform_1Level)
+TEST(client_context, extract_fpath_with_transform_1lvl)
 {
-    ClientContext ctx;
+    client_context ctx;
 
-    Transform2 tform(Vector2(1, 3), Vector2(3, 2), 45.0F);
-    ctx.SetCurrentTransform(tform);
+    transform2 tform(vector2(1, 3), vector2(3, 2), 45.0F);
+    ctx.set_transform(tform);
 
-    auto rootPath = ctx.GetCurrentFramePath();
-    auto rootPair = ctx.FramePathToFrameWithTransform(rootPath);
+    auto rootPath = ctx.get_fpath();
+    auto rootPair = ctx.extract_fpath_with_transform(rootPath);
 
     ASSERT_EQ(rootPair.first, tform);
-    ASSERT_EQ(rootPair.second.Name(), ClientContext::MAIN_FRAMENAME);
+    ASSERT_EQ(rootPair.second.name(), client_context::MAIN_FRAMENAME);
 }
 
-TEST(ClientContext, FramePathToFrameWithTransform_2Levels)
+TEST(client_context, extract_fpath_with_transform_2lvl)
 {
-    ClientContext ctx;
+    client_context ctx;
 
-    Transform2 tform(
-        Vector2(GetRandomFloat(), GetRandomFloat()), 
-        Vector2(GetRandomFloat(), GetRandomFloat()), 
-        GetRandomFloat());
+    transform2 tform(
+        vector2(get_random_float(), get_random_float()), 
+        vector2(get_random_float(), get_random_float()), 
+        get_random_float());
 
-    Transform2 ch_tform(
-        Vector2(GetRandomFloat(), GetRandomFloat()), 
-        Vector2(GetRandomFloat(), GetRandomFloat()), 
-        GetRandomFloat());
-    ctx.SetCurrentTransform(tform);
+    transform2 ch_tform(
+        vector2(get_random_float(), get_random_float()), 
+        vector2(get_random_float(), get_random_float()), 
+        get_random_float());
+    ctx.set_transform(tform);
 
-    ctx.SelectFrame("childframe");
-    ctx.SetCurrentTransform(ch_tform);
+    ctx.select_frame("childframe");
+    ctx.set_transform(ch_tform);
 
-    auto childPath = ctx.GetCurrentFramePath();
-    auto childPair = ctx.FramePathToFrameWithTransform(childPath);
+    auto childPath = ctx.get_fpath();
+    auto childPair = ctx.extract_fpath_with_transform(childPath);
 
-    Transform2 expectedTform(
-        (tform.Position + ch_tform.Position),
-        (tform.Scale * ch_tform.Scale),
-        Math::ClampAngleDeg(tform.Rotation + ch_tform.Rotation));
+    transform2 expectedTform(
+        (tform.position + ch_tform.position),
+        (tform.scale * ch_tform.scale),
+        math::clamp_angle_deg(tform.rotation + ch_tform.rotation));
 
     ASSERT_EQ(childPair.first, expectedTform);
-    ASSERT_EQ(childPair.second.Name(), "childframe");
+    ASSERT_EQ(childPair.second.name(), "childframe");
 }
