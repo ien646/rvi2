@@ -220,14 +220,14 @@ namespace rvi
         Transform2 currentTransform;
 
         currentFrame = &_mainFrame;
-        currentTransform = DEFAULT_TRANSFORM;
+        currentTransform = currentFrame->Transform();
 
         while (std::getline(ss, aux, FRAMEPATH_SEPARATOR))
         {
             if (aux != MAIN_FRAMENAME)
             {
-                currentTransform = currentTransform.Merge(currentFrame->Transform());
                 currentFrame = &currentFrame->GetChildFrame(aux);
+                currentTransform.MergeInPlace(currentFrame->Transform());
             }
         }
         return std::pair<Transform2, Frame&>(currentTransform, *currentFrame);
