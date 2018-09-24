@@ -22,9 +22,7 @@ namespace rvi
         static DefinitionInstruction SetCurrentTransform(const Transform2& tform);
         static DefinitionInstruction SetCurrentTransform(Transform2&& tform);
 
-        static DefinitionInstruction AddDefinition(const std::string& name, const Definition& instruction);
-        static DefinitionInstruction AddDefinition(const std::string& name, Definition&& instruction);
-        static DefinitionInstruction AddDefinition(std::string&& name, const Definition& instruction);
-        static DefinitionInstruction AddDefinition(std::string&& name, Definition&& instruction);
+        static DefinitionInstruction AddDefinition(const Definition& instruction);
+        static DefinitionInstruction AddDefinition(Definition&& instruction);
     };
 }

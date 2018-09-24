@@ -63,27 +63,15 @@ namespace rvi
         { c.SetCurrentTransform(std::move(tform)); };
     }
 
-    INSTRUCTION InstructionGenerator::AddDefinition(const string& name, const Definition& instruction)
+    INSTRUCTION InstructionGenerator::AddDefinition(const Definition& instruction)
     {
-        return[name, instruction](ClientContext& c)
-        { c.AddDefinition(name,instruction); };
+        return[instruction](ClientContext& c)
+        { c.AddDefinition(instruction); };
     }
 
-    INSTRUCTION InstructionGenerator::AddDefinition(const string& name, Definition&& instruction)
+    INSTRUCTION InstructionGenerator::AddDefinition(Definition&& instruction)
     {
-        return[name, CAPTURE_RVALUEREF(instruction)](ClientContext& c)
-        { c.AddDefinition(name, std::move(instruction)); };
-    }
-
-    INSTRUCTION InstructionGenerator::AddDefinition(string&& name, const Definition& instruction)
-    {
-        return[CAPTURE_RVALUEREF(name), instruction](ClientContext& c)
-        { c.AddDefinition(std::move(name),instruction); };
-    }
-
-    INSTRUCTION InstructionGenerator::AddDefinition(string&& name, Definition&& instruction)
-    {
-        return[CAPTURE_RVALUEREF(name), CAPTURE_RVALUEREF(instruction)](ClientContext& c)
-        { c.AddDefinition(std::move(name), std::move(instruction)); };
+        return[CAPTURE_RVALUEREF(instruction)](ClientContext& c)
+        { c.AddDefinition(std::move(instruction)); };
     }
 }
