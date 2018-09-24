@@ -162,25 +162,16 @@ namespace rvi
         MarkFrameAsModified();
     }
 
-    void ClientContext::AddDefinition(const std::string& name, const Definition& instruction)
+    void ClientContext::AddDefinition(const Definition& instruction)
     {
+        DISCARD_RESULT _localDefinitions.emplace(instruction.Name(), instruction);
+    }
+
+    void ClientContext::AddDefinition(Definition&& instruction)
+    {
+        auto name = instruction.Name();
         DISCARD_RESULT _localDefinitions.emplace(name, instruction);
-    }
-
-    void ClientContext::AddDefinition(std::string&& name, const Definition& instruction)
-    {
-        DISCARD_RESULT _localDefinitions.emplace(std::move(name), instruction);
-    }
-
-    void ClientContext::AddDefinition(const std::string& name, Definition&& instruction)
-    {
-        DISCARD_RESULT _localDefinitions.emplace(name, std::move(instruction));
-    }
-
-    void ClientContext::AddDefinition(std::string&& name, Definition&& instruction)
-    {
-        DISCARD_RESULT _localDefinitions.emplace(std::move(name), std::move(instruction));
-    }
+    }    
 
     void ClientContext::DeleteDefinition(const std::string& name)
     {

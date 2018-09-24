@@ -72,10 +72,8 @@ namespace rvi
 
         void ClearFrame() noexcept;
 
-        void AddDefinition(const std::string& name, const Definition& instruction);
-        void AddDefinition(std::string&& name, const Definition& instruction);
-        void AddDefinition(const std::string& name, Definition&& instruction);
-        void AddDefinition(std::string&& name, Definition&& instruction);
+        void AddDefinition(const Definition& instruction);
+        void AddDefinition(Definition&& instruction);
 
         void DeleteDefinition(const std::string& name);
 
