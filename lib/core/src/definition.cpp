@@ -28,6 +28,11 @@ namespace rvi
         }
     }
 
+    const std::string& Definition::Name() const noexcept
+    {
+        return _name;
+    }
+
     const std::vector<DefinitionInstruction>& Definition::GetSequence()
     {
         return _instSequence;

@@ -4,6 +4,7 @@
 #include <functional>
 #include <vector>
 #include <queue>
+#include <string>
 
 #include "rvi_base.hpp"
 
@@ -25,6 +26,8 @@ namespace rvi
         void AddInstruction(DefinitionInstruction&& inst);
         void Clear() noexcept;
         void ExecuteOnContext(ClientContext& cCtx);
+
+        const std::string& Name() const noexcept;
 
         const std::vector<DefinitionInstruction>& GetSequence();
     };
