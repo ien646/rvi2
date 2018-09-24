@@ -28,5 +28,8 @@ namespace rvi
         { 
             return Transform2(Vector2::Zero(), Vector2(1,1), 0); 
         }
+
+        bool operator==(const Transform2& other) const noexcept;
+        bool operator!=(const Transform2& other) const noexcept;
     };
 }
