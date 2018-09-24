@@ -23,6 +23,7 @@ namespace rvi
         { }
 
         Transform2 Merge(const Transform2& other) const noexcept;
+        void MergeInPlace(const Transform2& other) noexcept;
 
         static constexpr Transform2 Default() 
         { 

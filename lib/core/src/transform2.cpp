@@ -6,9 +6,16 @@ namespace rvi
     {
         Transform2 res = *this;
         res.Position += other.Position;
-        res.Rotation = Math::ClampAngleDeg(res.Rotation+ other.Rotation);
+        res.Rotation = Math::ClampAngleDeg(res.Rotation + other.Rotation);
         res.Scale *= other.Scale;
         return res;
+    }
+
+    void Transform2::MergeInPlace(const Transform2& other) noexcept
+    {
+        Position += other.Position;
+        Rotation = Math::ClampAngleDeg(Rotation + other.Rotation);
+        Scale *= other.Scale;
     }
 
     bool Transform2::operator==(const Transform2& other) const noexcept
