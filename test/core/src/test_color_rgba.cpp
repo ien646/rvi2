@@ -6,7 +6,7 @@
 using rvi::ColorRGBA;
 using rvi::U8;
 
-static const int OP_TEST_ITER = 250000;
+static const int OP_TEST_ITER = 5000;
 
 TEST(ColorRgba, Equality_Operator)
 {

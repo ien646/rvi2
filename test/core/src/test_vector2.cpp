@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-static const int OP_TEST_ITER = 250000;
+static const int OP_TEST_ITER = 5000;
 
 using rvi::Vector2;
 

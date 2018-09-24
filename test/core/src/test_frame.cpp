@@ -6,7 +6,7 @@
 
 using namespace rvi;
 
-static const int OP_TEST_ITER = 2500;
+static const int OP_TEST_ITER = 5000;
 
 TEST(Frame, AddLine)
 {
