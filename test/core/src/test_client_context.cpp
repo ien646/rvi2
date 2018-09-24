@@ -122,6 +122,12 @@ TEST(ClientContext, SetCurrentTransform)
 TEST(ClientContext, Select_Release_Frame)
 {
     ClientContext ctx;
+
+    ASSERT_EQ(ctx.SelectedFrame().Name(), ClientContext::MAIN_FRAMENAME);
+
+    ctx.ReleaseFrame();
+    ASSERT_EQ(ctx.SelectedFrame().Name(), ClientContext::MAIN_FRAMENAME);
+
     ctx.SelectFrame("test_frame_1");
     ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_1");
 
@@ -225,4 +231,68 @@ TEST(ClientContext, ExecDefinition)
     ASSERT_FALSE(execOk);
     ctx.ExecDefinition(def.Name());
     ASSERT_TRUE(execOk);
+}
+
+TEST(ClientContext, GetCurrentFramePath)
+{
+    ClientContext ctx;
+
+    ASSERT_EQ(ctx.GetCurrentFramePath(), ClientContext::MAIN_FRAMENAME);
+    ctx.SelectFrame("A");
+    auto expected = ClientContext::MAIN_FRAMENAME 
+        + ClientContext::FRAMEPATH_SEPARATOR 
+        + "A";
+    ASSERT_EQ(ctx.GetCurrentFramePath(), expected);
+
+    ctx.SelectFrame("B");
+    expected = ClientContext::MAIN_FRAMENAME 
+        + ClientContext::FRAMEPATH_SEPARATOR 
+        + "A"
+        + ClientContext::FRAMEPATH_SEPARATOR 
+        + "B";
+    ASSERT_EQ(ctx.GetCurrentFramePath(), expected);
+}
+
+TEST(ClientContext, FramePathToFrameWithTransform_1Level)
+{
+    ClientContext ctx;
+
+    Transform2 tform(Vector2(1, 3), Vector2(3, 2), 45.0F);
+    ctx.SetCurrentTransform(tform);
+
+    auto rootPath = ctx.GetCurrentFramePath();
+    auto rootPair = ctx.FramePathToFrameWithTransform(rootPath);
+
+    ASSERT_EQ(rootPair.first, tform);
+    ASSERT_EQ(rootPair.second.Name(), ClientContext::MAIN_FRAMENAME);
+}
+
+TEST(ClientContext, FramePathToFrameWithTransform_2Levels)
+{
+    ClientContext ctx;
+
+    Transform2 tform(
+        Vector2(GetRandomFloat(), GetRandomFloat()), 
+        Vector2(GetRandomFloat(), GetRandomFloat()), 
+        GetRandomFloat());
+
+    Transform2 ch_tform(
+        Vector2(GetRandomFloat(), GetRandomFloat()), 
+        Vector2(GetRandomFloat(), GetRandomFloat()), 
+        GetRandomFloat());
+    ctx.SetCurrentTransform(tform);
+
+    ctx.SelectFrame("childframe");
+    ctx.SetCurrentTransform(ch_tform);
+
+    auto childPath = ctx.GetCurrentFramePath();
+    auto childPair = ctx.FramePathToFrameWithTransform(childPath);
+
+    Transform2 expectedTform(
+        (tform.Position + ch_tform.Position),
+        (tform.Scale * ch_tform.Scale),
+        Math::ClampAngleDeg(tform.Rotation + ch_tform.Rotation));
+
+    ASSERT_EQ(childPair.first, expectedTform);
+    ASSERT_EQ(childPair.second.Name(), "childframe");
 }
