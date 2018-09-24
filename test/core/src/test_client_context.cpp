@@ -78,3 +78,151 @@ TEST(ClientContext, DrawLine_MainFrame)
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln3) != std::end(lines));
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln4) != std::end(lines));
 }
+
+TEST(ClientContext, SetCurrentOffset)
+{
+    ClientContext ctx;
+    Vector2 offset(GetRandomFloat(), GetRandomFloat());
+    ctx.SetCurrentOffset(offset);
+    
+    ASSERT_EQ(ctx.GetCurrentOffset(), offset);
+}
+
+TEST(ClientContext, SetCurrentScale)
+{
+    ClientContext ctx;
+    Vector2 scale(GetRandomFloat(), GetRandomFloat());
+    ctx.SetCurrentScale(scale);
+    
+    ASSERT_EQ(ctx.GetCurrentScale(), scale);
+}
+
+TEST(ClientContext, SetCurrentRotation)
+{
+    ClientContext ctx;
+    float rot = GetRandomFloat();
+    ctx.SetCurrentRotation(rot);
+
+    ASSERT_EQ(ctx.GetCurrentRotation(), rot);
+}
+
+TEST(ClientContext, SetCurrentTransform)
+{
+    ClientContext ctx;
+    Vector2 offset(GetRandomFloat(), GetRandomFloat());
+    Vector2 scale(GetRandomFloat(), GetRandomFloat());
+    float rot = GetRandomFloat();
+    Transform2 tform(offset, scale, rot);
+    
+    ctx.SetCurrentTransform(tform);
+
+    ASSERT_EQ(ctx.GetCurrentTransform(), tform);
+}
+
+TEST(ClientContext, Select_Release_Frame)
+{
+    ClientContext ctx;
+    ctx.SelectFrame("test_frame_1");
+    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_1");
+
+    ctx.ReleaseFrame();
+    ASSERT_EQ(ctx.SelectedFrame().Name(), ClientContext::MAIN_FRAMENAME);
+
+    ctx.SelectFrame("test_frame_2");
+    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2");
+
+    ctx.SelectFrame("test_frame_2_1");
+    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2_1");
+
+    ctx.ReleaseFrame();
+    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2");
+
+    ctx.SelectFrame("test_frame_2_2");
+    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2_2");
+
+    ctx.SelectFrame("test_frame_2_2_1");
+    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2_2_1");
+
+    ctx.SelectFrame("test_frame_2_2_1_1");
+    ASSERT_EQ(ctx.SelectedFrame().Name(), "test_frame_2_2_1_1");
+    
+}
+
+TEST(ClientContext, FrameCount)
+{
+    ClientContext ctx;
+    ctx.SelectFrame("test_frame_1");
+    ctx.ReleaseFrame();
+    ctx.SelectFrame("test_frame_2");
+    ctx.SelectFrame("test_frame_2_1");
+    ctx.ReleaseFrame();
+    ctx.SelectFrame("test_frame_2_2");
+    ctx.SelectFrame("test_frame_2_2_1");
+    ctx.SelectFrame("test_frame_2_2_1_1");
+
+    ASSERT_EQ(ctx.FrameCount(), 7);
+}
+
+TEST(ClientContext, ExistsDefinition)
+{
+    ClientContext ctx;
+    Definition def("test_def");
+
+    ASSERT_FALSE(ctx.ExistsDefinition(def.Name()));
+
+    ctx.AddDefinition(def);
+    ASSERT_TRUE(ctx.ExistsDefinition(def.Name()));
+}
+
+TEST(ClientContext, AddDefinition)
+{
+    ClientContext ctx;
+    Definition def("test_def");
+
+    ASSERT_FALSE(ctx.ExistsDefinition(def.Name()));
+
+    ctx.AddDefinition(def);
+    ASSERT_TRUE(ctx.ExistsDefinition(def.Name()));
+
+    Definition def2("test_def2");
+    ctx.AddDefinition(def2);
+    ASSERT_TRUE(ctx.ExistsDefinition(def2.Name()));
+}
+
+TEST(ClientContext, DeleteDefinition)
+{
+    ClientContext ctx;
+    Definition def("test_def");
+
+    ASSERT_FALSE(ctx.ExistsDefinition(def.Name()));
+
+    ctx.AddDefinition(def);
+    ASSERT_TRUE(ctx.ExistsDefinition(def.Name()));
+
+    Definition def2("test_def2");
+    ctx.AddDefinition(def2);
+    ASSERT_TRUE(ctx.ExistsDefinition(def2.Name()));
+
+    ctx.DeleteDefinition(def.Name());
+    ASSERT_FALSE(ctx.ExistsDefinition(def.Name()));
+    ASSERT_TRUE(ctx.ExistsDefinition(def2.Name()));
+
+    ctx.DeleteDefinition(def2.Name());
+    ASSERT_FALSE(ctx.ExistsDefinition(def.Name()));
+    ASSERT_FALSE(ctx.ExistsDefinition(def2.Name()));
+}
+
+TEST(ClientContext, ExecDefinition)
+{
+    ClientContext ctx;
+    Definition def("test_def");
+
+    bool execOk = false;
+    def.AddInstruction([&execOk](ClientContext& ctx) { execOk = true; });
+
+    ctx.AddDefinition(def);
+
+    ASSERT_FALSE(execOk);
+    ctx.ExecDefinition(def.Name());
+    ASSERT_TRUE(execOk);
+}
