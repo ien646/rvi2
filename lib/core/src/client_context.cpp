@@ -196,12 +196,16 @@ namespace rvi
 
     const std::string& ClientContext::GetCurrentFramePath()
     {
+        static const std::string separator = std::string(1, FRAMEPATH_SEPARATOR);
+
         if (_cachedFramePathNeedsRebuild)
         {
             _cachedFramePath.clear();
-            for (auto& frame : _frameStack)
+            _cachedFramePath = _frameStack[0].get().Name();
+            for (size_t i = 1; i < _frameStack.size(); i++)
             {
-                _cachedFramePath += frame.get().Name();
+                _cachedFramePath.append(separator);
+                _cachedFramePath.append(_frameStack[i].get().Name());
             }
             _cachedFramePathNeedsRebuild = false;
         }
