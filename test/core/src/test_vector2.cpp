@@ -156,7 +156,7 @@ TEST (vector_methods, magnitude)
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
         vector2 vec(get_random_float(), get_random_float());        
-        float manualMagnitude = std::sqrtf(std::powf(vec.x, 2) + std::powf(vec.y, 2));
+        float manualMagnitude = std::sqrt(std::pow(vec.x, 2) + std::pow(vec.y, 2));
         ASSERT_FLOAT_EQ(manualMagnitude, vec.magnitude());
     }
 }
