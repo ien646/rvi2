@@ -52,9 +52,6 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	set_property(TARGET ${RVI_LIB_NAME} PROPERTY LINKER_LANGUAGE CXX)
 	
 	target_include_directories(${RVI_LIB_NAME} PUBLIC ./include)
-	
-	cotire(${RVI_LIB_NAME})
-	
 	rvi_footer(${RVI_LIB_NAME})
 	file(COPY ${HEADERS} DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/include)
 endfunction()
