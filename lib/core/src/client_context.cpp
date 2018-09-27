@@ -44,6 +44,11 @@ namespace rvi
         _selected_frame.get().add_line(std::move(ln));
     }
 
+    void client_context::draw_line(const line& ln)
+    {
+        _selected_frame.get().add_line(ln);
+    }
+
     void client_context::select_frame(const std::string& name)
     {
         if (!_selected_frame.get().contains_child(name))
@@ -244,7 +249,7 @@ namespace rvi
 
     std::vector<line> client_context::snapshot_full_flat() const
     {
-        return _main_frame.get_flat_modulated_lines(DEFAULT_TRANSFORM);
+        return _main_frame.get_flat_modulated_lines(transform2::default_value());
     }
 
     std::vector<line> client_context::snapshot_diff_flat()

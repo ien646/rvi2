@@ -15,8 +15,8 @@ namespace rvi
 {
     class client_context
     {
-    private:        
-        const transform2 DEFAULT_TRANSFORM = transform2(vector2(0, 0), vector2(1, 1), 0);        
+    private:
+        const transform2 DEFAULT_TRANSFORM = transform2(vector2(0, 0), vector2(1, 1), 0);
 
         frame _main_frame;
         std::reference_wrapper<frame> _selected_frame;
@@ -41,6 +41,7 @@ namespace rvi
         void draw_line(vector2 from, vector2 to);
         void draw_line(vector2 from, color_rgba fromColor, vector2 to, color_rgba toColor);
         void draw_line(vertex from, vertex to);
+        void draw_line(const line& ln);
         void draw_line(line&& ln);
 
         void select_frame(const std::string& name);
