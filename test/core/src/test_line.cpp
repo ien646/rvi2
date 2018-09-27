@@ -9,11 +9,12 @@ using rvi::color_rgba;
 using rvi::vertex;
 
 static const int OP_TEST_ITER = 5000;
+static random_gen rnd;
 
 static vertex get_rand_vertex(vector2& out_pos, color_rgba out_color)
 {
-	out_pos = vector2(get_random_float(), get_random_float());
-	out_color = color_rgba::from_rgba(get_random_int());
+	out_pos = vector2(rnd.get_random_float(), rnd.get_random_float());
+	out_color = color_rgba::from_rgba(rnd.get_random_int());
 	return vertex(out_pos, out_color);
 }
 
@@ -28,9 +29,9 @@ TEST(line, equality_op)
 
         line l1(vx1, vx2);
         line l2(vx1, vx2);
-        vx1.position += vector2(get_random_float(), get_random_float());
+        vx1.position += vector2(rnd.get_random_float(), rnd.get_random_float());
         line l3(vx1, vx2);
-        vx2.position += vector2(get_random_float(), get_random_float());
+        vx2.position += vector2(rnd.get_random_float(), rnd.get_random_float());
         line l4(vx1, vx2);
 
         ASSERT_TRUE(l1 == l2);
@@ -50,9 +51,9 @@ TEST(line, inequality_op)
 
         line l1(vx1, vx2);
         line l2(vx1, vx2);
-        vx1.position += vector2(get_random_float(), get_random_float());
+        vx1.position += vector2(rnd.get_random_float(), rnd.get_random_float());
         line l3(vx1, vx2);
-        vx2.position += vector2(get_random_float(), get_random_float());
+        vx2.position += vector2(rnd.get_random_float(), rnd.get_random_float());
         line l4(vx1, vx2);
 
         ASSERT_FALSE(l1 != l2);
@@ -72,8 +73,8 @@ TEST(line, apply_position)
 
         line line(vx1, vx2);
 
-        float offset_x = get_random_float();
-        float offset_y = get_random_float();
+        float offset_x = rnd.get_random_float();
+        float offset_y = rnd.get_random_float();
 
         vector2 offset(offset_x, offset_y);
 
@@ -100,7 +101,7 @@ TEST(line, apply_rotation)
 
         line line(vx1, vx2);
 
-        float angle = get_random_float();;
+        float angle = rnd.get_random_float();;
 
         line.apply_rotation(angle);
 
@@ -128,7 +129,7 @@ TEST(line, apply_scale)
 
         line line(vx1, vx2);
 
-        const vector2 scale(get_random_float(), get_random_float());
+        const vector2 scale(rnd.get_random_float(), rnd.get_random_float());
 
         line.apply_scale(scale);
 
@@ -156,9 +157,9 @@ TEST(line, apply_transform)
 
         line line(vx1, vx2);
 
-        const vector2 pos(get_random_float(), get_random_float());
-        const vector2 scl(get_random_float(), get_random_float());
-        const float rot = get_random_float();
+        const vector2 pos(rnd.get_random_float(), rnd.get_random_float());
+        const vector2 scl(rnd.get_random_float(), rnd.get_random_float());
+        const float rot = rnd.get_random_float();
         const rvi::transform2 tform(pos, scl, rot);
         
         line.apply_transform(tform);

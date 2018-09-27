@@ -7,6 +7,7 @@
 #include <cmath>
 
 static const int OP_TEST_ITER = 5000;
+static random_gen rnd;
 
 using rvi::vector2;
 
@@ -22,8 +23,8 @@ TEST (vector_operators, add)
     vector2 result(0, 0);
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
 
         vector2 vec(x, y);
 
@@ -45,8 +46,8 @@ TEST (vector_operators, sub)
     vector2 result(0, 0);
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
 
         vector2 vec(x, y);
 
@@ -68,7 +69,7 @@ TEST (vector_operators, multiply_scalar_op)
     vector2 result(0, 0);
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float mul = get_random_float();
+        float mul = rnd.get_random_float();
 
         result *= mul;
 
@@ -84,12 +85,12 @@ TEST (vector_operators, divide_scalar_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();        
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();        
 
         vector2 vec(x, y);
 
-        float scale = get_random_float(true);
+        float scale = rnd.get_random_float(true);
 
         vec /= scale;
 
@@ -106,8 +107,8 @@ TEST (vector_operators, multiply_cross_op)
     vector2 result(0, 0);
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
 
         vector2 vec(x, y);
 
@@ -125,9 +126,9 @@ TEST (vector_operators, equality_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        vector2 a(get_random_float(), get_random_float());
+        vector2 a(rnd.get_random_float(), rnd.get_random_float());
         vector2 b(a.x, a.y);
-        vector2 c(get_random_float(), get_random_float());
+        vector2 c(rnd.get_random_float(), rnd.get_random_float());
 
         ASSERT_TRUE(a == b);
         ASSERT_FALSE(a == c);
@@ -138,9 +139,9 @@ TEST (vector_operators, inequality_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        vector2 a(get_random_float(), get_random_float());
+        vector2 a(rnd.get_random_float(), rnd.get_random_float());
         vector2 b(a.x, a.y);
-        vector2 c(get_random_float(), get_random_float());
+        vector2 c(rnd.get_random_float(), rnd.get_random_float());
 
         ASSERT_FALSE(a != b);
         ASSERT_TRUE(a != c);
@@ -155,7 +156,7 @@ TEST (vector_methods, magnitude)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        vector2 vec(get_random_float(), get_random_float());        
+        vector2 vec(rnd.get_random_float(), rnd.get_random_float());        
         float manualMagnitude = std::sqrt(std::pow(vec.x, 2) + std::pow(vec.y, 2));
         ASSERT_FLOAT_EQ(manualMagnitude, vec.magnitude());
     }
@@ -168,8 +169,8 @@ TEST (vector_methods, offset)
     vector2 result(0, 0);
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
         acc_x += x;
         acc_y += y;
         vector2 offs(x, y);       
@@ -187,8 +188,8 @@ TEST (vector_methods, offset_in_place)
     vector2 result(0, 0);
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
         acc_x += x;
         acc_y += y;
         vector2 offs(x, y);
@@ -203,7 +204,7 @@ TEST (vector_methods, Rotate)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float mag = get_random_float();
+        float mag = rnd.get_random_float();
         vector2 vec(mag, 0);
 
         vec = vec.rotate(45.0F);
@@ -240,7 +241,7 @@ TEST (vector_methods, rotate_in_place)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float mag = get_random_float();
+        float mag = rnd.get_random_float();
         vector2 vec(mag, 0);
 
         vec.rotate_in_place(45.0F);
@@ -277,8 +278,8 @@ TEST (vector_methods, reverse)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
         vector2 vec(x, y);
 
         vec = vec.reverse();
@@ -292,8 +293,8 @@ TEST (vector_methods, reverse_in_place)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
         vector2 vec(x, y);
 
         vec.reverse_in_place();
@@ -307,11 +308,11 @@ TEST (vector_methods, scale_scalar)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
         vector2 vec(x, y);
 
-        float scale = get_random_float();
+        float scale = rnd.get_random_float();
 
         vec = vec.scale(scale);
 
@@ -324,12 +325,12 @@ TEST (vector_methods, scale_cross)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
         vector2 vec(x, y);
 
-        float scale_x = get_random_float();
-        float scale_y = get_random_float();
+        float scale_x = rnd.get_random_float();
+        float scale_y = rnd.get_random_float();
         vector2 scale(scale_x, scale_y);
 
         vec = vec.scale(scale);
@@ -343,11 +344,11 @@ TEST (vector_methods, scale_in_place_scalar)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
         vector2 vec(x, y);
 
-        float scale = get_random_float();
+        float scale = rnd.get_random_float();
 
         vec.scale_in_place(scale);
 
@@ -360,12 +361,12 @@ TEST (vector_methods, scale_in_place_cross)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
         vector2 vec(x, y);
 
-        float scale_x = get_random_float();
-        float scale_y = get_random_float();
+        float scale_x = rnd.get_random_float();
+        float scale_y = rnd.get_random_float();
         vector2 scale(scale_x, scale_y);
 
         vec.scale_in_place(scale);
@@ -379,8 +380,8 @@ TEST (vector_methods, invert)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float();
-        float y = get_random_float();
+        float x = rnd.get_random_float();
+        float y = rnd.get_random_float();
         vector2 vec(x, y);
 
         vec = vec.invert();
@@ -394,8 +395,8 @@ TEST (vector_methods, invert_in_place)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
-        float x = get_random_float(true);
-        float y = get_random_float(true);
+        float x = rnd.get_random_float(true);
+        float y = rnd.get_random_float(true);
         vector2 vec(x, y);
 
         vec.invert_in_place();

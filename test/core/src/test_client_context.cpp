@@ -3,8 +3,11 @@
 #include <client_context.hpp>
 
 #include "random_gen.hpp"
+#include "utils.hpp"
 
 using namespace rvi;
+
+static random_gen rnd;
 
 TEST(client_context, ctor_default_frame)
 {
@@ -27,21 +30,21 @@ TEST(client_context, is_root_frame_selected)
 TEST(client_context, select_frame)
 {
     client_context ctx;
-    ASSERT_EQ(ctx.frame_count(), 1);
-    auto icount = std::max(10, std::abs(get_random_int()));
+    ASSERT_EQ(ctx.frame_count(), static_cast<size_t>(1));
+    auto icount = std::max(10, std::abs(rnd.get_random_int()));
     for (auto i = 0; i < icount; i++)
     {
         ctx.select_frame("test_frame" + i);
     }
-    ASSERT_EQ(ctx.frame_count(), 1 + icount);
+    ASSERT_EQ(ctx.frame_count(), static_cast<size_t>(1 + icount));
 }
 
 TEST(client_context, select_frame_dupe_noclear)
 {
     client_context ctx;
-    ASSERT_EQ(ctx.frame_count(), 1);
+    ASSERT_EQ(ctx.frame_count(), static_cast<size_t>(1));
     ctx.select_frame("test_frame");
-    auto icount = std::max(10, std::abs(get_random_int()));
+    auto icount = std::max(10, std::abs(rnd.get_random_int()));
     for (auto i = 0; i < icount; i++)
     {
         vertex vx1, vx2;
@@ -49,7 +52,7 @@ TEST(client_context, select_frame_dupe_noclear)
     }
     ctx.release_frame();
     ctx.select_frame("test_frame");
-    ASSERT_EQ(icount, ctx.selected_frame().line_count());
+    ASSERT_EQ(static_cast<size_t>(icount), ctx.selected_frame().line_count());
 }
 
 TEST(client_context, draw_line_main_frame)
@@ -57,7 +60,7 @@ TEST(client_context, draw_line_main_frame)
     client_context ctx;
 
     auto startCount = ctx.selected_frame().line_count();
-    ASSERT_EQ(startCount, 0);
+    ASSERT_EQ(startCount, static_cast<size_t>(0));
 
     ctx.draw_line(line(vector2(1, 2), vector2(3, 4)));
     ctx.draw_line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
@@ -65,7 +68,7 @@ TEST(client_context, draw_line_main_frame)
     ctx.draw_line(vector2(9, 10), vector2(11, 12));
 
     auto lcount = ctx.selected_frame().line_count();
-    ASSERT_EQ(lcount, 4);
+    ASSERT_EQ(lcount, static_cast<size_t>(4));
 
     line expected_ln1 = line(vector2(1, 2), vector2(3, 4));
     line expected_ln2 = line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
@@ -87,7 +90,7 @@ TEST(client_context, draw_line_child_frame)
     ctx.set_transform(transform2(vector2::zero(), vector2(0.5F, 0.5F), 0.0F));
 
     auto startCount = ctx.selected_frame().line_count();
-    ASSERT_EQ(startCount, 0);
+    ASSERT_EQ(startCount, static_cast<size_t>(0));
 
     ctx.draw_line(line(vector2(1, 2), vector2(3, 4)));
     ctx.draw_line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
@@ -95,7 +98,7 @@ TEST(client_context, draw_line_child_frame)
     ctx.draw_line(vector2(9, 10), vector2(11, 12));
 
     auto lcount = ctx.selected_frame().line_count();
-    ASSERT_EQ(lcount, 4);
+    ASSERT_EQ(lcount, static_cast<size_t>(4));
 
     line expected_ln1 = line(vector2(1, 2), vector2(3, 4));
     line expected_ln2 = line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
@@ -112,7 +115,7 @@ TEST(client_context, draw_line_child_frame)
 TEST(client_context, set_position)
 {
     client_context ctx;
-    vector2 offset(get_random_float(), get_random_float());
+    vector2 offset(rnd.get_random_float(), rnd.get_random_float());
     ctx.set_position(offset);
     
     ASSERT_EQ(ctx.position(), offset);
@@ -121,7 +124,7 @@ TEST(client_context, set_position)
 TEST(client_context, set_scale)
 {
     client_context ctx;
-    vector2 scale(get_random_float(), get_random_float());
+    vector2 scale(rnd.get_random_float(), rnd.get_random_float());
     ctx.set_scale(scale);
     
     ASSERT_EQ(ctx.scale(), scale);
@@ -130,7 +133,7 @@ TEST(client_context, set_scale)
 TEST(client_context, set_rotation)
 {
     client_context ctx;
-    float rot = get_random_float();
+    float rot = rnd.get_random_float();
     ctx.set_rotation(rot);
 
     ASSERT_EQ(ctx.rotation(), rot);
@@ -139,9 +142,9 @@ TEST(client_context, set_rotation)
 TEST(client_context, set_transform)
 {
     client_context ctx;
-    vector2 offset(get_random_float(), get_random_float());
-    vector2 scale(get_random_float(), get_random_float());
-    float rot = get_random_float();
+    vector2 offset(rnd.get_random_float(), rnd.get_random_float());
+    vector2 scale(rnd.get_random_float(), rnd.get_random_float());
+    float rot = rnd.get_random_float();
     transform2 tform(offset, scale, rot);
     
     ctx.set_transform(tform);
@@ -196,7 +199,7 @@ TEST(client_context, frame_count)
     ctx.select_frame("test_frame_2_2_1");
     ctx.select_frame("test_frame_2_2_1_1");
 
-    ASSERT_EQ(ctx.frame_count(), 7);
+    ASSERT_EQ(ctx.frame_count(), static_cast<size_t>(7));
 }
 
 TEST(client_context, contains_definition)
@@ -254,7 +257,11 @@ TEST(client_context, execute_definition)
     definition def("test_def");
 
     bool execOk = false;
-    def.add_instruction([&execOk](client_context& ctx) { execOk = true; });
+    def.add_instruction([&execOk](client_context& ctx) 
+    { 
+        UNREFERENCED_PARAMETER(ctx);
+        execOk = true; 
+    });
 
     ctx.add_definition(def);
 
@@ -302,14 +309,14 @@ TEST(client_context, extract_fpath_with_transform_2lvl)
     client_context ctx;
 
     transform2 tform(
-        vector2(get_random_float(), get_random_float()), 
-        vector2(get_random_float(), get_random_float()), 
-        get_random_float());
+        vector2(rnd.get_random_float(), rnd.get_random_float()), 
+        vector2(rnd.get_random_float(), rnd.get_random_float()), 
+        rnd.get_random_float());
 
     transform2 ch_tform(
-        vector2(get_random_float(), get_random_float()), 
-        vector2(get_random_float(), get_random_float()), 
-        get_random_float());
+        vector2(rnd.get_random_float(), rnd.get_random_float()), 
+        vector2(rnd.get_random_float(), rnd.get_random_float()), 
+        rnd.get_random_float());
     ctx.set_transform(tform);
 
     ctx.select_frame("childframe");
@@ -392,14 +399,14 @@ TEST(client_context, snapshot_diff_flat)
 
     auto lines_empty = ctx.snapshot_diff_flat();
 
-    ASSERT_EQ(lines_empty.size(), 0);
+    ASSERT_EQ(lines_empty.size(), static_cast<size_t>(0));
 
     // -- Partial snapshot (resends entire modified frame) -------
     ctx.draw_line(ln);
 
     auto lines_partial = ctx.snapshot_diff_flat();
 
-    ASSERT_EQ(lines_partial.size(), 2);
+    ASSERT_EQ(lines_partial.size(), static_cast<size_t>(2));
     ASSERT_EQ(std::count(lines_partial.begin(), lines_partial.end(), expectedln3), 2);
 }
 
@@ -436,10 +443,10 @@ TEST(client_context, snapshot_diff_relative)
     auto fname2 = fname1 + client_context::FRAMEPATH_SEPARATOR + "child_frame";
     auto fname3 = fname2 + client_context::FRAMEPATH_SEPARATOR +"child_child_frame";
 
-    ASSERT_EQ(snapshot_init.size(), 3);
-    ASSERT_EQ(snapshot_init.count(fname1), 1);
-    ASSERT_EQ(snapshot_init.count(fname2), 1);
-    ASSERT_EQ(snapshot_init.count(fname3), 1);
+    ASSERT_EQ(snapshot_init.size(), static_cast<size_t>(3));
+    ASSERT_EQ(snapshot_init.count(fname1), static_cast<size_t>(1));
+    ASSERT_EQ(snapshot_init.count(fname2), static_cast<size_t>(1));
+    ASSERT_EQ(snapshot_init.count(fname3), static_cast<size_t>(1));
 
     ASSERT_EQ(snapshot_init.at(fname1).at(0), expectedln1);
     ASSERT_EQ(snapshot_init.at(fname2).at(0), expectedln2);
@@ -449,13 +456,13 @@ TEST(client_context, snapshot_diff_relative)
 
     auto snapshot_empty = ctx.snapshot_diff_flat();
 
-    ASSERT_EQ(snapshot_empty.size(), 0);
+    ASSERT_EQ(snapshot_empty.size(), static_cast<size_t>(0));
 
     // -- Partial snapshot (resends entire modified frame) -------
     ctx.draw_line(ln);
 
     auto snapshot_partial = ctx.snapshot_diff_flat();
 
-    ASSERT_EQ(snapshot_partial.size(), 2);
+    ASSERT_EQ(snapshot_partial.size(), static_cast<size_t>(2));
     ASSERT_EQ(std::count(snapshot_partial.begin(), snapshot_partial.end(), expectedln3), 2);
 }

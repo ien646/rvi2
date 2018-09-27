@@ -8,14 +8,15 @@ using rvi::color_rgba;
 using rvi::vertex;
 
 static const int OP_TEST_ITER = 5000;
+static random_gen rnd;
 
 TEST (vertex, equality_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float pos_x = get_random_float();
-        float pos_y = get_random_float();
-        uint32_t rgba = get_random_int();
+        float pos_x = rnd.get_random_float();
+        float pos_y = rnd.get_random_float();
+        uint32_t rgba = rnd.get_random_int();
 
         vector2 vpos(pos_x, pos_y);
         color_rgba color = color_rgba::from_rgba(rgba);
@@ -39,9 +40,9 @@ TEST (vertex, inequality_op)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
-        float pos_x = get_random_float();
-        float pos_y = get_random_float();
-        uint32_t rgba = get_random_int();
+        float pos_x = rnd.get_random_float();
+        float pos_y = rnd.get_random_float();
+        uint32_t rgba = rnd.get_random_int();
 
         vector2 vpos(pos_x, pos_y);
         color_rgba color = color_rgba::from_rgba(rgba);

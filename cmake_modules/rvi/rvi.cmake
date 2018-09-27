@@ -13,17 +13,23 @@ function("rvi_footer" TEXT)
 	message("-------------------------------------")
 endfunction()
 
-function("rvi_set_stdconf_mode" TARGETNAME)
-	# Standard 'conformance' flags
+function("rvi_set_compiler_flags" TARGETNAME)
+
 	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")	
-		add_definitions(/permissive- /W4)	
+	
+		add_definitions(/permissive- /W4 /MP /Gm-)	
+		
 	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-		add_definitions(-pedantic-errors)
+	
+		add_definitions(-pedantic-errors -Wall)
+		
 	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-		add_definitions(-pedantic-errors)
+	
+		add_definitions(-pedantic-errors -Wall)
+		
 	endif()
 	
-	rvi_log(${TARGETNAME} "SET CPP-STD CONFORMANCE FLAG FOR COMPILER ${CMAKE_CXX_COMPILER_ID}")
+	rvi_log(${TARGETNAME} "SET COMPILER FLAGS FOR ${CMAKE_CXX_COMPILER_ID}")
 endfunction()
 
 function("rvi_static_lib" RVI_LIB_NAME)
@@ -32,7 +38,7 @@ function("rvi_static_lib" RVI_LIB_NAME)
 	
 	rvi_log(${RVI_LIB_NAME} "DETECTED C++ COMPILER: [${CMAKE_CXX_COMPILER_ID}]")
 	
-	rvi_set_stdconf_mode(${RVI_LIB_NAME})	
+	rvi_set_compiler_flags(${RVI_LIB_NAME})	
 	
 	file(GLOB SOURCES src/*.cpp src/*.c src/*.hpp src/*.h include/*.hpp include/*.h)
 	file(GLOB HEADERS include/*)

@@ -7,6 +7,7 @@
 using namespace rvi;
 
 static const int OP_TEST_ITER = 5000;
+static random_gen rnd;
 
 TEST(frame, AddLine)
 {
@@ -17,8 +18,8 @@ TEST(frame, AddLine)
         vertex vx1, vx2;
         const line ln1(vx1, vx2);
 
-        vx1.position.offset_in_place(vector2(get_random_float(),get_random_float()));
-        vx1.position.rotate_in_place(get_random_float());
+        vx1.position.offset_in_place(vector2(rnd.get_random_float(),rnd.get_random_float()));
+        vx1.position.rotate_in_place(rnd.get_random_float());
         const line ln2(vx1, vx2);
         line ln2_cp = ln2;
 
@@ -41,8 +42,8 @@ TEST(frame, line_count)
     {
         frame f("test_frame");
 
-        int icount = std::max(10, std::abs(get_random_int()));
-        for(int i = 0; i < icount; i++)
+        int icount = std::max(10, std::abs(rnd.get_random_int()));
+        for(int j = 0; j < icount; j++)
         {
             vertex vx1, vx2;
             f.add_line(line(vx1,vx2));
@@ -58,8 +59,8 @@ TEST(frame, clear_lines)
     {
         frame f("test_frame");
 
-        int icount = std::max(10, std::abs(get_random_int()));
-        for(int i = 0; i < icount; i++)
+        int icount = std::max(10, std::abs(rnd.get_random_int()));
+        for(int j = 0; j < icount; j++)
         {
             vertex vx1, vx2;
             f.add_line(line(vx1,vx2));
@@ -121,17 +122,17 @@ TEST(frame, get_all_modulated_lines_simple)
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
         frame frame("test_frame");
-        vector2 pos(get_random_float(true), get_random_float(true));
-        vector2 scl(get_random_float(true), get_random_float(true));
-        float rot = get_random_float();
+        vector2 pos(rnd.get_random_float(true), rnd.get_random_float(true));
+        vector2 scl(rnd.get_random_float(true), rnd.get_random_float(true));
+        float rot = rnd.get_random_float();
         transform2 tform(pos, scl, rot);
         frame.set_transform(tform);
 
         vertex vx1, vx2, vx3, vx4, vx5, vx6;
-        vx3.position.offset_in_place(vector2(get_random_float(true), get_random_float(true)));
-        vx4.position.offset_in_place(vector2(get_random_float(true), get_random_float(true)));
-        vx5.position.offset_in_place(vector2(get_random_float(true), get_random_float(true)));
-        vx6.position.offset_in_place(vector2(get_random_float(true), get_random_float(true)));
+        vx3.position.offset_in_place(vector2(rnd.get_random_float(true), rnd.get_random_float(true)));
+        vx4.position.offset_in_place(vector2(rnd.get_random_float(true), rnd.get_random_float(true)));
+        vx5.position.offset_in_place(vector2(rnd.get_random_float(true), rnd.get_random_float(true)));
+        vx6.position.offset_in_place(vector2(rnd.get_random_float(true), rnd.get_random_float(true)));
         frame.add_line(line(vx1, vx2));
         frame.add_line(line(vx3, vx4));
         frame.add_line(line(vx5, vx6));

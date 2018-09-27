@@ -1,5 +1,6 @@
 file(GLOB SOURCES src/*.cpp)
 add_executable(test.core ${SOURCES})
+rvi_set_compiler_flags(test.core)
 target_include_directories(test.core PUBLIC ${CMAKE_BINARY_DIR}/lib/core/include)
 target_link_libraries(test.core rvi2.core gtest gmock)
 add_test(NAME test.core COMMAND test.core)

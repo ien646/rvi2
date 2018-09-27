@@ -1,0 +1,1 @@
+#define UNREFERENCED_PARAMETER(x) (x)
