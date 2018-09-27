@@ -131,10 +131,6 @@ namespace rvi::serialization
         {
             i_create_string_utf32(fixed_len, cont_len);
         }
-        else
-        {
-            static_assert(0, "Unknown string character size/type");
-        }
     }
 
     constexpr contract_elem_desc contract_elem_desc::i_create_string_utf32(bool fixed_len, int32_t cont_len)
