@@ -24,5 +24,7 @@ namespace rvi
         Matrix2x2 get_2d_rot_matrix(float angle) noexcept;
 
         float clamp_angle_deg(float angle) noexcept;
+
+        bool fpcmp(float a, float b, int dec_precision = 5);
     }
 }

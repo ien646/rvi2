@@ -18,4 +18,12 @@ namespace rvi
     {
         return std::fabs(std::fmod(angle, 360.0F));
     }
+
+    bool math::fpcmp(float a, float b, int dec_precision)
+    {
+        float xa = a * (10 * dec_precision);
+        float xb = b * (10 * dec_precision);
+
+        return std::round(xa) == std::round(xb);
+    }
 }
