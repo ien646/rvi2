@@ -165,11 +165,11 @@ namespace rvi
 
     bool vector2::operator==(vector2 other) const noexcept
     {
-        return (x == other.x) && (y == other.y);
+        return math::fpcmp(x, other.x) && math::fpcmp(y, other.y);
     }
 
     bool vector2::operator!=(vector2 other) const noexcept
     {
-        return (x != other.x) || (y != other.y);
+        return !(math::fpcmp(x, other.x) && math::fpcmp(y, other.y));
     }
 }
