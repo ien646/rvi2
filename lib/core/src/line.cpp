@@ -20,8 +20,9 @@ namespace rvi
 
     void line::apply_scale(vector2 scale)
     {
-        // Start unnaffected, since it's the pivot
-        end.position.scale_in_place(scale);
+        vector2 scaler = end.position - start.position;
+        scaler.scale_in_place(scale);
+        end.position = (scaler + start.position);
     }
 
     void line::apply_rotation(float rotation)
@@ -38,8 +39,11 @@ namespace rvi
 
     void line::apply_transform(const transform2& tform)
     {
-        apply_scale(tform.scale);
-        apply_rotation(tform.rotation);
+        end.position -= start.position;
+        end.position.scale_in_place(tform.scale);
+        end.position.rotate_in_place(tform.rotation);
+        end.position += start.position;
+        
         apply_position(tform.position);
     }
 
