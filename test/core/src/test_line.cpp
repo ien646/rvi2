@@ -136,7 +136,9 @@ TEST(line, apply_scale)
         vertex expect_vx2 = vx2;
 
         // Since Start is the scale/rotation pivot, it is left untouched
+        expect_vx2.position -= expect_vx1.position;
         expect_vx2.position.scale_in_place(scale);
+        expect_vx2.position += expect_vx1.position;
 
         ASSERT_EQ(line.start, expect_vx1);
         ASSERT_EQ(line.end, expect_vx2);
@@ -155,19 +157,21 @@ TEST(line, apply_transform)
         line line(vx1, vx2);
 
         const vector2 pos(get_random_float(), get_random_float());
-        const vector2 scale(get_random_float(), get_random_float());
-        const float rotation = get_random_float();
-        const rvi::transform2 tform(pos, scale, rotation);
+        const vector2 scl(get_random_float(), get_random_float());
+        const float rot = get_random_float();
+        const rvi::transform2 tform(pos, scl, rot);
         
         line.apply_transform(tform);
         
         vertex expected_vx1 = vx1;
         vertex expected_vx2 = vx2;
-        expected_vx1.position += pos;
-        expected_vx2.position.scale_in_place(scale);
+
         expected_vx2.position -= vx1.position;
-        expected_vx2.position.rotate_in_place(rotation);
+        expected_vx2.position.scale_in_place(scl);
+        expected_vx2.position.rotate_in_place(rot);
         expected_vx2.position += vx1.position;
+
+        expected_vx1.position += pos;
         expected_vx2.position += pos;
 
         ASSERT_EQ(line.start, expected_vx1);
