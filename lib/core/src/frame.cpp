@@ -33,7 +33,7 @@ namespace rvi
         {
             return *_child_frames.at(name);
         }
-        auto pair = _child_frames.emplace(name, std::unique_ptr<frame>(new frame(name)));
+        auto& pair = _child_frames.emplace(name, std::make_unique<frame>(name));
         return *pair.first->second;
     }
 
@@ -44,7 +44,7 @@ namespace rvi
             return *_child_frames.at(name);
         }
         std::string nameCopy = name;
-        auto pair = _child_frames.emplace(nameCopy, std::unique_ptr<frame>(new frame(std::move(name))));
+        auto& pair = _child_frames.emplace(nameCopy, std::make_unique<frame>(name));
         return *pair.first->second;
     }
 
@@ -53,28 +53,39 @@ namespace rvi
         return (_child_frames.erase(name) < 0);
     }
 
-    std::vector<line> frame::get_flat_modulated_lines(const transform2& parentTform) const
+    std::vector<line> frame::get_all_modulated_lines(const transform2& parent_tform) const
     {
         std::vector<line> result;
 
         // Current absolute transform
-        const transform2 absTform = _transform.merge(parentTform);
+        const transform2 abs_tform = _transform.merge(parent_tform);
 
         // Owned lines
-        std::vector<line> ownLines = _lines;
+        std::vector<line> own_lines = _lines;
 
-        std::for_each(ownLines.begin(), ownLines.end(), 
-            [&](line& line){ line.apply_transform(absTform); });
+        std::for_each(own_lines.begin(), own_lines.end(), 
+            [&](line& line){ line.apply_transform(abs_tform); });
             
-        std::move(ownLines.begin(), ownLines.end(), std::back_inserter(result));
+        std::move(own_lines.begin(), own_lines.end(), std::back_inserter(result));
 
         // Child frames
         for (auto& entry : _child_frames)
         {
-            const frame& childFrame = *entry.second;
-            std::vector<line> childLines = childFrame.get_flat_modulated_lines(absTform);
-            std::move(childLines.begin(), childLines.end(), std::back_inserter(result));
+            std::vector<line> child_lines = entry.second->get_all_modulated_lines(abs_tform);
+            std::move(child_lines.begin(), child_lines.end(), std::back_inserter(result));
         }
+
+        return result;
+    }
+
+    std::vector<line> frame::get_manually_modulated_lines(const transform2& parent_tform) const
+    {
+        std::vector<line> result;
+
+        std::vector<line> ownLines = _lines;
+        std::for_each(ownLines.begin(), ownLines.end(), 
+            [&](line& line){ line.apply_transform(parent_tform); });
+        std::move(ownLines.begin(), ownLines.end(), std::back_inserter(result));
 
         return result;
     }
@@ -162,7 +173,7 @@ namespace rvi
         return _color;
     }
 
-    frame& frame::get_child(const std::string& name)
+    frame& frame::get_child(const std::string& name) const
     {
         return *_child_frames.at(name);
     }

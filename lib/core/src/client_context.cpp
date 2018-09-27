@@ -42,11 +42,13 @@ namespace rvi
     void client_context::draw_line(line&& ln)
     {
         _selected_frame.get().add_line(std::move(ln));
+        mark_frame_modified();
     }
 
     void client_context::draw_line(const line& ln)
     {
         _selected_frame.get().add_line(ln);
+        mark_frame_modified();
     }
 
     void client_context::select_frame(const std::string& name)
@@ -112,11 +114,13 @@ namespace rvi
     void client_context::set_transform(const transform2& tform) noexcept
     {
         _selected_frame.get().set_transform(tform);
+        mark_frame_modified();
     }
 
     void client_context::set_transform(transform2&& tform) noexcept
     {
         _selected_frame.get().set_transform(std::move(tform));
+        mark_frame_modified();
     }
 
     const transform2& client_context::transform() const noexcept
@@ -127,16 +131,19 @@ namespace rvi
     void client_context::set_position(vector2 offset) noexcept
     {
         _selected_frame.get().set_position(offset);
+        mark_frame_modified();
     }
 
     void client_context::set_rotation(float rotation) noexcept
     {
         _selected_frame.get().set_rotation(rotation);
+        mark_frame_modified();
     }
 
     void client_context::set_scale(vector2 scale) noexcept
     {
         _selected_frame.get().set_scale(scale);
+        mark_frame_modified();
     }
 
     vector2 client_context::position() const noexcept
@@ -217,7 +224,7 @@ namespace rvi
         return _cached_fpath;
     }
 
-    const std::pair<transform2, frame&> client_context::extract_fpath_with_transform(const std::string& fpath)
+    const frame& client_context::find_frame(const std::string& fpath)
     {
         std::stringstream ss(fpath);
         std::string aux;
@@ -225,17 +232,35 @@ namespace rvi
         transform2 currentTransform;
 
         currentFrame = &_main_frame;
-        currentTransform = currentFrame->transform();
 
         while (std::getline(ss, aux, FRAMEPATH_SEPARATOR))
         {
             if (aux != MAIN_FRAMENAME)
             {
                 currentFrame = &currentFrame->get_child(aux);
+            }
+        }
+        return *currentFrame;
+    }
+
+    const std::pair<frame&, transform2> client_context::find_frame_with_mod_tform(const std::string& fpath)
+    {
+        std::stringstream ss(fpath);
+        std::string aux;
+        frame* currentFrame = &_main_frame;
+
+        transform2 currentTransform = currentFrame->transform();
+
+        while (std::getline(ss, aux, FRAMEPATH_SEPARATOR))
+        {
+            if (aux != MAIN_FRAMENAME)
+            {
+                currentFrame = &(currentFrame->get_child(aux));
                 currentTransform.merge_in_place(currentFrame->transform());
             }
         }
-        return std::pair<transform2, frame&>(currentTransform, *currentFrame);
+        std::pair<frame&, transform2> pair(*currentFrame,std::move(currentTransform));
+        return std::move(pair);
     }
 
     void client_context::mark_frame_modified()
@@ -249,7 +274,7 @@ namespace rvi
 
     std::vector<line> client_context::snapshot_full_flat() const
     {
-        return _main_frame.get_flat_modulated_lines(transform2::default_value());
+        return _main_frame.get_all_modulated_lines(transform2::default_value());
     }
 
     std::vector<line> client_context::snapshot_diff_flat()
@@ -257,11 +282,11 @@ namespace rvi
         std::vector<line> result;
         for (auto& fpath : _modified_fpaths)
         {
-            const auto pair = extract_fpath_with_transform(fpath);
-            const transform2 parentTform = pair.first;
-            const frame& frame = pair.second;
+            auto frame_tform = find_frame_with_mod_tform(fpath);
+            const frame& frm = frame_tform.first;
+            const transform2 tform = frame_tform.second;
 
-            std::vector<line> lines = frame.get_flat_modulated_lines(parentTform);
+            std::vector<line> lines = frm.get_manually_modulated_lines(tform);
             std::move(lines.begin(), lines.end(), std::back_inserter(result));
         }
         _modified_fpaths.clear();
@@ -271,13 +296,13 @@ namespace rvi
     std::unordered_map<std::string, std::vector<line>> client_context::snapshot_diff_relative()
     {
         std::unordered_map<std::string, std::vector<line>> result;
-        for (auto& fpath : _modified_fpaths)
+        for (const auto& fpath : _modified_fpaths)
         {
-            const auto pair = extract_fpath_with_transform(fpath);
-            const transform2 parentTform = pair.first;
-            const frame& frame = pair.second;
+            auto frame_tform = find_frame_with_mod_tform(fpath);
+            const frame& frm = frame_tform.first;
+            const transform2 tform = frame_tform.second;
 
-            auto entry = std::make_pair(fpath, frame.get_flat_modulated_lines(parentTform));
+            auto entry = std::make_pair(fpath, frm.get_manually_modulated_lines(tform));
             result.insert(std::move(entry));
         }
         _modified_fpaths.clear();

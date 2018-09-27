@@ -41,7 +41,8 @@ namespace rvi
 
         bool delete_child(const std::string& name);
 
-        std::vector<line> get_flat_modulated_lines(const transform2& parentTform) const;
+        std::vector<line> get_all_modulated_lines(const transform2& parent_tform) const;
+        std::vector<line> get_manually_modulated_lines(const transform2& parent_tform) const;
 
         bool contains_child(const std::string& name);
 
@@ -53,7 +54,7 @@ namespace rvi
         const std::unordered_map<std::string, std::unique_ptr<frame>>& children() const noexcept;
         const transform2& transform() const noexcept;
         color_rgba color() const noexcept;
-        frame& get_child(const std::string& name);
+        frame& get_child(const std::string& name) const;
 
         // -- Setters --
         void set_color(u8 r, u8 g, u8 b, u8 a) noexcept;

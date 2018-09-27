@@ -291,10 +291,10 @@ TEST(client_context, extract_fpath_with_transform_1lvl)
     ctx.set_transform(tform);
 
     auto rootPath = ctx.get_fpath();
-    auto rootPair = ctx.extract_fpath_with_transform(rootPath);
+    const auto& rootFrame = ctx.find_frame(rootPath);
 
-    ASSERT_EQ(rootPair.first, tform);
-    ASSERT_EQ(rootPair.second.name(), client_context::MAIN_FRAMENAME);
+    ASSERT_EQ(rootFrame.transform(), tform);
+    ASSERT_EQ(rootFrame.name(), client_context::MAIN_FRAMENAME);
 }
 
 TEST(client_context, extract_fpath_with_transform_2lvl)
@@ -316,15 +316,10 @@ TEST(client_context, extract_fpath_with_transform_2lvl)
     ctx.set_transform(ch_tform);
 
     auto childPath = ctx.get_fpath();
-    auto childPair = ctx.extract_fpath_with_transform(childPath);
+    const auto& childFrame = ctx.find_frame(childPath);
 
-    transform2 expectedTform(
-        (tform.position + ch_tform.position),
-        (tform.scale * ch_tform.scale),
-        math::clamp_angle_deg(tform.rotation + ch_tform.rotation));
-
-    ASSERT_EQ(childPair.first, expectedTform);
-    ASSERT_EQ(childPair.second.name(), "childframe");
+    ASSERT_EQ(childFrame.transform(), ch_tform);
+    ASSERT_EQ(childFrame.name(), "childframe");
 }
 
 TEST(client_context, snapshot_full_flat)
@@ -358,4 +353,109 @@ TEST(client_context, snapshot_full_flat)
     ASSERT_TRUE(std::find(lines.begin(), lines.end(), expectedln1) != lines.end());
     ASSERT_TRUE(std::find(lines.begin(), lines.end(), expectedln2) != lines.end());
     ASSERT_TRUE(std::find(lines.begin(), lines.end(), expectedln3) != lines.end());
+}
+
+TEST(client_context, snapshot_diff_flat)
+{
+    // -- Initial snapshot -----------------------------------------
+    client_context ctx;
+    ctx.set_transform(transform2::default_value());
+
+    line ln(vector2(1,1), vector2(2,2));
+
+    ctx.draw_line(ln);
+
+    transform2 ch_tform = transform2::default_value();
+    ch_tform.position = vector2(1, -1);
+    ch_tform.scale = vector2(0.5F, 0.5F);
+    ch_tform.rotation = 180.0F;
+
+    ctx.select_frame("child_frame");
+    ctx.set_transform(ch_tform);
+    ctx.draw_line(ln);
+
+    ctx.select_frame("child_child_frame");
+    ctx.set_transform(ch_tform);
+    ctx.draw_line(ln);
+
+    auto lines_init = ctx.snapshot_diff_flat();
+
+    line expectedln1(vector2(1, 1), vector2(2, 2)); //diffvec = (1, 1)
+    line expectedln2(vector2(2, 0), vector2(1.5F, -0.5F)); // diffvec  =(-0.5, -0.5)
+    line expectedln3(vector2(3, -1), vector2(3.25F, -0.75F)); //diffvec = (0.25F, 0.25F)
+
+    ASSERT_TRUE(std::find(lines_init.begin(), lines_init.end(), expectedln1) != lines_init.end());
+    ASSERT_TRUE(std::find(lines_init.begin(), lines_init.end(), expectedln2) != lines_init.end());
+    ASSERT_TRUE(std::find(lines_init.begin(), lines_init.end(), expectedln3) != lines_init.end());
+
+    // -- Empty snapshot -----------------------------------------
+
+    auto lines_empty = ctx.snapshot_diff_flat();
+
+    ASSERT_EQ(lines_empty.size(), 0);
+
+    // -- Partial snapshot (resends entire modified frame) -------
+    ctx.draw_line(ln);
+
+    auto lines_partial = ctx.snapshot_diff_flat();
+
+    ASSERT_EQ(lines_partial.size(), 2);
+    ASSERT_EQ(std::count(lines_partial.begin(), lines_partial.end(), expectedln3), 2);
+}
+
+TEST(client_context, snapshot_diff_relative)
+{
+    // -- Initial snapshot -----------------------------------------
+    client_context ctx;
+    ctx.set_transform(transform2::default_value());
+
+    line ln(vector2(1,1), vector2(2,2));
+
+    ctx.draw_line(ln);
+
+    transform2 ch_tform = transform2::default_value();
+    ch_tform.position = vector2(1, -1);
+    ch_tform.scale = vector2(0.5F, 0.5F);
+    ch_tform.rotation = 180.0F;
+
+    ctx.select_frame("child_frame");
+    ctx.set_transform(ch_tform);
+    ctx.draw_line(ln);
+
+    ctx.select_frame("child_child_frame");
+    ctx.set_transform(ch_tform);
+    ctx.draw_line(ln);
+
+    auto snapshot_init = ctx.snapshot_diff_relative();   
+
+    line expectedln1(vector2(1, 1), vector2(2, 2)); //diffvec = (1, 1)
+    line expectedln2(vector2(2, 0), vector2(1.5F, -0.5F)); // diffvec  =(-0.5, -0.5)
+    line expectedln3(vector2(3, -1), vector2(3.25F, -0.75F)); //diffvec = (0.25F, 0.25F)
+
+    auto fname1 = client_context::MAIN_FRAMENAME;
+    auto fname2 = fname1 + client_context::FRAMEPATH_SEPARATOR + "child_frame";
+    auto fname3 = fname2 + client_context::FRAMEPATH_SEPARATOR +"child_child_frame";
+
+    ASSERT_EQ(snapshot_init.size(), 3);
+    ASSERT_EQ(snapshot_init.count(fname1), 1);
+    ASSERT_EQ(snapshot_init.count(fname2), 1);
+    ASSERT_EQ(snapshot_init.count(fname3), 1);
+
+    ASSERT_EQ(snapshot_init.at(fname1).at(0), expectedln1);
+    ASSERT_EQ(snapshot_init.at(fname2).at(0), expectedln2);
+    ASSERT_EQ(snapshot_init.at(fname3).at(0), expectedln3);
+
+    // -- Empty snapshot -----------------------------------------
+
+    auto snapshot_empty = ctx.snapshot_diff_flat();
+
+    ASSERT_EQ(snapshot_empty.size(), 0);
+
+    // -- Partial snapshot (resends entire modified frame) -------
+    ctx.draw_line(ln);
+
+    auto snapshot_partial = ctx.snapshot_diff_flat();
+
+    ASSERT_EQ(snapshot_partial.size(), 2);
+    ASSERT_EQ(std::count(snapshot_partial.begin(), snapshot_partial.end(), expectedln3), 2);
 }

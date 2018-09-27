@@ -83,7 +83,8 @@ namespace rvi
         bool contains_definition(const std::string& defName);
 
         const std::string& get_fpath();
-        const std::pair<transform2, frame&> extract_fpath_with_transform(const std::string& fPath);
+        const frame& find_frame(const std::string& fPath);
+        const std::pair<frame&, transform2> find_frame_with_mod_tform(const std::string& fPath);
 
         void mark_frame_modified();
 
@@ -91,5 +92,5 @@ namespace rvi
         std::vector<line> snapshot_diff_flat();
 
         std::unordered_map<std::string, std::vector<line>> client_context::snapshot_diff_relative();        
-    };        
+    };
 }

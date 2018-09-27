@@ -116,7 +116,7 @@ TEST(frame, delete_child)
     ASSERT_FALSE(parent.contains_child("child_4"));
 }
 
-TEST(frame, get_flat_modulated_lines_simple)
+TEST(frame, get_all_modulated_lines_simple)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -136,7 +136,7 @@ TEST(frame, get_flat_modulated_lines_simple)
         frame.add_line(line(vx3, vx4));
         frame.add_line(line(vx5, vx6));
 
-        auto lines = frame.get_flat_modulated_lines(transform2::default_value());
+        auto lines = frame.get_all_modulated_lines(transform2::default_value());
         ASSERT_EQ(lines.size(), 3);
 
         line expected_ln1(vx1, vx2);
@@ -152,7 +152,7 @@ TEST(frame, get_flat_modulated_lines_simple)
     }
 }
 
-TEST(frame, get_flat_modulated_lines_complex)
+TEST(frame, get_all_modulated_lines_complex)
 {
     for(int i = 0; i < OP_TEST_ITER; i++)
     {
@@ -202,7 +202,7 @@ TEST(frame, get_flat_modulated_lines_complex)
         expected_2.apply_transform(expected_tform2);
         expected_3.apply_transform(expected_tform3);
 
-        auto lines = frame.get_flat_modulated_lines(transform2::default_value());
+        auto lines = frame.get_all_modulated_lines(transform2::default_value());
 
         ASSERT_EQ(lines.size(), 3);
 

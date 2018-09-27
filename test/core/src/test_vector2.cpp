@@ -151,7 +151,7 @@ TEST (vector_operators, inequality_op)
 // METHODS
 //////////////////////////////////////////////////////////////////////////
 
-TEST (vector_methods, Magnitude)
+TEST (vector_methods, magnitude)
 {
     for (int i = 0; i < OP_TEST_ITER; i++)
     {
