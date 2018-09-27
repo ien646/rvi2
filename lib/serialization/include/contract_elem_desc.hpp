@@ -56,11 +56,11 @@ namespace rvi::serialization
     {
         if constexpr(std::is_integral_v<T>)
         {
-            return I_CreateScalar_Integer<T>();
+            return i_create_scalar_integer<T>();
         }
         else
         {
-            return I_CreateScalar_Float<T>();
+            return i_create_scalar_float<T>();
         }
         return result;
     }

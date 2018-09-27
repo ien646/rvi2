@@ -27,7 +27,7 @@ namespace rvi
 
         static constexpr transform2 default_value() 
         { 
-            return transform2(vector2::zero(), vector2(1,1), 0); 
+            return transform2(vector2::zero(), vector2(1, 1), 0); 
         }
 
         bool operator==(const transform2& other) const noexcept;
