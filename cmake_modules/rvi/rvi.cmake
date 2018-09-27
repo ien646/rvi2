@@ -16,15 +16,14 @@ endfunction()
 function("rvi_set_stdconf_mode" TARGETNAME)
 	# Standard 'conformance' flags
 	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")	
-		set(RVICORE_CONFORMANCE_FLAG "/permissive-")	
+		add_definitions(/permissive- /W4)	
 	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-		set(RVICORE_CONFORMANCE_FLAG "-pedantic-errors")	
+		add_definitions(-pedantic-errors -W4)
 	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-		set(RVICORE_CONFORMANCE_FLAG "-pedantic-errors")
+		add_definitions(-pedantic-errors -W4)
 	endif()
-
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${RVICORE_CONFORMANCE_FLAG}")
-	rvi_log(${TARGETNAME} "SET CPP-STD CONFORMANCE FLAG (${RVICORE_CONFORMANCE_FLAG}) FOR COMPILER ${CMAKE_CXX_COMPILER_ID}")
+	
+	rvi_log(${TARGETNAME} "SET CPP-STD CONFORMANCE FLAG FOR COMPILER ${CMAKE_CXX_COMPILER_ID}")
 endfunction()
 
 function("rvi_static_lib" RVI_LIB_NAME)
