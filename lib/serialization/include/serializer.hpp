@@ -145,7 +145,7 @@ namespace rvi::serialization
     template<typename T, typename>
     void serializer::serialize_array(std::vector<uint8_t>& buff, const std::vector<T>& val)
     {
-        for (int i = 0; i < cont_len; i++)
+        for (int i = 0; i < val.size(); i++)
         {
             if constexpr (std::is_floating_point_v<T>)
             {

@@ -62,7 +62,6 @@ namespace rvi::serialization
         {
             return i_create_scalar_float<T>();
         }
-        return result;
     }
 
     constexpr contract_elem_desc contract_elem_desc::create_binary(bool fixed_len, int32_t cont_len)

@@ -33,8 +33,8 @@ namespace rvi
         {
             return *_child_frames.at(name);
         }
-        auto& pair = _child_frames.emplace(name, std::make_unique<frame>(name));
-        return *pair.first->second;
+        auto pair = _child_frames.emplace(name, std::make_unique<frame>(name));
+        return *(pair.first->second);
     }
 
     frame& frame::add_child(std::string&& name)
@@ -44,8 +44,8 @@ namespace rvi
             return *_child_frames.at(name);
         }
         std::string nameCopy = name;
-        auto& pair = _child_frames.emplace(nameCopy, std::make_unique<frame>(name));
-        return *pair.first->second;
+        auto pair = _child_frames.emplace(nameCopy, std::make_unique<frame>(name));
+        return *(pair.first->second);
     }
 
     bool frame::delete_child(const std::string& name)

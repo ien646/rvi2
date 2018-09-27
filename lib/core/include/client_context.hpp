@@ -91,6 +91,6 @@ namespace rvi
         std::vector<line> snapshot_full_flat() const;
         std::vector<line> snapshot_diff_flat();
 
-        std::unordered_map<std::string, std::vector<line>> client_context::snapshot_diff_relative();        
+        std::unordered_map<std::string, std::vector<line>> snapshot_diff_relative();        
     };
 }
