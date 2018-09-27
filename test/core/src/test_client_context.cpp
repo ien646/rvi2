@@ -79,6 +79,36 @@ TEST(client_context, draw_line_main_frame)
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln4) != std::end(lines));
 }
 
+TEST(client_context, draw_line_child_frame)
+{
+    client_context ctx;
+
+    ctx.select_frame("child_frame");
+    ctx.set_transform(transform2(vector2::zero(), vector2(0.5F, 0.5F), 0.0F));
+
+    auto startCount = ctx.selected_frame().line_count();
+    ASSERT_EQ(startCount, 0);
+
+    ctx.draw_line(line(vector2(1, 2), vector2(3, 4)));
+    ctx.draw_line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
+    ctx.draw_line(vector2(5, 6), color_rgba::RED(), vector2(7, 8), color_rgba::BLUE());
+    ctx.draw_line(vector2(9, 10), vector2(11, 12));
+
+    auto lcount = ctx.selected_frame().line_count();
+    ASSERT_EQ(lcount, 4);
+
+    line expected_ln1 = line(vector2(1, 2), vector2(3, 4));
+    line expected_ln2 = line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
+    line expected_ln3 = line(vertex(vector2(5, 6), color_rgba::RED()), vertex(vector2(7, 8), color_rgba::BLUE()));
+    line expected_ln4 = line(vector2(9, 10), vector2(11, 12));
+
+    auto lines = ctx.selected_frame().lines();
+    ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln1) != std::end(lines));
+    ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln2) != std::end(lines));
+    ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln3) != std::end(lines));
+    ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln4) != std::end(lines));
+}
+
 TEST(client_context, set_position)
 {
     client_context ctx;
@@ -295,4 +325,37 @@ TEST(client_context, extract_fpath_with_transform_2lvl)
 
     ASSERT_EQ(childPair.first, expectedTform);
     ASSERT_EQ(childPair.second.name(), "childframe");
+}
+
+TEST(client_context, snapshot_full_flat)
+{
+    client_context ctx;
+    ctx.set_transform(transform2::default_value());
+
+    line ln(vector2(1,1), vector2(2,2));
+
+    ctx.draw_line(ln);
+
+    transform2 ch_tform = transform2::default_value();
+    ch_tform.position = vector2(1, -1);
+    ch_tform.scale = vector2(0.5F, 0.5F);
+    ch_tform.rotation = 180.0F;
+
+    ctx.select_frame("child_frame");
+    ctx.set_transform(ch_tform);
+    ctx.draw_line(ln);
+
+    ctx.select_frame("child_child_frame");
+    ctx.set_transform(ch_tform);
+    ctx.draw_line(ln);
+
+    auto lines = ctx.snapshot_full_flat();
+
+    line expectedln1(vector2(1, 1), vector2(2, 2)); //diffvec = (1, 1)
+    line expectedln2(vector2(2, 0), vector2(1.5F, -0.5F)); // diffvec  =(-0.5, -0.5)
+    line expectedln3(vector2(3, -1), vector2(3.25F, -0.75F)); //diffvec = (0.25F, 0.25F)
+
+    ASSERT_TRUE(std::find(lines.begin(), lines.end(), expectedln1) != lines.end());
+    ASSERT_TRUE(std::find(lines.begin(), lines.end(), expectedln2) != lines.end());
+    ASSERT_TRUE(std::find(lines.begin(), lines.end(), expectedln3) != lines.end());
 }
