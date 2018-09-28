@@ -52,12 +52,9 @@ namespace rvi
         const std::vector<line>& lines() const noexcept;
         const std::unordered_map<std::string, std::unique_ptr<frame>>& children() const noexcept;
         const transform2& transform() const noexcept;
-        color_rgba color() const noexcept;
         frame& get_child(const std::string& name) const;
 
         // -- Setters --
-        void set_color(u8 r, u8 g, u8 b, u8 a) noexcept;
-        void set_color(color_rgba color) noexcept;
         void set_transform(const transform2& tform) noexcept;
         void set_transform(transform2&& tform) noexcept;
         void set_position(vector2 offset) noexcept;

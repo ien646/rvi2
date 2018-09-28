@@ -32,6 +32,8 @@ namespace rvi
         bool _cached_fpath_rebuild = true;
         std::string _cached_fpath = MAIN_FRAMENAME;
 
+        color_rgba _current_color = color_rgba::BLACK();
+
     public:
         static const std::string MAIN_FRAMENAME;
         static const char FRAMEPATH_SEPARATOR;

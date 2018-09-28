@@ -20,8 +20,8 @@ namespace rvi
 
     void client_context::draw_line(vector2 from, vector2 to)
     {
-        line ln(vertex(from, _selected_frame.get().color()),
-                vertex(to,  _selected_frame.get().color()));
+        line ln(vertex(from, _current_color),
+                vertex(to, _current_color));
 
         _selected_frame.get().add_line(std::move(ln));
         mark_frame_modified();
@@ -108,7 +108,7 @@ namespace rvi
 
     void client_context::set_color(color_rgba color) noexcept
     {
-        _selected_frame.get().set_color(color);
+        _current_color = color;
     }
 
     void client_context::set_transform(const transform2& tform) noexcept

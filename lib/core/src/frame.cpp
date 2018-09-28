@@ -113,16 +113,6 @@ namespace rvi
         }
     }
 
-    void frame::set_color(u8 r, u8 g, u8 b, u8 a) noexcept
-    {
-        _color = color_rgba(r, g, b, a);
-    }
-
-    void frame::set_color(color_rgba color) noexcept
-    {
-        _color = color;
-    }
-
     void frame::set_transform(const transform2& tform) noexcept
     {
         _transform = tform;
@@ -166,11 +156,6 @@ namespace rvi
     const transform2& frame::transform() const noexcept
     {
         return _transform;
-    }
-
-    color_rgba frame::color() const noexcept
-    {
-        return _color;
     }
 
     frame& frame::get_child(const std::string& name) const
