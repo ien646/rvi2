@@ -23,14 +23,14 @@ TEST(frame, AddLine)
         const line ln2(vx1, vx2);
         line ln2_cp = ln2;
 
-        ASSERT_EQ(f.lines().size(), 0);
+        ASSERT_EQ(f.lines().size(), static_cast<size_t>(0));
 
         f.add_line(ln1);
-        ASSERT_EQ(f.lines().size(), 1);
+        ASSERT_EQ(f.lines().size(), static_cast<size_t>(1));
         ASSERT_EQ(f.lines()[0], ln1);
 
         f.add_line(std::move(ln2_cp));
-        ASSERT_EQ(f.lines().size(), 2);
+        ASSERT_EQ(f.lines().size(), static_cast<size_t>(2));
         ASSERT_EQ(f.lines()[0], ln1);
         ASSERT_EQ(f.lines()[1], ln2);
     }
@@ -49,7 +49,7 @@ TEST(frame, line_count)
             f.add_line(line(vx1,vx2));
         }
 
-        ASSERT_EQ(f.line_count(), icount);
+        ASSERT_EQ(f.line_count(), static_cast<size_t>(icount));
     }
 }
 
@@ -65,10 +65,10 @@ TEST(frame, clear_lines)
             vertex vx1, vx2;
             f.add_line(line(vx1,vx2));
         }    
-        ASSERT_EQ(f.line_count(), icount);
+        ASSERT_EQ(f.line_count(), static_cast<size_t>(icount));
 
         f.clear_lines();
-        ASSERT_EQ(f.line_count(), 0);
+        ASSERT_EQ(f.line_count(), static_cast<size_t>(0));
     }
 }
 
@@ -138,7 +138,7 @@ TEST(frame, get_all_modulated_lines_simple)
         frame.add_line(line(vx5, vx6));
 
         auto lines = frame.get_all_modulated_lines(transform2::default_value());
-        ASSERT_EQ(lines.size(), 3);
+        ASSERT_EQ(lines.size(), static_cast<size_t>(3));
 
         line expected_ln1(vx1, vx2);
         line expected_ln2(vx3, vx4);
@@ -205,7 +205,7 @@ TEST(frame, get_all_modulated_lines_complex)
 
         auto lines = frame.get_all_modulated_lines(transform2::default_value());
 
-        ASSERT_EQ(lines.size(), 3);
+        ASSERT_EQ(lines.size(), static_cast<size_t>(3));
 
         ASSERT_TRUE(std::find(lines.begin(), lines.end(), expected_1) != lines.end());
         ASSERT_TRUE(std::find(lines.begin(), lines.end(), expected_2) != lines.end());
