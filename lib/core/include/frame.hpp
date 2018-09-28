@@ -21,7 +21,6 @@ namespace rvi
         std::vector<line> _lines;
         std::unordered_map<std::string, std::unique_ptr<frame>> _child_frames;
         transform2 _transform;
-        color_rgba _color;
         
     public:
         frame() = delete;
