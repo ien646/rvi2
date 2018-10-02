@@ -33,50 +33,23 @@ namespace rvi::host
         return result;
     }
 
-    command_type interpreter::parse_command(const std::string& txt)
+    cmd_type interpreter::parse_command(const std::string& txt)
     {
-        std::string copy = txt;
-        str_tolower(copy);
-        if (copy == "select_frame")
-            return command_type::SELECT_FRAME;
-
-        else if (copy == "release_frame")
-            return command_type::RELEASE_FRAME;
-
-        else if (copy == "delete_frame")
-            return command_type::DELETE_FRAME;
-
-        else if (copy == "draw_line")
-            return command_type::DRAW_LINE;
-
-        else if (copy == "set_color")
-            return command_type::SET_COLOR;
-
-        else if (copy == "set_transform")
-            return command_type::SET_TRANSFORM;
-
-        else if (copy == "set_position")
-            return command_type::SET_POSITION;
-
-        else if (copy == "set_scale")
-            return command_type::SET_SCALE;
-
-        else if (copy == "set_rotation")
-            return command_type::SET_ROTATION;
-
-        else if (copy == "define")
-            return command_type::DEFINE;
-
-        else if (copy == "undefine")
-            return command_type::UNDEFINE;
-
+        std::string lower_txt = txt;
+        str_tolower(lower_txt);
+        if(cmd_map.count(lower_txt) > 0)
+        {
+            return cmd_map.at(lower_txt);
+        }
         else
-            return command_type::INVALID_CMD;
+        {
+            return cmd_type::INVALID_CMD;
+        }
     }
 
-    std::vector<parsed_line> interpreter::read(std::stringstream& stream)
+    std::vector<parsed_stmt> interpreter::read(std::stringstream& stream)
     {
-        std::vector<parsed_line> result;
+        std::vector<parsed_stmt> result;
         auto clean_text = clean_input(stream);
 
         std::string line;
@@ -87,9 +60,9 @@ namespace rvi::host
         return result;
     }
 
-    parsed_line interpreter::parse_line(const std::string& line)
+    parsed_stmt interpreter::parse_line(const std::string& line)
     {
-        parsed_line result;
+        parsed_stmt result;
 
         auto segments = str_split(line, SEP_CMDARGS);
         if (segments.size() != 2)
@@ -105,7 +78,7 @@ namespace rvi::host
         return result;
     }
 
-    void interpreter::run(const std::vector<parsed_line>& lines, client_context& ctx)
+    void interpreter::run(const std::vector<parsed_stmt>& lines, client_context& ctx)
     {
         for (auto& line : lines)
         {
@@ -113,7 +86,7 @@ namespace rvi::host
         }
     }
 
-    void interpreter::run_line(const parsed_line& line, client_context& ctx)
+    void interpreter::run_line(const parsed_stmt& line, client_context& ctx)
     {
         //...
     }
