@@ -15,20 +15,13 @@ namespace rvi::host
 {
     typedef std::function<void(client_context&, const std::vector<std::string>&)> ctx_action;
 
-    void expect_argc(const std::vector<std::string>& args, int argc, cmd_type ct)
-    {
-        if(args.size() < argc)
-        {
-            auto cmd_name = get_cmd_name(ct);
-            throw std::logic_error("Insufficient argument count for command: " + cmd_name);
-        }
-    }
+    extern void expect_argc(const std::vector<std::string>& args, int argc, cmd_type ct);
 
-    constexpr void no_expect_args() { return; }
+    constexpr static void no_expect_args() { return; }
 
-    std::vector<definition_inst> parse_definition_body(const std::string& body);
+    extern std::vector<definition_inst> parse_definition_body(const std::string& body);
 
-    std::unordered_map<cmd_type, ctx_action> context_action_map = 
+    static std::unordered_map<cmd_type, ctx_action> context_action_map = 
     {
         { 
             cmd_type::SELECT_FRAME , [](client_context& ctx, const std::vector<std::string>& args)

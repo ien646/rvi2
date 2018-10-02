@@ -2,6 +2,15 @@
 
 namespace rvi::host
 {
+    void expect_argc(const std::vector<std::string>& args, int argc, cmd_type ct)
+    {
+        if(args.size() < argc)
+        {
+            auto cmd_name = get_cmd_name(ct);
+            throw std::logic_error("Insufficient argument count for command: " + cmd_name);
+        }
+    }
+
     void i_select_frame(const parsed_stmt& line, std::vector<definition_inst>& result)
     {
         expect_argc(line.args, 1, cmd_type::SELECT_FRAME);
