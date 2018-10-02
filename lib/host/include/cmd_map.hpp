@@ -23,16 +23,5 @@ namespace rvi::host
         { "undefine",       cmd_type::UNDEFINE }
     };
 
-    std::string get_cmd_name(cmd_type ct)
-    {
-        auto it = std::find_if(cmd_map.begin(), cmd_map.end(), [](auto&& it_pair){ it_pair->second == ct});
-        if(it != cmd_map.end())
-        {
-            return it->first;
-        }
-        else
-        {
-            return "ERROR: Command typename not found";
-        }
-    }
+    std::string get_cmd_name(cmd_type ct);
 }

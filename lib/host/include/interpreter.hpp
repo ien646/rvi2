@@ -16,19 +16,12 @@ namespace rvi::host
         std::vector<std::string> args;
     };
 
-    std::vector<char> ignored_chars =
-    {
-        0,
-        ' ',
-        '\n',
-        '\t',
-        '\r'
-    };
+    static std::vector<char> ignored_chars = {0, ' ', '\n', '\t', '\r'};
 
     class interpreter
     {
     private:
-        str_dictionary _global_vars;
+        static str_dictionary _global_vars;
 
         static const char SEP_LINE = ';';
         static const char SEP_CMDARGS = ':';
@@ -36,13 +29,13 @@ namespace rvi::host
         static const char TXT_ESC_CHAR = '"';
 
     public:
-        std::vector<parsed_stmt> read(std::stringstream& stream);
-        void run(const std::vector<parsed_stmt>& lines, client_context& ctx);
+        static std::vector<parsed_stmt> read(std::stringstream& stream);
+        static void run(const std::vector<parsed_stmt>& lines, client_context& ctx);
     private:
 
-        parsed_stmt parse_line(const std::string& line);
-        cmd_type parse_command(const std::string& txt);
-        void run_line(const parsed_stmt& line, client_context& ctx);     
-        std::stringstream clean_input(std::stringstream& sstr);
+        static parsed_stmt parse_line(const std::string& line);
+        static cmd_type parse_command(const std::string& txt);
+        static void run_line(const parsed_stmt& line, client_context& ctx);     
+        static std::stringstream clean_input(std::stringstream& sstr);
     };
 }

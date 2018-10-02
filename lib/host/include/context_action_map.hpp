@@ -4,9 +4,12 @@
 #include <functional>
 
 #include <client_context.hpp>
+#include <instruction_generator.hpp>
 
 #include "cmd_type.hpp"
 #include "cmd_map.hpp"
+#include "interpreter.hpp"
+#include "str_utils.hpp"
 
 namespace rvi::host
 {
@@ -22,6 +25,8 @@ namespace rvi::host
     }
 
     constexpr void no_expect_args() { return; }
+
+    std::vector<definition_inst> parse_definition_body(const std::string& body);
 
     std::unordered_map<cmd_type, ctx_action> context_action_map = 
     {
@@ -114,7 +119,17 @@ namespace rvi::host
         {
             cmd_type::DEFINE, [](client_context& ctx, const std::vector<std::string>& args)
             {
-                //...
+                expect_argc(args, 2, cmd_type::DEFINE);
+                std::string name = args[0];
+                std::string body = str_split(args[1], '{')[1];
+                body = str_split(body, '}')[0];
+                auto instructions = parse_definition_body(body);
+                definition def(name);
+                std::for_each(instructions.begin(), instructions.end(), [&](auto&& inst)
+                { 
+                    def.add_instruction(std::move(inst));
+                });
+                ctx.add_definition(std::move(def));
             }
         },
         {
@@ -125,5 +140,5 @@ namespace rvi::host
                 ctx.delete_definition(fname);
             }
         }
-    };
+    };    
 }

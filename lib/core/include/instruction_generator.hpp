@@ -18,12 +18,20 @@ namespace rvi
 
         static definition_inst release_frame();
 
+        static definition_inst delete_frame(const std::string& name);
+
         static definition_inst set_color(color_rgba color);
 
         static definition_inst set_transform(const transform2& tform);
         static definition_inst set_transform(transform2&& tform);
 
+        static definition_inst set_position(const vector2& pos);
+        static definition_inst set_scale(const vector2& scale);
+        static definition_inst set_rotation(float angle);
+        
         static definition_inst add_definition(const definition& instruction);
         static definition_inst add_definition(definition&& instruction);
+
+        static definition_inst delete_definition(const std::string& def_name);
     };
 }

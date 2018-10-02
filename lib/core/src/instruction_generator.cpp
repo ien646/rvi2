@@ -43,6 +43,12 @@ namespace rvi
         { c.release_frame(); };
     }
 
+    definition_inst delete_frame(const std::string& name)
+    {
+        return[&](client_context& c)
+        { c.delete_frame(name); };
+    }
+
     definition_inst instruction_generator::set_color(color_rgba color)
     {
         return[=](client_context& c) noexcept
@@ -53,6 +59,24 @@ namespace rvi
     {
         return[=](client_context& c) noexcept
         { c.set_transform(tform); };
+    }
+
+    definition_inst instruction_generator::set_position(const vector2& pos)
+    {
+        return[&](client_context& c) noexcept
+        { c.set_position(pos); };
+    }
+
+    definition_inst instruction_generator::set_scale(const vector2& scale)
+    {
+        return[&](client_context& c) noexcept
+        { c.set_scale(scale); };
+    }
+
+    definition_inst instruction_generator::set_rotation(float angle)
+    {
+        return [&](client_context& c) noexcept
+        { c.set_rotation(angle); };
     }
 
     definition_inst instruction_generator::set_transform(transform2&& tform)
@@ -71,5 +95,11 @@ namespace rvi
     {
         return[CAPTURE_RVALUEREF(instruction)](client_context& c)
         { c.add_definition(std::move(instruction)); };
+    }
+
+    definition_inst instruction_generator::delete_definition(const std::string& def_name)
+    {
+        return[&](client_context& c)
+        { c.delete_definition(def_name); };
     }
 }

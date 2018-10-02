@@ -5,6 +5,8 @@
 #include <cinttypes>
 
 #include "str_utils.hpp"
+#include "cmd_type.hpp"
+#include "cmd_map.hpp"
 
 namespace rvi::host
 {
