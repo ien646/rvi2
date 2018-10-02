@@ -16,6 +16,6 @@ namespace rvi::host
     public:
         runtime() { }
         client_id create_client();
-        void start_client(client_id cid);
+        void start_client(client_id cid, std::stringstream& program);
     };
 }

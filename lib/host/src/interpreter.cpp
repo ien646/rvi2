@@ -3,10 +3,12 @@
 #include <algorithm>
 #include <cctype>
 #include <cinttypes>
+#include <iostream>
 
 #include "str_utils.hpp"
 #include "cmd_type.hpp"
 #include "cmd_map.hpp"
+#include "context_action_map.hpp"
 
 namespace rvi::host
 {
@@ -90,6 +92,17 @@ namespace rvi::host
 
     void interpreter::run_line(const parsed_stmt& line, client_context& ctx)
     {
-        //...
+        auto cmd = context_action_map.at(line.command);
+        cmd(ctx, line.args);
+
+        // -- Debug --------------------------------
+        std::stringstream ss;
+        ss << get_cmd_name(line.command) << ": [";
+        for (auto& a : line.args)
+        {
+            ss << a << ", ";
+        }
+        ss << "]";
+        std::cout << ss.str() << std::endl;
     }
 }
