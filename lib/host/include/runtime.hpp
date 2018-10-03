@@ -11,7 +11,7 @@ namespace rvi::host
     {
     private:
         std::unordered_map<client_id, client_context> _clients;
-        client_id _last_cid;
+        client_id _last_cid = 0;
         
     public:
         runtime() { }

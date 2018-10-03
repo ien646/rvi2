@@ -17,7 +17,7 @@ namespace rvi::host
 
     extern void expect_argc(const std::vector<std::string>& args, int argc, cmd_type ct);
 
-    constexpr static void no_expect_args() { return; }
+    static constexpr  void no_expect_args() { return; }
 
     extern std::vector<definition_inst> parse_definition_body(const std::string& body);
 

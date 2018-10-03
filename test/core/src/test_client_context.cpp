@@ -12,7 +12,7 @@ static random_gen rnd;
 TEST(client_context, ctor_default_frame)
 {
     client_context ctx;
-    auto name = ctx.selected_frame().name();
+    auto name = ctx.selected_frame()->name();
     ASSERT_EQ(name, client_context::MAIN_FRAMENAME);
 }
 
@@ -52,14 +52,14 @@ TEST(client_context, select_frame_dupe_noclear)
     }
     ctx.release_frame();
     ctx.select_frame("test_frame");
-    ASSERT_EQ(static_cast<size_t>(icount), ctx.selected_frame().line_count());
+    ASSERT_EQ(static_cast<size_t>(icount), ctx.selected_frame()->line_count());
 }
 
 TEST(client_context, draw_line_main_frame)
 {
     client_context ctx;
 
-    auto startCount = ctx.selected_frame().line_count();
+    auto startCount = ctx.selected_frame()->line_count();
     ASSERT_EQ(startCount, static_cast<size_t>(0));
 
     ctx.draw_line(line(vector2(1, 2), vector2(3, 4)));
@@ -67,7 +67,7 @@ TEST(client_context, draw_line_main_frame)
     ctx.draw_line(vector2(5, 6), color_rgba::RED(), vector2(7, 8), color_rgba::BLUE());
     ctx.draw_line(vector2(9, 10), vector2(11, 12));
 
-    auto lcount = ctx.selected_frame().line_count();
+    auto lcount = ctx.selected_frame()->line_count();
     ASSERT_EQ(lcount, static_cast<size_t>(4));
 
     line expected_ln1 = line(vector2(1, 2), vector2(3, 4));
@@ -75,7 +75,7 @@ TEST(client_context, draw_line_main_frame)
     line expected_ln3 = line(vertex(vector2(5, 6), color_rgba::RED()), vertex(vector2(7, 8), color_rgba::BLUE()));
     line expected_ln4 = line(vector2(9, 10), vector2(11, 12));
 
-    auto lines = ctx.selected_frame().lines();
+    auto lines = ctx.selected_frame()->lines();
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln1) != std::end(lines));
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln2) != std::end(lines));
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln3) != std::end(lines));
@@ -89,7 +89,7 @@ TEST(client_context, draw_line_child_frame)
     ctx.select_frame("child_frame");
     ctx.set_transform(transform2(vector2::zero(), vector2(0.5F, 0.5F), 0.0F));
 
-    auto startCount = ctx.selected_frame().line_count();
+    auto startCount = ctx.selected_frame()->line_count();
     ASSERT_EQ(startCount, static_cast<size_t>(0));
 
     ctx.draw_line(line(vector2(1, 2), vector2(3, 4)));
@@ -97,7 +97,7 @@ TEST(client_context, draw_line_child_frame)
     ctx.draw_line(vector2(5, 6), color_rgba::RED(), vector2(7, 8), color_rgba::BLUE());
     ctx.draw_line(vector2(9, 10), vector2(11, 12));
 
-    auto lcount = ctx.selected_frame().line_count();
+    auto lcount = ctx.selected_frame()->line_count();
     ASSERT_EQ(lcount, static_cast<size_t>(4));
 
     line expected_ln1 = line(vector2(1, 2), vector2(3, 4));
@@ -105,7 +105,7 @@ TEST(client_context, draw_line_child_frame)
     line expected_ln3 = line(vertex(vector2(5, 6), color_rgba::RED()), vertex(vector2(7, 8), color_rgba::BLUE()));
     line expected_ln4 = line(vector2(9, 10), vector2(11, 12));
 
-    auto lines = ctx.selected_frame().lines();
+    auto lines = ctx.selected_frame()->lines();
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln1) != std::end(lines));
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln2) != std::end(lines));
     ASSERT_TRUE(std::find(std::begin(lines), std::end(lines), expected_ln3) != std::end(lines));
@@ -156,34 +156,34 @@ TEST(client_context, select_release_frame)
 {
     client_context ctx;
 
-    ASSERT_EQ(ctx.selected_frame().name(), client_context::MAIN_FRAMENAME);
+    ASSERT_EQ(ctx.selected_frame()->name(), client_context::MAIN_FRAMENAME);
 
     ctx.release_frame();
-    ASSERT_EQ(ctx.selected_frame().name(), client_context::MAIN_FRAMENAME);
+    ASSERT_EQ(ctx.selected_frame()->name(), client_context::MAIN_FRAMENAME);
 
     ctx.select_frame("test_frame_1");
-    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_1");
+    ASSERT_EQ(ctx.selected_frame()->name(), "test_frame_1");
 
     ctx.release_frame();
-    ASSERT_EQ(ctx.selected_frame().name(), client_context::MAIN_FRAMENAME);
+    ASSERT_EQ(ctx.selected_frame()->name(), client_context::MAIN_FRAMENAME);
 
     ctx.select_frame("test_frame_2");
-    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2");
+    ASSERT_EQ(ctx.selected_frame()->name(), "test_frame_2");
 
     ctx.select_frame("test_frame_2_1");
-    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2_1");
+    ASSERT_EQ(ctx.selected_frame()->name(), "test_frame_2_1");
 
     ctx.release_frame();
-    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2");
+    ASSERT_EQ(ctx.selected_frame()->name(), "test_frame_2");
 
     ctx.select_frame("test_frame_2_2");
-    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2_2");
+    ASSERT_EQ(ctx.selected_frame()->name(), "test_frame_2_2");
 
     ctx.select_frame("test_frame_2_2_1");
-    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2_2_1");
+    ASSERT_EQ(ctx.selected_frame()->name(), "test_frame_2_2_1");
 
     ctx.select_frame("test_frame_2_2_1_1");
-    ASSERT_EQ(ctx.selected_frame().name(), "test_frame_2_2_1_1");
+    ASSERT_EQ(ctx.selected_frame()->name(), "test_frame_2_2_1_1");
     
 }
 
@@ -298,10 +298,10 @@ TEST(client_context, extract_fpath_with_transform_1lvl)
     ctx.set_transform(tform);
 
     auto rootPath = ctx.get_fpath();
-    const auto& rootFrame = ctx.find_frame(rootPath);
+    const auto rootFrame = ctx.find_frame(rootPath);
 
-    ASSERT_EQ(rootFrame.transform(), tform);
-    ASSERT_EQ(rootFrame.name(), client_context::MAIN_FRAMENAME);
+    ASSERT_EQ(rootFrame->transform(), tform);
+    ASSERT_EQ(rootFrame->name(), client_context::MAIN_FRAMENAME);
 }
 
 TEST(client_context, extract_fpath_with_transform_2lvl)
@@ -323,10 +323,10 @@ TEST(client_context, extract_fpath_with_transform_2lvl)
     ctx.set_transform(ch_tform);
 
     auto childPath = ctx.get_fpath();
-    const auto& childFrame = ctx.find_frame(childPath);
+    const auto childFrame = ctx.find_frame(childPath);
 
-    ASSERT_EQ(childFrame.transform(), ch_tform);
-    ASSERT_EQ(childFrame.name(), "childframe");
+    ASSERT_EQ(childFrame->transform(), ch_tform);
+    ASSERT_EQ(childFrame->name(), "childframe");
 }
 
 TEST(client_context, snapshot_full_flat)

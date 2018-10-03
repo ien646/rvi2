@@ -27,25 +27,25 @@ namespace rvi
         _lines.push_back(std::move(ln));
     }
 
-    frame& frame::add_child(const std::string& name)
+    frame* frame::add_child(const std::string& name)
     {
         if(_child_frames.count(name) > 0)
         {
-            return *_child_frames.at(name);
+            return &_child_frames.at(name);
         }
-        auto pair = _child_frames.emplace(name, std::make_unique<frame>(name));
-        return *(pair.first->second);
+        _child_frames.emplace(name, frame(name));
+        return (&_child_frames.at(name));
     }
 
-    frame& frame::add_child(std::string&& name)
+    frame* frame::add_child(std::string&& name)
     {
         if(_child_frames.count(name) > 0)
         {
-            return *_child_frames.at(name);
+            return &_child_frames.at(name);
         }
         std::string nameCopy = name;
-        auto pair = _child_frames.emplace(nameCopy, std::make_unique<frame>(name));
-        return *(pair.first->second);
+        _child_frames.emplace(nameCopy, frame(name));
+        return (&_child_frames.at(name));
     }
 
     bool frame::delete_child(const std::string& name)
@@ -71,7 +71,7 @@ namespace rvi
         // Child frames
         for (auto& entry : _child_frames)
         {
-            std::vector<line> child_lines = entry.second->get_all_modulated_lines(abs_tform);
+            std::vector<line> child_lines = entry.second.get_all_modulated_lines(abs_tform);
             std::move(child_lines.begin(), child_lines.end(), std::back_inserter(result));
         }
 
@@ -107,7 +107,7 @@ namespace rvi
             for (const auto& f : _child_frames)
             {
                 result++;
-                result += f.second->child_count(true);
+                result += f.second.child_count(true);
             }
             return result;
         }
@@ -148,7 +148,7 @@ namespace rvi
         return _lines;
     }
 
-    const std::unordered_map<std::string, std::unique_ptr<frame>>& frame::children() const noexcept
+    const std::unordered_map<std::string, frame>& frame::children() const noexcept
     {
         return _child_frames;
     }
@@ -158,9 +158,9 @@ namespace rvi
         return _transform;
     }
 
-    frame& frame::get_child(const std::string& name) const
+    frame* frame::get_child(const std::string& name)
     {
-        return *_child_frames.at(name);
+        return &_child_frames.at(name);
     }
 
     size_t frame::line_count() const noexcept

@@ -6,6 +6,10 @@
 #include <unordered_map>
 #include <type_traits>
 #include <functional>
+#include <stdexcept>
+
+#include "str_utils.hpp"
+#include "rvi_assert.hpp"
 
 namespace rvi
 {
@@ -55,5 +59,5 @@ namespace rvi
     static constexpr bool RVI_CEXPR_LITTLE_ENDIAN   = ((const uint8_t&)_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0xFF;
 
     FWD_DECL_CLASS(client_context);
-    typedef std::function<void(client_context&)> definition_inst;
+    typedef std::function<void(client_context&)> definition_inst;    
 }

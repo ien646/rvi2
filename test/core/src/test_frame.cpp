@@ -162,7 +162,7 @@ TEST(frame, get_all_modulated_lines_complex)
         // First child
         frame.add_child("child1");
         // Child's child
-        frame.get_child("child1").add_child("child2");
+        frame.get_child("child1")->add_child("child2");
 
         vector2 pos1(1, 1);
         vector2 scl1(2, 2);
@@ -180,8 +180,8 @@ TEST(frame, get_all_modulated_lines_complex)
         transform2 tform3(pos3, scl3, rot3);
 
         frame.set_transform(tform1);
-        frame.get_child("child1").set_transform(tform2);
-        frame.get_child("child1").get_child("child2").set_transform(tform3);
+        frame.get_child("child1")->set_transform(tform2);
+        frame.get_child("child1")->get_child("child2")->set_transform(tform3);
 
         vertex vx1, vx2, vx3, vx4, vx5, vx6;
         vx3.position.offset_in_place(vector2(1, 1));
@@ -189,8 +189,8 @@ TEST(frame, get_all_modulated_lines_complex)
         vx5.position.offset_in_place(vector2(3, 3));
         vx6.position.offset_in_place(vector2(4, 4));
         frame.add_line(line(vx1, vx2));
-        frame.get_child("child1").add_line(line(vx3, vx4));
-        frame.get_child("child1").get_child("child2").add_line(line(vx5, vx6));
+        frame.get_child("child1")->add_line(line(vx3, vx4));
+        frame.get_child("child1")->get_child("child2")->add_line(line(vx5, vx6));
 
         line expected_1 = line(vx1, vx2);
         line expected_2 = line(vx3, vx4);
@@ -224,10 +224,10 @@ TEST(frame, child_count_shallow)
     frame.add_child("child3");
 
     // Child's child
-    frame.get_child("child1").add_child("child11");
-    frame.get_child("child1").add_child("child12");
-    frame.get_child("child1").add_child("child13");
-    frame.get_child("child1").add_child("child14");
+    frame.get_child("child1")->add_child("child11");
+    frame.get_child("child1")->add_child("child12");
+    frame.get_child("child1")->add_child("child13");
+    frame.get_child("child1")->add_child("child14");
 
     size_t expectedCount = 3;
 
@@ -247,10 +247,10 @@ TEST(frame, child_count_deep)
     frame.add_child("child3");
 
     // Child's child
-    frame.get_child("child1").add_child("child11");
-    frame.get_child("child1").add_child("child12");
-    frame.get_child("child1").add_child("child13");
-    frame.get_child("child1").add_child("child14");
+    frame.get_child("child1")->add_child("child11");
+    frame.get_child("child1")->add_child("child12");
+    frame.get_child("child1")->add_child("child13");
+    frame.get_child("child1")->add_child("child14");
 
     size_t expectedCount = 7;
 

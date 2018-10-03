@@ -8,7 +8,7 @@
 
 namespace rvi::host
 {
-    const std::unordered_map<std::string, cmd_type> cmd_map = 
+    static const std::unordered_map<std::string, cmd_type> cmd_map = 
     {
         { "select_frame",   cmd_type::SELECT_FRAME },
         { "release_frame",  cmd_type::RELEASE_FRAME },
@@ -23,5 +23,5 @@ namespace rvi::host
         { "undefine",       cmd_type::UNDEFINE }
     };
 
-    std::string get_cmd_name(cmd_type ct);
+    extern std::string get_cmd_name(cmd_type ct);
 }

@@ -1,6 +1,6 @@
 #include "str_utils.hpp"
 
-namespace rvi::host
+namespace rvi
 {
     std::vector<std::string> str_split(const std::string& str, char delim)
     {
@@ -17,14 +17,10 @@ namespace rvi::host
 
     std::string str_tolower(const std::string& str)
     {
-        std::string result;
+        std::string result = str;
         result.reserve(str.size());
 
-        std::transform(
-            str.begin(),
-            str.end(),
-            result.begin(),
-            [](auto c) { return std::tolower(static_cast<int>(c)); });
+        std::transform(result.begin(), result.end(), result.begin(), ::tolower);
         return result;
     }
 

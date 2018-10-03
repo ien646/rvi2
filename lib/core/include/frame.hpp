@@ -19,11 +19,22 @@ namespace rvi
 
         std::string _name;
         std::vector<line> _lines;
-        std::unordered_map<std::string, std::unique_ptr<frame>> _child_frames;
+        std::unordered_map<std::string, frame> _child_frames;
         transform2 _transform;
         
     public:
         frame() = delete;
+        frame(const frame&) = delete;
+        frame(frame&& mv_src)
+        {
+            _name = std::move(mv_src._name);
+            _lines = std::move(mv_src.lines());
+            std::for_each(mv_src._child_frames.begin(), mv_src._child_frames.end(), [&](auto&& ch_pair) 
+            {
+                _child_frames.insert(std::move(ch_pair));
+            });
+            _transform = mv_src._transform;
+        }
 
         frame(const std::string& name);
         frame(std::string&& name);
@@ -35,8 +46,8 @@ namespace rvi
         void add_line(const line& ln);
         void add_line(line&& ln);
 
-        frame& add_child(const std::string& name);
-        frame& add_child(std::string&& name);
+        frame* add_child(const std::string& name);
+        frame* add_child(std::string&& name);
 
         bool delete_child(const std::string& name);
 
@@ -50,9 +61,9 @@ namespace rvi
         // -- Getters --
         const std::string& name() const noexcept;
         const std::vector<line>& lines() const noexcept;
-        const std::unordered_map<std::string, std::unique_ptr<frame>>& children() const noexcept;
+        const std::unordered_map<std::string, frame>& children() const noexcept;
         const transform2& transform() const noexcept;
-        frame& get_child(const std::string& name) const;
+        frame* get_child(const std::string& name);
 
         // -- Setters --
         void set_transform(const transform2& tform) noexcept;

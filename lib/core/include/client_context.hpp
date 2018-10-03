@@ -18,11 +18,11 @@ namespace rvi
     private:
         const transform2 DEFAULT_TRANSFORM = transform2(vector2(0, 0), vector2(1, 1), 0);
 
-        frame _main_frame;
-        std::reference_wrapper<frame> _selected_frame;
+        std::unique_ptr<frame> _main_frame;
+        frame* _selected_frame;
 
         // Current frame selection 'stack'
-        std::vector<std::reference_wrapper<frame>> _frame_stack;
+        std::vector<frame*> _frame_stack;
 
         std::unordered_map<std::string, definition> _local_definitions;
 
@@ -40,6 +40,8 @@ namespace rvi
 
         client_context();
 
+        client_context(client_context&& mv_src);
+
         void draw_line(vector2 from, vector2 to);
         void draw_line(vector2 from, color_rgba fromColor, vector2 to, color_rgba toColor);
         void draw_line(vertex from, vertex to);
@@ -53,7 +55,7 @@ namespace rvi
 
         bool delete_frame(const std::string& name);
 
-        const frame& selected_frame() const noexcept;
+        const frame* selected_frame() const noexcept;
         bool is_root_frame_selected() const noexcept;
 
         void set_color(color_rgba color) noexcept;
@@ -85,8 +87,8 @@ namespace rvi
         bool contains_definition(const std::string& defName);
 
         const std::string& get_fpath();
-        const frame& find_frame(const std::string& fPath);
-        const std::pair<frame&, transform2> find_frame_with_mod_tform(const std::string& fPath);
+        const frame* find_frame(const std::string& fPath);
+        const std::pair<frame*, transform2> find_frame_with_mod_tform(const std::string& fPath);
 
         void mark_frame_modified();
 

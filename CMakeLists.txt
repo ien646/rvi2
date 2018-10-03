@@ -39,4 +39,5 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${RVI_DIR_OUT_STATICLIB})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${RVI_DIR_OUT_EXECBIN})
 
 add_subdirectory("lib")
+add_subdirectory("bin")
 add_subdirectory("test")

@@ -43,7 +43,7 @@ namespace rvi
         { c.release_frame(); };
     }
 
-    definition_inst delete_frame(const std::string& name)
+    definition_inst instruction_generator::delete_frame(const std::string& name)
     {
         return[&](client_context& c)
         { c.delete_frame(name); };
