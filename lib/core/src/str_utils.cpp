@@ -20,7 +20,10 @@ namespace rvi
         std::string result = str;
         result.reserve(str.size());
 
-        std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+        std::transform(result.begin(), result.end(), result.begin(), [](char c)
+        {
+            return static_cast<char>(std::tolower(c));
+        });
         return result;
     }
 

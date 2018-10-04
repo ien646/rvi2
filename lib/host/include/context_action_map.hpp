@@ -15,9 +15,9 @@ namespace rvi::host
 {
     typedef std::function<void(client_context&, const std::vector<std::string>&)> ctx_action;
 
-    extern void expect_argc(const std::vector<std::string>& args, int argc, cmd_type ct);
+    extern void expect_argc(const std::vector<std::string>& args, size_t argc, cmd_type ct);
 
-    static constexpr  void no_expect_args() { return; }
+    static constexpr void no_expect_args() { return; }
 
     extern std::vector<definition_inst> parse_definition_body(const std::string& body);
 

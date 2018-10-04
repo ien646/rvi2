@@ -2,7 +2,7 @@
 
 namespace rvi::host
 {
-    void expect_argc(const std::vector<std::string>& args, int argc, cmd_type ct)
+    void expect_argc(const std::vector<std::string>& args, size_t argc, cmd_type ct)
     {
         if(args.size() < argc)
         {
