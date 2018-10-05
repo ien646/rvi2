@@ -33,5 +33,7 @@ namespace rvi
         static definition_inst add_definition(definition&& instruction);
 
         static definition_inst delete_definition(const std::string& def_name);
+
+        static definition_inst execute_definition(const std::string& def_name);
     };
 }

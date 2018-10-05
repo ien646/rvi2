@@ -102,4 +102,10 @@ namespace rvi
         return[&](client_context& c)
         { c.delete_definition(def_name); };
     }
+
+    definition_inst instruction_generator::execute_definition(const std::string& def_name)
+    {
+        return[&](client_context& c)
+        { c.execute_definition(def_name); };
+    }
 }
