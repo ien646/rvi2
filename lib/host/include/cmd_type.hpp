@@ -16,6 +16,7 @@ namespace rvi::host
         SET_ROTATION,
         SET_SCALE,
         DEFINE,
-        UNDEFINE
+        UNDEFINE,
+        CALL
     };
 }

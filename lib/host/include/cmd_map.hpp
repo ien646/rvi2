@@ -20,7 +20,8 @@ namespace rvi::host
         { "set_scale",      cmd_type::SET_SCALE },
         { "set_rotation",   cmd_type::SET_ROTATION },
         { "define",         cmd_type::DEFINE },
-        { "undefine",       cmd_type::UNDEFINE }
+        { "undefine",       cmd_type::UNDEFINE },
+        { "call",           cmd_type::CALL }
     };
 
     extern std::string get_cmd_name(cmd_type ct);

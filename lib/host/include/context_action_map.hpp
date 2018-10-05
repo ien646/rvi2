@@ -132,6 +132,14 @@ namespace rvi::host
                 std::string fname = args[0];
                 ctx.delete_definition(fname);
             }
+        },
+        {
+            cmd_type::CALL, [](client_context& ctx, const std::vector<std::string>& args)
+            {
+                expect_argc(args, 1, cmd_type::CALL);
+                std::string fname = args[0];
+                ctx.execute_definition(fname);
+            }
         }
     };    
 }

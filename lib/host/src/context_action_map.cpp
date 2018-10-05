@@ -4,7 +4,7 @@ namespace rvi::host
 {
     void expect_argc(const std::vector<std::string>& args, size_t argc, cmd_type ct)
     {
-        if(args.size() < argc)
+        if (args.size() < argc)
         {
             auto cmd_name = get_cmd_name(ct);
             throw std::logic_error("Insufficient argument count for command: " + cmd_name);
@@ -82,7 +82,7 @@ namespace rvi::host
         std::string def_name = line.args[0];
         auto instructions = parse_definition_body(line.args[1]);
         definition def(def_name);
-        for(auto&& inst : instructions)
+        for (auto&& inst : instructions)
         {
             def.add_instruction(std::move(inst));
         }
@@ -96,65 +96,77 @@ namespace rvi::host
         result.push_back(instruction_generator::delete_definition(def_name));
     }
 
+    void i_call(const parsed_stmt& line, std::vector<definition_inst>& result)
+    {
+        expect_argc(line.args, 1, cmd_type::CALL);
+        std::string def_name = line.args[0];
+        result.push_back(instruction_generator::execute_definition(def_name));
+    }
+
     std::vector<definition_inst> parse_definition_body(const std::string& body)
     {
         std::vector<definition_inst> result;
         auto stream = std::stringstream(body);
         auto lines = interpreter::read(stream);
-        for(auto& line : lines)
+        for (auto& line : lines)
         {
-            switch(line.command)
+            switch (line.command)
             {
-                case cmd_type::SELECT_FRAME:
-                {
-                    i_select_frame(line, result);
-                    break;
-                }
-                case cmd_type::RELEASE_FRAME:
-                {
-                    i_release_frame(line, result);
-                    break;
-                }
-                case cmd_type::DELETE_FRAME:
-                {
-                    i_delete_frame(line, result);
-                    break;
-                }
-                case cmd_type::DRAW_LINE:
-                {
-                    i_draw_line(line, result);
-                    break;
-                }
-                case cmd_type::SET_TRANSFORM:
-                {
-                    i_set_transform(line, result);
-                    break;
-                }
-                case cmd_type::SET_POSITION:
-                {
-                    i_set_position(line, result);
-                    break;
-                }
-                case cmd_type::SET_SCALE:
-                {
-                    i_set_scale(line, result);
-                    break;
-                }
-                case cmd_type::SET_ROTATION:
-                {
-                    i_set_rotation(line, result);
-                    break;
-                }
-                case cmd_type::DEFINE:
-                {
-                    i_define(line, result);
-                    break;
-                }
-                case cmd_type::UNDEFINE:
-                {
-                    i_undefine(line, result);
-                    break;
-                }
+            case cmd_type::SELECT_FRAME:
+            {
+                i_select_frame(line, result);
+                break;
+            }
+            case cmd_type::RELEASE_FRAME:
+            {
+                i_release_frame(line, result);
+                break;
+            }
+            case cmd_type::DELETE_FRAME:
+            {
+                i_delete_frame(line, result);
+                break;
+            }
+            case cmd_type::DRAW_LINE:
+            {
+                i_draw_line(line, result);
+                break;
+            }
+            case cmd_type::SET_TRANSFORM:
+            {
+                i_set_transform(line, result);
+                break;
+            }
+            case cmd_type::SET_POSITION:
+            {
+                i_set_position(line, result);
+                break;
+            }
+            case cmd_type::SET_SCALE:
+            {
+                i_set_scale(line, result);
+                break;
+            }
+            case cmd_type::SET_ROTATION:
+            {
+                i_set_rotation(line, result);
+                break;
+            }
+            case cmd_type::DEFINE:
+            {
+                i_define(line, result);
+                break;
+            }
+            case cmd_type::UNDEFINE:
+            {
+                i_undefine(line, result);
+                break;
+            }
+            case cmd_type::CALL:
+            {
+                i_call(line, result);
+                break;
+            }
             }
         }
         return result;
