@@ -15,6 +15,31 @@ namespace rvi
         return result;
     }
 
+    std::vector<std::string> str_split_once(const std::string& str, char delim)
+    {
+        std::vector<std::string> result;
+        
+        bool found = false;
+        std::stringstream first("");
+        std::stringstream second("");
+        for(auto& ch : str)
+        {
+            if(ch == delim)
+            {
+                found = true;
+                continue;                
+            }
+
+            if(found)
+                second << ch;
+            else
+                first << ch;
+        }
+        result.push_back(first.str());
+        result.push_back(second.str());
+        return result;
+    }
+
     std::string str_tolower(const std::string& str)
     {
         std::string result = str;

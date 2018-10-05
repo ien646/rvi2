@@ -29,7 +29,9 @@ namespace rvi::host
                 dq_escape = !dq_escape;
             }
 
-            if(!is_ignored_ch(ch) || dq_escape)
+            bool feed_flag = !dq_escape || !is_ignored_ch(ch);
+
+            if(feed_flag)
             {
                 result << ch;
             }
@@ -54,12 +56,32 @@ namespace rvi::host
     std::vector<parsed_stmt> interpreter::read(std::stringstream& stream)
     {
         std::vector<parsed_stmt> result;
-        auto clean_text = clean_input(stream);
+        auto clean_text = clean_input(stream).str();
+        std::stringstream line;
 
-        std::string line;
-        while(std::getline(clean_text, line, SEP_LINE))
+        int def_esc = 0;
+        for(auto& ch : clean_text)
         {
-            result.push_back(parse_line(line));
+            if(ch == DEF_ESC_CHAR_BEGIN)
+            {
+                def_esc++;
+            }
+            else if(ch == DEF_ESC_CHAR_END)
+            {
+                def_esc--;
+            }
+
+            rvi_assert(def_esc >= 0, "Invalid definition end char without prior begin char!"); 
+
+            if(ch == SEP_LINE && !def_esc)
+            {
+                result.push_back(parse_line(line.str()));
+                line.str(std::string());
+            }
+            else
+            {
+                line << ch;
+            }
         }
         return result;
     }
@@ -68,7 +90,7 @@ namespace rvi::host
     {
         parsed_stmt result;
 
-        auto segments = str_split(line, SEP_CMDARGS);
+        auto segments = str_split_once(line, SEP_CMDARGS);
         if (segments.size() != 2)
         {            
             throw std::logic_error("Invalid line syntax: " + line);
@@ -76,9 +98,21 @@ namespace rvi::host
         
         result.command = parse_command(segments[0]);
 
-        auto args = str_split(segments[1], SEP_ARGS);
-        std::move(args.begin(), args.end(), std::back_inserter(result.args));
+        if(result.command != cmd_type::DEFINE)
+        {
+            auto args = str_split(segments[1], SEP_ARGS);
+            std::move(args.begin(), args.end(), std::back_inserter(result.args));
+        }
+        else
+        {
+            auto args = str_split_once(segments[1], SEP_ARGS);
+            rvi_assert(args.size() >= 2, "Invalid definition arg count!");
 
+            // definition name
+            result.args.push_back(args[0]); 
+            // definition body
+            result.args.push_back(args[1]);
+        }
         return result;
     }
 
