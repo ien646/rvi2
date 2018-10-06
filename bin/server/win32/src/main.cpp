@@ -11,15 +11,27 @@ int main()
     std::stringstream pr;
     pr << "select_frame:child;"
         << "draw_line:0.5,0.5,1.0,1.0;"
-        << "draw_line:0.5,0.5,1.0,1.0;"
+        << "draw_line:0.6,0.75,1.0,1.0;"
         << "release_frame:_;"
         << "define:a,{draw_line:0.5,0.5,0.5,0.5;};"
         << "call:a;"
-        << "undefine:a;"
-        << "call:a;";
+        << "undefine:a;";
 
     rt.start_client(cid, pr);
-    
+
+    auto cmds = rt.get_update_commands(cid);
+    std::cout << std::ios_base::hex;
+    for (auto& c : cmds)
+    {
+        std::stringstream data_txt;
+        for(auto b : c)
+        {
+            data_txt << +b;
+        }
+        std::cout << "[CMD]: " << data_txt.str() << std::endl;
+    }
+
+
     std::cout << cid;
     std::cin >> cid;
     return cid;
