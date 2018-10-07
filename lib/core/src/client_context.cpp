@@ -323,7 +323,7 @@ namespace rvi
         return result;
     }
 
-    std::unordered_map<std::string, std::vector<line>> client_context::snapshot_diff_relative()
+    relative_snapshot_t client_context::snapshot_diff_relative()
     {
         std::unordered_map<std::string, std::vector<line>> result;
         for (const auto& fpath : _modified_fpaths)

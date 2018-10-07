@@ -20,6 +20,17 @@ namespace rvi
         : position(pos)
     { }
 
+    std::string vertex::to_string()
+    {
+        std::stringstream ss;
+        ss << "[{POS}:"
+            << position.to_string()
+            << ",{COLOR}:"
+            << color.to_string()
+            << "]";
+        return ss.str();
+    }
+
     bool vertex::operator==(vertex other) const noexcept
     {
         return (position == other.position) && (color == other.color);

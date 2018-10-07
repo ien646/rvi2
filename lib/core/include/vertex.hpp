@@ -20,5 +20,7 @@ namespace rvi
 
         bool operator==(vertex other) const noexcept;
         bool operator!=(vertex other) const noexcept;
+
+        std::string to_string();
     };
 }

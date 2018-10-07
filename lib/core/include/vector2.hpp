@@ -66,5 +66,7 @@ namespace rvi
         bool operator!=(vector2 other) const noexcept;
 
         static constexpr vector2 zero() { return vector2(0,0); }
+
+        std::string to_string();
     };
 }

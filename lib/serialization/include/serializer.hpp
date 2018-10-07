@@ -22,11 +22,11 @@ namespace rvi::serialization
         static data_t set_transform(const rvi::transform2& tform);
     };
 
-    static void serialize_fp32_bf(data_t& buff, float val);
-    static void serialize_fp64_bf(data_t& buff, double val);
-    static void serialize_line_bf(data_t& buff, const rvi::line& val);
-    static void serialize_vertex_bf(data_t& buff, const rvi::vertex& val);
-    static void serialize_vector2_bf(data_t& buff, const rvi::vector2& val);
-    static void serialize_color_rgba_bf(data_t& buff, const rvi::color_rgba& val);
-    static void serialize_transform2_bf(data_t& buff, const rvi::transform2& val);
+    extern void serialize_fp32_bf(data_t& buff, float val);
+    extern void serialize_fp64_bf(data_t& buff, double val);
+    extern void serialize_line_bf(data_t& buff, const rvi::line& val);
+    extern void serialize_vertex_bf(data_t& buff, const rvi::vertex& val);
+    extern void serialize_vector2_bf(data_t& buff, const rvi::vector2& val);
+    extern void serialize_color_rgba_bf(data_t& buff, const rvi::color_rgba& val);
+    extern void serialize_transform2_bf(data_t& buff, const rvi::transform2& val);
 }

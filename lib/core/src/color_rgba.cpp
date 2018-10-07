@@ -12,7 +12,7 @@ namespace rvi
         res.a = static_cast<u8>(rgba);
         
         return res;
-    }
+    }    
 
     bool color_rgba::operator==(color_rgba other) const noexcept
     {
@@ -28,5 +28,20 @@ namespace rvi
             || (g != other.g)
             || (b != other.b)
             || (a != other.a);
+    }
+
+    std::string color_rgba::to_string()
+    {
+        std::stringstream ss;
+        ss << "[{R}:"
+            << +r
+            << ",{G}:"
+            << +g
+            << ",{B}:"
+            << +b
+            << ",{A}:"
+            << +a
+            << "]";
+        return ss.str();
     }
 }

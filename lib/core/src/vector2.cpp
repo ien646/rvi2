@@ -132,7 +132,7 @@ namespace rvi
     vector2 vector2::operator/(vector2 other) const noexcept
     {
         return vector2((x / other.x), (y / other.y));
-    }
+    }    
 
     void vector2::operator-=(vector2 other) noexcept
     {
@@ -171,5 +171,16 @@ namespace rvi
     bool vector2::operator!=(vector2 other) const noexcept
     {
         return !(math::fpcmp(x, other.x) && math::fpcmp(y, other.y));
+    }
+
+    std::string vector2::to_string()
+    {
+        std::stringstream ss;
+        ss << "[{X}:"
+            << x
+            << ",{Y}:"
+            << y
+            << "]";
+        return ss.str();
     }
 }

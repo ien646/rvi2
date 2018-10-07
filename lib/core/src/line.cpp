@@ -45,7 +45,7 @@ namespace rvi
         end.position += start.position;
         
         apply_position(tform.position);
-    }
+    }    
 
     bool line::operator==(line other) const noexcept
     {
@@ -55,5 +55,16 @@ namespace rvi
     bool line::operator!=(line other) const noexcept
     {
         return (start != other.start) || (end != other.end);
+    }
+
+    std::string line::to_string()
+    {
+        std::stringstream ss;
+        ss << "[{VX_START}:"
+            << start.to_string()
+            << ", {VX_END}"
+            << end.to_string()
+            << "]";
+        return ss.str();
     }
 }

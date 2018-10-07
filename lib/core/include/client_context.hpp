@@ -13,6 +13,8 @@
 
 namespace rvi
 {
+    typedef std::unordered_map<std::string, std::vector<line>> relative_snapshot_t;
+
     class client_context
     {
     private:
@@ -93,8 +95,8 @@ namespace rvi
         void mark_frame_modified();
 
         std::vector<line> snapshot_full_flat() const;
-        std::vector<line> snapshot_diff_flat();
 
-        std::unordered_map<std::string, std::vector<line>> snapshot_diff_relative();        
+        std::vector<line> snapshot_diff_flat();
+        relative_snapshot_t snapshot_diff_relative();
     };
 }

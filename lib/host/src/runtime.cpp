@@ -6,20 +6,20 @@ using namespace rvi::serialization;
 
 namespace rvi::host
 {
-    client_id runtime::create_client()
+    cid_t runtime::create_client()
     {
         _clients.emplace(++_last_cid, client_context{});
         return _last_cid;
     }
 
-    void runtime::start_client(client_id cid, std::stringstream& program)
+    void runtime::start_client(cid_t cid, std::stringstream& program)
     {
         client_context& ctx = _clients.at(cid);
         auto stmt_col = interpreter::read(program);
         interpreter::run(stmt_col, ctx);
     }
 
-    cmdlist_t runtime::get_update_commands(client_id cid)
+    cmdlist_t runtime::get_update_commands(cid_t cid)
     {
         std::vector<std::vector<std::uint8_t>> result;
 
@@ -53,5 +53,11 @@ namespace rvi::host
         }
 
         return result;
+    }
+
+    relative_snapshot_t runtime::get_diff_snapshot(cid_t cid)
+    {
+        auto& ctx = _clients.at(cid);
+        return ctx.snapshot_diff_relative();
     }
 }
