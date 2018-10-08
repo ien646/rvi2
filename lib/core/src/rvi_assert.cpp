@@ -1,5 +1,7 @@
 #include "rvi_assert.hpp"
 
+#include <stdexcept>
+
 namespace rvi
 {
     void rvi_assert(bool cond, const std::string& msg)
