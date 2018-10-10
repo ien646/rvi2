@@ -270,16 +270,16 @@ TEST(client_context, execute_definition)
     ASSERT_TRUE(execOk);
 }
 
-TEST(client_context, get_fpath)
+TEST(client_context, get_full_frame_name)
 {
     client_context ctx;
 
-    ASSERT_EQ(ctx.get_fpath(), client_context::MAIN_FRAMENAME);
+    ASSERT_EQ(ctx.get_full_frame_name(), client_context::MAIN_FRAMENAME);
     ctx.select_frame("A");
     auto expected = client_context::MAIN_FRAMENAME 
         + client_context::FRAMEPATH_SEPARATOR 
         + "A";
-    ASSERT_EQ(ctx.get_fpath(), expected);
+    ASSERT_EQ(ctx.get_full_frame_name(), expected);
 
     ctx.select_frame("B");
     expected = client_context::MAIN_FRAMENAME 
@@ -287,7 +287,7 @@ TEST(client_context, get_fpath)
         + "A"
         + client_context::FRAMEPATH_SEPARATOR 
         + "B";
-    ASSERT_EQ(ctx.get_fpath(), expected);
+    ASSERT_EQ(ctx.get_full_frame_name(), expected);
 }
 
 TEST(client_context, extract_fpath_with_transform_1lvl)
@@ -297,7 +297,7 @@ TEST(client_context, extract_fpath_with_transform_1lvl)
     transform2 tform(vector2(1, 3), vector2(3, 2), 45.0F);
     ctx.set_transform(tform);
 
-    auto rootPath = ctx.get_fpath();
+    auto rootPath = ctx.get_full_frame_name();
     const auto rootFrame = ctx.find_frame(rootPath);
 
     ASSERT_EQ(rootFrame->transform(), tform);
@@ -322,7 +322,7 @@ TEST(client_context, extract_fpath_with_transform_2lvl)
     ctx.select_frame("childframe");
     ctx.set_transform(ch_tform);
 
-    auto childPath = ctx.get_fpath();
+    auto childPath = ctx.get_full_frame_name();
     const auto childFrame = ctx.find_frame(childPath);
 
     ASSERT_EQ(childFrame->transform(), ch_tform);
@@ -448,9 +448,9 @@ TEST(client_context, snapshot_diff_relative)
     ASSERT_EQ(snapshot_init.count(fname2), static_cast<size_t>(1));
     ASSERT_EQ(snapshot_init.count(fname3), static_cast<size_t>(1));
 
-    ASSERT_EQ(snapshot_init.at(fname1).at(0), expectedln1);
-    ASSERT_EQ(snapshot_init.at(fname2).at(0), expectedln2);
-    ASSERT_EQ(snapshot_init.at(fname3).at(0), expectedln3);
+    ASSERT_EQ(snapshot_init.at(fname1).at(0), ln);
+    ASSERT_EQ(snapshot_init.at(fname2).at(0), ln);
+    ASSERT_EQ(snapshot_init.at(fname3).at(0), ln);
 
     // -- Empty snapshot -----------------------------------------
 
