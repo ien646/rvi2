@@ -4,12 +4,24 @@ namespace rvi::serialization
 {
     void serialize_fp32_bf(data_t& buff, float val)
     {
-        static_assert(0, "NI");
+        constexpr size_t sz = sizeof(val);
+        uint32_t* valptr = reinterpret_cast<uint32_t*>(&val);
+        for(size_t i = 0; i < sz; i++)
+        {
+            uint8_t bt = SC_U8(*valptr >> ((sz - (i + 1)) * 8));
+            buff.push_back(bt);
+        }
     }
 
     void serialize_fp64_bf(data_t& buff, double val)
     {
-        static_assert(0, "NI");
+        constexpr size_t sz = sizeof(val);
+        uint64_t* valptr = reinterpret_cast<uint64_t*>(&val);
+        for(size_t i = 0; i < sz; i++)
+        {
+            uint8_t bt = SC_U8(*valptr >> ((sz - (i + 1)) * 8));
+            buff.push_back(bt);
+        }
     }
 
     void serialize_line_bf(data_t& buff, const rvi::line& val)
@@ -53,12 +65,26 @@ namespace rvi::serialization
 
     float deserialize_fp32(const data_t& buff, size_t offset)
     {
-        static_assert(0, "NI");
+        constexpr size_t sz = sizeof(float);
+        float result = 0.0F;
+        uint32_t* result_ptr = reinterpret_cast<uint32_t*>(&result);
+        for(size_t i = 0; i < sz; i++)
+        {
+            *result_ptr |= (buff[i + offset] << ((sz - (i + 1)) * 8));
+        }
+        return result;
     }
 
     double deserialize_fp64(const data_t& buff, size_t offset)
     {
-        static_assert(0, "NI");
+        constexpr size_t sz = sizeof(double);
+        double result = 0.0F;
+        uint64_t* result_ptr = reinterpret_cast<uint64_t*>(&result);
+        for(size_t i = 0; i < sz; i++)
+        {
+            *result_ptr |= (buff[i + offset] << ((sz - (i + 1)) * 8));
+        }
+        return result;
     }
 
     vector2 deserialize_vector2(const data_t& buff, size_t offset)

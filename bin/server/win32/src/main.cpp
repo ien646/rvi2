@@ -32,27 +32,27 @@ int main()
         {
             case rvi::serialization::cmd_header::SELECT_FRAME:
             {
-                std::cout   << "CMD[SELECT_FRAME]:" 
+                std::cout   << "[SELECT_FRAME]:" 
                             << rvi::serialization::deserializer::select_frame(c, 1)
                             << std::endl;
                 break;
             }
             case rvi::serialization::cmd_header::RELEASE_FRAME:
             {
-                std::cout   << "CMD[RELEASE_FRAME]"
+                std::cout   << "[RELEASE_FRAME]"
                             << std::endl;
                 break;
             }
             case rvi::serialization::cmd_header::DELETE_FRAME:
             {
-                std::cout   << "CMD[DELETE_FRAME]:" 
+                std::cout   << "[DELETE_FRAME]:" 
                             << rvi::serialization::deserializer::delete_frame(c, 1)
                             << std::endl;
                 break;
             }
             case rvi::serialization::cmd_header::DRAW_LINE:
             {
-                std::cout   << "CMD[DRAW_LINE]:"
+                std::cout   << "[DRAW_LINE]:"
                             << rvi::serialization::deserializer::draw_line(c, 1).to_string()
                             << std::endl;
                 break;

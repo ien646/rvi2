@@ -29,7 +29,11 @@ namespace rvi::serialization
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
     void serialize_integral(data_t& buff, T val)
     {
-        static_assert(0, "NI");
+        constexpr size_t sz = sizeof(T);
+        for(size_t i = 0; i < sz; i++)
+        {
+            buff.push_back(SC_U8(val >> (sz - (i + 1)) * 8));
+        }
     }
 
     extern void serialize_fp32_bf(data_t& buff, float val);
@@ -43,7 +47,13 @@ namespace rvi::serialization
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
     T deserialize_integral(const data_t& buff, size_t offset)
     {
-        static_assert(0, "NI");
+        constexpr size_t sz = sizeof(T);
+        T result = static_cast<T>(0);
+        for(size_t i = 0; i < sz; i++)
+        {
+            result |= (buff[i + offset]) << ((sz - (i + 1)) * 8);
+        }
+        return result;
     }
 
     extern float deserialize_fp32(const data_t& buff, size_t offset);
