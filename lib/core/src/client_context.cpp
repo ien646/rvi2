@@ -19,36 +19,6 @@ namespace rvi
         _selected_frame = _main_frame.get();
     }
 
-    client_context::client_context(client_context&& mv_src)
-    {
-        _frame_stack = std::move(mv_src._frame_stack);
-        _main_frame = std::move(mv_src._main_frame);
-        _selected_frame = _main_frame.get();
-
-        rvi_assert(_selected_frame->name() == MAIN_FRAMENAME, "Main frame seems to be corrupted...");
-        
-        _local_definitions = std::move(mv_src._local_definitions);
-        _modified_fpaths = std::move(mv_src._modified_fpaths);
-        _cached_fpath_rebuild = mv_src._cached_fpath_rebuild;
-        _current_color = mv_src._current_color;
-        _cached_fpath = mv_src._cached_fpath;
-        // -- regenerate frame-stack after move ------
-        
-        std::string stack_path = get_fpath();
-        auto path_segments = str_split(stack_path, FRAMEPATH_SEPARATOR);
-
-        rvi_assert(path_segments[0] == MAIN_FRAMENAME, "Generated an invalid framepath (corrupted framestack?)");
-        
-        frame* current_frame = _main_frame.get();
-        _frame_stack.push_back(current_frame);
-        for(auto it = path_segments.begin() +1; it != path_segments.end(); it++)
-        {
-            auto fname = *it;
-            current_frame = current_frame->get_child(fname);
-            _frame_stack.push_back(current_frame);
-        }
-    }
-
     void client_context::draw_line(vector2 from, vector2 to)
     {
         line ln(vertex(from, _current_color),
@@ -93,7 +63,6 @@ namespace rvi
             _selected_frame = _selected_frame->get_child(name);
         }
         _frame_stack.push_back(_selected_frame);
-        _cached_fpath_rebuild = true;
     }
 
     void client_context::select_frame(std::string&& name)
@@ -107,7 +76,6 @@ namespace rvi
             _selected_frame = _selected_frame->get_child(name);
         }
         _frame_stack.push_back(_selected_frame);
-        _cached_fpath_rebuild = true;
     }
 
     bool client_context::release_frame()
@@ -116,7 +84,6 @@ namespace rvi
         {
             return false;
         }
-        _cached_fpath_rebuild = true;
         _frame_stack.pop_back();
         _selected_frame = _frame_stack.back();
         return true;
@@ -127,7 +94,7 @@ namespace rvi
         return _selected_frame->delete_child(name);
     }
 
-    const frame* client_context::selected_frame() const noexcept
+    frame* client_context::selected_frame() noexcept
     {
         return _selected_frame;
     }
@@ -237,16 +204,21 @@ namespace rvi
         return _local_definitions.count(def_name) > 0;
     }
 
-    std::string client_context::get_full_frame_name(const frame* fptr) const noexcept
+    std::string client_context::get_full_frame_name(frame* fptr) noexcept
     {
+        if(fptr == nullptr)
+        {
+            fptr = _selected_frame;
+        }
+
         if(_cached_full_fnames.count(fptr) > 0)
         {
             return _cached_full_fnames.at(fptr);
         }
 
         std::stack<frame*> frame_stack;
-        const frame* cur_ptr = fptr;
-        frame_stack.push(cur_ptr->name());
+        frame* cur_ptr = fptr;
+        frame_stack.push(cur_ptr);
         while(cur_ptr->has_parent())
         {
             cur_ptr = cur_ptr->parent();
@@ -254,9 +226,11 @@ namespace rvi
         }
 
         std::stringstream result;
+        result << frame_stack.top()->name();
+        frame_stack.pop();
         while(!frame_stack.empty())
         {
-            result << FRAMEPATH_SEPARATOR << frame_stack.top();
+            result << FRAMEPATH_SEPARATOR << frame_stack.top()->name();
             frame_stack.pop();
         }
 
@@ -286,7 +260,7 @@ namespace rvi
 
     void client_context::mark_frame_modified()
     {
-        _modified_fpaths.insert(_selected_frame);
+        _modified_frames.insert(_selected_frame);
     }
 
     std::vector<line> client_context::snapshot_full_flat() const
@@ -337,6 +311,8 @@ namespace rvi
             }
         }
 
+        _modified_frames.clear();
+
         // Iterate all frames, while procedurally adding children
         while(!remaining_frames.empty())
         {
@@ -361,13 +337,12 @@ namespace rvi
         return result;
     }
 
-    relative_snapshot_t client_context::snapshot_full_relative() const
+    relative_snapshot_t client_context::snapshot_full_relative()
     {
         relative_snapshot_t result;
 
         std::queue<frame*> remaining_frames;
 
-        // Initial set consists of the main frame (== all frames)
         remaining_frames.push(_main_frame.get());
 
         // Iterate all frames, while procedurally adding children
@@ -390,7 +365,7 @@ namespace rvi
                 entry_lines.push_back(ln);
             }
 
-            result.emplace()
+            result.emplace(get_full_frame_name(fptr), std::move(lines));
 
             remaining_frames.pop();
         }
@@ -400,6 +375,45 @@ namespace rvi
 
     relative_snapshot_t client_context::snapshot_diff_relative()
     {
-        rvi_assert(0, "_NOT_IMPLEMENTED_");
+        relative_snapshot_t result;
+
+        std::queue<frame*> remaining_frames;
+        
+        for(frame* fptr : _modified_frames)
+        {
+            remaining_frames.push(fptr);
+            for(auto& ch_pair : fptr->children())
+            {
+                remaining_frames.push(ch_pair.second);
+            }
+        }
+
+        _modified_frames.clear();
+
+        while(!remaining_frames.empty())
+        {
+            frame* fptr = remaining_frames.front();
+            for(auto& ch_pair : fptr->children())
+            {
+                remaining_frames.push(ch_pair.second);
+            }
+
+            auto& lines = fptr->lines();
+            
+            std::vector<line> entry_lines;
+            entry_lines.reserve(lines.size());
+            
+            for(line ln : lines) // expl. copy
+            {
+                ln.apply_transform(fptr->get_absolute_transform());
+                entry_lines.push_back(ln);
+            }
+
+            result.emplace(get_full_frame_name(fptr), std::move(lines));
+
+            remaining_frames.pop();
+        }
+
+        return result;
     }
 }

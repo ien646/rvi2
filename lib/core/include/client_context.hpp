@@ -41,7 +41,7 @@ namespace rvi
 
         client_context();
 
-        client_context(client_context&& mv_src);
+        client_context(client_context&& mv_src) = default;
 
         void draw_line(vector2 from, vector2 to);
         void draw_line(vector2 from, color_rgba fromColor, vector2 to, color_rgba toColor);
@@ -56,7 +56,7 @@ namespace rvi
 
         bool delete_frame(const std::string& name);
 
-        const frame* selected_frame() const noexcept;
+        frame* selected_frame() noexcept;
         bool is_root_frame_selected() const noexcept;
 
         void set_color(color_rgba color) noexcept;
@@ -87,7 +87,7 @@ namespace rvi
 
         bool contains_definition(const std::string& defName);
 
-        std::string get_full_frame_name(const frame* fptr) const noexcept;
+        std::string get_full_frame_name(frame* fptr = nullptr) noexcept;
 
         const frame* find_frame(const std::string& fPath);
 
@@ -97,7 +97,7 @@ namespace rvi
 
         std::vector<line> snapshot_diff_flat();
 
-        relative_snapshot_t snapshot_full_relative() const;
+        relative_snapshot_t snapshot_full_relative();
 
         relative_snapshot_t snapshot_diff_relative();
     };
