@@ -1,5 +1,6 @@
 #include "client_context.hpp"
 
+#include <stack>
 #include <sstream>
 #include <iterator>
 
@@ -236,22 +237,32 @@ namespace rvi
         return _local_definitions.count(def_name) > 0;
     }
 
-    const std::string& client_context::get_fpath()
+    std::string client_context::get_full_frame_name(const frame* fptr) const noexcept
     {
-        static const std::string separator = std::string(1, FRAMEPATH_SEPARATOR);
-
-        if (_cached_fpath_rebuild)
+        if(_cached_full_fnames.count(fptr) > 0)
         {
-            _cached_fpath.clear();
-            _cached_fpath = _frame_stack[0]->name();
-            for (size_t i = 1; i < _frame_stack.size(); i++)
-            {
-                _cached_fpath.append(separator);
-                _cached_fpath.append(_frame_stack[i]->name());
-            }
-            _cached_fpath_rebuild = false;
+            return _cached_full_fnames.at(fptr);
         }
-        return _cached_fpath;
+
+        std::stack<frame*> frame_stack;
+        const frame* cur_ptr = fptr;
+        frame_stack.push(cur_ptr->name());
+        while(cur_ptr->has_parent())
+        {
+            cur_ptr = cur_ptr->parent();
+            frame_stack.push(cur_ptr);
+        }
+
+        std::stringstream result;
+        while(!frame_stack.empty())
+        {
+            result << FRAMEPATH_SEPARATOR << frame_stack.top();
+            frame_stack.pop();
+        }
+
+        std::string fname = result.str();
+        _cached_full_fnames.emplace(fptr, fname);
+        return fname;
     }
 
     const frame* client_context::find_frame(const std::string& fpath)
@@ -273,69 +284,122 @@ namespace rvi
         return currentFrame;
     }
 
-    const std::pair<frame*, transform2> client_context::find_frame_with_mod_tform(const std::string& fpath)
-    {
-        std::stringstream ss(fpath);
-        std::string aux;
-        frame* currentFrame = _main_frame.get();
-
-        transform2 currentTransform = currentFrame->transform();
-
-        while (std::getline(ss, aux, FRAMEPATH_SEPARATOR))
-        {
-            if (aux != MAIN_FRAMENAME)
-            {
-                currentFrame = currentFrame->get_child(aux);
-                currentTransform.merge_in_place(currentFrame->transform());
-            }
-        }
-        std::pair<frame*, transform2> pair(currentFrame, std::move(currentTransform));
-        return pair;
-    }
-
     void client_context::mark_frame_modified()
     {
-        const std::string& fpath = get_fpath();
-        if (_modified_fpaths.count(fpath) == 0)
-        {
-            DISCARD_RESULT _modified_fpaths.insert(fpath);
-        }
+        _modified_fpaths.insert(_selected_frame);
     }
 
     std::vector<line> client_context::snapshot_full_flat() const
     {
-        return _main_frame->get_all_modulated_lines(transform2::default_value());
+        std::vector<line> result;
+        std::queue<frame*> remaining_frames;
+
+        // Initial set consists of the main frame (== all frames)
+        remaining_frames.push(_main_frame.get());
+        
+
+        // Iterate all frames, while procedurally adding children
+        while(!remaining_frames.empty())
+        {
+            frame* fptr = remaining_frames.front();
+            for(auto& ch_pair : fptr->children())
+            {
+                remaining_frames.push(ch_pair.second);
+            }
+
+            auto& lines = fptr->lines();
+            result.reserve(lines.size());
+            
+            for(line ln : lines) // expl. copy
+            {
+                ln.apply_transform(fptr->get_absolute_transform());
+                result.push_back(ln);
+            }
+
+            remaining_frames.pop();
+        }
+
+        return result;
     }
 
     std::vector<line> client_context::snapshot_diff_flat()
     {
         std::vector<line> result;
-        for (auto& fpath : _modified_fpaths)
-        {
-            auto frame_tform = find_frame_with_mod_tform(fpath);
-            const frame* frm = frame_tform.first;
-            const transform2 tform = frame_tform.second;
+        std::queue<frame*> remaining_frames;
 
-            std::vector<line> lines = frm->get_manually_modulated_lines(tform);
-            std::move(lines.begin(), lines.end(), std::back_inserter(result));
+        // Initial set consists only of modified frame ptrs
+        for(frame* fptr : _modified_frames)
+        {
+            remaining_frames.push(fptr);
+            for(auto& ch_pair : fptr->children())
+            {
+                remaining_frames.push(ch_pair.second);
+            }
         }
-        _modified_fpaths.clear();
+
+        // Iterate all frames, while procedurally adding children
+        while(!remaining_frames.empty())
+        {
+            frame* fptr = remaining_frames.front();
+            for(auto& ch_pair : fptr->children())
+            {
+                remaining_frames.push(ch_pair.second);
+            }
+
+            auto& lines = fptr->lines();
+            result.reserve(lines.size());
+            
+            for(line ln : lines) // expl. copy
+            {
+                ln.apply_transform(fptr->get_absolute_transform());
+                result.push_back(ln);
+            }
+
+            remaining_frames.pop();
+        }
+
+        return result;
+    }
+
+    relative_snapshot_t client_context::snapshot_full_relative() const
+    {
+        relative_snapshot_t result;
+
+        std::queue<frame*> remaining_frames;
+
+        // Initial set consists of the main frame (== all frames)
+        remaining_frames.push(_main_frame.get());
+
+        // Iterate all frames, while procedurally adding children
+        while(!remaining_frames.empty())
+        {
+            frame* fptr = remaining_frames.front();
+            for(auto& ch_pair : fptr->children())
+            {
+                remaining_frames.push(ch_pair.second);
+            }
+
+            auto& lines = fptr->lines();
+            
+            std::vector<line> entry_lines;
+            entry_lines.reserve(lines.size());
+            
+            for(line ln : lines) // expl. copy
+            {
+                ln.apply_transform(fptr->get_absolute_transform());
+                entry_lines.push_back(ln);
+            }
+
+            result.emplace()
+
+            remaining_frames.pop();
+        }
+
         return result;
     }
 
     relative_snapshot_t client_context::snapshot_diff_relative()
     {
-        std::unordered_map<std::string, std::vector<line>> result;
-        for (const auto& fpath : _modified_fpaths)
-        {
-            auto frame_tform = find_frame_with_mod_tform(fpath);
-            const frame* frm = frame_tform.first;
-            const transform2 tform = frame_tform.second;
-
-            auto entry = std::make_pair(fpath, frm->get_manually_modulated_lines(tform));
-            result.insert(std::move(entry));
-        }
-        _modified_fpaths.clear();
-        return result;
+        rvi_assert(0, "_NOT_IMPLEMENTED_");
     }
 }

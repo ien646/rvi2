@@ -1,16 +1,25 @@
 #include "frame.hpp"
 
+#include <stack>
+
 namespace rvi
 {
-    frame::frame(const std::string& name)
+    frame::frame(const std::string& name, frame* parent)
         : _name(name)
         , _transform(DEFAULT_TRANSFORM)
+        , _parent(parent)
     { }
 
-    frame::frame(std::string&& name)
+    frame::frame(std::string&& name, frame* parent)
         : _name(std::move(name))
         , _transform(DEFAULT_TRANSFORM)
+        , _parent(parent)
     { }
+
+    bool frame::has_parent() const noexcept
+    {
+        return _parent != nullptr;
+    }
 
     void frame::clear_lines() noexcept
     {
@@ -35,7 +44,7 @@ namespace rvi
         }
         else
         {
-            _childs.push_back(std::make_unique<frame>(name));
+            _childs.push_back(std::make_unique<frame>(name, this));
             frame* f_ptr = _childs.back().get();
             _child_frames_index.emplace(name, f_ptr);
             return f_ptr;
@@ -60,44 +69,6 @@ namespace rvi
         _child_frames_index.erase(name);
         
         return true;
-    }
-
-    std::vector<line> frame::get_all_modulated_lines(const transform2& parent_tform) const
-    {
-        std::vector<line> result;
-
-        // Current absolute transform
-        const transform2 abs_tform = _transform.merge(parent_tform);
-
-        // Owned lines
-        std::vector<line> own_lines = _lines;
-
-        std::for_each(own_lines.begin(), own_lines.end(), 
-            [&](line& line){ line.apply_transform(abs_tform); });
-            
-        std::move(own_lines.begin(), own_lines.end(), std::back_inserter(result));
-
-        // Child frames
-        for (auto& entry : _child_frames_index)
-        {            
-            const frame* f_ptr = entry.second;
-            std::vector<line> child_lines = f_ptr->get_all_modulated_lines(abs_tform);
-            std::move(child_lines.begin(), child_lines.end(), std::back_inserter(result));
-        }
-
-        return result;
-    }
-
-    std::vector<line> frame::get_manually_modulated_lines(const transform2& parent_tform) const
-    {
-        std::vector<line> result;
-
-        std::vector<line> ownLines = _lines;
-        std::for_each(ownLines.begin(), ownLines.end(), 
-            [&](line& line){ line.apply_transform(parent_tform); });
-        std::move(ownLines.begin(), ownLines.end(), std::back_inserter(result));
-
-        return result;
     }
 
     bool frame::contains_child(const std::string& name)
@@ -175,6 +146,37 @@ namespace rvi
     const transform2& frame::transform() const noexcept
     {
         return _transform;
+    }
+
+    frame* frame::parent() const noexcept
+    {
+        return _parent;
+    }
+
+    transform2 frame::get_absolute_transform() noexcept
+    {
+        if(_cached_absolute_transform_needs_rebuild)
+        {
+            std::stack<transform2> tform_stack;
+            tform_stack.push(_transform);
+
+            const frame* current = this;
+            while(current->has_parent())
+            {
+                current = current->_parent;
+                tform_stack.push(current->_transform);
+            }
+
+            _cached_absolute_transform = transform2::default_value();
+            while(!tform_stack.empty())
+            {
+                transform2 tf = tform_stack.top();
+                _cached_absolute_transform.merge_in_place(tf);
+                tform_stack.pop();
+            }
+        }
+
+        return _cached_absolute_transform;
     }
 
     frame* frame::get_child(const std::string& name)

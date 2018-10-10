@@ -1,6 +1,7 @@
 #include "runtime.hpp"
 
 #include <serializer.hpp>
+#include <context_action_map.hpp>
 #include "interpreter.hpp"
 
 using namespace rvi::serialization;

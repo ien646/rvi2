@@ -29,10 +29,9 @@ namespace rvi
         std::unordered_map<std::string, definition> _local_definitions;
 
         // Framepaths of altered frames since last full or partial snapshot
-        std::unordered_set<std::string> _modified_fpaths;
+        std::unordered_set<frame*> _modified_frames;
 
-        bool _cached_fpath_rebuild = true;
-        std::string _cached_fpath = MAIN_FRAMENAME;
+        std::unordered_map<frame*, std::string> _cached_full_fnames;
 
         color_rgba _current_color = color_rgba::BLACK();
 
@@ -88,15 +87,18 @@ namespace rvi
 
         bool contains_definition(const std::string& defName);
 
-        const std::string& get_fpath();
+        std::string get_full_frame_name(const frame* fptr) const noexcept;
+
         const frame* find_frame(const std::string& fPath);
-        const std::pair<frame*, transform2> find_frame_with_mod_tform(const std::string& fPath);
 
         void mark_frame_modified();
 
         std::vector<line> snapshot_full_flat() const;
 
         std::vector<line> snapshot_diff_flat();
+
+        relative_snapshot_t snapshot_full_relative() const;
+
         relative_snapshot_t snapshot_diff_relative();
     };
 }

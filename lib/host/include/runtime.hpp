@@ -13,6 +13,7 @@ namespace rvi::host
     {
     private:
         std::unordered_map<cid_t, client_context> _clients;
+        std::unordered_map<std::string, definition> _runtimeDefs;
         cid_t _last_cid = 0;
         
     public:

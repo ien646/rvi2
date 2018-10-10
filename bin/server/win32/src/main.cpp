@@ -11,7 +11,7 @@ int main()
     rvi::host::cid_t cid = rt.create_client();
 
     std::stringstream pr;
-    pr << "select_frame:child;"
+    pr  << "select_frame:child;"
         << "set_scale:0.5,0.5;"
         << "draw_line:0.5,0.5,1.0,1.0;"
         << "draw_line:0.6,0.75,1.0,1.0;"

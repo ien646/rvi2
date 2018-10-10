@@ -21,7 +21,12 @@ namespace rvi
         std::vector<line> _lines;
         std::vector<std::unique_ptr<frame>> _childs;
         std::unordered_map<std::string, frame*> _child_frames_index;
+        frame* _parent = nullptr;
+
         transform2 _transform;
+
+        transform2 _cached_absolute_transform;
+        bool _cached_absolute_transform_needs_rebuild = true;
         
     public:
         frame() = delete;
@@ -29,8 +34,8 @@ namespace rvi
 
         frame(frame&& mv_src) = default;
 
-        frame(const std::string& name);
-        frame(std::string&& name);
+        frame(const std::string& name, frame* parent = nullptr);
+        frame(std::string&& name, frame* parent = nullptr);
 
         void clear_lines() noexcept;
 
@@ -41,12 +46,13 @@ namespace rvi
 
         frame* add_child(const std::string& name);
 
+        transform2 get_absolute_transform() noexcept;
+
         bool delete_child(const std::string& name);
 
-        std::vector<line> get_all_modulated_lines(const transform2& parent_tform) const;
-        std::vector<line> get_manually_modulated_lines(const transform2& parent_tform) const;
-
         bool contains_child(const std::string& name);
+
+        bool has_parent() const noexcept;
 
         size_t child_count(bool deep = false) const noexcept;
 
@@ -56,6 +62,7 @@ namespace rvi
         std::unordered_map<std::string, frame*> children() const noexcept;
         const transform2& transform() const noexcept;
         frame* get_child(const std::string& name);
+        frame* parent() const noexcept;
 
         // -- Setters --
         void set_transform(const transform2& tform) noexcept;
