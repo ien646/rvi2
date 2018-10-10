@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+
+#include <deserializer.hpp>
 #include <runtime.hpp>
 
 int main()
@@ -20,19 +22,43 @@ int main()
 
     rt.start_client(cid, pr);
 
-    //auto cmds = rt.get_update_commands(cid);
+    auto cmds = rt.get_update_commands(cid);
     auto status = rt.get_diff_snapshot(cid);
     
-    //std::cout << std::ios_base::hex;
-    //for (auto& c : cmds)
-    //{
-    //    std::stringstream data_txt;
-    //    for(auto b : c)
-    //    {
-    //        data_txt << +b;
-    //    }
-    //    std::cout << "[CMD]: " << data_txt.str() << std::endl;
-    //}
+    std::cout << std::ios_base::hex;
+    for (auto& c : cmds)
+    {
+        switch(static_cast<rvi::serialization::cmd_header>(c[0]))
+        {
+            case rvi::serialization::cmd_header::SELECT_FRAME:
+            {
+                std::cout   << "CMD[SELECT_FRAME]:" 
+                            << rvi::serialization::deserializer::select_frame(c, 1)
+                            << std::endl;
+                break;
+            }
+            case rvi::serialization::cmd_header::RELEASE_FRAME:
+            {
+                std::cout   << "CMD[RELEASE_FRAME]"
+                            << std::endl;
+                break;
+            }
+            case rvi::serialization::cmd_header::DELETE_FRAME:
+            {
+                std::cout   << "CMD[DELETE_FRAME]:" 
+                            << rvi::serialization::deserializer::delete_frame(c, 1)
+                            << std::endl;
+                break;
+            }
+            case rvi::serialization::cmd_header::DRAW_LINE:
+            {
+                std::cout   << "CMD[DRAW_LINE]:"
+                            << rvi::serialization::deserializer::draw_line(c, 1).to_string()
+                            << std::endl;
+                break;
+            }
+        }
+    }
 
     for (auto& p : status)
     {

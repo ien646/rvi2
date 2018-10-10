@@ -1,5 +1,6 @@
 #include "runtime.hpp"
 
+#include <serializer.hpp>
 #include "interpreter.hpp"
 
 using namespace rvi::serialization;
@@ -37,7 +38,7 @@ namespace rvi::host
             for (auto it = path.begin(); it != path.end(); it++)
             {
                 result.push_back(serializer::select_frame(*it));
-            }            
+            }
 
             // lines
             for (auto& line : lines)

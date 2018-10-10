@@ -7,11 +7,10 @@
 #include <line.hpp>
 
 #include "cmd_header.hpp"
+#include "serialization_base.hpp"
 
 namespace rvi::serialization
 {
-    typedef std::vector<std::uint8_t> data_t;    
-
     class serializer
     {
     public:
@@ -21,12 +20,4 @@ namespace rvi::serialization
         static data_t draw_line(const rvi::line& ln);
         static data_t set_transform(const rvi::transform2& tform);
     };
-
-    extern void serialize_fp32_bf(data_t& buff, float val);
-    extern void serialize_fp64_bf(data_t& buff, double val);
-    extern void serialize_line_bf(data_t& buff, const rvi::line& val);
-    extern void serialize_vertex_bf(data_t& buff, const rvi::vertex& val);
-    extern void serialize_vector2_bf(data_t& buff, const rvi::vector2& val);
-    extern void serialize_color_rgba_bf(data_t& buff, const rvi::color_rgba& val);
-    extern void serialize_transform2_bf(data_t& buff, const rvi::transform2& val);
 }
