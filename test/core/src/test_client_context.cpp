@@ -20,7 +20,7 @@ TEST(client_context, is_root_frame_selected)
 {
     client_context ctx;
 
-    ASSERT_TRUE(false/*ctx.is_root_frame_selected()*/);
+    ASSERT_TRUE(ctx.is_root_frame_selected());
     ctx.select_frame("test_frame");
     ASSERT_FALSE(ctx.is_root_frame_selected());
     ctx.release_frame();
