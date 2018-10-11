@@ -26,8 +26,16 @@ namespace rvi
         {
             if(ch == delim)
             {
-                found = true;
-                continue;                
+                if(found)
+                {
+                    second << ch;
+                    continue;
+                }
+                else
+                {
+                    found = true;
+                    continue;
+                }
             }
 
             if(found)

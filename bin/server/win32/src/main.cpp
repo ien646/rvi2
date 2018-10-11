@@ -16,7 +16,7 @@ int main()
         << "draw_line:0.5,0.5,1.0,1.0;"
         << "draw_line:0.6,0.75,1.0,1.0;"
         << "release_frame:_;"
-        << "define:a,{draw_line:0.5,0.5,0.5,0.5;};"
+        << "define:a,{draw_line:0.123,0.321,0.444,0.888;};"
         << "call:a;"
         << "undefine:a;";
 
@@ -28,6 +28,7 @@ int main()
     std::cout << std::ios_base::hex;
     for (auto& c : cmds)
     {
+        std::cout << std::endl << std::endl;
         switch(static_cast<rvi::serialization::cmd_header>(c[0]))
         {
             case rvi::serialization::cmd_header::SELECT_FRAME:
