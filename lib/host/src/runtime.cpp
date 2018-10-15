@@ -32,7 +32,7 @@ namespace rvi::host
         {
             const std::string& fname = data_pair.first;
             const auto& lines = data_pair.second;
-
+            
             // select frame commands
             const auto path = str_split(fname, client_context::FRAMEPATH_SEPARATOR);
 
@@ -40,6 +40,10 @@ namespace rvi::host
             {
                 result.push_back(serializer::select_frame(*it));
             }
+
+            // transform
+            frame* fptr = ctx.find_frame(fname);
+            result.push_back(serializer::set_transform(fptr->get_absolute_transform()));
 
             // lines
             for (auto& line : lines)
