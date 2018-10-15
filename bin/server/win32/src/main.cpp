@@ -4,31 +4,26 @@
 
 #include <deserializer.hpp>
 #include <runtime.hpp>
+#include <reader.hpp>
 
 int main()
 {
     rvi::host::runtime rt;
     rvi::host::cid_t cid = rt.create_client();
 
-    std::stringstream pr;
-    pr  << "select_frame:child;"
-        << "set_scale:0.5,0.5;"
-        << "draw_line:0.5,0.5,1.0,1.0;"
-        << "draw_line:0.6,0.75,1.0,1.0;"
-        << "release_frame:_;"
-        << "define:a,{draw_line:0.123,0.321,0.444,0.888;};"
-        << "call:a;"
-        << "undefine:a;";
+    auto files = rvi::host::reader::enum_program_files();
+    auto prg_txt = rvi::host::reader::get_text_from_files(files);
 
-    rt.start_client(cid, pr);
+    std::stringstream ss(prg_txt[0]);
+
+    rt.start_client(cid, ss);
 
     auto cmds = rt.get_update_commands(cid);
-    auto status = rt.get_diff_snapshot(cid);
     
     std::cout << std::ios_base::hex;
+    std::cout << std::endl;
     for (auto& c : cmds)
-    {
-        std::cout << std::endl << std::endl;
+    {        
         switch(static_cast<rvi::serialization::cmd_header>(c[0]))
         {
             case rvi::serialization::cmd_header::SELECT_FRAME:
@@ -58,16 +53,14 @@ int main()
                             << std::endl;
                 break;
             }
+            case rvi::serialization::cmd_header::SET_TRANSFORM:
+            {
+                std::cout   << "[SET_TRANSFORM]:"
+                            << rvi::serialization::deserializer::set_transform(c, 1).to_string()
+                            << std::endl;
+                break;
+            }
         }
-    }
-
-    for (auto& p : status)
-    {
-        std::cout << "-- FRAME : [" << p.first << "]" << std::endl;
-        std::for_each(p.second.begin(), p.second.end(), [](rvi::line& l) 
-        {
-            std::cout << l.to_string() << std::endl;
-        });
     }
 
     std::cout << cid;
