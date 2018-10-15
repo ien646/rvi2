@@ -97,26 +97,31 @@ namespace rvi
     void frame::set_transform(const transform2& tform) noexcept
     {
         _transform = tform;
+        _cached_absolute_transform_needs_rebuild = true;
     }
 
     void frame::set_transform(transform2&& tform) noexcept
     {
         _transform = std::move(tform);
+        _cached_absolute_transform_needs_rebuild = true;
     }
 
     void frame::set_position(vector2 offset) noexcept
     {
         _transform.position = offset;
+        _cached_absolute_transform_needs_rebuild = true;
     }
 
     void frame::set_rotation(float rotation) noexcept
     {
         _transform.rotation = rotation;
+        _cached_absolute_transform_needs_rebuild = true;
     }
 
     void frame::set_scale(vector2 scale) noexcept
     {
         _transform.scale = scale;
+        _cached_absolute_transform_needs_rebuild = true;
     }
 
     const std::string& frame::name() const noexcept
