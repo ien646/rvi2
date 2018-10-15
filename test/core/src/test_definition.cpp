@@ -20,9 +20,8 @@ TEST(definition, add_instruction)
 {
     bool mock_flag = false;
     vertex vx1, vx2;
-    definition_inst inst = [&](client_context& ctx)
+    definition_inst inst = [&](client_context&)
     { 
-        UNREFERENCED_PARAMETER(ctx);
         mock_flag = true; 
     };
 
@@ -40,9 +39,8 @@ TEST(definition, add_instruction)
 TEST(definition, clear)
 {
     definition def("test_def");
-    definition_inst inst = [&](client_context& ctx)
+    definition_inst inst = [&](client_context&)
     { 
-        UNREFERENCED_PARAMETER(ctx);
         return;
     };
     size_t icount = static_cast<size_t>(std::max(10, std::abs(rnd.get_random_int())));

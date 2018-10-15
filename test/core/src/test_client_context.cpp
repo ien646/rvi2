@@ -257,9 +257,8 @@ TEST(client_context, execute_definition)
     definition def("test_def");
 
     bool execOk = false;
-    def.add_instruction([&execOk](client_context& ctx) 
+    def.add_instruction([&execOk](client_context&) 
     { 
-        UNREFERENCED_PARAMETER(ctx);
         execOk = true; 
     });
 
