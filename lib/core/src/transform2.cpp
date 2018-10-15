@@ -31,4 +31,17 @@ namespace rvi
             || (scale != other.scale) 
             || (rotation != other.rotation);
     }
+
+    std::string transform2::to_string() const
+    {
+        std::stringstream ss;
+        ss  << "[{POS}:"
+            << position.to_string()
+            << ", {SCA}:"
+            << scale.to_string()
+            << ", {ROT}:"
+            << rotation
+            << "]";
+        return ss.str();
+    }
 }

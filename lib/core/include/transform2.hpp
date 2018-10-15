@@ -32,5 +32,7 @@ namespace rvi
 
         bool operator==(const transform2& other) const noexcept;
         bool operator!=(const transform2& other) const noexcept;
+
+        std::string to_string() const;
     };
 }
