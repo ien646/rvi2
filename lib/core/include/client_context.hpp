@@ -89,7 +89,7 @@ namespace rvi
 
         std::string get_full_frame_name(frame* fptr = nullptr) noexcept;
 
-        const frame* find_frame(const std::string& fPath);
+        frame* find_frame(const std::string& fPath);
 
         void mark_frame_modified();
 

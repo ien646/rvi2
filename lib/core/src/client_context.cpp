@@ -239,7 +239,7 @@ namespace rvi
         return fname;
     }
 
-    const frame* client_context::find_frame(const std::string& fpath)
+    frame* client_context::find_frame(const std::string& fpath)
     {
         std::stringstream ss(fpath);
         std::string aux;
