@@ -20,7 +20,7 @@ namespace rvi
         : position(pos)
     { }
 
-    std::string vertex::to_string()
+    std::string vertex::to_string() const
     {
         std::stringstream ss;
         ss << "[{POS}:"

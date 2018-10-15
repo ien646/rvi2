@@ -30,7 +30,7 @@ namespace rvi
             || (a != other.a);
     }
 
-    std::string color_rgba::to_string()
+    std::string color_rgba::to_string() const
     {
         std::stringstream ss;
         ss << "[{R}:"

@@ -35,7 +35,7 @@ namespace rvi
         bool operator==(color_rgba other) const noexcept;
         bool operator!=(color_rgba other) const noexcept;
 
-        std::string to_string();
+        std::string to_string() const;
 
         RVI_CRGBA_STANDARD_COLOR(TRANSPARENT,   00, 00, 00, FF);
         RVI_CRGBA_STANDARD_COLOR(WHITE,         FF, FF, FF, 00);

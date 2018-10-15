@@ -18,8 +18,10 @@ namespace rvi::host
         
     public:
         runtime() { }
+
         cid_t create_client();
         void start_client(cid_t cid, std::stringstream& program);
+        
         cmdlist_t get_update_commands(cid_t cid);
         relative_snapshot_t get_diff_snapshot(cid_t cid);
     };

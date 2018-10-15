@@ -173,7 +173,7 @@ namespace rvi
         return !(math::fpcmp(x, other.x) && math::fpcmp(y, other.y));
     }
 
-    std::string vector2::to_string()
+    std::string vector2::to_string() const
     {
         std::stringstream ss;
         ss << "[{X}:"

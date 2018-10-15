@@ -28,6 +28,6 @@ namespace rvi
         bool operator==(line other) const noexcept;
         bool operator!=(line other) const noexcept;
 
-        std::string to_string();
+        std::string to_string() const;
     };
 }

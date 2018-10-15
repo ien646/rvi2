@@ -67,6 +67,6 @@ namespace rvi
 
         static constexpr vector2 zero() { return vector2(0,0); }
 
-        std::string to_string();
+        std::string to_string() const;
     };
 }

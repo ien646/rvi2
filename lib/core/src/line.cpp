@@ -57,7 +57,7 @@ namespace rvi
         return (start != other.start) || (end != other.end);
     }
 
-    std::string line::to_string()
+    std::string line::to_string() const
     {
         std::stringstream ss;
         ss << "[{VX_START}:"
