@@ -1,7 +1,5 @@
 #include "data_reader.hpp"
 
-#include <type_traits>
-
 #ifdef RVI_COMPILER_MSVC
 
 #include <filesystem>
