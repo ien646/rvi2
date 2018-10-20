@@ -86,6 +86,22 @@ namespace rvi::host
         return result;
     }
 
+    void interpreter::filter_definitions(std::vector<parsed_stmt>& stmt_col)
+    {
+        auto it = stmt_col.begin();
+        while(it != stmt_col.end())
+        {
+            if(it->command != cmd_type::DEFINE)
+            {
+                it = stmt_col.erase(it);
+            }
+            else
+            {
+                it++;
+            }
+        }
+    }
+
     parsed_stmt interpreter::parse_line(const std::string& line)
     {
         parsed_stmt result;

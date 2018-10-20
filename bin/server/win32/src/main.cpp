@@ -1,20 +1,32 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <fstream>
 
 #include <deserializer.hpp>
 #include <runtime.hpp>
-#include <reader.hpp>
+
+#include "data_reader.hpp"
 
 int main()
 {
     rvi::host::runtime rt;
     rvi::host::cid_t cid = rt.create_client();
 
-    auto files = rvi::host::reader::enum_program_files();
-    auto prg_txt = rvi::host::reader::get_text_from_files(files);
+    auto files = data_reader::enum_runtime_files("data");
+    std::vector<std::string> files_text;
 
-    std::stringstream ss(prg_txt[0]);
+    for(auto& f : files)
+    {        
+        std::ifstream ifs(f);
+
+        std::stringstream ss;
+        ss << ifs.rdbuf();
+
+        files_text.push_back(ss.str());
+    }
+
+    std::stringstream ss(files_text[0]);
 
     rt.start_client(cid, ss);
 

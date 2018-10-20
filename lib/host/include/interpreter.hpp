@@ -32,6 +32,7 @@ namespace rvi::host
 
     public:
         static std::vector<parsed_stmt> read(std::stringstream& stream);
+        static void filter_definitions(std::vector<parsed_stmt>& stmt_col);
         static void run(const std::vector<parsed_stmt>& lines, client_context& ctx);
         static std::stringstream clean_input(std::stringstream& sstr);
 
@@ -39,6 +40,6 @@ namespace rvi::host
 
         static parsed_stmt parse_line(const std::string& line);
         static cmd_type parse_command(const std::string& txt);
-        static void run_line(const parsed_stmt& line, client_context& ctx);       
+        static void run_line(const parsed_stmt& line, client_context& ctx);
     };
 }
