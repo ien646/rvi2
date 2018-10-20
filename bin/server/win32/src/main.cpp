@@ -13,10 +13,10 @@ int main()
     rvi::host::runtime rt;
     rvi::host::cid_t cid = rt.create_client();
 
-    auto files = data_reader::enum_runtime_files("data");
+    auto files = data_reader::enum_data_files("data", true);
     std::vector<std::string> files_text;
 
-    for(auto& f : files)
+    for(auto& f : files.runtime_files)
     {        
         std::ifstream ifs(f);
 
