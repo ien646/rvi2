@@ -43,6 +43,8 @@ namespace rvi
 
         client_context(client_context&& mv_src) = default;
 
+        client_context create_shallow_copy();
+
         void draw_line(vector2 from, vector2 to);
         void draw_line(vector2 from, color_rgba fromColor, vector2 to, color_rgba toColor);
         void draw_line(vertex from, vertex to);

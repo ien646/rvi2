@@ -19,6 +19,21 @@ namespace rvi
         _selected_frame = _main_frame.get();
     }
 
+    client_context client_context::create_shallow_copy()
+    {
+        client_context result;
+        result._main_frame = _main_frame->create_copy(nullptr);
+        result._selected_frame = _main_frame.get();
+        result._frame_stack.clear();
+        result._frame_stack.push_back(_main_frame.get());
+        result._local_definitions = _local_definitions;
+        result._modified_frames.clear();
+        result._modified_frames.emplace(_main_frame.get());
+        result._cached_full_fnames.clear();
+        result._current_color = _current_color;
+        return result;
+    }
+
     void client_context::draw_line(vector2 from, vector2 to)
     {
         line ln(vertex(from, _current_color),
