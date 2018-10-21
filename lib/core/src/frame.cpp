@@ -16,6 +16,36 @@ namespace rvi
         , _parent(parent)
     { }
 
+    std::unique_ptr <frame> frame::create_copy(frame* fptr_parent)
+    {
+        auto result = std::make_unique<frame>(_name, fptr_parent);
+
+        // copy lines
+        for (auto& ln : _lines)
+        {
+            result->_lines.push_back(ln);
+        }
+
+        // copy children
+        for (auto& chfr_up : _children)
+        {
+            auto fuptr = std::make_unique<frame>(chfr_up->name(), this);
+            result->_children.push_back(std::move(fuptr));
+        }
+
+        // regenerate children index
+        for (auto& chfr_up : result->_children)
+        {
+            result->_child_frames_index.emplace(chfr_up->name(), chfr_up.get());
+        }
+
+        result->_transform = _transform;
+        result->_cached_abs_tform = _cached_abs_tform;
+        result->_cached_abs_tform_rebuild = _cached_abs_tform_rebuild;
+
+        return result;
+    }
+
     bool frame::has_parent() const noexcept
     {
         return _parent != nullptr;
@@ -44,8 +74,8 @@ namespace rvi
         }
         else
         {
-            _childs.push_back(std::make_unique<frame>(name, this));
-            frame* f_ptr = _childs.back().get();
+            _children.push_back(std::make_unique<frame>(name, this));
+            frame* f_ptr = _children.back().get();
             _child_frames_index.emplace(name, f_ptr);
             return f_ptr;
         }
@@ -60,12 +90,12 @@ namespace rvi
         
         frame* f_ptr = _child_frames_index.at(name);
 
-        auto it = std::find_if(_childs.begin(), _childs.end(), [&](auto& fuptr)
+        auto it = std::find_if(_children.begin(), _children.end(), [&](auto& fuptr)
         {
             return fuptr.get() == f_ptr;
         });
 
-        _childs.erase(it);
+        _children.erase(it);
         _child_frames_index.erase(name);
         
         return true;
@@ -97,31 +127,31 @@ namespace rvi
     void frame::set_transform(const transform2& tform) noexcept
     {
         _transform = tform;
-        _cached_absolute_transform_needs_rebuild = true;
+        _cached_abs_tform_rebuild = true;
     }
 
     void frame::set_transform(transform2&& tform) noexcept
     {
         _transform = std::move(tform);
-        _cached_absolute_transform_needs_rebuild = true;
+        _cached_abs_tform_rebuild = true;
     }
 
     void frame::set_position(vector2 offset) noexcept
     {
         _transform.position = offset;
-        _cached_absolute_transform_needs_rebuild = true;
+        _cached_abs_tform_rebuild = true;
     }
 
     void frame::set_rotation(float rotation) noexcept
     {
         _transform.rotation = rotation;
-        _cached_absolute_transform_needs_rebuild = true;
+        _cached_abs_tform_rebuild = true;
     }
 
     void frame::set_scale(vector2 scale) noexcept
     {
         _transform.scale = scale;
-        _cached_absolute_transform_needs_rebuild = true;
+        _cached_abs_tform_rebuild = true;
     }
 
     const std::string& frame::name() const noexcept
@@ -160,7 +190,7 @@ namespace rvi
 
     transform2 frame::get_absolute_transform() noexcept
     {
-        if(_cached_absolute_transform_needs_rebuild)
+        if(_cached_abs_tform_rebuild)
         {
             std::stack<transform2> tform_stack;
             tform_stack.push(_transform);
@@ -172,16 +202,16 @@ namespace rvi
                 tform_stack.push(current->_transform);
             }
 
-            _cached_absolute_transform = transform2::default_value();
+            _cached_abs_tform = transform2::default_value();
             while(!tform_stack.empty())
             {
                 transform2 tf = tform_stack.top();
-                _cached_absolute_transform.merge_in_place(tf);
+                _cached_abs_tform.merge_in_place(tf);
                 tform_stack.pop();
             }
         }
 
-        return _cached_absolute_transform;
+        return _cached_abs_tform;
     }
 
     frame* frame::get_child(const std::string& name)

@@ -19,20 +19,22 @@ namespace rvi
 
         std::string _name;
         std::vector<line> _lines;
-        std::vector<std::unique_ptr<frame>> _childs;
+        std::vector<std::unique_ptr<frame>> _children;
         std::unordered_map<std::string, frame*> _child_frames_index;
         frame* _parent = nullptr;
 
         transform2 _transform;
 
-        transform2 _cached_absolute_transform;
-        bool _cached_absolute_transform_needs_rebuild = true;
+        transform2 _cached_abs_tform;
+        bool _cached_abs_tform_rebuild = true;
         
     public:
         frame() = delete;
         frame(const frame&) = delete;
 
         frame(frame&& mv_src) = default;
+
+        std::unique_ptr<frame> create_copy(frame* fptr_parent);
 
         frame(const std::string& name, frame* parent = nullptr);
         frame(std::string&& name, frame* parent = nullptr);
