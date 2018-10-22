@@ -17,6 +17,7 @@ namespace rvi::host
         SET_SCALE,
         DEFINE,
         UNDEFINE,
-        CALL
+        CALL,
+        INCLUDE
     };
 }

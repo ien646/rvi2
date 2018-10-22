@@ -21,7 +21,8 @@ namespace rvi::host
         { "set_rotation",   cmd_type::SET_ROTATION },
         { "define",         cmd_type::DEFINE },
         { "undefine",       cmd_type::UNDEFINE },
-        { "call",           cmd_type::CALL }
+        { "call",           cmd_type::CALL },
+        { "include",        cmd_type::INCLUDE }
     };
 
     extern std::string get_cmd_name(cmd_type ct);

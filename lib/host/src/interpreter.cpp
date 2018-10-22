@@ -27,6 +27,7 @@ namespace rvi::host
             if (ch == TXT_ESC_CHAR)
             {
                 dq_escape = !dq_escape;
+                continue;
             }
 
             bool feed_flag = !dq_escape || !is_ignored_ch(ch);
@@ -147,6 +148,7 @@ namespace rvi::host
 
         // -- Debug --------------------------------
         std::stringstream ss;
+        ss << "[ INTERPRETER ] >> ";
         ss << get_cmd_name(line.command) << ": [";
         for (auto& a : line.args)
         {

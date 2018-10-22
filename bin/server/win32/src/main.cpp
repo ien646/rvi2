@@ -13,26 +13,15 @@ int main()
     rvi::host::runtime rt;
     rvi::host::cid_t cid = rt.create_client();
 
-    auto files = data_reader::enum_data_files("data", true);
-    std::vector<std::string> files_text;
+    std::ifstream ifs("data/main.rpf");
 
-    for(auto& f : files.runtime_files)
-    {        
-        std::ifstream ifs(f);
-
-        std::stringstream ss;
-        ss << ifs.rdbuf();
-
-        files_text.push_back(ss.str());
-    }
-
-    std::stringstream ss(files_text[0]);
+    std::stringstream ss;
+    ss << ifs.rdbuf();
 
     rt.start_client(cid, ss);
 
     auto cmds = rt.get_update_commands(cid);
     
-    std::cout << std::ios_base::hex;
     std::cout << std::endl;
     for (auto& c : cmds)
     {        

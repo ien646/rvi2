@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <functional>
+#include <fstream>
 
 #include <client_context.hpp>
 #include <instruction_generator.hpp>
@@ -10,6 +11,7 @@
 #include "cmd_map.hpp"
 #include "interpreter.hpp"
 #include "str_utils.hpp"
+#include "data_reader.hpp"
 
 namespace rvi::host
 {
@@ -139,6 +141,17 @@ namespace rvi::host
                 expect_argc(args, 1, cmd_type::CALL);
                 std::string fname = args[0];
                 ctx.execute_definition(fname);
+            }
+        },
+        {
+            cmd_type::INCLUDE, [](client_context& ctx, const std::vector<std::string>& args)
+            {
+                expect_argc(args, 1, cmd_type::INCLUDE);
+                std::string text = data_reader::get_include_text(args[0]);
+                std::stringstream ss;
+                ss << text;
+                auto stmt_col = interpreter::read(ss);
+                interpreter::run(stmt_col, ctx);
             }
         }
     };    
