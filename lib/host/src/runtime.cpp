@@ -153,7 +153,7 @@ namespace rvi::host
                 int diffidx = 0;
                 for(const auto& seg : ccont.container)
                 {
-                    if(path_stack.size() <= diffidx)
+                    if(path_stack.size() <= static_cast<size_t>(diffidx))
                     {
                         break;
                     }
@@ -171,7 +171,7 @@ namespace rvi::host
 
                 // Release deeper frames
                 int release_count = desired_stack_size - diffidx;
-                if(diffidx == path_stack.size())
+                if(static_cast<size_t>(diffidx) == path_stack.size())
                 {
                     release_count = 0;
                 }
@@ -183,7 +183,7 @@ namespace rvi::host
                 }
 
                 // Push frames from difference index onwards
-                for(size_t i = diffidx; i < desired_stack_size; i++)
+                for(size_t i = diffidx; i < static_cast<size_t>(desired_stack_size); i++)
                 {
                     std::string fname = ccont.container[i];
                     result.push_back(serializer::select_frame(fname));
