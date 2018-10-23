@@ -2,6 +2,7 @@
 
 #include <map>
 #include <stack>
+#include <iostream>
 
 #include <serializer.hpp>
 #include <context_action_map.hpp>
@@ -100,7 +101,7 @@ namespace rvi::host
     {
         client_context& ctx = _clients.at(cid);
         auto stmt_col = interpreter::read(program);
-        interpreter::run(stmt_col, ctx);
+        interpreter::run(*this, stmt_col, ctx);
     }
 
     cmdlist_t runtime::get_update_commands(cid_t cid)
@@ -216,5 +217,25 @@ namespace rvi::host
     {
         auto& ctx = _clients.at(cid);
         return ctx.snapshot_diff_relative();
+    }
+
+    void runtime::create_binding(const std::string& name, binding_t call)
+    {
+        if(_bindings.count(name) > 0)
+        {
+            std::cout << "Overwrite binding: [ " << name << " ]" << std::endl;
+        }
+        _bindings[name] = call;
+    }
+
+    void runtime::exec_binding(const std::string& name, client_context& ctx)
+    {
+        if(_bindings.count(name) == 0)
+        {
+            std::cout << "[ RUNTIME ] Binding [ " << name << " ] not found!" << std::endl;
+            return;
+        }
+        auto cb = _bindings.at(name);
+        cb(ctx);
     }
 }

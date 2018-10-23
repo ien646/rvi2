@@ -18,6 +18,7 @@ namespace rvi::host
         DEFINE,
         UNDEFINE,
         CALL,
-        INCLUDE
+        INCLUDE,
+        EXEC_BIND
     };
 }

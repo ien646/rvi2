@@ -18,6 +18,15 @@ int main()
     std::stringstream ss;
     ss << ifs.rdbuf();
 
+    rt.create_binding("bcall", [](rvi::client_context& ctx)
+    {
+        ctx.select_frame("bcall_frame");
+        ctx.draw_line(rvi::line());
+        ctx.release_frame();
+
+        std::cout << std::endl << "## BCALL SUCCESFULLY CALLED!!!!" << std::endl;
+    });
+    
     rt.start_client(cid, ss);
 
     auto cmds = rt.get_update_commands(cid);
