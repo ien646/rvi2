@@ -3,7 +3,7 @@ define:A,
 	draw_line:0.0,0.0, 		0.0,1.0;
 	draw_line:0.0,1.0, 		1.0,1.0;
 	draw_line:1.0,1.0, 		1.0,0.0;
-	draw_line:0.0,0.5, 		1.0,0.6;
+	draw_line:0.0,0.5, 		1.0,0.5;
 };
 
 define:B,
@@ -11,9 +11,9 @@ define:B,
 	draw_line:0.0,0.0, 		0.0,1.0;
 	draw_line:0.0,0.0,		1.0,0.0;
 	draw_line:0.0,1.0,		0.8,1.0;
-	draw_line:0.8,1.0,		0.8,0.6;
-	draw_line:0.8,0.6,		1.0,0.6;
-	draw_line:1.0,0.6,		1.0,0.0;
+	draw_line:0.8,1.0,		0.8,0.5;
+	draw_line:0.8,0.5,		1.0,0.5;
+	draw_line:1.0,0.5,		1.0,0.0;
 };
 
 define:C,
@@ -37,14 +37,14 @@ define:E,
 	draw_line:0.0,0.0, 		0.0,1.0;
 	draw_line:0.0,1.0, 		1.0,1.0;
 	draw_line:0.0,0.0,		1.0,0.0;
-	draw_line:0.0,0.6, 		1.0,0.6;
+	draw_line:0.0,0.5, 		1.0,0.5;
 };
 
 define:F,
 {
 	draw_line:0.0,0.0, 		0.0,1.0;
 	draw_line:0.0,1.0, 		1.0,1.0;
-	draw_line:0.0,0.6, 		1.0,0.6;
+	draw_line:0.0,0.5, 		1.0,0.5;
 };
 
 define:G,
@@ -52,15 +52,15 @@ define:G,
 	draw_line:0.0,0.0, 		0.0,1.0;
 	draw_line:0.0,1.0, 		1.0,1.0;
 	draw_line:0.0,0.0,		1.0,0.0;
-	draw_line:1.0,0.0,		1.0,0.6;
-	draw_line:1.0,0.6,		0.2,0.6;
+	draw_line:1.0,0.0,		1.0,0.5;
+	draw_line:1.0,0.5,		0.2,0.5;
 };
 
 define:H,
 {
 	draw_line:0.0,0.0, 		0.0,1.0;
 	draw_line:1.0,1.0,		1.0,0.0;
-	draw_line:0.0,0.6, 		1.0,0.6;
+	draw_line:0.0,0.5, 		1.0,0.5;
 }
 
 define:I,
@@ -75,4 +75,76 @@ define:J,
 	draw_line:1.0,1.0,		1.0,0.0;
 	draw_line:1.0,0.0,		0.0,0.0;
 	draw_line:0.0,0.0,		0.0,0.2;
+};
+
+define:K,
+{
+	draw_line:0.0,0.0,		0.0,1.0;
+	draw_line:0.0,0.5,		1.0,0.5;
+	draw_line:1.0,0.5,		1.0,0.0;
+	draw_line:0.5,0.5,		1.0,1.0;
+};
+
+define:L,
+{
+	draw_line:0.0,0.0,		0.0,1.0;
+	draw_line:0.0,0.0,		1.0,0.0;
+};
+
+define:M,
+{
+	draw_line:0.0,0.0,		0.0,1.0;
+	draw_line:0.5,0.0,		0.5,1.0;
+	draw_line:1.0,0.0,		1.0,1.0;
+	draw_line:0.0,1.0,		1.0,1.0;
+};
+
+define:N,
+{
+	draw_line:0.0,0.0,		0.0,1.0;
+	draw_line:1.0,0.0,		1.0,1.0;
+	draw_line:0.0,1.0,		1.0,1.0;
+};
+
+define:O,
+{
+	draw_line:0.0,0.0,		0.0,1.0;
+	draw_line:1.0,0.0,		1.0,1.0;
+	draw_line:0.0,1.0,		1.0,1.0;
+	draw_line:0.0,0.0,		1.0,0.0;
+};
+
+define:P,
+{
+	draw_line:0.0,0.0,		0.0,1.0;
+	draw_line:0.0,1.0,		1.0,1.0;
+	draw_line:0.0,0.5,		1.0,0.5;
+	draw_line:1.0,0.5,		1.0,1.0;
+};
+
+define:Q,
+{
+	draw_line:0.0,0.0,		0.0,1.0;
+	draw_line:1.0,0.0,		1.0,1.0;
+	draw_line:0.0,1.0,		1.0,1.0;
+	draw_line:0.0,0.0,		1.0,0.0;
+	draw_line:0.5,0.5,		1.0,0.0;
+};
+
+define:R,
+{
+	draw_line:0.0,0.0,		0.0,1.0;
+	draw_line:0.0,1.0,		1.0,1.0;
+	draw_line:0.0,0.5,		1.0,0.5;
+	draw_line:1.0,0.5,		1.0,1.0;
+	draw_line:0.5,0.5,		1.0,0.0;
+};
+
+define:S,
+{
+	draw_line:0.0,0.0,		1.0,0.0;
+	draw_line:1.0,0.0,		1.0,0.5;
+	draw_line:1.0,0.5,		0.0,0.5;
+	draw_line:0.0,0.5,		0.0,1.0;
+	draw_line:0.0,1.0,		1.0,1.0;
 };
