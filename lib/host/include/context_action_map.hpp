@@ -160,8 +160,9 @@ namespace rvi::host
             {
                 expect_argc(args, 1, cmd_type::EXEC_BIND);
                 std::string name = args[0];
-                rtime.exec_binding(name, ctx);
+                arglist_t b_args(args.begin() + 1, args.end());
+                rtime.exec_binding(name, ctx, b_args);
             }
         }
-    };    
+    };
 }

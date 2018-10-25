@@ -8,8 +8,9 @@
 namespace rvi::host
 {
     typedef int cid_t;
+    typedef std::vector<std::string> arglist_t;
     typedef std::vector<std::vector<std::uint8_t>> cmdlist_t;
-    typedef std::function<void(client_context& ctx)> binding_t;
+    typedef std::function<void(client_context& ctx, const arglist_t& args)> binding_t;
 
     class runtime
     {
@@ -25,7 +26,7 @@ namespace rvi::host
         void start_client(cid_t cid, std::stringstream& program);
 
         void create_binding(const std::string& name, binding_t call);
-        void exec_binding(const std::string& name, client_context& ctx);
+        void exec_binding(const std::string& name, client_context& ctx, const arglist_t& args);
         
         cmdlist_t get_update_commands(cid_t cid);
         relative_snapshot_t get_diff_snapshot(cid_t cid);

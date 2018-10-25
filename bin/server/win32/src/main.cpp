@@ -18,10 +18,19 @@ int main()
     std::stringstream ss;
     ss << ifs.rdbuf();
 
-    rt.create_binding("bcall", [](rvi::client_context& ctx)
+    rt.create_binding("bcall", [](rvi::client_context& ctx, const std::vector<std::string>& args)
     {
         ctx.select_frame("bcall_frame");
-        ctx.draw_line(rvi::line());
+        int count = std::stoi(args[0]);
+        for(int i = 0; i < count; i++)
+        {
+            rvi::vertex start, end;
+            start.position.x = static_cast<float>(i);
+            start.position.y = static_cast<float>(-i);
+            end.position.x = 1.0F / i;
+            end.position.y = 1.0F / -i;
+            ctx.draw_line(rvi::line(start, end));
+        }
         ctx.release_frame();
 
         std::cout << std::endl << "## BCALL SUCCESFULLY CALLED!!!!" << std::endl;

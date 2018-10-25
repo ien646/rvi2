@@ -228,7 +228,7 @@ namespace rvi::host
         _bindings[name] = call;
     }
 
-    void runtime::exec_binding(const std::string& name, client_context& ctx)
+    void runtime::exec_binding(const std::string& name, client_context& ctx, const arglist_t& args)
     {
         if(_bindings.count(name) == 0)
         {
@@ -236,6 +236,6 @@ namespace rvi::host
             return;
         }
         auto cb = _bindings.at(name);
-        cb(ctx);
+        cb(ctx, args);
     }
 }
