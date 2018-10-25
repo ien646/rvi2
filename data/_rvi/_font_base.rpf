@@ -148,3 +148,53 @@ define:S,
 	draw_line:0.0,0.5,		0.0,1.0;
 	draw_line:0.0,1.0,		1.0,1.0;
 };
+
+define:T,
+{
+	draw_line:0.0,1.0,		1.0,1.0;
+	draw_line:0.5,1.0,		0.5,0.0;
+};
+
+define:U,
+{
+	draw_line:0.0,0.0,		0.0,1.0;
+	draw_line:1.0,0.0,		1.0,1.0;
+	draw_line:0.0,0.0,		1.0,0.0;
+};
+
+define:V,
+{
+	draw_line:0.0,1.0,		0.0,0.8;
+	draw_line:0.0,0.8,		0.5,0.0;
+	draw_line:1.0,1.0,		1.0,0.8;
+	draw_line:1.0,0.8,		0.5,0.0;
+};
+
+define:W,
+{
+	draw_line:0.0,0.0,		0.0,1.0;
+	draw_line:0.5,0.0,		0.5,1.0;
+	draw_line:1.0,0.0,		1.0,1.0;
+	draw_line:0.0,0.0,		1.0,0.0;
+};
+
+define:X,
+{
+	draw_line:0.0,0.0,		1.0,1.0;
+	draw_line:1.0,0.0,		0.0,1.0;
+};
+
+define:Y,
+{
+	draw_line:0.0,0.0,		1.0,0.0;
+	draw_line:1.0,0.0,		1.0,1.0;
+	draw_line:0.0,0.5,		1.0,0.5;
+	draw_line:0.0,0.5,		0.0,1.0;
+};
+
+define:Z,
+{
+	draw_line:0.0,0.0,		1.0,0.0;
+	draw_line:0.0,1.0,		1.0,1.0;
+	draw_line:1.0,1.0,		0.0,0.0;
+};
