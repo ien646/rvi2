@@ -1,3 +1,5 @@
+no_reinclude:_;
+
 define:A,
 {
 	draw_line:0.0,0.0, 		0.0,1.0;

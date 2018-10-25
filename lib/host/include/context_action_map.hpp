@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <functional>
 #include <fstream>
+#include <iostream>
 
 #include <client_context.hpp>
 #include <instruction_generator.hpp>
@@ -148,11 +149,30 @@ namespace rvi::host
             cmd_type::INCLUDE, [](runtime& rtime, client_context& ctx, const std::vector<std::string>& args)
             {
                 expect_argc(args, 1, cmd_type::INCLUDE);
-                std::string text = data_reader::get_include_text(args[0]);
-                std::stringstream ss;
-                ss << text;
-                auto stmt_col = interpreter::read(ss);
-                interpreter::run(rtime, stmt_col, ctx);
+                const std::string& fname = args[0];
+                if(rtime.can_include(fname))
+                {
+                    std::string text = data_reader::get_include_text(fname);
+                    std::stringstream ss;
+                    ss << text;
+                    auto stmt_col = interpreter::read(ss);
+
+                    std::string aux = rtime.current_include();
+                    rtime.push_include(fname);
+                    interpreter::run(rtime, stmt_col, ctx);
+                    rtime.pop_include();
+                }
+                else
+                {
+                    std::cout << "Skipping re-inclusion of file: [ " << fname << " ]" << std::endl;
+                }
+            }
+        },
+        {
+            cmd_type::NO_REINCLUDE, [](runtime& rtime, client_context&, const std::vector<std::string>&)
+            {
+                no_expect_args();
+                rtime.mark_include_once();
             }
         },
         {

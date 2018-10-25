@@ -101,7 +101,9 @@ namespace rvi::host
     {
         client_context& ctx = _clients.at(cid);
         auto stmt_col = interpreter::read(program);
+        push_include("main.rpf");
         interpreter::run(*this, stmt_col, ctx);
+        pop_include();
     }
 
     cmdlist_t runtime::get_update_commands(cid_t cid)
@@ -237,5 +239,30 @@ namespace rvi::host
         }
         auto cb = _bindings.at(name);
         cb(ctx, args);
+    }
+
+    bool runtime::can_include(const std::string fname)
+    {
+        return _include_once_files.count(fname) == 0;
+    }
+
+    void runtime::mark_include_once()
+    {
+        _include_once_files.emplace(current_include());
+    }
+
+    void runtime::push_include(const std::string& fname)
+    {
+        _include_stack.push(fname);
+    }
+
+    const std::string& runtime::current_include()
+    {
+        return _include_stack.top();
+    }
+
+    void runtime::pop_include()
+    {
+        _include_stack.pop();
     }
 }

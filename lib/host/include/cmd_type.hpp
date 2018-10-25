@@ -19,6 +19,7 @@ namespace rvi::host
         UNDEFINE,
         CALL,
         INCLUDE,
+        NO_REINCLUDE,
         EXEC_BIND
     };
 }

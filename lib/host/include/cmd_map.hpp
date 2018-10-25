@@ -23,7 +23,8 @@ namespace rvi::host
         { "undefine",       cmd_type::UNDEFINE },
         { "call",           cmd_type::CALL },
         { "include",        cmd_type::INCLUDE },
-        { "exec_bind",   cmd_type::EXEC_BIND }
+        { "exec_bind",      cmd_type::EXEC_BIND },
+        { "no_reinclude",   cmd_type::NO_REINCLUDE }
     };
 
     extern std::string get_cmd_name(cmd_type ct);

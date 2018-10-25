@@ -1,0 +1,13 @@
+include:"rvi_font_base.rpf";
+
+call:A;
+call:B;
+call:C;
+call:D;
+
+include:"rvi_font_base.rpf";
+
+call:E;
+call:F;
+call:G;
+call:H;
