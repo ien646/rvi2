@@ -17,7 +17,7 @@
 
 namespace rvi::host
 {
-    typedef std::function<void(runtime& rtime, client_context&, const std::vector<std::string>&)> ctx_action;
+    typedef std::function<void(runtime&, client_context&, const std::vector<std::string>&)> ctx_action;
 
     extern void expect_argc(const std::vector<std::string>& args, size_t argc, cmd_type ct);
 
