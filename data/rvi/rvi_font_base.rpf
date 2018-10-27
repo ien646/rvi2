@@ -1,0 +1,3 @@
+no_reinclude:_;
+
+include:"_rvi_font_base_caps.rpf";
