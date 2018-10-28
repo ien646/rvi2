@@ -1,5 +1,5 @@
 include:"rvi_font_base.rpf";
 
 select_frame:"hello_world";
-	exec_bind:"draw_text", "HELLO WORLD", 0.025, 0.025, 0.01, 0.00;
+	exec_bind:"print", "HELLO WORLD", 0.025, 0.025, 0.01, 0.00;
 release_frame:_;

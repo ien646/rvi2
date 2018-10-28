@@ -43,5 +43,7 @@ namespace rvi::host
         void push_include(const std::string& fname);
         const std::string& current_include();
         void pop_include();
+
+        void init_std_bindings();
     };
 }

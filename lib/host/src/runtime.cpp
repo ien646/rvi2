@@ -6,7 +6,9 @@
 
 #include <serializer.hpp>
 #include <context_action_map.hpp>
+
 #include "interpreter.hpp"
+#include "std_bindings.hpp"
 
 using namespace rvi::serialization;
 
@@ -264,5 +266,13 @@ namespace rvi::host
     void runtime::pop_include()
     {
         _include_stack.pop();
+    }
+
+    void runtime::init_std_bindings()
+    {
+        for(auto& entry : std_bindings_list)
+        {
+            create_binding(entry.name, entry.call);
+        }
     }
 }
