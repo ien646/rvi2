@@ -20,6 +20,7 @@ namespace rvi::host
     std::stringstream interpreter::clean_input(std::stringstream& sstr)
     {
         std::stringstream result;
+        sstr << std::noskipws;
         bool dq_escape = false;
         for(char ch; sstr >> ch;) 
         {
@@ -30,11 +31,15 @@ namespace rvi::host
                 continue;
             }
 
-            bool feed_flag = !dq_escape || !is_ignored_ch(ch);
+            bool feed_flag = (!is_ignored_ch(ch) && !dq_escape) || (dq_escape);
 
             if(feed_flag)
             {
                 result << ch;
+            }
+            else
+            {
+                continue;
             }
         }
         return result;
