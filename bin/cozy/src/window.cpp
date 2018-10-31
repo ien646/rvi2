@@ -10,7 +10,7 @@ static void resize_callback(GLFWwindow* wptr, int w, int h)
 window::window(uint32_t sz_x, uint32_t sz_y, const std::string& title)
 {
     glfwInit();    
-
+    glfwWindowHint(GLFW_SAMPLES, 4);
     _wndptr = glfwCreateWindow(sz_x, sz_y, title.c_str(), NULL, NULL);
 
     if (_wndptr == NULL) 

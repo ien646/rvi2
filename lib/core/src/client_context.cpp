@@ -284,8 +284,7 @@ namespace rvi
         std::queue<frame*> remaining_frames;
 
         // Initial set consists of the main frame (== all frames)
-        remaining_frames.push(_main_frame.get());
-        
+        remaining_frames.push(_main_frame.get());        
 
         // Iterate all frames, while procedurally adding children
         while(!remaining_frames.empty())

@@ -39,11 +39,13 @@ namespace rvi
 
     void line::apply_transform(const transform2& tform)
     {
-        end.position -= start.position;
+        start.position.scale_in_place(tform.scale);
         end.position.scale_in_place(tform.scale);
+
+        end.position -= start.position;        
         end.position.rotate_in_place(tform.rotation);
         end.position += start.position;
-        
+
         apply_position(tform.position);
     }    
 

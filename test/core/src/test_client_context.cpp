@@ -64,7 +64,7 @@ TEST(client_context, draw_line_main_frame)
 
     ctx.draw_line(line(vector2(1, 2), vector2(3, 4)));
     ctx.draw_line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
-    ctx.draw_line(vector2(5, 6), color_rgba::RED(), vector2(7, 8), color_rgba::BLUE());
+    ctx.draw_line(vector2(5, 6), color_rgba(255,0,0,0), vector2(7, 8), color_rgba(0,0,255,0));
     ctx.draw_line(vector2(9, 10), vector2(11, 12));
 
     auto lcount = ctx.selected_frame()->line_count();
@@ -72,7 +72,7 @@ TEST(client_context, draw_line_main_frame)
 
     line expected_ln1 = line(vector2(1, 2), vector2(3, 4));
     line expected_ln2 = line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
-    line expected_ln3 = line(vertex(vector2(5, 6), color_rgba::RED()), vertex(vector2(7, 8), color_rgba::BLUE()));
+    line expected_ln3 = line(vertex(vector2(5, 6), color_rgba(255,0,0,0)), vertex(vector2(7, 8), color_rgba(0,0,255,0)));
     line expected_ln4 = line(vector2(9, 10), vector2(11, 12));
 
     auto lines = ctx.selected_frame()->lines();
@@ -94,7 +94,7 @@ TEST(client_context, draw_line_child_frame)
 
     ctx.draw_line(line(vector2(1, 2), vector2(3, 4)));
     ctx.draw_line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
-    ctx.draw_line(vector2(5, 6), color_rgba::RED(), vector2(7, 8), color_rgba::BLUE());
+    ctx.draw_line(vector2(5, 6), color_rgba(255,0,0,0), vector2(7, 8), color_rgba(0,0,255,0));
     ctx.draw_line(vector2(9, 10), vector2(11, 12));
 
     auto lcount = ctx.selected_frame()->line_count();
@@ -102,7 +102,7 @@ TEST(client_context, draw_line_child_frame)
 
     line expected_ln1 = line(vector2(1, 2), vector2(3, 4));
     line expected_ln2 = line(vertex(vector2(0, 0)), vertex(vector2(0, 0)));
-    line expected_ln3 = line(vertex(vector2(5, 6), color_rgba::RED()), vertex(vector2(7, 8), color_rgba::BLUE()));
+    line expected_ln3 = line(vertex(vector2(5, 6), color_rgba(255,0,0,0)), vertex(vector2(7, 8), color_rgba(0,0,255,0)));
     line expected_ln4 = line(vector2(9, 10), vector2(11, 12));
 
     auto lines = ctx.selected_frame()->lines();

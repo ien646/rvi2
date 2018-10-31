@@ -42,7 +42,7 @@ namespace rvi::host
             ctx.execute_definition(defn);
             ctx.release_frame();
 
-            curPos.offset_in_place(rvi::vector2(fontsep_x, fontsep_y));
+            curPos.offset_in_place(rvi::vector2(fontsz_x + fontsep_x, fontsep_y));
         }
     }
 }

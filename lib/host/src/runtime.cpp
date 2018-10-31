@@ -217,10 +217,10 @@ namespace rvi::host
         return result;
     }
 
-    relative_snapshot_t runtime::get_diff_snapshot(cid_t cid)
+    std::vector<line> runtime::get_flat_snapshot(cid_t cid)
     {
         auto& ctx = _clients.at(cid);
-        return ctx.snapshot_diff_relative();
+        return ctx.snapshot_full_flat();
     }
 
     void runtime::create_binding(const std::string& name, binding_t call)

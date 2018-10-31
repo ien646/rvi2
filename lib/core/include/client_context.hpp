@@ -33,7 +33,7 @@ namespace rvi
 
         std::unordered_map<frame*, std::string> _cached_full_fnames;
 
-        color_rgba _current_color = color_rgba::BLACK();
+        color_rgba _current_color;
 
     public:
         static const std::string MAIN_FRAMENAME;

@@ -34,7 +34,7 @@ namespace rvi::host
         void exec_binding(const std::string& name, client_context& ctx, const arglist_t& args);      
 
         cmdlist_t get_update_commands(cid_t cid);
-        relative_snapshot_t get_diff_snapshot(cid_t cid);
+        std::vector<line> get_flat_snapshot(cid_t cid);
 
         void mark_include_once();
 
