@@ -63,6 +63,7 @@ int main()
 
     glEnable(GL_MULTISAMPLE);
     glLineWidth(2.0F);
+    glfwSwapInterval(1);
 // -------------------------------------------------------------------------------
     while(!wnd.should_close())
     {        
