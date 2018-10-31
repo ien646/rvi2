@@ -23,4 +23,5 @@ target_include_directories(cozy
 target_link_libraries(cozy rvi2.host rvi2.serialization rvi2.core glfw opengl32.lib)
 
 file(COPY shaders DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
