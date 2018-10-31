@@ -73,7 +73,7 @@ int main()
         // --  Render  ------------------------------
         glUseProgram(shader_program);
         glBindVertexArray(vao);
-        glDrawArrays(GL_LINES, 0, sizeof(vertices) * sizeof(float));        
+        glDrawArrays(GL_LINES, 0, sizeof(vertices) * sizeof(float) * 2);
         // ------------------------------------------
 
         glfwSwapBuffers(wnd.wnd_ptr());
