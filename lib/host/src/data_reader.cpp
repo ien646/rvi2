@@ -4,13 +4,10 @@
 
 #include <filesystem>
 #include <fstream>
-namespace stdfs = std::filesystem;
-
+    namespace stdfs = std::filesystem;
 #else
-
-#include <experimental/filesystem>
-namespace stdfs = std::experimental::filesystem;
-
+    #include <experimental/filesystem>
+    namespace stdfs = std::experimental::filesystem;
 #endif
 
 const static std::string EXT_RUNTIME = { ".rpf" };
