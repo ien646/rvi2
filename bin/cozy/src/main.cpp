@@ -29,7 +29,7 @@ int main()
     std::ifstream ifs("data/main.rpf");
     std::stringstream sstr;
     sstr << ifs.rdbuf();
-    rtm.init_std_bindings();
+    rtm.init_std_bindings(cid);
     rtm.start_client(cid, sstr);
 
     auto snapshot = rtm.get_flat_snapshot(cid);

@@ -5,7 +5,6 @@
 #include <cinttypes>
 #include <client_context.hpp>
 
-
 namespace rvi::host
 {
     typedef int cid_t;
@@ -13,15 +12,18 @@ namespace rvi::host
     typedef std::vector<std::vector<std::uint8_t>> cmdlist_t;
     typedef std::function<void(client_context& ctx, const arglist_t& args)> binding_t;
 
+    struct runtime_instance_data
+    {
+        std::unordered_map<std::string, binding_t> bindings;
+        std::stack<std::string> include_stack;
+        std::unordered_set<std::string> include_once_files;
+    };
+
     class runtime
     {
     private:
-        std::unordered_map<cid_t, client_context> _clients;
-        std::unordered_map<std::string, binding_t> _bindings;
-        
-        std::stack<std::string> _include_stack;
-
-        std::unordered_set<std::string> _include_once_files;
+        std::unordered_map<cid_t, client_context> _clients;  
+        std::unordered_map<cid_t, runtime_instance_data> _client_rt_data;        
         cid_t _last_cid = 0;
         
     public:
@@ -30,20 +32,22 @@ namespace rvi::host
         cid_t create_client();
         void start_client(cid_t cid, std::stringstream& program);
 
-        void create_binding(const std::string& name, binding_t call);
-        void exec_binding(const std::string& name, client_context& ctx, const arglist_t& args);      
+        void create_binding(cid_t cid, const std::string& name, binding_t call);
+        void exec_binding(cid_t cid, const std::string& name, const arglist_t& args);      
 
         cmdlist_t get_update_commands(cid_t cid);
         std::vector<line> get_flat_snapshot(cid_t cid);
 
-        void mark_include_once();
+        void mark_include_once(cid_t cid);
 
-        bool can_include(const std::string fname);
+        bool can_include(cid_t cid, const std::string fname);
 
-        void push_include(const std::string& fname);
-        const std::string& current_include();
-        void pop_include();
+        void push_include(cid_t cid, const std::string& fname);
+        const std::string& current_include(cid_t cid);
+        void pop_include(cid_t cid);
 
-        void init_std_bindings();
+        void init_std_bindings(cid_t cid);      
+
+        client_context* get_client(cid_t);  
     };
 }

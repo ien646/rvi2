@@ -17,7 +17,7 @@
 
 namespace rvi::host
 {
-    typedef std::function<void(runtime&, client_context&, const std::vector<std::string>&)> ctx_action;
+    typedef std::function<void(cid_t, runtime&, const std::vector<std::string>&)> ctx_action;
 
     extern void expect_argc(const std::vector<std::string>& args, size_t argc, cmd_type ct);
 
@@ -28,30 +28,30 @@ namespace rvi::host
     static std::unordered_map<cmd_type, ctx_action> context_action_map = 
     {
         { 
-            cmd_type::SELECT_FRAME , [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::SELECT_FRAME , [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 1, cmd_type::SELECT_FRAME);
                 std::string frame_name = args[0];
-                ctx.select_frame(frame_name);
+                rt.get_client(cid)->select_frame(frame_name);
             }
         },
         {
-            cmd_type::RELEASE_FRAME, [](runtime&, client_context& ctx, const std::vector<std::string>&)
+            cmd_type::RELEASE_FRAME, [](cid_t cid, runtime& rt, const std::vector<std::string>&)
             {
                 no_expect_args();
-                ctx.release_frame();
+                rt.get_client(cid)->release_frame();
             }
         },
         {
-            cmd_type::DELETE_FRAME, [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::DELETE_FRAME, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 1, cmd_type::DELETE_FRAME);
                 std::string frame_name = args[0];
-                ctx.delete_frame(frame_name);
+                rt.get_client(cid)->delete_frame(frame_name);
             }
         },
         {
-            cmd_type::DRAW_LINE, [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::DRAW_LINE, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 4, cmd_type::DRAW_LINE);
                 float fx = std::stof(args[0]);
@@ -60,11 +60,11 @@ namespace rvi::host
                 float ty = std::stof(args[3]);
                 vector2 from(fx, fy);
                 vector2 to(tx, ty);
-                ctx.draw_line(from, to);
+                rt.get_client(cid)->draw_line(from, to);
             }
         },
         {
-            cmd_type::SET_TRANSFORM, [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::SET_TRANSFORM, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 5, cmd_type::SET_TRANSFORM);
                 float pos_x = std::stof(args[0]);
@@ -73,48 +73,48 @@ namespace rvi::host
                 float scl_y = std::stof(args[3]);
                 float rottn = std::stof(args[4]);
                 transform2 tform(vector2(pos_x, pos_y), vector2(scl_x, scl_y), rottn);
-                ctx.set_transform(tform);
+                rt.get_client(cid)->set_transform(tform);
             }
         },
         {
-            cmd_type::SET_POSITION, [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::SET_POSITION, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 2, cmd_type::SET_POSITION);
                 float pos_x = std::stof(args[0]);
                 float pos_y = std::stof(args[1]);
-                ctx.set_position(vector2(pos_x, pos_y));
+                rt.get_client(cid)->set_position(vector2(pos_x, pos_y));
             },
         },
         {
-            cmd_type::SET_SCALE, [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::SET_SCALE, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 2, cmd_type::SET_SCALE);
                 float scl_x = std::stof(args[0]);
                 float scl_y = std::stof(args[1]);
-                ctx.set_scale(vector2(scl_x, scl_y));
+                rt.get_client(cid)->set_scale(vector2(scl_x, scl_y));
             }
         },
         {
-            cmd_type::SET_ROTATION, [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::SET_ROTATION, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 1, cmd_type::SET_ROTATION);
                 float rottn = std::stof(args[0]);
-                ctx.set_rotation(rottn);
+                rt.get_client(cid)->set_rotation(rottn);
             }
         },
         {
-            cmd_type::SET_COLOR, [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::SET_COLOR, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 4, cmd_type::SET_COLOR);
                 uint8_t r = static_cast<uint8_t>(std::stoi(args[0]));
                 uint8_t g = static_cast<uint8_t>(std::stoi(args[1]));
                 uint8_t b = static_cast<uint8_t>(std::stoi(args[2]));
                 uint8_t a = static_cast<uint8_t>(std::stoi(args[3]));
-                ctx.set_color(color_rgba(r, b, g, a));
+                rt.get_client(cid)->set_color(color_rgba(r, b, g, a));
             }
         },
         {
-            cmd_type::DEFINE, [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::DEFINE, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 2, cmd_type::DEFINE);
                 std::string name = args[0];
@@ -126,41 +126,42 @@ namespace rvi::host
                 { 
                     def.add_instruction(std::move(inst));
                 });
-                ctx.add_definition(std::move(def));
+                rt.get_client(cid)->add_definition(std::move(def));
             }
         },
         {
-            cmd_type::UNDEFINE, [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::UNDEFINE, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 1, cmd_type::UNDEFINE);
                 std::string fname = args[0];
-                ctx.delete_definition(fname);
+                rt.get_client(cid)->delete_definition(fname);
             }
         },
         {
-            cmd_type::CALL, [](runtime&, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::CALL, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 1, cmd_type::CALL);
                 std::string fname = args[0];
-                ctx.execute_definition(fname);
+                rt.get_client(cid)->execute_definition(fname);
             }
         },
         {
-            cmd_type::INCLUDE, [](runtime& rtime, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::INCLUDE, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 1, cmd_type::INCLUDE);
                 const std::string& fname = args[0];
-                if(rtime.can_include(fname))
+                if(rt.can_include(cid, fname))
                 {
                     std::string text = data_reader::get_include_text(fname);
                     std::stringstream ss;
                     ss << text;
                     auto stmt_col = interpreter::read(ss);
 
-                    std::string aux = rtime.current_include();
-                    rtime.push_include(fname);
-                    interpreter::run(rtime, stmt_col, ctx);
-                    rtime.pop_include();
+                    std::string aux = rt.current_include(cid);
+                    rt.push_include(cid, fname);
+                    client_context& ctx = *(rt.get_client(cid));
+                    interpreter::run(cid, rt, stmt_col);
+                    rt.pop_include(cid);
                 }
                 else
                 {
@@ -169,19 +170,19 @@ namespace rvi::host
             }
         },
         {
-            cmd_type::NO_REINCLUDE, [](runtime& rtime, client_context&, const std::vector<std::string>&)
+            cmd_type::NO_REINCLUDE, [](cid_t cid, runtime& rt, const std::vector<std::string>&)
             {
                 no_expect_args();
-                rtime.mark_include_once();
+                rt.mark_include_once(cid);
             }
         },
         {
-            cmd_type::EXEC_BIND, [](runtime& rtime, client_context& ctx, const std::vector<std::string>& args)
+            cmd_type::EXEC_BIND, [](cid_t cid, runtime& rt, const std::vector<std::string>& args)
             {
                 expect_argc(args, 1, cmd_type::EXEC_BIND);
                 std::string name = args[0];
                 arglist_t b_args(args.begin() + 1, args.end());
-                rtime.exec_binding(name, ctx, b_args);
+                rt.exec_binding(cid, name, b_args);
             }
         }
     };

@@ -95,7 +95,9 @@ namespace rvi::host
 
     cid_t runtime::create_client()
     {
-        _clients.emplace(++_last_cid, client_context{});
+        cid_t cid = ++_last_cid;
+        _clients.emplace(cid, client_context{});
+        _client_rt_data.emplace(cid, runtime_instance_data());
         return _last_cid;
     }
 
@@ -103,9 +105,9 @@ namespace rvi::host
     {
         client_context& ctx = _clients.at(cid);
         auto stmt_col = interpreter::read(program);
-        push_include("main.rpf");
-        interpreter::run(*this, stmt_col, ctx);
-        pop_include();
+        push_include(cid, "main.rpf");
+        interpreter::run(cid, *this, stmt_col);
+        pop_include(cid);
     }
 
     cmdlist_t runtime::get_update_commands(cid_t cid)
@@ -223,56 +225,72 @@ namespace rvi::host
         return ctx.snapshot_full_flat();
     }
 
-    void runtime::create_binding(const std::string& name, binding_t call)
+    void runtime::create_binding(cid_t cid, const std::string& name, binding_t call)
     {
-        if(_bindings.count(name) > 0)
+        runtime_instance_data& dt = _client_rt_data[cid];
+        if(dt.bindings.count(name) > 0)
         {
             std::cout << "Overwrite binding: [ " << name << " ]" << std::endl;
         }
-        _bindings[name] = call;
+        dt.bindings[name] = call;
     }
 
-    void runtime::exec_binding(const std::string& name, client_context& ctx, const arglist_t& args)
+    void runtime::exec_binding(cid_t cid, const std::string& name, const arglist_t& args)
     {
-        if(_bindings.count(name) == 0)
+        runtime_instance_data& dt = _client_rt_data[cid];
+        if(dt.bindings.count(name) == 0)
         {
             std::cout << "[ RUNTIME ] Binding [ " << name << " ] not found!" << std::endl;
             return;
         }
-        auto cb = _bindings.at(name);
-        cb(ctx, args);
+        auto cb = dt.bindings.at(name);
+        cb(_clients[cid], args);
     }
 
-    bool runtime::can_include(const std::string fname)
+    bool runtime::can_include(cid_t cid, const std::string fname)
     {
-        return _include_once_files.count(fname) == 0;
+        runtime_instance_data& dt = _client_rt_data[cid];
+        return dt.include_once_files.count(fname) == 0;
     }
 
-    void runtime::mark_include_once()
+    void runtime::mark_include_once(cid_t cid)
     {
-        _include_once_files.emplace(current_include());
+        runtime_instance_data& dt = _client_rt_data[cid];
+        dt.include_once_files.emplace(current_include(cid));
     }
 
-    void runtime::push_include(const std::string& fname)
+    void runtime::push_include(cid_t cid, const std::string& fname)
     {
-        _include_stack.push(fname);
+        runtime_instance_data& dt = _client_rt_data[cid];
+        dt.include_stack.push(fname);
     }
 
-    const std::string& runtime::current_include()
+    const std::string& runtime::current_include(cid_t cid)
     {
-        return _include_stack.top();
+        runtime_instance_data& dt = _client_rt_data[cid];
+        return dt.include_stack.top();
     }
 
-    void runtime::pop_include()
+    void runtime::pop_include(cid_t cid)
     {
-        _include_stack.pop();
+        runtime_instance_data& dt = _client_rt_data[cid];
+        dt.include_stack.pop();
     }
 
-    void runtime::init_std_bindings()
+    void runtime::init_std_bindings(cid_t cid)
     {
         for(auto& entry : std_bindings_list)
         {
-            create_binding(entry.name, entry.call);
+            create_binding(cid, entry.name, entry.call);
         }
+    }
+
+    client_context* runtime::get_client(cid_t cid)
+    {
+        if(_clients.count(cid) == 0)
+        {
+            return nullptr;
+        }
+        return &_clients[cid];
     }
 }

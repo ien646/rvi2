@@ -138,18 +138,18 @@ namespace rvi::host
         return result;
     }
 
-    void interpreter::run(runtime& rtime, const std::vector<parsed_stmt>& lines, client_context& ctx)
+    void interpreter::run(cid_t cid, runtime& rtime, const std::vector<parsed_stmt>& lines)
     {
         for (auto& line : lines)
         {
-            run_line(rtime, line, ctx);
+            run_line(cid, rtime, line);
         }
     }
 
-    void interpreter::run_line(runtime& rtime, const parsed_stmt& line, client_context& ctx)
+    void interpreter::run_line(cid_t cid, runtime& rtime, const parsed_stmt& line)
     {
         auto cmd = context_action_map.at(line.command);
-        cmd(rtime, ctx, line.args);
+        cmd(cid, rtime, line.args);
 
         // -- Debug --------------------------------
         std::stringstream ss;
