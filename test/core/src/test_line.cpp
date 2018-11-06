@@ -167,8 +167,10 @@ TEST(line, apply_transform)
         vertex expected_vx1 = vx1;
         vertex expected_vx2 = vx2;
 
-        expected_vx2.position -= vx1.position;
-        expected_vx2.position.scale_in_place(scl);
+		expected_vx1.position.scale_in_place(scl);
+		expected_vx2.position.scale_in_place(scl);
+		
+        expected_vx2.position -= vx1.position;        
         expected_vx2.position.rotate_in_place(rot);
         expected_vx2.position += vx1.position;
 
