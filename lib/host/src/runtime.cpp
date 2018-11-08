@@ -10,8 +10,6 @@
 #include "interpreter.hpp"
 #include "std_bindings.hpp"
 
-using namespace rvi::serialization;
-
 namespace rvi::host
 {
     struct orderable_path_container
@@ -142,17 +140,17 @@ namespace rvi::host
                 for(const auto& seg : ccont.container)
                 {
                     path_stack.push_back(seg);
-                    result.push_back(serializer::select_frame(seg));
+                    result.push_back(rvi::serialization::serializer::select_frame(seg));
                     std::string path = 
                         orderable_path_container(path_stack).to_full_path(client_context::FRAMEPATH_SEPARATOR);
                     frame* fptr = ctx.find_frame(path);
-                    result.push_back(serializer::set_transform(fptr->transform()));
+                    result.push_back(rvi::serialization::serializer::set_transform(fptr->transform()));
                 }
 
                 // Push lines
                 for(auto& ln : map_pair.second)
                 {
-                    result.push_back(serializer::draw_line(ln));
+                    result.push_back(rvi::serialization::serializer::draw_line(ln));
                 }
             }
             else
@@ -185,7 +183,7 @@ namespace rvi::host
 
                 for(int i = 0; i < release_count; i++)
                 {
-                    result.push_back(serializer::release_frame());
+                    result.push_back(rvi::serialization::serializer::release_frame());
                     path_stack.pop_back();
                 }
 
@@ -193,18 +191,18 @@ namespace rvi::host
                 for(size_t i = diffidx; i < static_cast<size_t>(desired_stack_size); i++)
                 {
                     std::string fname = ccont.container[i];
-                    result.push_back(serializer::select_frame(fname));
+                    result.push_back(rvi::serialization::serializer::select_frame(fname));
                     path_stack.push_back(fname);
                     std::string path = 
                         orderable_path_container(path_stack).to_full_path(client_context::FRAMEPATH_SEPARATOR);
                     frame* fptr = ctx.find_frame(path);
-                    result.push_back(serializer::set_transform(fptr->transform()));
+                    result.push_back(rvi::serialization::serializer::set_transform(fptr->transform()));
                 }
 
                 // Push lines
                 for(auto& ln : map_pair.second)
                 {
-                    result.push_back(serializer::draw_line(ln));
+                    result.push_back(rvi::serialization::serializer::draw_line(ln));
                 }
             }
         }
@@ -213,7 +211,7 @@ namespace rvi::host
         size_t pop_count = path_stack.size();
         for(size_t i = 0; i < pop_count; i++)
         {
-            result.push_back(serializer::release_frame());
+            result.push_back(rvi::serialization::serializer::release_frame());
             path_stack.pop_back();
         }
         return result;
@@ -225,7 +223,7 @@ namespace rvi::host
         return ctx.snapshot_full_flat();
     }
 
-    void runtime::create_binding(cid_t cid, const std::string& name, binding_t call)
+    void runtime::create_binding(cid_t cid, const std::string& name, runtime_inst_t call)
     {
         runtime_instance_data& dt = _client_rt_data[cid];
         if(dt.bindings.count(name) > 0)
@@ -244,7 +242,7 @@ namespace rvi::host
             return;
         }
         auto cb = dt.bindings.at(name);
-        cb(_clients[cid], args);
+        cb(cid, *this, args);
     }
 
     bool runtime::can_include(cid_t cid, const std::string fname)
@@ -293,4 +291,34 @@ namespace rvi::host
         }
         return &_clients[cid];
     }
+
+    void runtime::add_definition(cid_t cid, const std::string& name, definition def)
+    {
+        runtime_instance_data& dt = _client_rt_data[cid];
+        dt.definitions[name] = def;
+    }
+
+    void runtime::delete_definition(cid_t cid, const std::string& name)
+    {
+        runtime_instance_data& dt = _client_rt_data[cid];
+        dt.definitions.erase(name);
+    }
+
+    void runtime::execute_definition(cid_t cid, const std::string& name)
+    {
+        runtime_instance_data& dt = _client_rt_data[cid];
+        if (dt.definitions.count(name) == 0)
+        {
+            return;
+        }
+
+        definition def = dt.definitions.at(name);
+        for (auto& line : def.lines)
+        {
+            const cmd_type& cmd = cmd_map.at(line.cmd);
+            runtime_inst_t& inst = context_action_map[cmd];
+
+            inst(cid, *this, line.args);
+        }
+    }    
 }

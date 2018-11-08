@@ -5,18 +5,21 @@
 #include <cinttypes>
 #include <client_context.hpp>
 
+#include "host_types.hpp"
+#include "definition.hpp"
+
 namespace rvi::host
 {
     typedef int cid_t;
     typedef std::vector<std::string> arglist_t;
     typedef std::vector<std::vector<std::uint8_t>> cmdlist_t;
-    typedef std::function<void(client_context& ctx, const arglist_t& args)> binding_t;
 
     struct runtime_instance_data
     {
-        std::unordered_map<std::string, binding_t> bindings;
+        std::unordered_map<std::string, runtime_inst_t> bindings;
         std::stack<std::string> include_stack;
         std::unordered_set<std::string> include_once_files;
+        std::unordered_map<std::string, definition> definitions;
     };
 
     class runtime
@@ -32,7 +35,7 @@ namespace rvi::host
         cid_t create_client();
         void start_client(cid_t cid, std::stringstream& program);
 
-        void create_binding(cid_t cid, const std::string& name, binding_t call);
+        void create_binding(cid_t cid, const std::string& name, runtime_inst_t call);
         void exec_binding(cid_t cid, const std::string& name, const arglist_t& args);      
 
         cmdlist_t get_update_commands(cid_t cid);
@@ -48,6 +51,10 @@ namespace rvi::host
 
         void init_std_bindings(cid_t cid);      
 
-        client_context* get_client(cid_t);  
+        client_context* get_client(cid_t);
+
+        void add_definition(cid_t cid, const std::string& name, definition def);
+        void delete_definition(cid_t cid, const std::string& name);
+        void execute_definition(cid_t cid, const std::string& name);
     };
 }

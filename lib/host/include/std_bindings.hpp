@@ -3,22 +3,22 @@
 #include <unordered_map>
 #include <client_context.hpp>
 
+#include "host_types.hpp"
+
 namespace rvi::host
 {
-    typedef std::function<void(client_context&, const std::vector<std::string>&)> std_binding_call_t;
-
     class std_bindings
     {
     public:
-        static void print(client_context& ctx, const std::vector<std::string>& args);
+        static void print(cid_t, runtime&, const arglist_t&);
     };
 
     struct std_binding_entry
     {
         std::string name;
-        std_binding_call_t call;
+        runtime_inst_t call;
 
-        std_binding_entry(const std::string& name, std_binding_call_t call)
+        std_binding_entry(const std::string& name, runtime_inst_t call)
         {
             this->name = name;
             this->call = call;

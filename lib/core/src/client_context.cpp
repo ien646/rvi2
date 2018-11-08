@@ -3,6 +3,7 @@
 #include <stack>
 #include <sstream>
 #include <iterator>
+#include <queue>
 
 namespace rvi
 { 
@@ -26,7 +27,6 @@ namespace rvi
         result._selected_frame = _main_frame.get();
         result._frame_stack.clear();
         result._frame_stack.push_back(_main_frame.get());
-        result._local_definitions = _local_definitions;
         result._modified_frames.clear();
         result._modified_frames.emplace(_main_frame.get());
         result._cached_full_fnames.clear();
@@ -185,39 +185,7 @@ namespace rvi
     {
         _selected_frame->clear_lines();
         mark_frame_modified();
-    }
-
-    void client_context::add_definition(const definition& instruction)
-    {
-        DISCARD_RESULT _local_definitions.emplace(instruction.name(), instruction);
-    }
-
-    void client_context::add_definition(definition&& instruction)
-    {
-        auto name = instruction.name();
-        DISCARD_RESULT _local_definitions.emplace(name, instruction);
     }    
-
-    void client_context::delete_definition(const std::string& name)
-    {
-        _local_definitions.erase(name);
-    }
-
-    bool client_context::execute_definition(const std::string& def_name)
-    {
-        if (_local_definitions.count(def_name) == 0)
-        {
-            return false;
-        }
-        definition def = _local_definitions.at(def_name);
-        def.execute_on_context(*this);
-        return true;
-    }
-
-    bool client_context::contains_definition(const std::string& def_name)
-    {
-        return _local_definitions.count(def_name) > 0;
-    }
 
     std::string client_context::get_full_frame_name(frame* fptr) noexcept
     {

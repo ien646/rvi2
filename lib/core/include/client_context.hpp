@@ -9,7 +9,6 @@
 #include "rvi_base.hpp"
 #include "frame.hpp"
 #include "line.hpp"
-#include "definition.hpp"
 
 namespace rvi
 {
@@ -25,8 +24,6 @@ namespace rvi
 
         // Current frame selection 'stack'
         std::vector<frame*> _frame_stack;
-
-        std::unordered_map<std::string, definition> _local_definitions;
 
         // Framepaths of altered frames since last full or partial snapshot
         std::unordered_set<frame*> _modified_frames;
@@ -79,15 +76,6 @@ namespace rvi
         size_t frame_count() const noexcept;
 
         void clear_frame() noexcept;
-
-        void add_definition(const definition& instruction);
-        void add_definition(definition&& instruction);
-
-        void delete_definition(const std::string& name);
-
-        bool execute_definition(const std::string& defName);
-
-        bool contains_definition(const std::string& defName);
 
         std::string get_full_frame_name(frame* fptr = nullptr) noexcept;
 
