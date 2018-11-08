@@ -6,9 +6,8 @@ namespace rvi
 {
     class transform2;
 
-    class vector2
+    struct vector2
     {
-    public:
         float x = 0.0F;
         float y = 0.0F;
 

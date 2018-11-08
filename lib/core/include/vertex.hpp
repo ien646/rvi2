@@ -6,9 +6,8 @@
 
 namespace rvi
 {
-    class vertex
+    struct vertex
     {
-    public:
         vector2 position;
         color_rgba color;
 

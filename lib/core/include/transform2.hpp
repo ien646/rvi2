@@ -8,9 +8,8 @@
 
 namespace rvi
 {
-    class transform2
+    struct transform2
     {
-    public:
         vector2 position;
         vector2 scale;
         float rotation = 0.0F;

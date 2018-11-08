@@ -9,9 +9,8 @@
 
 namespace rvi
 {
-    class line
+    struct line
     {
-    public:
         vertex start;
         vertex end;
 
