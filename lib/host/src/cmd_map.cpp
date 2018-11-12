@@ -11,7 +11,7 @@ namespace rvi::host
         }
         else
         {
-            return "ERROR: Command typename not found";
+            throw std::invalid_argument("Invalid cmd_type!");
         }
     }
 }

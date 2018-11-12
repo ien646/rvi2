@@ -1,21 +1,13 @@
 #pragma once
 
-#include <string>
 #include <vector>
-
-#include "runtime.hpp"
-#include "host_types.hpp"
+#include "runtime_call.hpp"
 
 namespace rvi::host
-{    
-    struct definition_line
-    {
-        std::string cmd;
-        arglist_t args;
-    };
-
+{
+    typedef std::pair<runtime_call_t, const arglist_t&> definition_call_t;
     struct definition
     {
-        std::vector<definition_line> lines;
+        std::vector<definition_call_t> instructions;
     };
 }
