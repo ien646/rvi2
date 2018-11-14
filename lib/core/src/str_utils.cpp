@@ -1,74 +1,88 @@
 #include "str_utils.hpp"
 
-namespace rvi
-{
-    std::vector<std::string> str_split(const std::string& str, char delim)
+namespace rvi::str_utils
+{        
+    str_vec_t split(std::string_view strv, char delim)
     {
-        std::vector<std::string> result;
+        str_vec_t result;
+        auto beg_it = strv.begin();
+        auto cur_it = strv.begin();
 
-        std::string line;
-        std::stringstream sstr(str);
-        while (std::getline(sstr, line, delim))
+        while (cur_it != strv.end())
         {
-            result.push_back(line);
-        }
-        return result;
-    }
-
-    std::vector<std::string> str_split_once(const std::string& str, char delim)
-    {
-        std::vector<std::string> result;
-        
-        bool found = false;
-        std::stringstream first("");
-        std::stringstream second("");
-        for(auto& ch : str)
-        {
-            if(ch == delim)
+            if (*cur_it == delim)
             {
-                if(found)
-                {
-                    second << ch;
-                    continue;
-                }
-                else
-                {
-                    found = true;
-                    continue;
-                }
+                result.push_back(std::string(beg_it, cur_it));
+                beg_it = ++cur_it;
             }
-
-            if(found)
-                second << ch;
             else
-                first << ch;
+            {
+                cur_it++;
+            }
         }
-        result.push_back(first.str());
-        result.push_back(second.str());
+
+        result.push_back(std::string(beg_it, cur_it));
         return result;
     }
 
-    std::string str_tolower(const std::string& str)
+    str_pair_t split_once_beg(std::string_view strv, char delim)
     {
-        std::string result = str;
-        result.reserve(str.size());
+        str_pair_t result;
 
-        std::transform(result.begin(), result.end(), result.begin(), [](char c)
+        auto found_it = std::find(strv.begin(), strv.end(), delim);
+        if (found_it == strv.end())
         {
-            return static_cast<char>(std::tolower(c));
-        });
+            result.first = strv;
+        }
+        else
+        {
+            result.first = std::string(strv.begin(), found_it);
+            if (++found_it != strv.end())
+            {
+                result.second = std::string(found_it, strv.end());
+            }
+        }
         return result;
     }
 
-    std::string str_trim(const std::string& str)
+    str_pair_t split_once_end(std::string_view strv, char delim)
     {
-        std::string result;
-        result.reserve(str.size());
+        str_pair_t result;
 
-        auto start_it = std::find(str.begin(), str.end(), ' ');
-        auto end_it = std::find(str.end(), str.begin(), ' ');
+        // -- Reverse start/end iterators
+        auto start_it = strv.rbegin();
+        auto end_it = strv.rend();
 
-        std::copy(start_it, end_it, std::back_inserter(result));
+        auto rfound_it = std::find(start_it, end_it, delim);
+        auto found_it = rfound_it.base() - 1;
+        if (found_it == strv.begin())
+        {
+            result.first = strv;
+        }
+        else
+        {
+            result.first = std::string(strv.begin(), found_it);
+            if (++found_it != strv.end())
+            {
+                result.second = std::string(found_it, strv.end());
+            }
+        }
         return result;
+    }
+
+    std::string_view substr_from_delim(std::string_view strv, char delim)
+    {
+        std::string_view result;
+        auto found_it = std::find(strv.begin(), strv.end(), delim);
+        std::ptrdiff_t offset = (found_it - strv.begin()) + 1;
+        return strv.substr(offset);
+    }
+
+    std::string_view substr_until_delim(std::string_view strv, char delim)
+    {
+        std::string_view result;
+        auto found_it = std::find(strv.begin(), strv.end(), delim);
+        std::ptrdiff_t sslen = found_it - strv.begin();
+        return strv.substr(0, sslen);
     }
 }

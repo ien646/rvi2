@@ -8,7 +8,7 @@ using rvi::vector2;
 using rvi::color_rgba;
 using rvi::vertex;
 
-static const int OP_TEST_ITER = 5000;
+static const int OP_TEST_ITER = 500;
 static random_gen rnd;
 
 static vertex get_rand_vertex(vector2& out_pos, color_rgba out_color)
@@ -170,9 +170,9 @@ TEST(line, apply_transform)
 		expected_vx1.position.scale_in_place(scl);
 		expected_vx2.position.scale_in_place(scl);
 		
-        expected_vx2.position -= vx1.position;        
+        expected_vx2.position -= expected_vx1.position;
         expected_vx2.position.rotate_in_place(rot);
-        expected_vx2.position += vx1.position;
+        expected_vx2.position += expected_vx1.position;
 
         expected_vx1.position += pos;
         expected_vx2.position += pos;

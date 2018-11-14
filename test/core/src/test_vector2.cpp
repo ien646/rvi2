@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-static const int OP_TEST_ITER = 5000;
+static const int OP_TEST_ITER = 500;
 static random_gen rnd;
 
 using rvi::vector2;

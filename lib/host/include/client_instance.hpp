@@ -8,12 +8,9 @@ namespace rvi::host
 {
     class client_instance
     {
-    private:
+    public:
         client_context context;
         client_instance_data data;
-
-        // -- getters --
-        client_context& context();
 
         // -- include control --
         void push_include(const std::string& inc_file);

@@ -7,7 +7,7 @@ using rvi::vector2;
 using rvi::color_rgba;
 using rvi::vertex;
 
-static const int OP_TEST_ITER = 5000;
+static const int OP_TEST_ITER = 500;
 static random_gen rnd;
 
 TEST (vertex, equality_op)

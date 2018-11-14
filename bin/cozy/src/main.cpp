@@ -25,25 +25,8 @@ int main()
 // --- RVI -----------------------------------------------------------------------
 
     rvi::host::runtime rtm;
-    auto cid = rtm.create_client();
-    std::ifstream ifs("data/main.rpf");
-    std::stringstream sstr;
-    sstr << ifs.rdbuf();
-    rtm.init_std_bindings(cid);
-    rtm.start_client(cid, sstr);
-
-    auto snapshot = rtm.get_flat_snapshot(cid);
 
     std::vector<float> vertices;
-    for(auto& ln : snapshot)
-    {
-        vertices.push_back(ln.start.position.x);
-        vertices.push_back(ln.start.position.y);
-        vertices.push_back(ln.end.position.x);
-        vertices.push_back(ln.end.position.y);
-    }
-
-    auto sz = sizeof(rvi::color_rgba);
 
 // --- VERTEX BUFFERS / ARRAYS ---------------------------------------------------
 

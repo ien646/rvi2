@@ -2,11 +2,6 @@
 
 namespace rvi::host
 {
-    client_context& client_instance::context()
-    {
-        return this->context;
-    }
-
     void client_instance::push_include(const std::string& inc_file)
     {
         data.include_stack.push_back(inc_file);

@@ -2,18 +2,29 @@
 
 #include <vector>
 #include <string>
+#include <string_view>
 #include <sstream>
 #include <algorithm>
 #include <cinttypes>
 #include <cctype>
 
-namespace rvi
+namespace rvi::str_utils
 {
-    extern std::vector<std::string> str_split(const std::string& str, char delim);
+    typedef std::vector<std::string> str_vec_t;
+    typedef std::pair<std::string, std::string> str_pair_t;
 
-    extern std::vector<std::string> str_split_once(const std::string& str, char delim);
+    [[nodiscard]]
+    str_vec_t split(std::string_view strv, char delim);
 
-    extern std::string str_tolower(const std::string& str);
+    [[nodiscard]]
+    str_pair_t split_once_beg(std::string_view strv, char delim);
 
-    extern std::string str_trim(const std::string& str);
+    [[nodiscard]]
+    str_pair_t split_once_end(std::string_view strv, char delim);
+
+    [[nodiscard]]
+    std::string_view substr_from_delim(std::string_view strv, char delim);
+
+    [[nodiscard]]
+    std::string_view substr_until_delim(std::string_view strv, char delim);
 }
