@@ -27,4 +27,13 @@ namespace rvi::str_utils
 
     [[nodiscard]]
     std::string_view substr_until_delim(std::string_view strv, char delim);
+
+    [[nodiscard]]
+    std::string_view trim_ws_beg(std::string_view strv);
+ 
+    [[nodiscard]]
+    std::string_view trim_ws_end(std::string_view strv);
+
+    [[nodiscard]]
+    std::string_view trim_ws(std::string_view strv);
 }

@@ -46,3 +46,25 @@ TEST(str_utils, substr_until_delim)
 
     ASSERT_EQ(res, "12345");
 }
+
+TEST(str_utils, trim_ws_beg)
+{
+    std::string test_str = "  dfas- adsf ;lj;    ";
+    auto res = rvi::str_utils::trim_ws_beg(test_str);
+
+    ASSERT_EQ(res, "dfas- adsf ;lj;    ");
+}
+
+TEST(str_utils, trim_ws_end)
+{
+    std::string test_str = "  dfas- adsf ;lj;    ";
+    auto res = rvi::str_utils::trim_ws_end(test_str);
+    ASSERT_EQ(res, "  dfas- adsf ;lj;");
+}
+
+TEST(str_utils, trim_ws)
+{
+    std::string test_str = "  dfas- adsf ;lj;    ";
+    auto res = rvi::str_utils::trim_ws(test_str);
+    ASSERT_EQ(res, "dfas- adsf ;lj;");
+}

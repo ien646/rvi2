@@ -85,4 +85,45 @@ namespace rvi::str_utils
         std::ptrdiff_t sslen = found_it - strv.begin();
         return strv.substr(0, sslen);
     }
+
+    std::string_view trim_ws_beg(std::string_view strv)
+    {
+        int offset = 0;
+        auto it = strv.begin();
+        while(it != strv.end())
+        {
+            if(*it == ' ')
+            {
+                it++;
+                offset++;
+            }
+            else
+            {
+                return strv.substr(offset);
+            }
+        }
+    }
+
+    std::string_view trim_ws_end(std::string_view strv)
+    {
+        int offset = 0;
+        auto it = strv.rbegin();
+        while(it != strv.rend())
+        {
+            if(*it == ' ')
+            {
+                it++;
+                offset++;
+            }
+            else
+            {
+                return strv.substr(0, strv.size() - offset);
+            }
+        }
+    }
+
+    std::string_view trim_ws(std::string_view strv)
+    {
+        return trim_ws_beg(trim_ws_end(strv));
+    }
 }
