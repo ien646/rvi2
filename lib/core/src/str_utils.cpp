@@ -1,8 +1,11 @@
 #include "str_utils.hpp"
 
 namespace rvi::str_utils
-{        
-    str_vec_t split(std::string_view strv, char delim)
+{
+    using std::string;
+    using std::string_view;
+
+    str_vec_t split(string_view strv, char delim)
     {
         str_vec_t result;
         auto beg_it = strv.begin();
@@ -12,7 +15,7 @@ namespace rvi::str_utils
         {
             if (*cur_it == delim)
             {
-                result.push_back(std::string(beg_it, cur_it));
+                result.push_back(string(beg_it, cur_it));
                 beg_it = ++cur_it;
             }
             else
@@ -21,11 +24,11 @@ namespace rvi::str_utils
             }
         }
 
-        result.push_back(std::string(beg_it, cur_it));
+        result.push_back(string(beg_it, cur_it));
         return result;
     }
 
-    str_pair_t split_once_beg(std::string_view strv, char delim)
+    str_pair_t split_once_beg(string_view strv, char delim)
     {
         str_pair_t result;
 
@@ -39,13 +42,13 @@ namespace rvi::str_utils
             result.first = std::string(strv.begin(), found_it);
             if (++found_it != strv.end())
             {
-                result.second = std::string(found_it, strv.end());
+                result.second = string(found_it, strv.end());
             }
         }
         return result;
     }
 
-    str_pair_t split_once_end(std::string_view strv, char delim)
+    str_pair_t split_once_end(string_view strv, char delim)
     {
         str_pair_t result;
 
@@ -61,16 +64,16 @@ namespace rvi::str_utils
         }
         else
         {
-            result.first = std::string(strv.begin(), found_it);
+            result.first = string(strv.begin(), found_it);
             if (++found_it != strv.end())
             {
-                result.second = std::string(found_it, strv.end());
+                result.second = string(found_it, strv.end());
             }
         }
         return result;
     }
 
-    std::string_view substr_from_delim(std::string_view strv, char delim)
+    string_view substr_from_delim(string_view strv, char delim)
     {
         std::string_view result;
         auto found_it = std::find(strv.begin(), strv.end(), delim);
@@ -78,7 +81,7 @@ namespace rvi::str_utils
         return strv.substr(offset);
     }
 
-    std::string_view substr_until_delim(std::string_view strv, char delim)
+    string_view substr_until_delim(string_view strv, char delim)
     {
         std::string_view result;
         auto found_it = std::find(strv.begin(), strv.end(), delim);
@@ -86,7 +89,7 @@ namespace rvi::str_utils
         return strv.substr(0, sslen);
     }
 
-    std::string_view trim_ws_beg(std::string_view strv)
+    string_view trim_ws_beg(string_view strv)
     {
         int offset = 0;
         auto it = strv.begin();
@@ -102,9 +105,10 @@ namespace rvi::str_utils
                 return strv.substr(offset);
             }
         }
+		return strv;
     }
 
-    std::string_view trim_ws_end(std::string_view strv)
+    string_view trim_ws_end(string_view strv)
     {
         int offset = 0;
         auto it = strv.rbegin();
@@ -120,10 +124,52 @@ namespace rvi::str_utils
                 return strv.substr(0, strv.size() - offset);
             }
         }
+		return strv;
     }
 
-    std::string_view trim_ws(std::string_view strv)
+    string_view trim_ws(string_view strv)
     {
         return trim_ws_beg(trim_ws_end(strv));
+    }
+
+    string replace(string_view strv, char old_val, char new_val)
+    {
+        string result(strv);
+        std::replace(result.begin(), result.end(), old_val, new_val);
+        return result;
+    }
+
+    string replace(string_view strv, string_view old_val, string_view new_val)
+    {
+        std::string res = string(strv);
+        auto cur_it = res.begin();
+		
+        const auto old_sz = old_val.size();
+
+        for(;;)
+        {
+            cur_it = std::search(
+                cur_it, 
+                res.end(),
+                old_val.begin(), 
+                old_val.end()
+            );
+
+            if(cur_it == res.end())
+            {
+                break;
+            }
+            else
+            {
+                res.replace(
+                    cur_it, 
+                    cur_it + old_sz, 
+                    new_val.begin(),
+                    new_val.end()
+                );
+            }
+        }
+
+        return res;
     }
 }

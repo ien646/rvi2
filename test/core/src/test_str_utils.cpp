@@ -68,3 +68,24 @@ TEST(str_utils, trim_ws)
     auto res = rvi::str_utils::trim_ws(test_str);
     ASSERT_EQ(res, "dfas- adsf ;lj;");
 }
+
+TEST(str_utils, replace_char)
+{
+    std::string test_str = "e abcdefgh-eee-bebe e";
+    auto res = rvi::str_utils::replace(test_str, 'e', 'x');
+    ASSERT_EQ(res, "x abcdxfgh-xxx-bxbx x");
+}
+
+TEST(str_utils, replace_string)
+{
+    std::string test_str = "123-124-421-421123 123";
+
+    std::string a = "123";
+    std::string b = "abcde";
+    std::string c = "";
+    auto res = rvi::str_utils::replace(test_str, a, b);
+    ASSERT_EQ(res, "abcde-124-421-421abcde abcde");
+    
+    res = rvi::str_utils::replace(res, b, c);
+    ASSERT_EQ(res, "-124-421-421 ");
+}
