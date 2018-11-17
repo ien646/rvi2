@@ -5,7 +5,7 @@
 
 #include "client_instance.hpp"
 
-namespace rvi::host
+namespace rvi
 {
     class runtime
     {

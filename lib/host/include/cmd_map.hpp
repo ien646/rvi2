@@ -6,7 +6,7 @@
 
 #include "cmd_type.hpp"
 
-namespace rvi::host
+namespace rvi
 {
     static const std::unordered_map<std::string, cmd_type> cmd_map = 
     {

@@ -8,7 +8,7 @@
 #include "definition.hpp"
 #include "runtime_call.hpp"
 
-namespace rvi::host
+namespace rvi
 {
     struct client_instance_data
     {

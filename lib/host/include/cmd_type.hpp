@@ -1,6 +1,6 @@
 #pragma once
 
-namespace rvi::host
+namespace rvi
 {
     enum class cmd_type
     {

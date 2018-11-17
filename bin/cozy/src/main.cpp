@@ -24,7 +24,7 @@ int main()
     
 // --- RVI -----------------------------------------------------------------------
 
-    rvi::host::runtime rtm;
+    rvi::runtime rtm;
 
     std::vector<float> vertices;
 

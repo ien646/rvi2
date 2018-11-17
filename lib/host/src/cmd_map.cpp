@@ -1,6 +1,6 @@
 #include "cmd_map.hpp"
 
-namespace rvi::host
+namespace rvi
 {
     std::string get_cmd_name(cmd_type ct)
     {

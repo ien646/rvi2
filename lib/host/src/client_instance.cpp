@@ -1,6 +1,6 @@
 #include "client_instance.hpp"
 
-namespace rvi::host
+namespace rvi
 {
     void client_instance::push_include(const std::string& inc_file)
     {

@@ -2,7 +2,7 @@
 
 #include <cinttypes>
 
-namespace rvi::serialization
+namespace rvi
 {
     enum class cmd_header : uint8_t
     {

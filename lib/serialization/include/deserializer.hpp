@@ -5,7 +5,7 @@
 #include "cmd_header.hpp"
 #include "serialization_base.hpp"
 
-namespace rvi::serialization
+namespace rvi
 {
     class deserializer
     {

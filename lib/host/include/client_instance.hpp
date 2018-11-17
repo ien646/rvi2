@@ -4,7 +4,7 @@
 
 #include "client_instance_data.hpp"
 
-namespace rvi::host
+namespace rvi
 {
     class client_instance
     {

@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-namespace rvi::host
+namespace rvi
 {
     class client_instance;
     typedef std::vector<std::string> arglist_t;

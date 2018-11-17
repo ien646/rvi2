@@ -6,7 +6,7 @@
 #include <line.hpp>
 #include "cmd_header.hpp"
 
-namespace rvi::serialization
+namespace rvi
 {
     typedef std::vector<std::uint8_t> data_t;
 

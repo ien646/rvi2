@@ -1,6 +1,6 @@
 #include "serializer.hpp"
 
-namespace rvi::serialization
+namespace rvi
 {
     data_t serializer::select_frame(const std::string& fname)
     {

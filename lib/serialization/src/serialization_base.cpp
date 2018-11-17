@@ -1,6 +1,6 @@
 #include "serialization_base.hpp"
 
-namespace rvi::serialization
+namespace rvi
 {
     void serialize_fp32_bf(data_t& buff, float val)
     {

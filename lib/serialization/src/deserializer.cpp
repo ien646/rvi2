@@ -1,6 +1,6 @@
 #include "deserializer.hpp"
 
-namespace rvi::serialization
+namespace rvi
 {
     std::string deserializer::select_frame(const data_t& buff, size_t offset)
     {
