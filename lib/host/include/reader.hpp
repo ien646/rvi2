@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <unordered_set>
@@ -40,7 +41,7 @@ namespace rvi
 
     private:
         void handle_instruction_separator(processing_state& state, std::vector<parsed_stmt>& result);
-        void handle_cmdargs_separator(processing_state& state, std::vector<parsed_stmt>& result);
+        void handle_cmdargs_separator(processing_state& state);
         void handle_string_beg_token(processing_state& state);
         void handle_string_end_token(processing_state& state);
         void handle_character(processing_state& state, char ch);

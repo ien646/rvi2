@@ -20,7 +20,9 @@ namespace rvi
 
     reader::reader(std::basic_istream<char>& stream)
         : _stream(stream)
-    { }
+    {
+        _stream >> std::noskipws;
+    }
 
     std::vector<parsed_stmt> reader::process()
     {
@@ -36,7 +38,7 @@ namespace rvi
                     handle_instruction_separator(current_state, result);
                     break;
                 case CMDARGS_SEP_CH:
-                    handle_cmdargs_separator(current_state, result);
+                    handle_cmdargs_separator(current_state);
                     break;
                 case STRING_ESC_CH_BEG:
                     handle_string_beg_token(current_state);
@@ -45,9 +47,12 @@ namespace rvi
                     handle_string_end_token(current_state);
                     break;
                 default:
+                    handle_character(current_state, ch);
                     break;
             }
         }
+
+        return result;
     }
 
     void reader::push_char_uncond(processing_state& state, char ch)
@@ -86,9 +91,27 @@ namespace rvi
         );
 
         result.cmd = cmd_map.at(state.cmd.str());
-        if(!state.past_cmd)
+        if(state.past_cmd)
         {
             result.args = parse_arg_str(state.args.str());
+        }
+
+        return result;
+    }
+
+    void reader::handle_cmdargs_separator(processing_state& state)
+    {
+        rvi_assert(
+            state.str_escape > 0 || !state.past_cmd,
+            "Unexpected cmd-args separator character!"
+        );
+        if(state.str_escape > 0)
+        {
+            push_char_uncond(state, CMDARGS_SEP_CH);
+        }
+        else
+        {
+            state.past_cmd = true;
         }
     }
 
