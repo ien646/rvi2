@@ -7,6 +7,6 @@ namespace rvi
     void rvi_assert(bool cond, const std::string& msg)
     {
         if(!cond)        
-            throw std::logic_error(msg);        
+            throw std::logic_error(msg);
     }
 }
