@@ -1,9 +1,10 @@
 #include "call_map.hpp"
 
+#include <client_instance.hpp>
 #include <rvi_assert.hpp>
 
 #define RT_CALL_ENTRY(name) \
-    void name(client_instance& client_inst, const arglist_t& args)
+    void name(client_instance& c_inst, const arglist_t& args)
 
 #define STR(v) std::to_string(v)
 
@@ -62,56 +63,93 @@ namespace rvi
 
     RT_CALL_ENTRY(c_call)
     { 
-        
+        // 1: Get defname
+        // 2: Parse and compile definition body with a reader
+        // 3: Optionally, cache the compiled definition for later reuse
     }
 
     RT_CALL_ENTRY(c_define)
     { 
-
+        expect_argc(args, 2);
+        std::string defname = args[0];
+        std::string defbody = args[1];
+        c_inst.data.definitions.emplace(defname, defbody);
     }
 
     RT_CALL_ENTRY(c_delete_frame)
     {
-
+        expect_argc(args, 1);
+        std::string framename = args[0];
+        c_inst.context.delete_frame(framename);
     }
 
     RT_CALL_ENTRY(c_draw_line)
-    { 
-
+    {
+        expect_argc(args, 4);
+        float sx = std::stof(args[0]);
+        float sy = std::stof(args[1]);
+        float ex = std::stof(args[2]);
+        float ey = std::stof(args[3]);
+        vector2 from(sx, sy);
+        vector2 to(ex, ey);
+        c_inst.context.draw_line(from, to);
     }
 
     RT_CALL_ENTRY(c_exec_bind)
     {
-
+        expect_argc(args, 1);
+        std::string bname = args[0];
+        std::vector<std::string> oargs;
+        if(args.size() > 1)
+        {
+            std::copy(args.begin() + 1, args.end(), std::back_inserter(oargs));
+        }
+        c_inst.data.bindings[bname](c_inst, oargs);
     }
 
     RT_CALL_ENTRY(c_include)
     { 
-
+        // 1: Read include file from data/ tree
+        // 2: Process file and execute
+        // 3: Optionally, cache the processed file
     }
 
     RT_CALL_ENTRY(c_invalid_cmd)
     { 
-
+        throw std::invalid_argument("Attempt to execute invalid command!");
     }
 
     RT_CALL_ENTRY(c_no_reinclude)
     { 
-
+        c_inst.mark_include_once();
     }
 
     RT_CALL_ENTRY(c_release_frame)
     { 
-
+        c_inst.context.release_frame();
     }
 
     RT_CALL_ENTRY(c_select_frame)
     { 
-
+        expect_argc(args, 1);
+        std::string framename = args[0];
+        c_inst.context.select_frame(framename);
     }
+
     RT_CALL_ENTRY(c_set_color)
     { 
+        expect_argc(args, 3);
+        uint8_t r = std::min(std::stoi(args[0]), 255);
+        uint8_t g = std::min(std::stoi(args[1]), 255);
+        uint8_t b = std::min(std::stoi(args[2]), 255);
+        uint8_t a = 255;
+        if(args.size() > 3)
+        {
+            a = std::min(std::stoi(args[3]), 255);
+        }
 
+        color_rgba color(r, g, b, a);
+        c_inst.context.set_color(color);
     }
 
     RT_CALL_ENTRY(c_set_position)
