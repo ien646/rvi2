@@ -1,1 +1,1 @@
-add_subdirectory(google-test)
+add_subdirectory(googletest)
