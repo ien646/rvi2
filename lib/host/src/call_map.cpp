@@ -69,9 +69,16 @@ namespace rvi
 
     RT_CALL_ENTRY(c_call)
     {
-        // 1: Get defname
-        // 2: Parse and compile definition body with a reader
-        // 3: Optionally, cache the compiled definition for later reuse
+        expect_argc(args, 1);
+        const std::string& defname = args[0];
+        std::vector<parsed_stmt>& instructions = 
+            c_inst.data.definitions[defname];
+
+        for(auto& inst : instructions)
+        {
+            auto& call = call_map.at(inst.cmd);
+            call(c_inst, inst.args);
+        }
     }
 
     RT_CALL_ENTRY(c_define)
@@ -79,7 +86,11 @@ namespace rvi
         expect_argc(args, 2);
         const std::string& defname = args[0];
         const std::string& defbody = args[1];
-        c_inst.data.definitions.emplace(defname, defbody);
+
+        std::stringstream ssbody(defbody);
+        reader rdr(ssbody);
+        auto parsed_def = rdr.process();
+        c_inst.data.definitions.emplace(defname, parsed_def);
     }
 
     RT_CALL_ENTRY(c_delete_frame)
