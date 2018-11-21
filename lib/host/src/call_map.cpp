@@ -1,7 +1,13 @@
 #include "call_map.hpp"
 
+#include <fstream>
+
 #include <client_instance.hpp>
+#include <runtime.hpp>
 #include <rvi_assert.hpp>
+
+#include "reader.hpp"
+#include "parsed_stmt.hpp"
 
 #define RT_CALL_ENTRY(name) \
     void name(client_instance& c_inst, const arglist_t& args)
@@ -62,7 +68,7 @@ namespace rvi
     };
 
     RT_CALL_ENTRY(c_call)
-    { 
+    {
         // 1: Get defname
         // 2: Parse and compile definition body with a reader
         // 3: Optionally, cache the compiled definition for later reuse
@@ -71,15 +77,15 @@ namespace rvi
     RT_CALL_ENTRY(c_define)
     { 
         expect_argc(args, 2);
-        std::string defname = args[0];
-        std::string defbody = args[1];
+        const std::string& defname = args[0];
+        const std::string& defbody = args[1];
         c_inst.data.definitions.emplace(defname, defbody);
     }
 
     RT_CALL_ENTRY(c_delete_frame)
     {
         expect_argc(args, 1);
-        std::string framename = args[0];
+        const std::string& framename = args[0];
         c_inst.context.delete_frame(framename);
     }
 
@@ -98,7 +104,7 @@ namespace rvi
     RT_CALL_ENTRY(c_exec_bind)
     {
         expect_argc(args, 1);
-        std::string bname = args[0];
+        const std::string& bname = args[0];
         std::vector<std::string> oargs;
         if(args.size() > 1)
         {
@@ -108,10 +114,34 @@ namespace rvi
     }
 
     RT_CALL_ENTRY(c_include)
-    { 
-        // 1: Read include file from data/ tree
-        // 2: Process file and execute
-        // 3: Optionally, cache the processed file
+    {
+        expect_argc(args, 1);
+        const std::string& name = args[0];
+
+        if(c_inst.data.include_once_ids.count(name) > 0)
+        {
+            return;
+        }
+        runtime* rptr = c_inst.runtime_ptr();
+        std::vector<parsed_stmt> instructions;
+        if(rptr->is_include_cached(name))
+        {
+            instructions = rptr->get_cached_include(name);
+        }
+        else
+        {
+            const std::string& ipath = rptr->get_include_path(name);
+            std::ifstream ifs(ipath);
+            reader rdr(ifs);
+            instructions = rdr.process();
+            rptr->cache_parsed_include(name, instructions);
+        }
+
+        for(auto& stmt : instructions)
+        {
+            auto& rtcall = call_map.at(stmt.cmd);
+            rtcall(c_inst, stmt.args);
+        }
     }
 
     RT_CALL_ENTRY(c_invalid_cmd)
@@ -132,7 +162,7 @@ namespace rvi
     RT_CALL_ENTRY(c_select_frame)
     { 
         expect_argc(args, 1);
-        std::string framename = args[0];
+        const std::string& framename = args[0];
         c_inst.context.select_frame(framename);
     }
 
@@ -190,7 +220,7 @@ namespace rvi
     RT_CALL_ENTRY(c_undefine)
     {
         expect_argc(args, 1);
-        std::string defname = args[0];
+        const std::string& defname = args[0];
         c_inst.data.definitions.erase(defname);
     }
 }
