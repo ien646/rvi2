@@ -154,26 +154,43 @@ namespace rvi
 
     RT_CALL_ENTRY(c_set_position)
     { 
-
+        expect_argc(args, 2);
+        float x = std::stof(args[0]);
+        float y = std::stof(args[1]);
+        c_inst.context.set_position(vector2(x, y));
     }
 
     RT_CALL_ENTRY(c_set_rotation)
     { 
-
+        expect_argc(args, 1);
+        float rotation = std::stof(args[0]);
+        c_inst.context.set_rotation(rotation);
     }
 
     RT_CALL_ENTRY(c_set_scale)
     { 
-
+        expect_argc(args, 2);
+        float x = std::stof(args[0]);
+        float y = std::stof(args[1]);
+        c_inst.context.set_scale(vector2(x, y));
     }
 
     RT_CALL_ENTRY(c_set_transform)
     { 
-
+        expect_argc(args, 5);
+        float px = std::stof(args[0]);
+        float py = std::stof(args[1]);
+        float sx = std::stof(args[2]);
+        float sy = std::stof(args[3]);
+        float ra = std::stof(args[4]);
+        transform2 tform(vector2(px, py), vector2(sx, sy), ra);
+        c_inst.context.set_transform(std::move(tform));
     }
 
     RT_CALL_ENTRY(c_undefine)
-    { 
-
+    {
+        expect_argc(args, 1);
+        std::string defname = args[0];
+        c_inst.data.definitions.erase(defname);
     }
 }
