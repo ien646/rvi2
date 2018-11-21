@@ -148,7 +148,7 @@ void tcp_listener::start_accept(accept_callback_t cback)
         int sz = sizeof(client_addrinfo);
 
         std::cout << "Awaiting for new client connection..." << std::endl;
-        SOCKET csck = accept(_listen_sock, NULL, NULL);
+        SOCKET csck = accept(_listen_sock, &client_addrinfo, &sz);
         if(csck == INVALID_SOCKET)
         {
             std::cout << "Accepted invalid socket! Skipping..." << std::endl;

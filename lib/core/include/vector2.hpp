@@ -4,7 +4,7 @@
 
 namespace rvi
 {
-    class transform2;
+    struct transform2;
 
     struct vector2
     {

@@ -10,7 +10,7 @@
 #include "parsed_stmt.hpp"
 
 #define RT_CALL_ENTRY(name) \
-    void name(client_instance& c_inst, const arglist_t& args)
+    void name([[maybe_unused]] client_instance& c_inst, [[maybe_unused]] const arglist_t& args)
 
 #define STR(v) std::to_string(v)
 
@@ -157,6 +157,7 @@ namespace rvi
 
     RT_CALL_ENTRY(c_invalid_cmd)
     { 
+        
         throw std::invalid_argument("Attempt to execute invalid command!");
     }
 
@@ -178,15 +179,15 @@ namespace rvi
     }
 
     RT_CALL_ENTRY(c_set_color)
-    { 
+    {
         expect_argc(args, 3);
-        uint8_t r = std::min(std::stoi(args[0]), 255);
-        uint8_t g = std::min(std::stoi(args[1]), 255);
-        uint8_t b = std::min(std::stoi(args[2]), 255);
+        uint8_t r = static_cast<uint8_t>(std::min(std::stoi(args[0]), 255));
+        uint8_t g = static_cast<uint8_t>(std::min(std::stoi(args[1]), 255));
+        uint8_t b = static_cast<uint8_t>(std::min(std::stoi(args[2]), 255));
         uint8_t a = 255;
         if(args.size() > 3)
         {
-            a = std::min(std::stoi(args[3]), 255);
+            a = static_cast<uint8_t>(std::min(std::stoi(args[3]), 255));
         }
 
         color_rgba color(r, g, b, a);
