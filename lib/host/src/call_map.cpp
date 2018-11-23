@@ -148,16 +148,17 @@ namespace rvi
             rptr->cache_parsed_include(name, instructions);
         }
 
+        c_inst.push_include(name);
         for(auto& stmt : instructions)
         {
             auto& rtcall = call_map.at(stmt.cmd);
             rtcall(c_inst, stmt.args);
         }
+        c_inst.pop_include();
     }
 
     RT_CALL_ENTRY(c_invalid_cmd)
-    { 
-        
+    {
         throw std::invalid_argument("Attempt to execute invalid command!");
     }
 
