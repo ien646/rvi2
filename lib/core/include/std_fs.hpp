@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined __GNUC__
+#if defined __GNUC__ && !__INTEL_COMPILER
     #if defined __llvm__ || defined __clang__ 
     // -- CLANG
         #if __clang_major__ >= 7
