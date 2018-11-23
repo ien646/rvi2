@@ -8,7 +8,7 @@
         #elif __clang_major__ >= 6
             #include <experimental/filesystem>
         #else
-            #error At least Clang version 7.x is required for <filesystem> support!
+            #error At least Clang version 6.x is required for <filesystem> support!
         #endif
     #else
     // -- GCC
