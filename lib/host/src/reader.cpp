@@ -142,7 +142,14 @@ namespace rvi
     {
         if(state.str_escape > 0)
         {
-            push_char_uncond(state, ch);
+            if(ch == ARGUMENTS_SEP_CH)
+            {
+                push_char_uncond(state, 0x06);
+            }
+            else
+            {
+                push_char_uncond(state, ch);
+            }
         }
         else
         {
@@ -160,6 +167,11 @@ namespace rvi
 
     std::vector<std::string> reader::parse_arg_str(std::string_view arg_str)
     {
-        return str_utils::split(arg_str, ARGUMENTS_SEP_CH);
+        std::vector<std::string> result = str_utils::split(arg_str, ARGUMENTS_SEP_CH);
+        for(auto& str : result)
+        {
+            str = str_utils::replace(str, 0x06, ',');
+        }
+        return result;
     }
 }
