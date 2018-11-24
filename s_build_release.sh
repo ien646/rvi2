@@ -1,3 +1,4 @@
+echo "-- Initializing git submodules -- "
 git submodule update --init
 mkdir build_release
 cd build_release

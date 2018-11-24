@@ -3,4 +3,5 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     git clean -d -x -f
+	git reset --hard
 fi
