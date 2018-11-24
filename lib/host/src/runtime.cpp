@@ -3,6 +3,8 @@
 #include <std_fs.hpp>
 #include <reader.hpp>
 
+#include <fstream>
+
 #include "call_map.hpp"
 
 namespace rvi
@@ -12,20 +14,20 @@ namespace rvi
         init_include_files(DATA_DIR);
     }
 
-    int create_client()
+    int runtime::create_client()
     {
         int client_id = ++_client_id_accum;
-        _client_instances.emplace(client_id, client_instance());
+        _client_instances.emplace(client_id, client_instance(this));
         return client_id;
     }
 
-    void start_client(int client_id)
+    void runtime::start_client(int client_id)
     {
         client_instance& client = _client_instances.at(client_id);
 
         std::ifstream ifs_prg(DATA_DIR + "/" + MAIN_PRGNAME);
         reader rdr(ifs_prg);
-        auto& stmt_col = rdr.process();
+        auto stmt_col = rdr.process();
         for(auto& stmt : stmt_col)
         {
             auto& call = call_map.at(stmt.cmd);
