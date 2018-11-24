@@ -17,7 +17,7 @@
 namespace rvi
 {
     // -- HELPER METHODS --
-    void expect_argc(const arglist_t& args, int count)
+    void expect_argc(const arglist_t& args, size_t count)
     {
         rvi_assert(
             args.size() >= count,

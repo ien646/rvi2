@@ -2,7 +2,7 @@
 
 namespace rvi
 {
-    static void expect_argc(const arglist_t& args, int count)
+    static void expect_argc(const arglist_t& args, size_t count)
     {
         rvi_assert(
             args.size() >= count,
@@ -15,6 +15,7 @@ namespace rvi
 
     void std_bindings::print(client_instance& c_inst, const arglist_t& args)
     {
+        expect_argc(args, 5);
         std::string text = args[0];
         float fontsz_x = std::stof(args[1]);
         float fontsz_y = std::stof(args[2]);
@@ -49,7 +50,7 @@ namespace rvi
             ctx.set_scale(rvi::vector2(fontsz_x, fontsz_y));
             c_inst.exec_definition(defn);
             ctx.release_frame();
-            curPos.offset_in_place(rvi::vector2(fontsep_x, fontsep_y));
+            curPos.offset_in_place(rvi::vector2(fontsz_x + fontsep_x, fontsep_y));
         }
     }
 
