@@ -26,6 +26,11 @@ namespace rvi
         client_instance& client = _client_instances.at(client_id);
 
         std::ifstream ifs_prg(DATA_DIR + "/" + MAIN_PRGNAME);
+        if(!ifs_prg)
+        {
+            throw std::runtime_error("Main program file not found!");
+        }
+        
         reader rdr(ifs_prg);
         auto stmt_col = rdr.process();
         for(auto& stmt : stmt_col)
