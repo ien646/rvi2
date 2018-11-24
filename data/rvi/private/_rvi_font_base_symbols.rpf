@@ -75,7 +75,7 @@ define:#,
 	draw_line:0.0,0.75,	1.0,0.75;
 };
 
-define: ,
+define:{ },
 {
 };
 

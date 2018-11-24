@@ -25,5 +25,7 @@ namespace rvi
         void pop_include();
         void mark_include_once();
         runtime* runtime_ptr();
+
+        void exec_definition(const std::string& dname);
     };
 }

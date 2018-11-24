@@ -1,5 +1,9 @@
 #include "client_instance.hpp"
 
+#include <iostream>
+
+#include "call_map.hpp"
+
 namespace rvi
 {
     client_instance::client_instance(runtime* rptr)
@@ -29,5 +33,25 @@ namespace rvi
     runtime* client_instance::runtime_ptr()
     {
         return _runtime_ptr;
+    }
+
+    void client_instance::exec_definition(const std::string& dname)
+    {
+        if(data.definitions.count(dname) > 0)
+        {
+            auto def = data.definitions.at(dname);
+            for(auto& inst : def)
+            {
+                auto& call = call_map.at(inst.cmd);
+                call(*this, inst.args);
+            }
+        }
+        else
+        {
+            std::cerr   << "Attempt to use undefined definition ["
+                        << dname
+                        << "]"
+                        << std::endl;
+        }
     }
 }

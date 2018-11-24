@@ -63,7 +63,7 @@ define:H,
 	draw_line:0.0,0.0, 		0.0,1.0;
 	draw_line:1.0,1.0,		1.0,0.0;
 	draw_line:0.0,0.5, 		1.0,0.5;
-}
+};
 
 define:I,
 {

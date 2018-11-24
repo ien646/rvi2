@@ -6,6 +6,7 @@
 #include <fstream>
 
 #include "call_map.hpp"
+#include "std_bindings.hpp"
 
 namespace rvi
 {
@@ -18,6 +19,7 @@ namespace rvi
     {
         int client_id = ++_client_id_accum;
         _client_instances.emplace(client_id, client_instance(this));
+        std_bindings::init_std_bindings(_client_instances.at(client_id));
         return client_id;
     }
 
@@ -84,5 +86,29 @@ namespace rvi
             std::string iid = file.path().filename().string();
             _include_filepaths.emplace(iid, path);
         }
+    }
+
+    std::vector<line> runtime::snapshot_full_flat(int client_id)
+    {
+        client_instance& client = _client_instances.at(client_id);
+        return client.context.snapshot_full_flat();
+    }
+
+    relative_snapshot_t runtime::snapshot_full_relative(int client_id)
+    {
+        client_instance& client = _client_instances.at(client_id);
+        return client.context.snapshot_full_relative();
+    }
+
+    std::vector<line> runtime::snapshot_diff_flat(int client_id)
+    {
+        client_instance& client = _client_instances.at(client_id);
+        return client.context.snapshot_diff_flat();
+    }
+
+    relative_snapshot_t runtime::snapshot_diff_relative(int client_id)
+    {
+        client_instance& client = _client_instances.at(client_id);
+        return client.context.snapshot_diff_relative();
     }
 }

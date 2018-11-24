@@ -25,8 +25,19 @@ int main()
 // --- RVI -----------------------------------------------------------------------
 
     rvi::runtime rtm;
+    int client = rtm.create_client();
+    rtm.start_client(client);
+    auto snapshot = rtm.snapshot_full_flat(client);
 
     std::vector<float> vertices;
+
+    for(auto& line : snapshot)
+    {
+        vertices.push_back(line.start.position.x);
+        vertices.push_back(line.start.position.y);
+        vertices.push_back(line.end.position.x);
+        vertices.push_back(line.end.position.y);
+    }
 
 // --- VERTEX BUFFERS / ARRAYS ---------------------------------------------------
 

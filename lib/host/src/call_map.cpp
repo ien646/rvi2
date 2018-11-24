@@ -121,7 +121,17 @@ namespace rvi
         {
             std::copy(args.begin() + 1, args.end(), std::back_inserter(oargs));
         }
-        c_inst.data.bindings[bname](c_inst, oargs);
+        if(c_inst.data.bindings.count(bname) > 0)
+        {
+            c_inst.data.bindings.at(bname)(c_inst, oargs);
+        }
+        else
+        {
+            std::cerr   << "Attempt to execute non-present binding ["
+                        << bname
+                        << "]"
+                        << std::endl;
+        }
     }
 
     RT_CALL_ENTRY(c_include)
