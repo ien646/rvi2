@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <glad/glad.h>
+#include <glad/glad.hpp>
 #include <GLFW/glfw3.h>
 
 extern std::string read_file(const std::string& fname);
