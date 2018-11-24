@@ -11,11 +11,23 @@ namespace rvi
     class runtime
     {
     private:
+        const std::string DATA_DIR = "data";
+        const std::string MAIN_PRGNAME = "main.rpf";
+
+        int _client_id_accum = 0;
+
+        std::string _include_dir;
         std::unordered_map<int, client_instance> _client_instances;
         std::unordered_map<std::string, std::string> _include_filepaths;
         std::unordered_map<std::string, std::vector<parsed_stmt>> _include_cache;
         
     public:
+        runtime();
+
+        int create_client();
+
+        void start_client(int client_id);
+
         client_instance& get_instance(
             int inst_id);
         
@@ -31,5 +43,8 @@ namespace rvi
         void cache_parsed_include(
             const std::string& name, 
             std::vector<parsed_stmt> instructions);
+
+    private:
+        void init_include_files(const std::string& dir);
     };
 }

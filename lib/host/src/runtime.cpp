@@ -1,7 +1,38 @@
 #include "runtime.hpp"
 
+#include <std_fs.hpp>
+#include <reader.hpp>
+
+#include "call_map.hpp"
+
 namespace rvi
 {
+    runtime::runtime()
+    {
+        init_include_files(DATA_DIR);
+    }
+
+    int create_client()
+    {
+        int client_id = ++_client_id_accum;
+        _client_instances.emplace(client_id, client_instance());
+        return client_id;
+    }
+
+    void start_client(int client_id)
+    {
+        client_instance& client = _client_instances.at(client_id);
+
+        std::ifstream ifs_prg(DATA_DIR + "/" + MAIN_PRGNAME);
+        reader rdr(ifs_prg);
+        auto& stmt_col = rdr.process();
+        for(auto& stmt : stmt_col)
+        {
+            auto& call = call_map.at(stmt.cmd);
+            call(client, stmt.args);
+        }
+    }
+
     client_instance& runtime::get_instance(int inst_id)
     {
         if(_client_instances.count(inst_id) == 0)
@@ -29,5 +60,22 @@ namespace rvi
     void runtime::cache_parsed_include(const std::string& name, std::vector<parsed_stmt> instructions)
     {
         _include_cache[name] = instructions;
+    }
+
+    void runtime::init_include_files(const std::string& dir)
+    {
+        #if !(defined RVI_HAS_STD_FILESYSTEM)
+            #error Current version of RVI2 requires std::filesystem support!
+        #endif
+        
+        using namespace std::filesystem;
+        _include_dir = dir;
+
+        for(auto& file : recursive_directory_iterator(_include_dir))
+        {
+            std::string path = file.path().string();
+            std::string iid = file.path().filename().string();
+            _include_filepaths.emplace(iid, path);
+        }
     }
 }
