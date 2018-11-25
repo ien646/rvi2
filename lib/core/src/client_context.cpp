@@ -347,7 +347,7 @@ namespace rvi
                 entry_lines.push_back(ln);
             }
 
-            result.emplace(get_full_frame_name(fptr), std::move(lines));
+            result.emplace(get_full_frame_name(fptr), std::move(entry_lines));
 
             remaining_frames.pop();
         }
@@ -391,7 +391,7 @@ namespace rvi
                 entry_lines.push_back(ln);
             }
 
-            result.emplace(get_full_frame_name(fptr), std::move(lines));
+            result.emplace(get_full_frame_name(fptr), std::move(entry_lines));
 
             remaining_frames.pop();
         }
