@@ -22,5 +22,5 @@ void main()
 	float b = float(bi) / 255;
 	float a = float(ai) / 255;
 
-	vxColor = vec4(r,g,b,a);
+	vxColor = vec4(r, g, b, a);
 }

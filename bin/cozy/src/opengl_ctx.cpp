@@ -1,5 +1,7 @@
 #include "opengl_ctx.hpp"
 
+#define SCFLOAT(f) static_cast<float>(f)
+
 namespace rvi
 {
     opengl_ctx::opengl_ctx(runtime* rptr, int cid)
@@ -7,6 +9,7 @@ namespace rvi
         , _client_id(cid)
     {
         init_default_shaders(&_shader_program);
+        glLineWidth(2);
     }
 
     void opengl_ctx::refresh()
@@ -24,12 +27,12 @@ namespace rvi
             {
                 vf.line_data.push_back(line.start.position.x);
                 vf.line_data.push_back(line.start.position.y);
-                vf.line_data.push_back(line.start.color.rgba());
+                vf.line_data.push_back(SCFLOAT(line.start.color.rgba()));
                 vf.line_data.push_back(line.end.position.x);
                 vf.line_data.push_back(line.end.position.y);
-                vf.line_data.push_back(line.start.color.rgba());
+                vf.line_data.push_back(SCFLOAT(line.end.color.rgba()));
             }
-            _vframes.emplace(frame_entry.first, std::move(vf));      
+            _vframes.emplace(frame_entry.first, std::move(vf));
 
             const vframe& entry = _vframes[frame_entry.first];
 
