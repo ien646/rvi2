@@ -7,6 +7,7 @@
 
 #include "runtime_call.hpp"
 #include "parsed_stmt.hpp"
+#include "clickable_frame_data.hpp"
 
 namespace rvi
 {
@@ -16,5 +17,6 @@ namespace rvi
         std::unordered_map<std::string, runtime_call_t> bindings;
         std::vector<std::string> include_stack;
         std::unordered_set<std::string> include_once_ids;
+        std::unordered_map<frame*, clickable_frame_data> clickable_frames;
     };
 };

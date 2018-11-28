@@ -46,6 +46,8 @@ namespace rvi
     RT_CALL_ENTRY(c_set_scale);
     RT_CALL_ENTRY(c_set_transform);
     RT_CALL_ENTRY(c_undefine);
+    RT_CALL_ENTRY(c_set_clickable);
+    RT_CALL_ENTRY(c_unset_clickable);
 
     const std::unordered_map<cmd_type, runtime_call_t> call_map = 
     {
@@ -64,7 +66,9 @@ namespace rvi
         { cmd_type::SET_ROTATION,   &c_set_rotation},
         { cmd_type::SET_SCALE,      &c_set_scale},
         { cmd_type::SET_TRANSFORM,  &c_set_transform},
-        { cmd_type::UNDEFINE,       &c_undefine}
+        { cmd_type::UNDEFINE,       &c_undefine},
+        { cmd_type::SET_CLICKABLE,  &c_set_clickable},
+        { cmd_type::UNSET_CLICKABLE,&c_unset_clickable}
     };
 
     RT_CALL_ENTRY(c_call)
@@ -98,6 +102,13 @@ namespace rvi
         expect_argc(args, 1);
         const std::string& framename = args[0];
         c_inst.context.delete_frame(framename);
+
+        // If it is clickable, remove from instance data
+        frame* fptr = c_inst.context.selected_frame()->get_child(framename);
+        if(c_inst.data.clickable_frames.count(fptr) > 0)
+        {
+            c_inst.data.clickable_frames.erase(fptr);
+        }
     }
 
     RT_CALL_ENTRY(c_draw_line)
@@ -245,5 +256,41 @@ namespace rvi
         expect_argc(args, 1);
         const std::string& defname = args[0];
         c_inst.data.definitions.erase(defname);
+    }
+
+    RT_CALL_ENTRY(c_set_clickable)
+    {
+        expect_argc(args, 1);
+
+        std::string binding_name = args[0];
+        
+        std::vector<std::string> binding_args;
+        std::copy(args.begin() + 1, args.end(), std::back_inserter(binding_args));
+
+        frame* fptr = c_inst.context.selected_frame();
+        rectangle rect(fptr->transform().position, fptr->transform().scale);
+
+        clickable_frame_data cfdata;
+        cfdata.binding_name = binding_name;
+        cfdata.binding_args = std::move(binding_args);
+        cfdata.rect = rect;
+        
+        if(c_inst.data.clickable_frames.count(fptr) > 0)
+        {
+            c_inst.data.clickable_frames.erase(fptr);
+        }
+
+        c_inst.data.clickable_frames.emplace(fptr, cfdata);
+    }
+
+    RT_CALL_ENTRY(c_unset_clickable)
+    {        
+        // expect_argc(args, 0);
+        frame* fptr = c_inst.context.selected_frame();
+
+        if(c_inst.data.clickable_frames.count(fptr) > 0)
+        {
+            c_inst.data.clickable_frames.erase(fptr);
+        }
     }
 }

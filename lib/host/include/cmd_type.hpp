@@ -20,6 +20,8 @@ namespace rvi
         CALL,
         INCLUDE,
         NO_REINCLUDE,
-        EXEC_BIND
+        EXEC_BIND,
+        SET_CLICKABLE,
+        UNSET_CLICKABLE
     };
 }
