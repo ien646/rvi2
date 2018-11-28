@@ -78,9 +78,9 @@ namespace rvi
 
     bool rectangle::intersects(const rectangle& other) const noexcept
     {
-        return left() < other.right() 
-            && right() > other.left() 
-            && top() > other.bottom() 
-            && bottom() < other.top();
+        return left() <= other.right() 
+            && right() >= other.left() 
+            && top() >= other.bottom() 
+            && bottom() <= other.top();
     }
 }
