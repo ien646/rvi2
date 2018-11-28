@@ -16,7 +16,21 @@ namespace rvi
         rectangle(float x, float y, float w, float h);
         rectangle(vector2 pos, vector2 sz);
 
-        bool operator==(const rectangle& other);
-        bool operator!=(const rectangle& other);
+        float left() const noexcept;
+        float right() const noexcept;
+        float bottom() const noexcept;
+        float top() const noexcept;
+
+        vector2 top_left_corner() const noexcept;
+        vector2 top_right_corner() const noexcept;
+        vector2 bottom_left_corner() const noexcept;
+        vector2 bottom_right_corner() const noexcept;
+
+        bool operator==(const rectangle& other) const noexcept;
+        bool operator!=(const rectangle& other) const noexcept;
+
+        bool contains(vector2 point) const noexcept;
+        bool contains(const rectangle& other) const noexcept;
+        bool intersects(const rectangle& other) const noexcept;
     };
 }
