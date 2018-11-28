@@ -21,10 +21,10 @@ namespace rvi
         float bottom() const noexcept;
         float top() const noexcept;
 
-        vector2 top_left_corner() const noexcept;
-        vector2 top_right_corner() const noexcept;
-        vector2 bottom_left_corner() const noexcept;
-        vector2 bottom_right_corner() const noexcept;
+        vector2 corner_left_top() const noexcept;
+        vector2 corner_right_top() const noexcept;
+        vector2 corner_left_bottom() const noexcept;
+        vector2 corner_right_bottom() const noexcept;
 
         bool operator==(const rectangle& other) const noexcept;
         bool operator!=(const rectangle& other) const noexcept;

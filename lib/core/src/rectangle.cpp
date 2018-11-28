@@ -32,24 +32,24 @@ namespace rvi
         return position.y + size.y;
     }
 
-    vector2 rectangle::top_left_corner() const noexcept
+    vector2 rectangle::corner_left_top() const noexcept
     {
         return vector2(left(), top());
     }
 
-    vector2 rectangle::top_right_corner() const noexcept
+    vector2 rectangle::corner_right_top() const noexcept
     {
         return vector2(right(), top());
     }
             
-    vector2 rectangle::bottom_left_corner() const noexcept
+    vector2 rectangle::corner_left_bottom() const noexcept
     {
         return position;
     }
 
-    vector2 rectangle::bottom_right_corner() const noexcept
+    vector2 rectangle::corner_right_bottom() const noexcept
     {
-        return vector2(bottom(), right());
+        return vector2(right(), bottom());
     }
 
     bool rectangle::operator==(const rectangle& other) const noexcept
@@ -73,7 +73,7 @@ namespace rvi
     bool rectangle::contains(const rectangle& other) const noexcept
     {
         return (this->contains(other.position))
-            && (this->contains(other.top_right_corner()));
+            && (this->contains(other.corner_right_top()));
     }
 
     bool rectangle::intersects(const rectangle& other) const noexcept
