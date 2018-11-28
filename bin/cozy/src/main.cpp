@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <fstream>
+#include <chrono>
 
 #include <runtime.hpp>
 #include <line.hpp>
@@ -25,18 +26,23 @@ int main()
     rvi::opengl_ctx roglctx(&rtm, client);
     roglctx.refresh();
     
+    // vsync
     glfwSwapInterval(1);
+
+    auto clk = std::chrono::high_resolution_clock();
+    auto i_time = clk.now();
+
     while(!wnd.should_close())
     {
+        auto delta_duration = (clk.now() - i_time).count();
+        auto delta_time = static_cast<float>(delta_duration) / 1000000.0F;
         // --  Render  ------------------------------
         roglctx.refresh();
-        roglctx.draw();
+        roglctx.draw(delta_time);
         // ------------------------------------------
         glfwSwapBuffers(wnd.wnd_ptr());
         glfwPollEvents();
     }
-
-    glDisableVertexAttribArray(0);
 
     glfwTerminate();
     return 0;

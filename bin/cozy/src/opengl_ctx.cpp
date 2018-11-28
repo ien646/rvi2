@@ -54,11 +54,17 @@ namespace rvi
         }
     }
 
-    void opengl_ctx::draw()
+    void opengl_ctx::draw(float delta_time)
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);        
+        glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(_shader_program);
+        GLint uloc = glGetUniformLocation(_shader_program, "delta_time");
+        if(uloc >= 0)
+        {
+            glUniform1f(uloc, delta_time);
+        }
+        
         for(auto &vfp : _vframes)
         {
             glBindVertexArray(vfp.second.vao);

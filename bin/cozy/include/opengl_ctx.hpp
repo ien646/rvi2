@@ -31,7 +31,7 @@ namespace rvi
     public:
         opengl_ctx(runtime* rptr, int client_id);
         void refresh();
-        void draw();
+        void draw(float delta_time);
     
     private:
         void create_frame_obj(const std::string& name, std::vector<line>&& lines);

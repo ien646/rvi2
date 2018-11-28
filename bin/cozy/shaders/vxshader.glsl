@@ -3,6 +3,8 @@ layout (location = 0) in vec3 aPos;
 
 out vec4 vxColor;
 
+uniform float delta_time;
+
 void main()
 {
 	// Position
@@ -11,11 +13,11 @@ void main()
 	gl_Position = vec4(x, y, 1.0, 1.0);
 
 	// Vertex color
-	uint dt = floatBitsToInt(aPos.z);
-	uint ri = (dt >> 24) & 0x000000FF;
-	uint gi = (dt >> 16) & 0x000000FF;
-	uint bi = (dt >> 8) & 0x000000FF;
-	uint ai = (dt) & 0x000000FF;
+	uint dt = floatBitsToUint(aPos.z);
+	uint ri = uint((dt >> 24) & uint(0x000000FF));
+	uint gi = uint((dt >> 16) & uint(0x000000FF));
+	uint bi = uint((dt >> 8) & uint(0x000000FF));
+	uint ai = uint((dt) & uint(0x000000FF));
 
 	float r = float(ri) / 255;
 	float g = float(gi) / 255;
