@@ -56,9 +56,10 @@ namespace rvi
     }
 
     void client_instance::set_clickable_frame(
-        frame* fptr, 
-        const std::string& binding_name,
-        const std::vector<std::string>& binding_args)
+            frame* fptr, 
+            const std::string& binding_name,
+            float depth,
+            const std::vector<std::string>& binding_args)
     {
         rectangle rect(fptr->transform().position, fptr->transform().scale);
 
@@ -66,16 +67,48 @@ namespace rvi
         cfdata.binding_name = binding_name;
         cfdata.binding_args = std::move(binding_args);
         cfdata.rect = rect;
+        cfdata.depth_value = depth;
 
-        remove_clickable_frame(fptr);
+        unset_clickable_frame(fptr);
         data.clickable_frames.emplace(fptr, cfdata);
     }
 
-    void client_instance::remove_clickable_frame(frame* fptr)
+    void client_instance::unset_clickable_frame(frame* fptr)
     {
         if(data.clickable_frames.count(fptr) > 0)
         {
             data.clickable_frames.erase(fptr);
+        }
+    }
+
+    void client_instance::user_click(vector2 pos)
+    {
+        std::vector<const clickable_frame_data&> matches;
+        for(const auto& dt : data.clickable_frames)
+        {
+            const auto& data = dt.second;
+            if(data.rect.contains(pos))
+            {
+                if(data.depth_value > matches.back().depth_value)
+                {
+                    continue;
+                }
+                else if(data.depth_value == matches.back().depth_value)
+                {
+                    matches.push_back(data);
+                }
+                else //if (data.depth_value < matches.back().depth_value)
+                {
+                    matches.clear();
+                    matches.push_back(data);
+                }
+            }
+        }
+
+        for(auto& match : matches)
+        {
+            auto& binding = data.bindings.at(match.binding_name);
+            binding(*this, match.binding_args);
         }
     }
 }

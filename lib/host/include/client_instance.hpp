@@ -31,8 +31,11 @@ namespace rvi
         void set_clickable_frame(
             frame* fptr, 
             const std::string& binding_name,
+            float depth,
             const std::vector<std::string>& binding_args);
             
-        void remove_clickable_frame(frame* fptr);
+        void unset_clickable_frame(frame* fptr);
+
+        void user_click(vector2 pos);
     };
 }

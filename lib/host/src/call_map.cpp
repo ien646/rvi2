@@ -1,6 +1,7 @@
 #include "call_map.hpp"
 
 #include <fstream>
+#include <utility>
 
 #include <client_instance.hpp>
 #include <runtime.hpp>
@@ -99,13 +100,23 @@ namespace rvi
 
     RT_CALL_ENTRY(c_delete_frame)
     {
-        expect_argc(args, 1);
-        const std::string& framename = args[0];
-        c_inst.context.delete_frame(framename);
+        // expect_argc(args, 0);
+        frame* sfptr = c_inst.context.selected_frame();
 
-        // If it is clickable, remove from instance data
-        frame* fptr = c_inst.context.selected_frame()->get_child(framename);
-        c_inst.remove_clickable_frame(fptr);
+        if(args.size() > 0)
+        {
+            const std::string& framename = args[0];
+            frame* cfptr = c_inst.context.selected_frame()->get_child(framename);
+            c_inst.context.delete_frame(framename);
+            c_inst.unset_clickable_frame(cfptr);
+        }
+        else if(c_inst.context.selected_frame()->has_parent())
+        {
+            frame* cfptr = c_inst.context.selected_frame();
+            c_inst.context.release_frame();
+            c_inst.context.delete_frame(cfptr->name());
+            c_inst.unset_clickable_frame(cfptr);
+        }
     }
 
     RT_CALL_ENTRY(c_draw_line)
@@ -261,17 +272,26 @@ namespace rvi
 
         std::string binding_name = args[0];
         
+        float depth = 0.0F;
+        if(args.size() > 1) // optional depth
+        {
+            depth = std::stof(args[1]);
+        }
+
         std::vector<std::string> binding_args;
-        std::copy(args.begin() + 1, args.end(), std::back_inserter(binding_args));
+        if(args.size() > 2) // optional args
+        {
+            std::copy(args.begin() + 2, args.end(), std::back_inserter(binding_args));
+        }
 
         frame* fptr = c_inst.context.selected_frame();
-        c_inst.set_clickable_frame(fptr, binding_name, binding_args);
+        c_inst.set_clickable_frame(fptr, binding_name, depth, binding_args);
     }
 
     RT_CALL_ENTRY(c_unset_clickable)
     {
         // expect_argc(args, 0);
         frame* fptr = c_inst.context.selected_frame();
-        c_inst.remove_clickable_frame(fptr);
+        c_inst.unset_clickable_frame(fptr);
     }
 }

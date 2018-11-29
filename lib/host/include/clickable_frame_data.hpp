@@ -11,6 +11,7 @@ namespace rvi
     {
         std::string binding_name;
         std::vector<std::string> binding_args;
+        float depth_value = 0.0F;
         rectangle rect;
     };
 }
