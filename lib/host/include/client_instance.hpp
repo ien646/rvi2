@@ -27,5 +27,12 @@ namespace rvi
         runtime* runtime_ptr();
 
         void exec_definition(const std::string& dname);
+
+        void client_instance::set_clickable_frame(
+            frame* fptr, 
+            const std::string& binding_name,
+            const std::vector<std::string>& binding_args);
+            
+        void remove_clickable_frame(frame* fptr);
     };
 }

@@ -54,4 +54,28 @@ namespace rvi
                         << std::endl;
         }
     }
+
+    void client_instance::set_clickable_frame(
+        frame* fptr, 
+        const std::string& binding_name,
+        const std::vector<std::string>& binding_args)
+    {
+        rectangle rect(fptr->transform().position, fptr->transform().scale);
+
+        clickable_frame_data cfdata;
+        cfdata.binding_name = binding_name;
+        cfdata.binding_args = std::move(binding_args);
+        cfdata.rect = rect;
+
+        remove_clickable_frame(fptr);
+        data.clickable_frames.emplace(fptr, cfdata);
+    }
+
+    void client_instance::remove_clickable_frame(frame* fptr)
+    {
+        if(data.clickable_frames.count(fptr) > 0)
+        {
+            data.clickable_frames.erase(fptr);
+        }
+    }
 }

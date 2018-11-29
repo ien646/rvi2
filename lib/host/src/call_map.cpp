@@ -105,10 +105,7 @@ namespace rvi
 
         // If it is clickable, remove from instance data
         frame* fptr = c_inst.context.selected_frame()->get_child(framename);
-        if(c_inst.data.clickable_frames.count(fptr) > 0)
-        {
-            c_inst.data.clickable_frames.erase(fptr);
-        }
+        c_inst.remove_clickable_frame(fptr);
     }
 
     RT_CALL_ENTRY(c_draw_line)
@@ -268,29 +265,13 @@ namespace rvi
         std::copy(args.begin() + 1, args.end(), std::back_inserter(binding_args));
 
         frame* fptr = c_inst.context.selected_frame();
-        rectangle rect(fptr->transform().position, fptr->transform().scale);
-
-        clickable_frame_data cfdata;
-        cfdata.binding_name = binding_name;
-        cfdata.binding_args = std::move(binding_args);
-        cfdata.rect = rect;
-        
-        if(c_inst.data.clickable_frames.count(fptr) > 0)
-        {
-            c_inst.data.clickable_frames.erase(fptr);
-        }
-
-        c_inst.data.clickable_frames.emplace(fptr, cfdata);
+        c_inst.set_clickable_frame(fptr, binding_name, binding_args);
     }
 
     RT_CALL_ENTRY(c_unset_clickable)
-    {        
+    {
         // expect_argc(args, 0);
         frame* fptr = c_inst.context.selected_frame();
-
-        if(c_inst.data.clickable_frames.count(fptr) > 0)
-        {
-            c_inst.data.clickable_frames.erase(fptr);
-        }
+        c_inst.remove_clickable_frame(fptr);
     }
 }
