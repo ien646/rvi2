@@ -83,32 +83,32 @@ namespace rvi
 
     void client_instance::user_click(vector2 pos)
     {
-        std::vector<const clickable_frame_data&> matches;
-        for(const auto& dt : data.clickable_frames)
+        std::vector<clickable_frame_data*> matches;
+        for(auto& dt : data.clickable_frames)
         {
-            const auto& data = dt.second;
-            if(data.rect.contains(pos))
+            auto& sdata = dt.second;
+            if(sdata.rect.contains(pos))
             {
-                if(data.depth_value > matches.back().depth_value)
+                if(sdata.depth_value > matches.back()->depth_value)
                 {
                     continue;
                 }
-                else if(data.depth_value == matches.back().depth_value)
+                else if(sdata.depth_value == matches.back()->depth_value)
                 {
-                    matches.push_back(data);
+                    matches.push_back(&sdata);
                 }
                 else //if (data.depth_value < matches.back().depth_value)
                 {
                     matches.clear();
-                    matches.push_back(data);
+                    matches.push_back(&sdata);
                 }
             }
         }
 
         for(auto& match : matches)
         {
-            auto& binding = data.bindings.at(match.binding_name);
-            binding(*this, match.binding_args);
+            auto& binding = data.bindings.at(match->binding_name);
+            binding(*this, match->binding_args);
         }
     }
 }
