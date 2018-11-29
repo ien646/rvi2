@@ -28,7 +28,7 @@ namespace rvi
 
         void exec_definition(const std::string& dname);
 
-        void client_instance::set_clickable_frame(
+        void set_clickable_frame(
             frame* fptr, 
             const std::string& binding_name,
             const std::vector<std::string>& binding_args);
