@@ -4,10 +4,12 @@
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <deque>
 
 #include "runtime_call.hpp"
 #include "parsed_stmt.hpp"
 #include "clickable_frame_data.hpp"
+#include "constrained_buffer.hpp"
 
 namespace rvi
 {
@@ -18,5 +20,6 @@ namespace rvi
         std::vector<std::string> include_stack;
         std::unordered_set<std::string> include_once_ids;
         std::unordered_map<frame*, clickable_frame_data> clickable_frames;
+        constrained_buffer<char, 128> key_buffer;
     };
 };

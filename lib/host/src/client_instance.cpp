@@ -111,4 +111,9 @@ namespace rvi
             binding(*this, match->binding_args);
         }
     }
+
+    void client_instance::key_press(char kval)
+    {
+        data.key_buffer.push_back(kval);
+    }
 }

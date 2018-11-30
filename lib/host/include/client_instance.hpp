@@ -37,5 +37,7 @@ namespace rvi
         void unset_clickable_frame(frame* fptr);
 
         void user_click(vector2 pos);
+
+        void key_press(char kval);
     };
 }
