@@ -16,7 +16,7 @@ namespace rvi
         , _parent(parent)
     { }
 
-    std::unique_ptr <frame> frame::create_copy(frame* fptr_parent)
+    std::unique_ptr<frame> frame::create_copy(frame* fptr_parent)
     {
         auto result = std::make_unique<frame>(_name, fptr_parent);
 
@@ -117,7 +117,7 @@ namespace rvi
             size_t result = 0;
             for (const auto& f : _child_frames_index)
             {
-                result++;           
+                result++;
                 result += _child_frames_index.at(f.first)->child_count(true);
             }
             return result;

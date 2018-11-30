@@ -7,7 +7,7 @@
 namespace rvi
 {
     ///RGBA color data structure
-    struct color_rgba
+    struct color_rgba : public string_representable
     {
         ///Red channel value
         u8 r = 0;
@@ -58,6 +58,7 @@ namespace rvi
 
         bool operator!=(color_rgba other) const noexcept;
 
-        std::string to_string() const;
+        ///Represent as string
+        std::string to_string() const final;
     };
 }
