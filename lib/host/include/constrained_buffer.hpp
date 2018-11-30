@@ -15,7 +15,7 @@ namespace rvi
         
         constexpr constrained_buffer() { }
        
-        constexpr max_size() const noexcept
+        constexpr size_t max_size() const noexcept
         {
             return max_sz;
         }
@@ -23,7 +23,7 @@ namespace rvi
         void push_back(const T& val)
         {
             buffer.push_back(val);
-            if(buffer.size() > max_size)
+            if(buffer.size() > max_sz)
             {
                 buffer.pop_front();
             }
@@ -32,7 +32,7 @@ namespace rvi
         void push_back(T&& val)
         {
             buffer.push_back(std::move(val));
-            if(buffer.size() > max_size)
+            if(buffer.size() > max_sz)
             {
                 buffer.pop_front();
             }
@@ -43,12 +43,12 @@ namespace rvi
             buffer.clear();
         }
 
-        std::deque<T>::const_iterator begin() noexcept
+        auto begin() noexcept
         {
             return buffer.begin();
         }
 
-        std::deque<T>::const_iterator end() noexcept
+        auto end() noexcept
         {
             return buffer.end();
         }

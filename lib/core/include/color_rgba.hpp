@@ -6,28 +6,26 @@
 
 namespace rvi
 {
-    /**
-     * @brief RGBA color data structure
-     */
+    ///RGBA color data structure
     struct color_rgba
     {
-        ///@brief Red channel value
+        ///Red channel value
         u8 r = 0;
 
-        ///@brief Green channel value
+        ///Green channel value
         u8 g = 0;
 
-        ///@brief Blue channel value
+        ///Blue channel value
         u8 b = 0;
 
-        ///@brief Alpha channel value
+        ///Alpha channel value
         u8 a = 0;
 
-        ///@brief Construct a new color_rgba object [rgba = (0,0,0,0)]
+        ///Construct a new color_rgba object [rgba = (0,0,0,0)]
         constexpr color_rgba() noexcept { };
 
         /**
-         * @brief Construct a new color_rgba object
+         * Construct a new color_rgba object
          * 
          * @param r Red channel value
          * @param g Green channel value
@@ -42,14 +40,14 @@ namespace rvi
             this->a = a;
         }
 
-        ///@brief Pack channel data into a 4-byte scalar
+        ///Pack channel data into a 4-byte scalar
         u32 rgba()
         {
             return (r << 24) | (g << 16) | (b << 8) | (a);
         }
 
         /**
-         * @brief Construct a new color_rgba from a 4-byte scalar,
+         * Construct a new color_rgba from a 4-byte scalar,
          * where each byte represents a channel value
          * 
          * @param rgba 4-byte scalar rgba value

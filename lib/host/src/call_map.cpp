@@ -106,16 +106,15 @@ namespace rvi
         if(args.size() > 0)
         {
             const std::string& framename = args[0];
-            frame* cfptr = c_inst.context.selected_frame()->get_child(framename);
+            frame* cfptr = sfptr->get_child(framename);
             c_inst.context.delete_frame(framename);
             c_inst.unset_clickable_frame(cfptr);
         }
-        else if(c_inst.context.selected_frame()->has_parent())
+        else if(sfptr->has_parent())
         {
-            frame* cfptr = c_inst.context.selected_frame();
             c_inst.context.release_frame();
-            c_inst.context.delete_frame(cfptr->name());
-            c_inst.unset_clickable_frame(cfptr);
+            c_inst.context.delete_frame(sfptr->name());
+            c_inst.unset_clickable_frame(sfptr);
         }
     }
 
