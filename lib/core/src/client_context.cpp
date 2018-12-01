@@ -106,6 +106,7 @@ namespace rvi
 
     bool client_context::delete_frame(const std::string& name)
     {
+        _deleted_frame_queue.push_back(name);
         return _selected_frame->delete_child(name);
     }
 
@@ -276,55 +277,13 @@ namespace rvi
         }
 
         return result;
-    }
+    }    
 
-    std::vector<line> client_context::snapshot_diff_flat()
+    relative_snapshot client_context::snapshot_full_relative()
     {
-        std::vector<line> result;
-        std::queue<frame*> remaining_frames;
-
-        // Initial set consists only of modified frame ptrs
-        for(frame* fptr : _modified_frames)
-        {
-            remaining_frames.push(fptr);
-            for(auto& ch_pair : fptr->children())
-            {
-                remaining_frames.push(ch_pair.second);
-            }
-        }
-
-        _modified_frames.clear();
-
-        // Iterate all frames, while procedurally adding children
-        while(!remaining_frames.empty())
-        {
-            frame* fptr = remaining_frames.front();
-            for(auto& ch_pair : fptr->children())
-            {
-                remaining_frames.push(ch_pair.second);
-            }
-
-            auto& lines = fptr->lines();
-            result.reserve(lines.size());
-            
-            for(line ln : lines) // expl. copy
-            {
-                ln.apply_transform(fptr->get_absolute_transform());
-                result.push_back(ln);
-            }
-
-            remaining_frames.pop();
-        }
-
-        return result;
-    }
-
-    relative_snapshot_t client_context::snapshot_full_relative()
-    {
-        relative_snapshot_t result;
+        relative_snapshot result;        
 
         std::queue<frame*> remaining_frames;
-
         remaining_frames.push(_main_frame.get());
 
         // Iterate all frames, while procedurally adding children
@@ -347,7 +306,12 @@ namespace rvi
                 entry_lines.push_back(ln);
             }
 
-            result.emplace(get_full_frame_name(fptr), std::move(entry_lines));
+            relative_snapshot_entry entry;
+            entry.name = get_full_frame_name(fptr);
+            entry.lines = std::move(entry_lines);
+            entry.deleted = false;
+
+            result.entries.push_back(std::move(entry));
 
             remaining_frames.pop();
         }
@@ -355,9 +319,11 @@ namespace rvi
         return result;
     }
 
-    relative_snapshot_t client_context::snapshot_diff_relative()
+    relative_snapshot client_context::snapshot_diff_relative()
     {
-        relative_snapshot_t result;
+        relative_snapshot result;
+
+        add_deleted_frames_to_snapshot(result);
 
         std::queue<frame*> remaining_frames;
         
@@ -391,11 +357,28 @@ namespace rvi
                 entry_lines.push_back(ln);
             }
 
-            result.emplace(get_full_frame_name(fptr), std::move(entry_lines));
+            relative_snapshot_entry entry;
+            entry.name = get_full_frame_name(fptr);
+            entry.lines = std::move(entry_lines);
+            entry.deleted = false;
+
+            result.entries.push_back(std::move(entry));
 
             remaining_frames.pop();
         }
 
         return result;
+    }
+
+    void client_context::add_deleted_frames_to_snapshot(relative_snapshot& sh)
+    {
+        // Enqueue deleted frames
+        for(auto& deleted_frame : _deleted_frame_queue)
+        {
+            relative_snapshot_entry entry;
+            entry.deleted = true;
+            sh.entries.push_back(std::move(entry));
+        }
+        _deleted_frame_queue.clear();
     }
 }

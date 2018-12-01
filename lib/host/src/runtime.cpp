@@ -94,19 +94,13 @@ namespace rvi
         return client.context.snapshot_full_flat();
     }
 
-    relative_snapshot_t runtime::snapshot_full_relative(int client_id)
+    relative_snapshot runtime::snapshot_full_relative(int client_id)
     {
         client_instance& client = _client_instances.at(client_id);
         return client.context.snapshot_full_relative();
     }
 
-    std::vector<line> runtime::snapshot_diff_flat(int client_id)
-    {
-        client_instance& client = _client_instances.at(client_id);
-        return client.context.snapshot_diff_flat();
-    }
-
-    relative_snapshot_t runtime::snapshot_diff_relative(int client_id)
+    relative_snapshot runtime::snapshot_diff_relative(int client_id)
     {
         client_instance& client = _client_instances.at(client_id);
         return client.context.snapshot_diff_relative();

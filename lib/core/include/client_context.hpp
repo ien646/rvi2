@@ -9,11 +9,10 @@
 #include "rvi_base.hpp"
 #include "frame.hpp"
 #include "line.hpp"
+#include "relative_snapshot.hpp"
 
 namespace rvi
 {
-    typedef std::unordered_map<std::string, std::vector<line>> relative_snapshot_t;
-
     class client_context
     {
     private:
@@ -31,6 +30,8 @@ namespace rvi
         std::unordered_map<frame*, std::string> _cached_full_fnames;
 
         color_rgba _current_color;
+
+        std::vector<std::string> _deleted_frame_queue;
 
     public:
         static const std::string MAIN_FRAMENAME;
@@ -85,10 +86,11 @@ namespace rvi
 
         std::vector<line> snapshot_full_flat() const;
 
-        std::vector<line> snapshot_diff_flat();
+        relative_snapshot snapshot_full_relative();
 
-        relative_snapshot_t snapshot_full_relative();
+        relative_snapshot snapshot_diff_relative();
 
-        relative_snapshot_t snapshot_diff_relative();
+    private:
+        void add_deleted_frames_to_snapshot(relative_snapshot& sh);
     };
 }

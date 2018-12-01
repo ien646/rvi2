@@ -15,7 +15,7 @@ namespace rvi
     void opengl_ctx::refresh()
     {
         auto snapshot = _runtime_ptr->snapshot_full_relative(_client_id);
-        for(auto&& frame_entry : snapshot)
+        for(auto&& frame_entry : snapshot.entries)
         {
             GLuint vao, vbo;
             glGenVertexArrays(1, &vao);
@@ -23,7 +23,7 @@ namespace rvi
             vframe vf;
             vf.vao = vao;
             vf.vbo = vbo;
-            for(auto& line : frame_entry.second)
+            for(auto& line : frame_entry.lines)
             {
                 vf.line_data.push_back(line.start.position.x);
                 vf.line_data.push_back(line.start.position.y);
@@ -32,9 +32,9 @@ namespace rvi
                 vf.line_data.push_back(line.end.position.y);
                 vf.line_data.push_back(SCFLOAT(line.end.color.rgba()));
             }
-            _vframes.emplace(frame_entry.first, std::move(vf));
+            _vframes.emplace(frame_entry.name, std::move(vf));
 
-            const vframe& entry = _vframes[frame_entry.first];
+            const vframe& entry = _vframes[frame_entry.name];
 
             glBindVertexArray(vao);
             glBindBuffer(GL_ARRAY_BUFFER, vbo);

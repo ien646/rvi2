@@ -45,9 +45,8 @@ namespace rvi
             std::vector<parsed_stmt> instructions);
 
         std::vector<line> snapshot_full_flat(int client_id);
-        relative_snapshot_t snapshot_full_relative(int client_id);
-        std::vector<line> snapshot_diff_flat(int client_id);
-        relative_snapshot_t snapshot_diff_relative(int client_id);
+        relative_snapshot snapshot_full_relative(int client_id);
+        relative_snapshot snapshot_diff_relative(int client_id);
 
     private:
         void init_include_files(const std::string& dir);
