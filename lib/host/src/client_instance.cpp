@@ -68,6 +68,7 @@ namespace rvi
         cfdata.binding_args = std::move(binding_args);
         cfdata.rect = rect;
         cfdata.depth_value = depth;
+        cfdata.fptr = fptr;
 
         unset_clickable_frame(fptr);
         data.clickable_frames.emplace(fptr, cfdata);
@@ -108,6 +109,7 @@ namespace rvi
         for(auto& match : matches)
         {
             auto& binding = data.bindings.at(match->binding_name);
+            match->binding_args.push_back(context.get_full_frame_name(match->fptr));
             binding(*this, match->binding_args);
         }
     }
