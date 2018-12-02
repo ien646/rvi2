@@ -32,7 +32,7 @@ namespace rvi
             glGenBuffers(1, &vbo);
             vframe vf;
             vf.vao = vao;
-            vf.vbo = vbo;
+            vf.vbo = vbo;            
             for(auto& line : frame_entry.lines)
             {
                 vf.line_data.push_back(line.start.position.x);

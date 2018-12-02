@@ -23,8 +23,9 @@ static void hello_click(rvi::client_instance& inst, const rvi::arglist_t&)
 
     // Return to root frame
     while(ctx.release_frame()) { continue; }
-    rvi::frame* hframe = ctx.select_frame("hello_friend");
-    hframe->clear_lines();
+    ctx.select_frame("hello_friend");
+    ctx.clear_frame();
+    ctx.clear_children();
     ctx.set_position(rvi::vector2(0.15f, 0.15f));
     inst.data.bindings["print"](inst, rvi::arglist_t
     {

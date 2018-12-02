@@ -29,7 +29,6 @@ namespace rvi
         result._frame_stack.push_back(_main_frame.get());
         result._modified_frames.clear();
         result._modified_frames.emplace(_main_frame.get());
-        result._cached_full_fnames.clear();
         result._current_color = _current_color;
         return result;
     }
@@ -113,8 +112,18 @@ namespace rvi
 
     bool client_context::delete_frame(const std::string& name)
     {
-        _deleted_frame_queue.push_back(name);
+        std::string full_name = get_full_frame_name(_selected_frame->get_child(name));
+        _deleted_frame_queue.push_back(full_name);
         return _selected_frame->delete_child(name);
+    }
+
+    void client_context::clear_children()
+    {
+        for (auto& ch : _selected_frame->children())
+        {
+            _deleted_frame_queue.push_back(get_full_frame_name(ch.second));
+        }
+        _selected_frame->clear_children();
     }
 
     frame* client_context::selected_frame() noexcept
@@ -202,11 +211,6 @@ namespace rvi
             fptr = _selected_frame;
         }
 
-        if(_cached_full_fnames.count(fptr) > 0)
-        {
-            return _cached_full_fnames.at(fptr);
-        }
-
         std::stack<frame*> frame_stack;
         frame* cur_ptr = fptr;
         frame_stack.push(cur_ptr);
@@ -226,7 +230,6 @@ namespace rvi
         }
 
         std::string fname = result.str();
-        _cached_full_fnames.emplace(fptr, fname);
         return fname;
     }
 
@@ -384,6 +387,7 @@ namespace rvi
         {
             relative_snapshot_entry entry;
             entry.deleted = true;
+            entry.name = deleted_frame;
             sh.entries.push_back(std::move(entry));
         }
         _deleted_frame_queue.clear();

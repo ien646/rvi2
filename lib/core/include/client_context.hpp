@@ -27,8 +27,6 @@ namespace rvi
         // Framepaths of altered frames since last full or partial snapshot
         std::unordered_set<frame*> _modified_frames;
 
-        std::unordered_map<frame*, std::string> _cached_full_fnames;
-
         color_rgba _current_color;
 
         std::vector<std::string> _deleted_frame_queue;
@@ -56,6 +54,7 @@ namespace rvi
         bool release_frame();
 
         bool delete_frame(const std::string& name);
+        void clear_children();
 
         frame* selected_frame() noexcept;
         bool is_root_frame_selected() const noexcept;

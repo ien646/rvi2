@@ -93,6 +93,9 @@ namespace rvi
          */
         frame* add_child(const std::string& name);
 
+        ///Safely delete all children
+        void clear_children();
+
         /**
          * Obtain this frame's transform, applying all parent
          * transform information before its own.

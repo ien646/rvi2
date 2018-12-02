@@ -116,8 +116,9 @@ namespace rvi
         for(auto& match : matches)
         {
             auto& binding = data.bindings.at(match->binding_name);
-            match->binding_args.push_back(context.get_full_frame_name(match->fptr));
-            binding(*this, match->binding_args);
+            rvi::arglist_t args = match->binding_args;
+            args.push_back(match->fptr->name());
+            binding(*this, args);
         }
     }
 

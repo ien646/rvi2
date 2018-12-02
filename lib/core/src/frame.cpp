@@ -81,6 +81,12 @@ namespace rvi
         }
     }
 
+    void frame::clear_children()
+    {
+        _children.clear();
+        _child_frames_index.clear();
+    }
+
     bool frame::delete_child(const std::string& name)
     {
         if (_child_frames_index.count(name) == 0)
