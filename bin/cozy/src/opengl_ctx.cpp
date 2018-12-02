@@ -26,13 +26,17 @@ namespace rvi
                 _vframes.erase(frame_entry.name);
                 continue;
             }
+            if (frame_entry.lines.size() == 0)
+            {
+                continue;
+            }
 
             GLuint vao, vbo;
             glGenVertexArrays(1, &vao);
             glGenBuffers(1, &vbo);
             vframe vf;
             vf.vao = vao;
-            vf.vbo = vbo;            
+            vf.vbo = vbo;
             for(auto& line : frame_entry.lines)
             {
                 vf.line_data.push_back(line.start.position.x);
@@ -43,7 +47,6 @@ namespace rvi
                 vf.line_data.push_back(SCFLOAT(line.end.color.rgba()));
             }
             _vframes.emplace(frame_entry.name, std::move(vf));
-
             const vframe& entry = _vframes[frame_entry.name];
 
             glBindVertexArray(vao);
