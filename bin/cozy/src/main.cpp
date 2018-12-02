@@ -40,7 +40,7 @@ int main()
 
     rvi::runtime rtm;
     int client = rtm.create_client();
-    rtm.start_client(client); 
+    rtm.start_client(client);
     rtm.get_instance(client).data.bindings.emplace("hello_click", &hello_click);
 
     rvi::opengl_ctx roglctx(&rtm, client);

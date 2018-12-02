@@ -13,10 +13,32 @@
 namespace rvi
 {
     struct vframe
-    {
+    {    
         GLuint vao;
         GLuint vbo;
         std::vector<float> line_data;
+
+        vframe() = default;
+        vframe(const vframe& cp_src) = delete;
+        vframe(vframe&& mv_src)
+        {
+            vao = mv_src.vao;
+            vbo = mv_src.vbo;
+            line_data = std::move(mv_src.line_data);
+            mv_src._moved = true;
+        }
+
+        ~vframe()
+        {
+            if(!_moved)
+            {
+                glDeleteVertexArrays(1, &vao);
+                glDeleteBuffers(1, &vbo);
+            }
+        }
+
+    private:
+        bool _moved = false;
     };
 
     class opengl_ctx
