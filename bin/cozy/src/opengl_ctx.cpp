@@ -4,10 +4,14 @@
 
 namespace rvi
 {
+    int opengl_ctx::_client_id;
+    runtime* opengl_ctx::_runtime_ptr;
+    vector2 opengl_ctx::_cursor_pos;
+
     opengl_ctx::opengl_ctx(runtime* rptr, int cid)
-        : _runtime_ptr(rptr)
-        , _client_id(cid)
     {
+        _runtime_ptr = rptr;
+        _client_id = cid;
         init_default_shaders(&_shader_program);
         glLineWidth(2);
     }
@@ -77,5 +81,29 @@ namespace rvi
             glDrawArrays(GL_LINES, 0, vfp.second.line_data.size() * sizeof(line));
             glBindVertexArray(NULL);
         }   
+    }
+
+    void opengl_ctx::setup_mouse_callbacks(GLFWwindow* wnd)
+    {
+        glfwSetMouseButtonCallback(wnd, &mouse_press_callback);
+        glfwSetCursorPosCallback(wnd, &mouse_pos_callback);
+    }
+
+    void opengl_ctx::mouse_pos_callback(GLFWwindow* wnd, double px, double py)
+    {
+        int w, h;
+        glfwGetWindowSize(wnd, &w, &h);
+        float x = px / w;
+        float y = 1 - (py / h);
+        _cursor_pos = rvi::vector2(x, y);
+    }
+
+    void opengl_ctx::mouse_press_callback(GLFWwindow* wnd, int key, int act, int mods)
+    {
+        if(key == GLFW_MOUSE_BUTTON_LEFT && act == GLFW_PRESS)
+        {
+            auto& inst = _runtime_ptr->get_instance(_client_id);
+            inst.user_click(_cursor_pos);
+        }
     }
 }

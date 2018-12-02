@@ -23,17 +23,23 @@ namespace rvi
     {
     private:
         GLuint _shader_program;
-        std::unordered_map<std::string, vframe> _vframes;
-        runtime* _runtime_ptr;
-        int _client_id;
+        std::unordered_map<std::string, vframe> _vframes;        
+        
         size_t _line_count = 0;
+
+        static int _client_id;
+        static runtime* _runtime_ptr;
+        static vector2 _cursor_pos;
 
     public:
         opengl_ctx(runtime* rptr, int client_id);
         void refresh();
         void draw(float delta_time);
-    
-    private:
+        
+        static void setup_mouse_callbacks(GLFWwindow* wnd);
+    private:        
+        static void mouse_pos_callback(GLFWwindow* wnd, double px, double py);
+        static void mouse_press_callback(GLFWwindow* wnd, int key, int act, int mods);
         void create_frame_obj(const std::string& name, std::vector<line>&& lines);
     };
 }

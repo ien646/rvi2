@@ -90,18 +90,25 @@ namespace rvi
             auto& sdata = dt.second;
             if(sdata.rect.contains(pos))
             {
-                if(sdata.depth_value > matches.back()->depth_value)
-                {
-                    continue;
-                }
-                else if(sdata.depth_value == matches.back()->depth_value)
+                if(matches.size() == 0)
                 {
                     matches.push_back(&sdata);
                 }
-                else //if (data.depth_value < matches.back().depth_value)
+                else
                 {
-                    matches.clear();
-                    matches.push_back(&sdata);
+                    if(sdata.depth_value > matches.back()->depth_value)
+                    {
+                        continue;
+                    }
+                    else if(sdata.depth_value == matches.back()->depth_value)
+                    {
+                        matches.push_back(&sdata);
+                    }
+                    else //if (data.depth_value < matches.back().depth_value)
+                    {
+                        matches.clear();
+                        matches.push_back(&sdata);
+                    }
                 }
             }
         }

@@ -8,7 +8,7 @@ namespace rvi
             args.size() >= count,
             "Expected argument count of " 
                 + std::to_string(count) 
-                + "; Actual arg count: " 
+                + "; Actual arg count: "
                 + std::to_string(args.size())
         );
     }
@@ -44,7 +44,6 @@ namespace rvi
             }
             
             auto& ctx = c_inst.context;
-
             ctx.select_frame(std::to_string(rid++) + (ch));
             ctx.set_position(curPos);
             ctx.set_scale(rvi::vector2(fontsz_x, fontsz_y));

@@ -49,8 +49,9 @@ namespace rvi
         void draw_line(const line& ln);
         void draw_line(line&& ln);
 
-        void select_frame(const std::string& name);
-        void select_frame(std::string&& name);
+        frame* select_frame(const std::string& name);
+        frame* select_frame(std::string&& name);
+        void select_frame(frame* fptr);
 
         bool release_frame();
 

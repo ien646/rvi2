@@ -67,7 +67,7 @@ namespace rvi
         mark_frame_modified();
     }
 
-    void client_context::select_frame(const std::string& name)
+    frame* client_context::select_frame(const std::string& name)
     {
         if (!_selected_frame->contains_child(name))
         {
@@ -78,9 +78,10 @@ namespace rvi
             _selected_frame = _selected_frame->get_child(name);
         }
         _frame_stack.push_back(_selected_frame);
+        return _selected_frame;
     }
 
-    void client_context::select_frame(std::string&& name)
+    frame* client_context::select_frame(std::string&& name)
     {
         if (!_selected_frame->contains_child(name))
         {
@@ -91,6 +92,12 @@ namespace rvi
             _selected_frame = _selected_frame->get_child(name);
         }
         _frame_stack.push_back(_selected_frame);
+        return _selected_frame;
+    }
+
+    void  client_context::select_frame(frame* fptr)
+    {
+        _selected_frame = fptr;
     }
 
     bool client_context::release_frame()

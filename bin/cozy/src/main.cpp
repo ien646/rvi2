@@ -15,15 +15,36 @@
 #include "shader_utils.hpp"
 #include "opengl_ctx.hpp"
 
+static void hello_click(rvi::client_instance& inst, const rvi::arglist_t&)
+{
+    // Save current selected frame
+    auto& ctx = inst.context;
+    rvi::frame* save_ptr = ctx.selected_frame();
+
+    // Return to root frame
+    while(ctx.release_frame()) { continue; }
+    rvi::frame* hframe = ctx.select_frame("hello_friend");
+    hframe->clear_lines();
+    ctx.set_position(rvi::vector2(0.15f, 0.15f));
+    inst.data.bindings["print"](inst, rvi::arglist_t
+    {
+        "+-+-+ HELLO FRIEND +-+-+",
+        "0.025", "0.04", "0.01", "0"
+    });
+    ctx.select_frame(save_ptr);
+}
+
 int main()
 {
     window wnd(800, 600, "COZY");
 
     rvi::runtime rtm;
     int client = rtm.create_client();
-    rtm.start_client(client);   
-    
+    rtm.start_client(client); 
+    rtm.get_instance(client).data.bindings.emplace("hello_click", &hello_click);
+
     rvi::opengl_ctx roglctx(&rtm, client);
+    roglctx.setup_mouse_callbacks(wnd.wnd_ptr());
     roglctx.refresh();
     
     // vsync
