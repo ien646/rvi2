@@ -14,9 +14,15 @@ namespace rvi
 
     void opengl_ctx::refresh()
     {
-        auto snapshot = _runtime_ptr->snapshot_full_relative(_client_id);
+        auto snapshot = _runtime_ptr->snapshot_diff_relative(_client_id);
         for(auto&& frame_entry : snapshot.entries)
         {
+            if(frame_entry.deleted)
+            {
+                _vframes.erase(frame_entry.name);
+                continue;
+            }
+
             GLuint vao, vbo;
             glGenVertexArrays(1, &vao);
             glGenBuffers(1, &vbo);
