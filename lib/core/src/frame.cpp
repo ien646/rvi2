@@ -167,12 +167,12 @@ namespace rvi
     std::unordered_map<std::string, frame*> frame::children() const noexcept
     {
         std::unordered_map<std::string, frame*> result;
-
+        result.reserve(_child_frames_index.size());
         for (auto& p : _child_frames_index)
         {
-            std::string name = p.first;
+            const std::string& name = p.first;
             frame* f_ptr = _child_frames_index.at(name);
-            result.emplace(std::move(name), f_ptr);
+            result.emplace(name, f_ptr);
         }
 
         return result;
@@ -209,6 +209,7 @@ namespace rvi
                 _cached_abs_tform.merge_in_place(tf);
                 tform_stack.pop();
             }
+            _cached_abs_tform_rebuild = false;
         }
 
         return _cached_abs_tform;
