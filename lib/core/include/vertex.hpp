@@ -12,18 +12,35 @@ namespace rvi
      */
     struct vertex
     {
+        /**
+         * @brief Vertex position
+         */
         vector2 position;
+
+        /**
+         * @brief Vertex color
+         */
         color_rgba color;
 
+        /**
+         * @brief Default constructor
+         */
         constexpr vertex() noexcept { }
-        vertex(float x, float y) noexcept;
-        vertex(float x, float y, u8 r, u8 g, u8 b, u8 a) noexcept;
-        vertex(vector2 pos) noexcept;
+
+        /**
+         * @brief Construct a new vertex object
+         * 
+         * @param pos Vertex position
+         * @param vx_color Vertex color
+         */
         vertex(vector2 pos, color_rgba vx_color) noexcept;
 
         bool operator==(vertex other) const noexcept;
         bool operator!=(vertex other) const noexcept;
 
+        /**
+         * @brief Convert this vertex to its textual representation
+         */
         std::string to_string() const;
     };
 }

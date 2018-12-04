@@ -188,7 +188,7 @@ namespace rvi
         static constexpr vector2 zero() { return vector2(0,0); }
 
         /**
-         * @brief Convert object to its textual representation
+         * @brief Convert this vector2 to its textual representation
          */
         std::string to_string() const;
     };
