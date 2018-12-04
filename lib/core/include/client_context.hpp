@@ -68,7 +68,7 @@ namespace rvi
          * @param to End vertex position
          * @param toColor End vertex color
          */
-        void draw_line(vector2 from, color_rgba fromColor, vector2 to, color_rgba toColor);
+        void draw_line(vector2 from, color_rgba from_color, vector2 to, color_rgba to_color);
 
         /**
          * @brief Construct and append a new line to the currently selected frame.
