@@ -2,12 +2,21 @@
 
 #include <vector>
 #include <cinttypes>
+#include <limits>
 
 #include <line.hpp>
 #include "cmd_header.hpp"
 
 namespace rvi
 {
+    constexpr void restrict_ieee_754()
+    {
+        static_assert(
+            std::numeric_limits<float>::is_iec559,
+            "Unable to compile for IEEE-754 non-conforming floating point representation"
+        );
+    }
+
     typedef std::vector<std::uint8_t> data_t;
 
     // Static cast to uint8_t

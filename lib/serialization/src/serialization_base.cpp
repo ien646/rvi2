@@ -4,6 +4,7 @@ namespace rvi
 {
     void serialize_fp32_bf(data_t& buff, float val)
     {
+        restrict_ieee_754();
         constexpr size_t sz = sizeof(val);
         uint32_t* valptr = reinterpret_cast<uint32_t*>(&val);
         for(size_t i = 0; i < sz; i++)
@@ -15,6 +16,7 @@ namespace rvi
 
     void serialize_fp64_bf(data_t& buff, double val)
     {
+        restrict_ieee_754();
         constexpr size_t sz = sizeof(val);
         uint64_t* valptr = reinterpret_cast<uint64_t*>(&val);
         for(size_t i = 0; i < sz; i++)
@@ -65,6 +67,7 @@ namespace rvi
 
     float deserialize_fp32(const data_t& buff, size_t offset)
     {
+        restrict_ieee_754();
         constexpr size_t sz = sizeof(float);
         float result = 0.0F;
         uint32_t* result_ptr = reinterpret_cast<uint32_t*>(&result);
@@ -77,6 +80,7 @@ namespace rvi
 
     double deserialize_fp64(const data_t& buff, size_t offset)
     {
+        restrict_ieee_754();
         constexpr size_t sz = sizeof(double);
         double result = 0.0F;
         uint64_t* result_ptr = reinterpret_cast<uint64_t*>(&result);
