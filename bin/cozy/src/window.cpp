@@ -18,7 +18,6 @@ window::window(uint32_t sz_x, uint32_t sz_y, const std::string& title)
         std::cout << "GLFW Window creation failure!" << std::endl;
         glfwTerminate();
         std::exit(-1);
-        return;
     }
 
     glfwMakeContextCurrent(_wndptr);
@@ -30,7 +29,6 @@ window::window(uint32_t sz_x, uint32_t sz_y, const std::string& title)
         std::cout << "GLAD loading failure!" << std::endl;
         glfwTerminate();
         std::exit(-1);
-        return;
     }
 }
 

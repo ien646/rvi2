@@ -237,11 +237,9 @@ namespace rvi
     {
         std::stringstream ss(fpath);
         std::string aux;
-        frame* currentFrame = nullptr;
+        frame* currentFrame = _main_frame.get();
         transform2 currentTransform;
-
-        currentFrame = _main_frame.get();
-
+		
         while (std::getline(ss, aux, FRAMEPATH_SEPARATOR))
         {
             if (aux != MAIN_FRAMENAME)
