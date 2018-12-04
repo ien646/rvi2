@@ -10,19 +10,21 @@ namespace rvi
     struct color_rgba : public string_representable
     {
         ///Red channel value
-        u8 r = 0;
+        u8 r : 8;
 
         ///Green channel value
-        u8 g = 0;
+        u8 g : 8;
 
         ///Blue channel value
-        u8 b = 0;
+        u8 b : 8;
 
         ///Alpha channel value
-        u8 a = 0;
+        u8 a : 8;
 
         ///Construct a new color_rgba object [rgba = (0,0,0,0)]
-        constexpr color_rgba() noexcept { };
+        constexpr color_rgba() noexcept
+            : r(0), g(0), b(0), a(0)
+        { };
 
         /**
          * Construct a new color_rgba object
@@ -32,7 +34,7 @@ namespace rvi
          * @param b Blue channel value
          * @param a Alpha channel value
          */
-        constexpr color_rgba(u8 r, u8 g, u8 b, u8 a) noexcept
+        color_rgba(u8 r, u8 g, u8 b, u8 a) noexcept
         {
             this->r = r;
             this->g = g;

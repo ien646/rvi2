@@ -6,6 +6,10 @@
 
 namespace rvi
 {
+    /**
+     * @brief 2D-Vertex data structure. 
+     * Includes 32-bit color information.
+     */
     struct vertex
     {
         vector2 position;
