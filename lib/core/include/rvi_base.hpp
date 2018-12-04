@@ -59,12 +59,14 @@ namespace rvi
     static constexpr bool RVI_CEXPR_LITTLE_ENDIAN   = ((const uint8_t&)_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0xFF;
 
     FWD_DECL_CLASS(client_context);
-    typedef std::function<void(client_context&)> definition_inst;
 
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     // to_string-able interface
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    ///Interface for string representable types
+
+    /**
+     * @brief Interface for textually representable types
+     */
     class string_representable
     {
     public:
