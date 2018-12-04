@@ -5,14 +5,14 @@
 
 struct vframe
 {
-    GLuint vao;
-    GLuint vbo;
+    GLuint vao = 0u;
+    GLuint vbo = 0u;
     std::vector<float> line_data;
 
     vframe() = default;
     vframe(const vframe& cp_src) = delete;
 
-    vframe(vframe&& mv_src);
+    vframe(vframe&& mv_src) noexcept;
 
     ~vframe();
 

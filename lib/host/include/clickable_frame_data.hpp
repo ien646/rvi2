@@ -13,6 +13,6 @@ namespace rvi
         std::vector<std::string> binding_args;
         float depth_value = 0.0F;
         rectangle rect;
-        frame* fptr;
+        frame* fptr = nullptr;
     };
 }

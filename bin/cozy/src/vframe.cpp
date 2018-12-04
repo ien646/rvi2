@@ -1,6 +1,6 @@
 #include "vframe.hpp"
 
-vframe::vframe(vframe&& mv_src)
+vframe::vframe(vframe&& mv_src) noexcept
 {
     vao = mv_src.vao;
     vbo = mv_src.vbo;

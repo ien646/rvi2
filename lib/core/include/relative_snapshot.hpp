@@ -25,7 +25,7 @@ namespace rvi
          * @brief In differential snapshots, used to signal
          * the deletion of the frame. Unused in full snapshots.
          */
-        bool deleted;
+        bool deleted = false;
     };
 
     /**
