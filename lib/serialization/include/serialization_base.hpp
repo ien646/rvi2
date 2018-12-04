@@ -60,7 +60,7 @@ namespace rvi
         T result = static_cast<T>(0);
         for(size_t i = 0; i < sz; i++)
         {
-            result |= (buff[i + offset]) << ((sz - (i + 1)) * 8);
+            result |= static_cast<uint64_t>(buff[i + offset]) << ((sz - (i + 1)) * 8);
         }
         return result;
     }

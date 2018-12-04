@@ -69,11 +69,12 @@ namespace rvi
     {
         restrict_ieee_754();
         constexpr size_t sz = sizeof(float);
-        float result = 0.0F;
+        float result;
         uint32_t* result_ptr = reinterpret_cast<uint32_t*>(&result);
+        *result_ptr = 0x00000000;
         for(size_t i = 0; i < sz; i++)
         {
-            *result_ptr |= (buff[i + offset] << ((sz - (i + 1)) * 8));
+            *result_ptr |= (static_cast<uint32_t>(buff[i + offset]) << ((sz - (i + 1)) * 8));
         }
         return result;
     }
@@ -82,11 +83,12 @@ namespace rvi
     {
         restrict_ieee_754();
         constexpr size_t sz = sizeof(double);
-        double result = 0.0F;
+        double result;
         uint64_t* result_ptr = reinterpret_cast<uint64_t*>(&result);
+        *result_ptr = 0x0000000000000000;
         for(size_t i = 0; i < sz; i++)
         {
-            *result_ptr |= (buff[i + offset] << ((sz - (i + 1)) * 8));
+            *result_ptr |= (static_cast<uint64_t>(buff[i + offset]) << ((sz - (i + 1)) * 8));
         }
         return result;
     }
