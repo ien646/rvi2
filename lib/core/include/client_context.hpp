@@ -46,7 +46,7 @@ namespace rvi
         client_context();
 
         ///Default move constructor
-        client_context(client_context&& mv_src) noexcept = default;
+        client_context(client_context&& mv_src) = default;
 
         ///Explicit copy constructor
         client_context create_shallow_copy();
