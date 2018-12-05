@@ -157,21 +157,52 @@ TEST(serialization_base_roundtrips, color_rgba)
     ASSERT_TRUE(c == dc);
 }
 
-TEST(serialization_base_roundtrips, line)
+TEST(serialization_base_roundtrips, vector2)
 {
-    rvi::line ln(
-        rvi::vertex(rvi::vector2(0.0F, 1.0F), rvi::color_rgba(0,100,200,50)),
-        rvi::vertex(rvi::vector2(0.5F, 0.77F), rvi::color_rgba(100,211,10,0))
-    );
+    rvi::vector2 a(0.0F, 0.0F);
+    rvi::vector2 b(-1.0F, -1.0F);
+    rvi::vector2 c(1.0F, 1.0F);
+    rvi::vector2 d(0.51F, 1.13F);
 
     rvi::data_t buff;
+    rvi::serialize_vector2_bf(buff, a);
+    rvi::serialize_vector2_bf(buff, b);
+    rvi::serialize_vector2_bf(buff, c);
+    rvi::serialize_vector2_bf(buff, d);
 
-    rvi::serialize_line_bf(buff, ln);
-    int line_sz = (((sizeof(float) * 2) + 4) * 2);
-    ASSERT_TRUE(buff.size() == line_sz);
+    ASSERT_TRUE(buff.size() == (sizeof(float) * 2) * 4);
 
-    rvi::line dln = rvi::deserialize_line(buff, 0);
+    rvi::vector2 da, db, dc, dd;
+    da = rvi::deserialize_vector2(buff, 0);
+    db = rvi::deserialize_vector2(buff, 8);
+    dc = rvi::deserialize_vector2(buff, 16);
+    dd = rvi::deserialize_vector2(buff, 24);
 
-    ASSERT_TRUE(ln == dln);
+    ASSERT_TRUE(da == a);
+    ASSERT_TRUE(db == b);
+    ASSERT_TRUE(dc == c);
+    ASSERT_TRUE(dd == d);
 }
 
+TEST(serialization_base_roundtrips, vertex)
+{
+    rvi::vertex a(rvi::vector2(0.0F, 0.0F), rvi::color_rgba(0, 0, 0, 0));
+    rvi::vertex b(rvi::vector2(1.0F, 1.0F), rvi::color_rgba(10, 20, 50, 100));
+    rvi::vertex c(rvi::vector2(0.33F, 0.111F), rvi::color_rgba(111, 222, 71, 212));
+
+    rvi::data_t buff;
+    rvi::serialize_vertex_bf(buff, a);
+    rvi::serialize_vertex_bf(buff, b);
+    rvi::serialize_vertex_bf(buff, c);
+
+    ASSERT_TRUE(buff.size() == 3 * 12);
+
+    rvi::vertex da, db, dc;
+    da = rvi::deserialize_vertex(buff, 0);
+    db = rvi::deserialize_vertex(buff, 12);
+    dc = rvi::deserialize_vertex(buff, 24);
+
+    ASSERT_TRUE(a == da);
+    ASSERT_TRUE(b == db);
+    ASSERT_TRUE(c == dc);
+}

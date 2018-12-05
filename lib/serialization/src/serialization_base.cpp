@@ -112,7 +112,7 @@ namespace rvi
     vertex deserialize_vertex(const data_t& buff, size_t offset)
     {
         vector2 pos = deserialize_vector2(buff, offset);
-        color_rgba col = deserialize_color_rgba(buff, sizeof(vector2));
+        color_rgba col = deserialize_color_rgba(buff, offset + sizeof(vector2));
         return vertex(pos, col);
     }
 
