@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <iostream>
+
 #include <serialization_base.hpp>
 
 TEST(serialization_base_roundtrips, float_32)
@@ -63,4 +65,94 @@ TEST(serialization_base_roundtrips, float_64)
     ASSERT_DOUBLE_EQ(db, b);
     ASSERT_TRUE(std::isnan(dc));
     ASSERT_TRUE(std::isinf(dd));
+}
+
+template<typename T>
+static void test_serialize_integral()
+{
+    std::cout   << "  >> Testing integral: [" 
+                << typeid(T).name()
+                << "]"
+                << std::endl;
+
+    T arr[] = 
+    {
+        std::numeric_limits<T>::max(),
+        std::numeric_limits<T>::min(),
+        std::numeric_limits<T>::max() / 2,
+        std::numeric_limits<T>::min() / 2,
+        static_cast<T>(0)
+    };
+
+    rvi::data_t buff;
+    for(T v : arr)
+    {
+        rvi::serialize_integral<T>(buff, v);
+    }   
+
+    int arr_len = sizeof(arr) / sizeof(T);
+    ASSERT_TRUE(buff.size() == sizeof(arr));
+
+    for(int i = 0; i < arr_len; ++i)
+    {
+        int offset = i * sizeof(T);
+        T dval = rvi::deserialize_integral<T>(buff, offset);
+        ASSERT_EQ(arr[i], dval);
+    }
+}
+
+TEST(serialization_base_roundtrips, integers)
+{
+    test_serialize_integral<uint8_t>();
+    test_serialize_integral<uint16_t>();
+    test_serialize_integral<uint32_t>();
+    test_serialize_integral<uint64_t>();
+
+    test_serialize_integral<int8_t>();
+    test_serialize_integral<int16_t>();
+    test_serialize_integral<int32_t>();
+    test_serialize_integral<int64_t>();
+
+    test_serialize_integral<char>();
+    test_serialize_integral<short>();
+    test_serialize_integral<int>();
+    test_serialize_integral<long>();
+    test_serialize_integral<long long>();
+
+    test_serialize_integral<unsigned char>();
+    test_serialize_integral<unsigned short>();
+    test_serialize_integral<unsigned int>();
+    test_serialize_integral<unsigned long>();
+    test_serialize_integral<unsigned long long>();
+}
+
+TEST(serialization_base_roundtrips, color_rgba)
+{
+    rvi::color_rgba a(0, 0, 0, 0);
+    rvi::color_rgba b(127, 127, 127, 127);
+    rvi::color_rgba c(255, 255, 255, 255);
+
+    rvi::data_t buff;
+    rvi::serialize_color_rgba_bf(buff, a);
+    rvi::serialize_color_rgba_bf(buff, b);
+    rvi::serialize_color_rgba_bf(buff, c);
+
+    const int crgba_size = 4;
+
+    ASSERT_TRUE(buff.size() == 3 * crgba_size);
+
+    int offset = 0;
+    rvi::color_rgba da, db, dc;
+    da = rvi::deserialize_color_rgba(buff, offset);
+    offset += crgba_size;
+
+    db = rvi::deserialize_color_rgba(buff, offset);
+    offset += crgba_size;
+
+    dc = rvi::deserialize_color_rgba(buff, offset);
+    offset += crgba_size;
+
+    ASSERT_TRUE(a == da);
+    ASSERT_TRUE(b == db);
+    ASSERT_TRUE(c == dc);
 }
