@@ -156,3 +156,22 @@ TEST(serialization_base_roundtrips, color_rgba)
     ASSERT_TRUE(b == db);
     ASSERT_TRUE(c == dc);
 }
+
+TEST(serialization_base_roundtrips, line)
+{
+    rvi::line ln(
+        rvi::vertex(rvi::vector2(0.0F, 1.0F), rvi::color_rgba(0,100,200,50)),
+        rvi::vertex(rvi::vector2(0.5F, 0.77F), rvi::color_rgba(100,211,10,0))
+    );
+
+    rvi::data_t buff;
+
+    rvi::serialize_line_bf(buff, ln);
+    int line_sz = (((sizeof(float) * 2) + 4) * 2);
+    ASSERT_TRUE(buff.size() == line_sz);
+
+    rvi::line dln = rvi::deserialize_line(buff, 0);
+
+    ASSERT_TRUE(ln == dln);
+}
+
