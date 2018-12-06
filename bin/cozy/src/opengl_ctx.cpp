@@ -31,12 +31,9 @@ namespace rvi
                 continue;
             }
 
-            GLuint vao, vbo;
-            glGenVertexArrays(1, &vao);
-            glGenBuffers(1, &vbo);
             vframe vf;
-            vf.vao = vao;
-            vf.vbo = vbo;
+            glGenVertexArrays(1, &vf.vao);
+            glGenBuffers(1, &vf.vbo);
             for(auto& line : frame_entry.lines)
             {
                 vf.line_data.push_back(line.start.position.x);
@@ -49,8 +46,8 @@ namespace rvi
             _vframes.emplace(frame_entry.name, std::move(vf));
             const vframe& entry = _vframes[frame_entry.name];
 
-            glBindVertexArray(vao);
-            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            glBindVertexArray(entry.vao);
+            glBindBuffer(GL_ARRAY_BUFFER, entry.vbo);
 
             glBufferData(
                 GL_ARRAY_BUFFER, 
@@ -69,8 +66,8 @@ namespace rvi
 
     void opengl_ctx::draw(float delta_time)
     {
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);    
         glUseProgram(_shader_program);
         GLint uloc = glGetUniformLocation(_shader_program, "delta_time");
         if(uloc >= 0)
