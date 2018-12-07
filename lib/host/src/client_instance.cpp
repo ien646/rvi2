@@ -71,6 +71,20 @@ namespace rvi
         }
     }
 
+    void client_instance::create_binding(const std::string& bname, runtime_call_t call)
+    {
+        if(data.bindings.count(bname) > 0)
+        {
+            data.bindings.erase(bname);
+        }
+        data.bindings.emplace(bname, call);
+    }
+
+    void client_instance::delete_binding(const std::string& bname)
+    {
+        data.bindings.erase(bname);
+    }
+
     void client_instance::set_clickable_frame(
             frame* fptr, 
             const std::string& binding_name,
@@ -131,10 +145,13 @@ namespace rvi
 
         for(auto& match : matches)
         {
-            auto& binding = data.bindings.at(match->binding_name);
+            auto& binding_name = match->binding_name;
+            auto& frame_name = match->fptr->name();
+
             rvi::arglist_t args = match->binding_args;
-            args.push_back(match->fptr->name());
-            binding(*this, args);
+            args.push_back(frame_name);
+            
+            exec_binding(binding_name, args);
         }
     }
 
