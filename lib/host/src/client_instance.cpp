@@ -39,7 +39,7 @@ namespace rvi
     {
         if(data.definitions.count(dname) > 0)
         {
-            auto def = data.definitions.at(dname);
+            auto& def = data.definitions.at(dname);
             for(auto& inst : def)
             {
                 auto& call = call_map.at(inst.cmd);
