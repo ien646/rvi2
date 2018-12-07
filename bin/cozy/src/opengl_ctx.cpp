@@ -31,37 +31,50 @@ namespace rvi
                 continue;
             }
 
-            vframe vf;
-            glGenVertexArrays(1, &vf.vao);
-            glGenBuffers(1, &vf.vbo);
-            for(auto& line : frame_entry.lines)
-            {
-                vf.line_data.push_back(line.start.position.x);
-                vf.line_data.push_back(line.start.position.y);
-                vf.line_data.push_back(SCFLOAT(line.start.color.rgba()));
-                vf.line_data.push_back(line.end.position.x);
-                vf.line_data.push_back(line.end.position.y);
-                vf.line_data.push_back(SCFLOAT(line.end.color.rgba()));
-            }
-            _vframes.emplace(frame_entry.name, std::move(vf));
-            const vframe& entry = _vframes[frame_entry.name];
-
-            glBindVertexArray(entry.vao);
-            glBindBuffer(GL_ARRAY_BUFFER, entry.vbo);
-
-            glBufferData(
-                GL_ARRAY_BUFFER, 
-                entry.line_data.size() * sizeof(float),
-                entry.line_data.data(),
-                GL_DYNAMIC_DRAW
-            );
-
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-            glEnableVertexAttribArray(0);
-
-            glBindBuffer(GL_ARRAY_BUFFER, NULL);
-            glBindVertexArray(NULL);
+            auto& entry = vframe_from_snapshot_entry(frame_entry);
+            setup_vframe_ogl(entry);
         }
+    }
+
+    const vframe& opengl_ctx::vframe_from_snapshot_entry(relative_snapshot_entry& entry)
+    {
+        vframe vf;
+        glGenVertexArrays(1, &vf.vao);
+        glGenBuffers(1, &vf.vbo);
+        for(auto& line : entry.lines)
+        {
+            vf.line_data.push_back(line.start.position.x);
+            vf.line_data.push_back(line.start.position.y);
+            vf.line_data.push_back(SCFLOAT(line.start.color.rgba()));
+            vf.line_data.push_back(line.end.position.x);
+            vf.line_data.push_back(line.end.position.y);
+            vf.line_data.push_back(SCFLOAT(line.end.color.rgba()));
+        }
+        _vframes.emplace(entry.name, std::move(vf));
+        return _vframes[entry.name];
+    }
+
+    void opengl_ctx::setup_vframe_ogl(const vframe& vf)
+    {
+        // Bind vao/vbo
+        glBindVertexArray(vf.vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vf.vbo);
+
+        // Bind data to vbo
+        glBufferData(
+            GL_ARRAY_BUFFER, 
+            vf.line_data.size() * sizeof(float),
+            vf.line_data.data(),
+            GL_DYNAMIC_DRAW
+        );
+
+        // Setup shader inputs
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+        glEnableVertexAttribArray(0);
+
+        // Unbind vao/vbo
+        glBindBuffer(GL_ARRAY_BUFFER, NULL);
+        glBindVertexArray(NULL);
     }
 
     void opengl_ctx::draw(float delta_time)

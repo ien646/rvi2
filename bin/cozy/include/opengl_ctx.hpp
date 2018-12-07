@@ -34,6 +34,7 @@ namespace rvi
     private:        
         static void mouse_pos_callback(GLFWwindow* wnd, double px, double py);
         static void mouse_press_callback(GLFWwindow* wnd, int key, int act, int mods);
-        void create_frame_obj(const std::string& name, std::vector<line>&& lines);
+        const vframe& vframe_from_snapshot_entry(relative_snapshot_entry& entry);
+        void setup_vframe_ogl(const vframe& vf);
     };
 }
