@@ -24,15 +24,12 @@ namespace rvi
             if(frame_entry.deleted)
             {
                 _vframes.erase(frame_entry.name);
-                continue;
             }
-            if (frame_entry.lines.size() == 0)
+            else if (frame_entry.lines.size() > 0)
             {
-                continue;
-            }
-
-            auto& entry = vframe_from_snapshot_entry(frame_entry);
-            setup_vframe_ogl(entry);
+                auto& entry = vframe_from_snapshot_entry(frame_entry);
+                setup_vframe_ogl(entry);
+            }            
         }
     }
 
