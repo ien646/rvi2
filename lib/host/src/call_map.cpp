@@ -141,7 +141,7 @@ namespace rvi
         }
         if(c_inst.data.bindings.count(bname) > 0)
         {
-            c_inst.data.bindings.at(bname)(c_inst, oargs);
+            c_inst.exec_binding(bname, oargs);
         }
         else
         {

@@ -1,8 +1,8 @@
-include:{rvi_font_base.rpf};
+include: rvi_font_base.rpf;
 
-select_frame:{hello_world};
-	set_position:0.1,0.45;
-	set_color:255, 255, 127, 255;
-	exec_bind:{print}, {* CLICK ME FRIEND *}, 0.04, 0.04, 0.01, 0.00;
-	set_clickable:{hello_click};
+select_frame: hello_world;
+	set_position: 0.10, 0.45;
+	set_color: 255, 255, 127, 255;
+	exec_bind: print, {* CLICK ME FRIEND *}, 0.04, 0.04, 0.01, 0.00;
+	set_clickable: hello_click;
 release_frame;

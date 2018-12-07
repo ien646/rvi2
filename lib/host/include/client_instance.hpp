@@ -28,6 +28,8 @@ namespace rvi
 
         void exec_definition(const std::string& dname);
 
+        void exec_binding(const std::string& bname, const arglist_t& args);
+
         void set_clickable_frame(
             frame* fptr, 
             const std::string& binding_name,

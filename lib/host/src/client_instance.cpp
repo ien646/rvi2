@@ -48,8 +48,24 @@ namespace rvi
         }
         else
         {
-            std::cerr   << "Attempt to use undefined definition ["
+            std::cerr   << "Attempt to execute undefined definition ["
                         << dname
+                        << "]"
+                        << std::endl;
+        }
+    }
+
+    void client_instance::exec_binding(const std::string& bname, const arglist_t& args)
+    {
+        if(data.bindings.count(bname) > 0)
+        {
+            auto& binding = data.bindings.at(bname);
+            binding(*this, args);
+        }
+        else
+        {
+            std::cerr   << "Attempt to execute undefined binding ["
+                        << bname
                         << "]"
                         << std::endl;
         }

@@ -27,7 +27,7 @@ static void hello_click(rvi::client_instance& inst, const rvi::arglist_t&)
     ctx.clear_frame();
     ctx.clear_children();
     ctx.set_position(rvi::vector2(0.15f, 0.15f));
-    inst.data.bindings["print"](inst, rvi::arglist_t
+    inst.exec_binding("print", rvi::arglist_t
     {
         "+-+-+ HELLO FRIEND +-+-+",
         "0.025", "0.04", "0.01", "0"
