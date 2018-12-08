@@ -153,6 +153,11 @@ namespace rvi
         mark_frame_modified();
     }
 
+    void client_context::set_transform_scale_abs(bool enabled) noexcept
+    {
+        _selected_frame->set_transform_scale_absolute(enabled);
+    }
+
     const transform2& client_context::transform() const noexcept
     {
         return _selected_frame->transform();
@@ -277,7 +282,12 @@ namespace rvi
             
             for(line ln : lines) // expl. copy
             {
-                ln.apply_transform(fptr->get_absolute_transform());
+                transform2 tform = fptr->get_absolute_transform();
+                if (fptr->transform_scale_abs())
+                {
+                    tform.scale = fptr->transform().scale;
+                }
+                ln.apply_transform(tform);
                 result.push_back(ln);
             }
 
@@ -310,7 +320,12 @@ namespace rvi
             
             for(line ln : lines) // expl. copy
             {
-                ln.apply_transform(fptr->get_absolute_transform());
+                transform2 tform = fptr->get_absolute_transform();
+                if (fptr->transform_scale_abs())
+                {
+                    tform.scale = fptr->transform().scale;
+                }
+                ln.apply_transform(tform);
                 entry_lines.push_back(ln);
             }
 
@@ -361,7 +376,12 @@ namespace rvi
             
             for(line ln : lines) // expl. copy
             {
-                ln.apply_transform(fptr->get_absolute_transform());
+                transform2 tform = fptr->get_absolute_transform();
+                if (fptr->transform_scale_abs())
+                {
+                    tform.scale = fptr->transform().scale;
+                }
+                ln.apply_transform(tform);
                 entry_lines.push_back(ln);
             }
 

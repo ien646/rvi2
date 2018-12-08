@@ -176,10 +176,16 @@ namespace rvi
          */
         void set_transform(transform2&& tform) noexcept;
 
+        /*
+         * @brief Set the currently selected frame's scale as
+         * absolute (ignores parent scale)
+         */
+        void set_transform_scale_abs(bool enabled) noexcept;
+
         /**
          * @brief Get the currently selected frame's transform
          */
-        const transform2& transform() const noexcept;
+        const transform2& transform() const noexcept;        
 
         /**
          * @brief Set the currently selected frame's position

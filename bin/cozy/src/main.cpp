@@ -22,15 +22,15 @@ static void hello_click(rvi::client_instance& inst, const rvi::arglist_t&)
     rvi::frame* save_ptr = ctx.selected_frame();
 
     // Return to root frame
-    while(ctx.release_frame()) { continue; }
     ctx.select_frame("hello_friend");
+    ctx.selected_frame()->set_transform_scale_absolute(true);
     ctx.clear_frame();
     ctx.clear_children();
     ctx.set_position(rvi::vector2(0.15f, 0.15f));
     inst.exec_binding("print", rvi::arglist_t
     {
         "+-+-+ HELLO FRIEND +-+-+",
-        "0.025", "0.04", "0.01", "0"
+        "0.025", "0.04", "0.01", "0", "0.00", "0.00"
     });
     ctx.select_frame(save_ptr);
 }

@@ -60,7 +60,9 @@ namespace rvi
         if(data.bindings.count(bname) > 0)
         {
             auto& binding = data.bindings.at(bname);
-            binding(*this, args);
+            arglist_t n_args = args;
+            n_args.push_back(context.get_full_frame_name());
+            binding(*this, n_args);
         }
         else
         {
