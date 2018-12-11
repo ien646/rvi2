@@ -389,7 +389,7 @@ namespace rvi
         {
             a = static_cast<uint8_t>(std::min(std::stoi(args[3]), 255));
         }
-        color_rgba cross_color = color_rgba(r, g, b, a);
+        color_rgba cross_color(r, g, b, a);
 
         frame* save_fptr = ctx.selected_frame();
         frame* calling_fptr = ctx.find_frame(calling_frame);
@@ -418,11 +418,11 @@ namespace rvi
         frame* save_fptr = ctx.selected_frame();
         frame* calling_fptr = ctx.find_frame(calling_frame);
 
-        float x_step = 1.0F / grid_cell_sz;
-        float y_step = 1.0F / grid_cell_sz;
+        float x_step = grid_cell_sz;
+        float y_step = grid_cell_sz;
 
         ctx.select_frame(calling_fptr);
-        ctx.select_frame("__STD_GRID_FILL");
+        ctx.select_frame("__STD_GRID_FILL_ABS");
         {
             for(float x = 0; x <= 1.0F; x += x_step)
             {
@@ -458,13 +458,13 @@ namespace rvi
         {
             a = static_cast<uint8_t>(std::min(std::stoi(args[3]), 255));
         }
-        color_rgba grid_color = color_rgba(r, g, b, a);
+        color_rgba grid_color(r, g, b, a);
 
-        float x_step = 1.0F / grid_cell_sz;
-        float y_step = 1.0F / grid_cell_sz;
+        float x_step = grid_cell_sz;
+        float y_step = grid_cell_sz;
 
         ctx.select_frame(calling_fptr);
-        ctx.select_frame("__STD_GRID_FILL");
+        ctx.select_frame("__STD_GRID_FILL_ABS");
         {
             ctx.set_color(grid_color);
 
@@ -484,12 +484,77 @@ namespace rvi
 
     void std_bindings::grid_fill_rlt(client_instance& c_inst, const arglist_t& args)
     {
-        throw std::logic_error("Not implemented");
+        expect_argc(args, 2 + 1);
+
+        uint16_t x_cells = std::stof(args[0]);
+        uint16_t y_cells = std::stof(args[1]);       
+
+        const std::string& calling_frame = args.back();
+        auto& ctx = c_inst.context;
+
+        frame* save_fptr = ctx.selected_frame();
+        frame* calling_fptr = ctx.find_frame(calling_frame);
+
+        float x_step = 1.0F / x_cells;
+        float y_step = 1.0F / y_cells;
+
+        ctx.select_frame(calling_fptr);
+        ctx.select_frame("__STD_GRID_FILL_RLT");
+        {
+            for(float x = x_step; x <= 1.0F; x += x_step)
+            {
+                ctx.draw_line(vector2(x, 0), vector2(x, 1));
+            }
+
+            for(float y = y_step; y <= 1.0F; y += y_step)
+            {
+                ctx.draw_line(vector2(y, 0), vector2(y, 1));
+            }
+        }
+        ctx.select_frame(save_fptr);
     }
 
     void std_bindings::grid_fill_rlt_rgba(client_instance& c_inst, const arglist_t& args)
     {
-        throw std::logic_error("Not implemented");
+        expect_argc(args, 6 + 1);
+
+        uint16_t x_cells = std::stof(args[0]);
+        uint16_t y_cells = std::stof(args[1]);
+
+        uint8_t r = static_cast<uint8_t>(std::min(std::stoi(args[2]), 255));
+        uint8_t g = static_cast<uint8_t>(std::min(std::stoi(args[3]), 255));
+        uint8_t b = static_cast<uint8_t>(std::min(std::stoi(args[4]), 255));
+        uint8_t a = 255;
+        if(args.size() > 5)
+        {
+            a = static_cast<uint8_t>(std::min(std::stoi(args[5]), 255));
+        }
+        color_rgba grid_color(r, g, b, a);
+
+        const std::string& calling_frame = args.back();
+        auto& ctx = c_inst.context;
+
+        frame* save_fptr = ctx.selected_frame();
+        frame* calling_fptr = ctx.find_frame(calling_frame);
+
+        float x_step = 1.0F / x_cells;
+        float y_step = 1.0F / y_cells;
+
+        ctx.select_frame(calling_fptr);
+        ctx.select_frame("__STD_GRID_FILL_RLT");
+        {
+            ctx.set_color(grid_color);
+            for(float x = x_step; x <= 1.0F; x += x_step)
+            {
+                ctx.draw_line(vector2(x, 0), vector2(x, 1));
+            }
+
+            for(float y = y_step; y <= 1.0F; y += y_step)
+            {
+                ctx.draw_line(vector2(y, 0), vector2(y, 1));
+            }
+        }
+        ctx.select_frame(save_fptr);
     }
 
     void std_bindings::clear_context(client_instance& c_inst, const arglist_t& args)
@@ -517,6 +582,8 @@ namespace rvi
 
         c_inst.create_binding("grid_fill_abs", &std_bindings::grid_fill_abs);
         c_inst.create_binding("grid_fill_abs_rgba", &std_bindings::grid_fill_abs_rgba);
+        c_inst.create_binding("grid_fill_rlt", &std_bindings::grid_fill_rlt);
+        c_inst.create_binding("grid_fill_rlt_rgba", &std_bindings::grid_fill_rlt_rgba);
 
         c_inst.create_binding("clear_context", &std_bindings::clear_context);
     }
