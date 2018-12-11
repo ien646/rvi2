@@ -35,11 +35,11 @@ namespace rvi
         return _runtime_ptr;
     }
 
-    void client_instance::exec_definition(const std::string& dname)
+    void client_instance::exec_macro(const std::string& mname)
     {
-        if(data.definitions.count(dname) > 0)
+        if(data.macros.count(mname) > 0)
         {
-            auto& def = data.definitions.at(dname);
+            auto& def = data.macros.at(mname);
             for(auto& inst : def)
             {
                 auto& call = call_map.at(inst.cmd);
@@ -48,8 +48,8 @@ namespace rvi
         }
         else
         {
-            std::cerr   << "Attempt to execute undefined definition ["
-                        << dname
+            std::cerr   << "Attempt to execute undefined macro ["
+                        << mname
                         << "]"
                         << std::endl;
         }

@@ -21,7 +21,7 @@ namespace rvi
         { "set_rotation",   cmd_type::SET_ROTATION },
         { "define",         cmd_type::DEFINE },
         { "undefine",       cmd_type::UNDEFINE },
-        { "call",           cmd_type::CALL },
+        { "macro",          cmd_type::MACRO },
         { "include",        cmd_type::INCLUDE },
         { "exec_bind",      cmd_type::EXEC_BIND },
         { "no_reinclude",   cmd_type::NO_REINCLUDE },

@@ -17,7 +17,7 @@ namespace rvi
         SET_SCALE,
         DEFINE,
         UNDEFINE,
-        CALL,
+        MACRO,
         INCLUDE,
         NO_REINCLUDE,
         EXEC_BIND,

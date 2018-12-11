@@ -26,7 +26,7 @@ namespace rvi
         void mark_include_once();
         runtime* runtime_ptr();
 
-        void exec_definition(const std::string& dname);
+        void exec_macro(const std::string& dname);
 
         void exec_binding(const std::string& bname, const arglist_t& args);
         void create_binding(const std::string& bname, runtime_call_t call);

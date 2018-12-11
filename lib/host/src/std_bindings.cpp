@@ -208,7 +208,7 @@ namespace rvi
                 ctx.set_scale(vector2(font_sz_h, font_sz_v));
                 ctx.set_transform_scale_abs(true);
                 ctx.set_position(offset);
-                c_inst.exec_definition(defn);
+                c_inst.exec_macro(defn);
             }
             ctx.release_frame();
 
@@ -288,7 +288,7 @@ namespace rvi
                     ctx.set_scale(vector2(font_sz_h, font_sz_v));
                     ctx.set_transform_scale_abs(true);
                     ctx.set_position(offset);
-                    c_inst.exec_definition(defn);
+                    c_inst.exec_macro(defn);
                 }
                 ctx.release_frame();
 

@@ -31,7 +31,7 @@ namespace rvi
     // --------------------
 
     // -- FWD DECLARE --
-    RT_CALL_ENTRY(c_call);
+    RT_CALL_ENTRY(c_macro);
     RT_CALL_ENTRY(c_define);
     RT_CALL_ENTRY(c_delete_frame);
     RT_CALL_ENTRY(c_draw_line);
@@ -52,7 +52,7 @@ namespace rvi
 
     const std::unordered_map<cmd_type, runtime_call_t> call_map = 
     {
-        { cmd_type::CALL,           &c_call },
+        { cmd_type::MACRO,          &c_macro },
         { cmd_type::DEFINE,         &c_define },
         { cmd_type::DELETE_FRAME,   &c_delete_frame },
         { cmd_type::DRAW_LINE,      &c_draw_line },
@@ -72,12 +72,12 @@ namespace rvi
         { cmd_type::UNSET_CLICKABLE,&c_unset_clickable}
     };
 
-    RT_CALL_ENTRY(c_call)
+    RT_CALL_ENTRY(c_macro)
     {
         expect_argc(args, 1);
         const std::string& defname = args[0];
         std::vector<parsed_stmt>& instructions = 
-            c_inst.data.definitions[defname];
+            c_inst.data.macros[defname];
 
         for(auto& inst : instructions)
         {
@@ -95,7 +95,7 @@ namespace rvi
         std::stringstream ssbody(defbody);
         reader rdr(ssbody);
         auto parsed_def = rdr.process();
-        c_inst.data.definitions.emplace(defname, parsed_def);
+        c_inst.data.macros.emplace(defname, parsed_def);
     }
 
     RT_CALL_ENTRY(c_delete_frame)
@@ -262,7 +262,7 @@ namespace rvi
     {
         expect_argc(args, 1);
         const std::string& defname = args[0];
-        c_inst.data.definitions.erase(defname);
+        c_inst.data.macros.erase(defname);
     }
 
     RT_CALL_ENTRY(c_set_clickable)

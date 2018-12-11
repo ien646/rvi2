@@ -15,7 +15,7 @@ namespace rvi
 {
     struct client_instance_data
     {
-        std::unordered_map<std::string, std::vector<parsed_stmt>> definitions;
+        std::unordered_map<std::string, std::vector<parsed_stmt>> macros;
         std::unordered_map<std::string, runtime_call_t> bindings;
         std::vector<std::string> include_stack;
         std::unordered_set<std::string> include_once_ids;
