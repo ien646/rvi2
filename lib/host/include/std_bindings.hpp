@@ -51,8 +51,10 @@ namespace rvi::std_bindings
     extern void cross(client_instance& c_inst, const arglist_t& args);
     extern void cross_rgba(client_instance& c_inst, const arglist_t& args);
 
-    extern void grid_fill(client_instance& c_inst, const arglist_t& args);
-    extern void grid_fill_rgba(client_instance& c_inst, const arglist_t& args);
+    extern void grid_fill_abs(client_instance& c_inst, const arglist_t& args);
+    extern void grid_fill_abs_rgba(client_instance& c_inst, const arglist_t& args);
+    extern void grid_fill_rlt(client_instance& c_inst, const arglist_t& args);
+    extern void grid_fill_rlt_rgba(client_instance& c_inst, const arglist_t& args);
 
     extern void clear_context(client_instance& c_inst, const arglist_t& args);
 

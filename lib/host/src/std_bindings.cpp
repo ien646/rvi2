@@ -406,7 +406,7 @@ namespace rvi
         ctx.select_frame(save_fptr);
     }
 
-    void std_bindings::grid_fill(client_instance& c_inst, const arglist_t& args)
+    void std_bindings::grid_fill_abs(client_instance& c_inst, const arglist_t& args)
     {
         expect_argc(args, 0 + 1);
 
@@ -437,7 +437,7 @@ namespace rvi
         ctx.select_frame(save_fptr);
     }
 
-    void std_bindings::grid_fill_rgba(client_instance& c_inst, const arglist_t& args)
+    void std_bindings::grid_fill_abs_rgba(client_instance& c_inst, const arglist_t& args)
     {
         expect_argc(args, 4 + 1);
 
@@ -482,6 +482,16 @@ namespace rvi
         ctx.set_color(save_color);
     }
 
+    void std_bindings::grid_fill_rlt(client_instance& c_inst, const arglist_t& args)
+    {
+        throw std::logic_error("Not implemented");
+    }
+
+    void std_bindings::grid_fill_rlt_rgba(client_instance& c_inst, const arglist_t& args)
+    {
+        throw std::logic_error("Not implemented");
+    }
+
     void std_bindings::clear_context(client_instance& c_inst, const arglist_t& args)
     {
         expect_argc(args, 0 + 1);
@@ -505,8 +515,8 @@ namespace rvi
         c_inst.create_binding("cross", &std_bindings::cross);
         c_inst.create_binding("cross_rgba", &std_bindings::cross_rgba);
 
-        c_inst.create_binding("grid_fill", &std_bindings::grid_fill);
-        c_inst.create_binding("grid_fill_rgba", &std_bindings::grid_fill_rgba);
+        c_inst.create_binding("grid_fill_abs", &std_bindings::grid_fill_abs);
+        c_inst.create_binding("grid_fill_abs_rgba", &std_bindings::grid_fill_abs_rgba);
 
         c_inst.create_binding("clear_context", &std_bindings::clear_context);
     }
