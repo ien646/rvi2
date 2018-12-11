@@ -255,14 +255,17 @@ namespace rvi
             line += wrap_sep_char;
             if(!first)
             {
-                float finalPos = offset.x + (line.size() * font_sz_h) + ((line.size() - 1) * font_sep_h);
+                float finalPos = offset.x + 
+                    (line.size() * font_sz_h) + 
+                    ((line.size() - 1) * font_sep_h);
+
                 if(finalPos > x_max_sz)
                 {
                     offset.x = font_margin_h;
                     offset.y -= (font_sz_v + wrap_vsep);
                 }
             }
-            first = false;            
+            first = false;
             for (auto& ch : line)
             {
                 buff[0] = buff[1];
@@ -303,7 +306,7 @@ namespace rvi
     {
         expect_argc(args, 0 + 1);
 
-        auto& calling_frame = args[0];
+        auto& calling_frame = args.back();
         auto& ctx = c_inst.context;
 
         frame* save_fptr = ctx.selected_frame();
@@ -311,17 +314,19 @@ namespace rvi
 
         ctx.select_frame(calling_fptr);
         ctx.select_frame("__STD_BOX_BORDER");
-        ctx.draw_line(vector2(0, 0), vector2(1, 0)); //  -
-        ctx.draw_line(vector2(0, 1), vector2(1, 1)); //  =
-        ctx.draw_line(vector2(0, 0), vector2(0, 1)); // |=
-        ctx.draw_line(vector2(1, 0), vector2(1, 1)); // |=|
+        {
+            ctx.draw_line(vector2(0, 0), vector2(1, 0)); //  -
+            ctx.draw_line(vector2(0, 1), vector2(1, 1)); //  =
+            ctx.draw_line(vector2(0, 0), vector2(0, 1)); // |=
+            ctx.draw_line(vector2(1, 0), vector2(1, 1)); // |=|
+        }
         ctx.select_frame(save_fptr);
     }
 
     void std_bindings::box_border_rgba(client_instance& c_inst, const arglist_t& args)
     {
         expect_argc(args, 4 + 1);
-        auto& calling_frame = args[0];
+        auto& calling_frame = args.back();
         auto& ctx = c_inst.context;
 
         uint8_t r = static_cast<uint8_t>(std::min(std::stoi(args[0]), 255));
@@ -340,11 +345,13 @@ namespace rvi
 
         ctx.select_frame(calling_fptr);
         ctx.select_frame("__STD_BOX_BORDER");
-        ctx.set_color(border_color);
-        ctx.draw_line(vector2(0, 0), vector2(1, 0)); //  -
-        ctx.draw_line(vector2(0, 1), vector2(1, 1)); //  =
-        ctx.draw_line(vector2(0, 0), vector2(0, 1)); // |=
-        ctx.draw_line(vector2(1, 0), vector2(1, 1)); // |=|
+        {
+            ctx.set_color(border_color);
+            ctx.draw_line(vector2(0, 0), vector2(1, 0)); //  -
+            ctx.draw_line(vector2(0, 1), vector2(1, 1)); //  =
+            ctx.draw_line(vector2(0, 0), vector2(0, 1)); // |=
+            ctx.draw_line(vector2(1, 0), vector2(1, 1)); // |=|
+        }
         ctx.set_color(save_color);
         ctx.select_frame(save_fptr);
     }
@@ -353,7 +360,7 @@ namespace rvi
     {
         expect_argc(args, 0 + 1);
 
-        auto& calling_frame = args[0];
+        auto& calling_frame = args.back();
         auto& ctx = c_inst.context;
 
         frame* save_fptr = ctx.selected_frame();
@@ -361,8 +368,10 @@ namespace rvi
 
         ctx.select_frame(calling_fptr);
         ctx.select_frame("__STD_CROSS");
-        ctx.draw_line(vector2(0, 0), vector2(1, 1)); //  /
-        ctx.draw_line(vector2(0, 1), vector2(1, 0)); //  X
+        {
+            ctx.draw_line(vector2(0, 0), vector2(1, 1)); //  /
+            ctx.draw_line(vector2(0, 1), vector2(1, 0)); //  X
+        }
         ctx.select_frame(save_fptr);
     }
 
@@ -380,7 +389,7 @@ namespace rvi
         {
             a = static_cast<uint8_t>(std::min(std::stoi(args[3]), 255));
         }
-        color_rgba border_color = color_rgba(r, g, b, a);
+        color_rgba cross_color = color_rgba(r, g, b, a);
 
         frame* save_fptr = ctx.selected_frame();
         frame* calling_fptr = ctx.find_frame(calling_frame);
@@ -388,10 +397,12 @@ namespace rvi
 
         ctx.select_frame(calling_fptr);
         ctx.select_frame("__STD_CROSS");
-        ctx.set_color(border_color);
-        ctx.draw_line(vector2(0, 0), vector2(1, 1)); //  /
-        ctx.draw_line(vector2(0, 1), vector2(1, 0)); //  X
-        ctx.set_color(save_color);
+        {
+            ctx.set_color(cross_color);
+            ctx.draw_line(vector2(0, 0), vector2(1, 1)); //  /
+            ctx.draw_line(vector2(0, 1), vector2(1, 0)); //  X
+            ctx.set_color(save_color);
+        }
         ctx.select_frame(save_fptr);
     }
 
@@ -404,9 +415,6 @@ namespace rvi
         const std::string& calling_frame = args.back();
         auto& ctx = c_inst.context;
 
-        float x_offset = 0.0F;
-        float y_offset = 0.0F;         
-
         frame* save_fptr = ctx.selected_frame();
         frame* calling_fptr = ctx.find_frame(calling_frame);
 
@@ -415,16 +423,63 @@ namespace rvi
 
         ctx.select_frame(calling_fptr);
         ctx.select_frame("__STD_GRID_FILL");
-        for(float x = 0; x <= 1.0F; x += x_step)
         {
-            ctx.draw_line(vector2(x, 0), vector2(x, 1));
-        }
+            for(float x = 0; x <= 1.0F; x += x_step)
+            {
+                ctx.draw_line(vector2(x, 0), vector2(x, 1));
+            }
 
-        for(float y = 0; y <= 1.0F; y += y_step)
-        {
-            ctx.draw_line(vector2(y, 0), vector2(y, 1));
+            for(float y = 0; y <= 1.0F; y += y_step)
+            {
+                ctx.draw_line(vector2(y, 0), vector2(y, 1));
+            }
         }
         ctx.select_frame(save_fptr);
+    }
+
+    void std_bindings::grid_fill_rgba(client_instance& c_inst, const arglist_t& args)
+    {
+        expect_argc(args, 4 + 1);
+
+        float grid_cell_sz = args.size() > 1 ? std::stof(args[0]) : DEF_GRIDFILL_SEP;
+
+        const std::string& calling_frame = args.back();
+        auto& ctx = c_inst.context;
+
+        frame* save_fptr = ctx.selected_frame();
+        frame* calling_fptr = ctx.find_frame(calling_frame);
+        color_rgba save_color = ctx.current_color();
+
+        uint8_t r = static_cast<uint8_t>(std::min(std::stoi(args[0]), 255));
+        uint8_t g = static_cast<uint8_t>(std::min(std::stoi(args[1]), 255));
+        uint8_t b = static_cast<uint8_t>(std::min(std::stoi(args[2]), 255));
+        uint8_t a = 255;
+        if(args.size() > 3)
+        {
+            a = static_cast<uint8_t>(std::min(std::stoi(args[3]), 255));
+        }
+        color_rgba grid_color = color_rgba(r, g, b, a);
+
+        float x_step = 1.0F / grid_cell_sz;
+        float y_step = 1.0F / grid_cell_sz;
+
+        ctx.select_frame(calling_fptr);
+        ctx.select_frame("__STD_GRID_FILL");
+        {
+            ctx.set_color(grid_color);
+
+            for(float x = 0; x <= 1.0F; x += x_step)
+            {
+                ctx.draw_line(vector2(x, 0), vector2(x, 1));
+            }
+
+            for(float y = 0; y <= 1.0F; y += y_step)
+            {
+                ctx.draw_line(vector2(y, 0), vector2(y, 1));
+            }
+        }
+        ctx.select_frame(save_fptr);
+        ctx.set_color(save_color);
     }
 
     void std_bindings::clear_context(client_instance& c_inst, const arglist_t& args)
@@ -451,6 +506,7 @@ namespace rvi
         c_inst.create_binding("cross_rgba", &std_bindings::cross_rgba);
 
         c_inst.create_binding("grid_fill", &std_bindings::grid_fill);
+        c_inst.create_binding("grid_fill_rgba", &std_bindings::grid_fill_rgba);
 
         c_inst.create_binding("clear_context", &std_bindings::clear_context);
     }
