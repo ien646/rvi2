@@ -5,14 +5,15 @@
 namespace rvi::std_bindings
 {
     static const float DEF_FONT_SZ = 0.03F;
-    static const float DEF_FONT_HSEP = 0.075F;
+    static const float DEF_FONT_HSEP = 0.0075F;
     static const float DEF_FONT_MARGIN = 0.01F;
     static const char  DEF_FONT_WRAP_SEP_CH = ' ';
+    static const float DEF_FONT_WRAP_LINE_VSEP = 0.0125F;
 
     extern void print(client_instance& c_inst, const arglist_t& args);
     extern void printw(client_instance& c_inst, const arglist_t& args);
-    extern void print_ex(client_instance& c_inst, const arglist_t& args);
-    extern void printw_ex(client_instance& c_inst, const arglist_t& args);
+    extern void printx(client_instance& c_inst, const arglist_t& args);
+    extern void printwx(client_instance& c_inst, const arglist_t& args);
     extern void printc(client_instance& c_inst, const arglist_t& args);
     extern void printcw(client_instance& c_inst, const arglist_t& args);
     
@@ -37,7 +38,8 @@ namespace rvi::std_bindings
         float font_sep_v,
         float font_margin_h,
         float font_margin_v,
-        char wsep_char);
+        char wrap_sep_char,
+        float wrap_vsep);
 
     extern void box_border(client_instance& c_inst, const arglist_t& args);
 

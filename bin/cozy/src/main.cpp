@@ -23,14 +23,13 @@ static void hello_click(rvi::client_instance& inst, const rvi::arglist_t&)
 
     // Return to root frame
     ctx.select_frame("hello_friend");
-    ctx.selected_frame()->set_transform_scale_absolute(true);
     ctx.clear_frame();
     ctx.clear_children();
-    ctx.set_position(rvi::vector2(0.15f, 0.15f));
-    inst.exec_binding("print", rvi::arglist_t
+    ctx.set_position(rvi::vector2(0.10f, 0.15f));
+    inst.exec_binding("printx", rvi::arglist_t
     {
         "+-+-+ HELLO FRIEND +-+-+",
-        "0.025", "0.04", "0.01", "0", "0.00", "0.00"
+        "0.02"
     });
     ctx.select_frame(save_ptr);
 }
@@ -42,7 +41,8 @@ int main()
     rvi::runtime rtm;
     int client = rtm.create_client();
     rtm.start_client(client);
-    rtm.get_instance(client).data.bindings.emplace("hello_click", &hello_click);
+
+    rtm.get_instance(client).create_binding("hello_click", &hello_click);
 
     rvi::opengl_ctx roglctx(&rtm, client);
     roglctx.setup_mouse_callbacks(wnd.wnd_ptr());
