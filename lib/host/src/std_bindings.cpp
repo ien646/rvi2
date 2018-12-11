@@ -307,7 +307,7 @@ namespace rvi
         auto& ctx = c_inst.context;
 
         frame* save_fptr = ctx.selected_frame();
-        frame* calling_fptr = ctx.find_frame(args[0]);
+        frame* calling_fptr = ctx.find_frame(calling_frame);
 
         ctx.select_frame(calling_fptr);
         ctx.select_frame("__STD_BOX_BORDER");

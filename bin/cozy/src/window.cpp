@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-static void resize_callback(GLFWwindow* wptr, int w, int h)
+static void resize_callback(GLFWwindow* /**/, int w, int h)
 {
     glViewport(0, 0, w, h);
 }
