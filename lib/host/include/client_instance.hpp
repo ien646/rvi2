@@ -29,7 +29,7 @@ namespace rvi
         void exec_macro(const std::string& dname);
 
         void exec_binding(const std::string& bname, const arglist_t& args);
-        void create_binding(const std::string& bname, runtime_call_t call);
+        void create_binding(const std::string& bname, runtime_cmd_t call);
         void delete_binding(const std::string& bname);
 
         void set_clickable_frame(

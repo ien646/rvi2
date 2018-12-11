@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "call_map.hpp"
+#include "cmd_def_map.hpp"
 
 namespace rvi
 {
@@ -42,8 +42,8 @@ namespace rvi
             auto& def = data.macros.at(mname);
             for(auto& inst : def)
             {
-                auto& call = call_map.at(inst.cmd);
-                call(*this, inst.args);
+                auto& cmd = cmd_def_map.at(inst.cmd);
+                cmd(*this, inst.args);
             }
         }
         else
@@ -73,7 +73,7 @@ namespace rvi
         }
     }
 
-    void client_instance::create_binding(const std::string& bname, runtime_call_t call)
+    void client_instance::create_binding(const std::string& bname, runtime_cmd_t call)
     {
         if(data.bindings.count(bname) > 0)
         {

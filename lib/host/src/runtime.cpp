@@ -5,7 +5,7 @@
 
 #include <fstream>
 
-#include "call_map.hpp"
+#include "cmd_def_map.hpp"
 #include "std_bindings.hpp"
 
 namespace rvi
@@ -37,8 +37,8 @@ namespace rvi
         auto stmt_col = rdr.process();
         for(auto& stmt : stmt_col)
         {
-            auto& call = call_map.at(stmt.cmd);
-            call(client, stmt.args);
+            auto& cmd = cmd_def_map.at(stmt.cmd);
+            cmd(client, stmt.args);
         }
     }
 

@@ -1,4 +1,4 @@
-#include "call_map.hpp"
+#include "cmd_def_map.hpp"
 
 #include <fstream>
 #include <utility>
@@ -10,8 +10,10 @@
 #include "reader.hpp"
 #include "parsed_stmt.hpp"
 
-#define RT_CALL_ENTRY(name) \
-    void name([[maybe_unused]] client_instance& c_inst, [[maybe_unused]] const arglist_t& args)
+#define RT_CMD_ENTRY(name) \
+    void name( \
+        [[maybe_unused]] client_instance& c_inst, \
+        [[maybe_unused]] const arglist_t& args)
 
 #define STR(v) std::to_string(v)
 
@@ -31,32 +33,32 @@ namespace rvi
     // --------------------
 
     // -- FWD DECLARE --
-    RT_CALL_ENTRY(c_macro);
-    RT_CALL_ENTRY(c_define);
-    RT_CALL_ENTRY(c_delete_frame);
-    RT_CALL_ENTRY(c_draw_line);
-    RT_CALL_ENTRY(c_exec_bind);
-    RT_CALL_ENTRY(c_include);
-    RT_CALL_ENTRY(c_invalid_cmd);
-    RT_CALL_ENTRY(c_no_reinclude);
-    RT_CALL_ENTRY(c_release_frame);
-    RT_CALL_ENTRY(c_select_frame);
-    RT_CALL_ENTRY(c_set_color);
-    RT_CALL_ENTRY(c_set_position);
-    RT_CALL_ENTRY(c_set_rotation);
-    RT_CALL_ENTRY(c_set_scale);
-    RT_CALL_ENTRY(c_set_transform);
-    RT_CALL_ENTRY(c_undefine);
-    RT_CALL_ENTRY(c_set_clickable);
-    RT_CALL_ENTRY(c_unset_clickable);
+    RT_CMD_ENTRY(c_macro);
+    RT_CMD_ENTRY(c_define);
+    RT_CMD_ENTRY(c_delete_frame);
+    RT_CMD_ENTRY(c_draw_line);
+    RT_CMD_ENTRY(c_call);
+    RT_CMD_ENTRY(c_include);
+    RT_CMD_ENTRY(c_invalid_cmd);
+    RT_CMD_ENTRY(c_no_reinclude);
+    RT_CMD_ENTRY(c_release_frame);
+    RT_CMD_ENTRY(c_select_frame);
+    RT_CMD_ENTRY(c_set_color);
+    RT_CMD_ENTRY(c_set_position);
+    RT_CMD_ENTRY(c_set_rotation);
+    RT_CMD_ENTRY(c_set_scale);
+    RT_CMD_ENTRY(c_set_transform);
+    RT_CMD_ENTRY(c_undefine);
+    RT_CMD_ENTRY(c_set_clickable);
+    RT_CMD_ENTRY(c_unset_clickable);
 
-    const std::unordered_map<cmd_type, runtime_call_t> call_map = 
+    const std::unordered_map<cmd_type, runtime_cmd_t> cmd_def_map = 
     {
         { cmd_type::MACRO,          &c_macro },
         { cmd_type::DEFINE,         &c_define },
         { cmd_type::DELETE_FRAME,   &c_delete_frame },
         { cmd_type::DRAW_LINE,      &c_draw_line },
-        { cmd_type::EXEC_BIND,      &c_exec_bind},
+        { cmd_type::CALL,           &c_call},
         { cmd_type::INCLUDE,        &c_include},
         { cmd_type::INVALID_CMD,    &c_invalid_cmd},
         { cmd_type::NO_REINCLUDE,   &c_no_reinclude},
@@ -72,7 +74,7 @@ namespace rvi
         { cmd_type::UNSET_CLICKABLE,&c_unset_clickable}
     };
 
-    RT_CALL_ENTRY(c_macro)
+    RT_CMD_ENTRY(c_macro)
     {
         expect_argc(args, 1);
         const std::string& defname = args[0];
@@ -81,12 +83,12 @@ namespace rvi
 
         for(auto& inst : instructions)
         {
-            auto& call = call_map.at(inst.cmd);
-            call(c_inst, inst.args);
+            auto& cmd = cmd_def_map.at(inst.cmd);
+            cmd(c_inst, inst.args);
         }
     }
 
-    RT_CALL_ENTRY(c_define)
+    RT_CMD_ENTRY(c_define)
     { 
         expect_argc(args, 2);
         const std::string& defname = args[0];
@@ -98,7 +100,7 @@ namespace rvi
         c_inst.data.macros.emplace(defname, parsed_def);
     }
 
-    RT_CALL_ENTRY(c_delete_frame)
+    RT_CMD_ENTRY(c_delete_frame)
     {
         // expect_argc(args, 0);
         frame* sfptr = c_inst.context.selected_frame();
@@ -118,7 +120,7 @@ namespace rvi
         }
     }
 
-    RT_CALL_ENTRY(c_draw_line)
+    RT_CMD_ENTRY(c_draw_line)
     {
         expect_argc(args, 4);
         float sx = std::stof(args[0]);
@@ -130,7 +132,7 @@ namespace rvi
         c_inst.context.draw_line(from, to);
     }
 
-    RT_CALL_ENTRY(c_exec_bind)
+    RT_CMD_ENTRY(c_call)
     {
         expect_argc(args, 1);
         const std::string& bname = args[0];
@@ -152,7 +154,7 @@ namespace rvi
         }
     }
 
-    RT_CALL_ENTRY(c_include)
+    RT_CMD_ENTRY(c_include)
     {
         expect_argc(args, 1);
         const std::string& name = args[0];
@@ -179,35 +181,35 @@ namespace rvi
         c_inst.push_include(name);
         for(auto& stmt : instructions)
         {
-            auto& rtcall = call_map.at(stmt.cmd);
-            rtcall(c_inst, stmt.args);
+            auto& cmd = cmd_def_map.at(stmt.cmd);
+            cmd(c_inst, stmt.args);
         }
         c_inst.pop_include();
     }
 
-    RT_CALL_ENTRY(c_invalid_cmd)
+    RT_CMD_ENTRY(c_invalid_cmd)
     {
         throw std::invalid_argument("Attempt to execute invalid command!");
     }
 
-    RT_CALL_ENTRY(c_no_reinclude)
+    RT_CMD_ENTRY(c_no_reinclude)
     { 
         c_inst.mark_include_once();
     }
 
-    RT_CALL_ENTRY(c_release_frame)
+    RT_CMD_ENTRY(c_release_frame)
     { 
         c_inst.context.release_frame();
     }
 
-    RT_CALL_ENTRY(c_select_frame)
+    RT_CMD_ENTRY(c_select_frame)
     { 
         expect_argc(args, 1);
         const std::string& framename = args[0];
         c_inst.context.select_frame(framename);
     }
 
-    RT_CALL_ENTRY(c_set_color)
+    RT_CMD_ENTRY(c_set_color)
     {
         expect_argc(args, 3);
         uint8_t r = static_cast<uint8_t>(std::min(std::stoi(args[0]), 255));
@@ -223,7 +225,7 @@ namespace rvi
         c_inst.context.set_color(color);
     }
 
-    RT_CALL_ENTRY(c_set_position)
+    RT_CMD_ENTRY(c_set_position)
     { 
         expect_argc(args, 2);
         float x = std::stof(args[0]);
@@ -231,14 +233,14 @@ namespace rvi
         c_inst.context.set_position(vector2(x, y));
     }
 
-    RT_CALL_ENTRY(c_set_rotation)
+    RT_CMD_ENTRY(c_set_rotation)
     { 
         expect_argc(args, 1);
         float rotation = std::stof(args[0]);
         c_inst.context.set_rotation(rotation);
     }
 
-    RT_CALL_ENTRY(c_set_scale)
+    RT_CMD_ENTRY(c_set_scale)
     { 
         expect_argc(args, 2);
         float x = std::stof(args[0]);
@@ -246,7 +248,7 @@ namespace rvi
         c_inst.context.set_scale(vector2(x, y));
     }
 
-    RT_CALL_ENTRY(c_set_transform)
+    RT_CMD_ENTRY(c_set_transform)
     { 
         expect_argc(args, 5);
         float px = std::stof(args[0]);
@@ -258,14 +260,14 @@ namespace rvi
         c_inst.context.set_transform(std::move(tform));
     }
 
-    RT_CALL_ENTRY(c_undefine)
+    RT_CMD_ENTRY(c_undefine)
     {
         expect_argc(args, 1);
         const std::string& defname = args[0];
         c_inst.data.macros.erase(defname);
     }
 
-    RT_CALL_ENTRY(c_set_clickable)
+    RT_CMD_ENTRY(c_set_clickable)
     {
         expect_argc(args, 1);
 
@@ -287,7 +289,7 @@ namespace rvi
         c_inst.set_clickable_frame(fptr, binding_name, depth, binding_args);
     }
 
-    RT_CALL_ENTRY(c_unset_clickable)
+    RT_CMD_ENTRY(c_unset_clickable)
     {
         // expect_argc(args, 0);
         frame* fptr = c_inst.context.selected_frame();

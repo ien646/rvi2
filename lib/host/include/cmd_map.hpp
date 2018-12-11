@@ -23,7 +23,7 @@ namespace rvi
         { "undefine",       cmd_type::UNDEFINE },
         { "macro",          cmd_type::MACRO },
         { "include",        cmd_type::INCLUDE },
-        { "exec_bind",      cmd_type::EXEC_BIND },
+        { "call",           cmd_type::CALL },
         { "no_reinclude",   cmd_type::NO_REINCLUDE },
         { "set_clickable",  cmd_type::SET_CLICKABLE },
         { "unset_clickable",cmd_type::UNSET_CLICKABLE }

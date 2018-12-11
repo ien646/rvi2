@@ -20,7 +20,7 @@ namespace rvi
         MACRO,
         INCLUDE,
         NO_REINCLUDE,
-        EXEC_BIND,
+        CALL,
         SET_CLICKABLE,
         UNSET_CLICKABLE
     };
