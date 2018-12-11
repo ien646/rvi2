@@ -150,10 +150,13 @@ namespace rvi
 
         /**
          * @brief Return pointer to the currently selected frame
-         * 
-         * @return frame* Pointer to the currently selected frame
          */
         frame* selected_frame() noexcept;
+
+        /**
+         * @brief Return current context color
+         */
+        color_rgba current_color() const noexcept;
 
         /**
          * @return true Selected frame is the root frame

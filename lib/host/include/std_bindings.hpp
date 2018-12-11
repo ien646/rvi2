@@ -4,11 +4,15 @@
 
 namespace rvi::std_bindings
 {
+    // -- PRINT* constants
     static const float DEF_FONT_SZ = 0.03F;
     static const float DEF_FONT_HSEP = 0.0075F;
     static const float DEF_FONT_MARGIN = 0.01F;
     static const char  DEF_FONT_WRAP_SEP_CH = ' ';
     static const float DEF_FONT_WRAP_LINE_VSEP = 0.0125F;
+
+    // -- GRID_FILL* constants
+    static const float DEF_GRIDFILL_SEP = 0.02F;
 
     extern void print(client_instance& c_inst, const arglist_t& args);
     extern void printw(client_instance& c_inst, const arglist_t& args);
@@ -42,6 +46,14 @@ namespace rvi::std_bindings
         float wrap_vsep);
 
     extern void box_border(client_instance& c_inst, const arglist_t& args);
+    extern void box_border_rgba(client_instance& c_inst, const arglist_t& args);
+
+    extern void cross(client_instance& c_inst, const arglist_t& args);
+    extern void cross_rgba(client_instance& c_inst, const arglist_t& args);
+
+    extern void grid_fill(client_instance& c_inst, const arglist_t& args);
+
+    extern void clear_context(client_instance& c_inst, const arglist_t& args);
 
     extern void init_std_bindings(client_instance& c_inst);
 }

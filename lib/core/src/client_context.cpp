@@ -101,7 +101,7 @@ namespace rvi
 
     bool client_context::release_frame()
     {
-        if (_selected_frame == _main_frame.get())
+        if (is_root_frame_selected())
         {
             return false;
         }
@@ -139,6 +139,11 @@ namespace rvi
     void client_context::set_color(color_rgba color) noexcept
     {
         _current_color = color;
+    }
+
+    color_rgba client_context::current_color() const noexcept
+    {
+        return _current_color;
     }
 
     void client_context::set_transform(const transform2& tform) noexcept
