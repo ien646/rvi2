@@ -101,14 +101,18 @@ namespace rvi
 
     void opengl_ctx::mouse_pos_callback(GLFWwindow* wnd, double px, double py)
     {
+        float fpx = static_cast<float>(px);
+        float fpy = static_cast<float>(py);
+
         int w, h;
         glfwGetWindowSize(wnd, &w, &h);
-        float x = px / w;
-        float y = 1 - (py / h);
+
+        float x = fpx / w;
+        float y = 1 - (fpy / h);
         _cursor_pos = rvi::vector2(x, y);
     }
 
-    void opengl_ctx::mouse_press_callback(GLFWwindow* wnd, int key, int act, int mods)
+    void opengl_ctx::mouse_press_callback(GLFWwindow* /**/, int key, int act, int /**/)
     {
         if(key == GLFW_MOUSE_BUTTON_LEFT && act == GLFW_PRESS)
         {

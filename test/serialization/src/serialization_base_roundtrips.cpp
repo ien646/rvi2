@@ -77,10 +77,10 @@ static void test_serialize_integral()
 
     T arr[] = 
     {
-        std::numeric_limits<T>::max(),
-        std::numeric_limits<T>::min(),
-        std::numeric_limits<T>::max() / 2,
-        std::numeric_limits<T>::min() / 2,
+        static_cast<T>(std::numeric_limits<T>::max()),
+        static_cast<T>(std::numeric_limits<T>::min()),
+        static_cast<T>(std::numeric_limits<T>::max() / 2),
+        static_cast<T>(std::numeric_limits<T>::min() / 2),
         static_cast<T>(0)
     };
 
