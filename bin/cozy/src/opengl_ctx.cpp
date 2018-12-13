@@ -13,7 +13,7 @@ namespace rvi
         _runtime_ptr = rptr;
         _client_id = cid;
         init_default_shaders(&_shader_program);
-        glLineWidth(2);
+        glLineWidth(1);
     }
 
     void opengl_ctx::refresh()

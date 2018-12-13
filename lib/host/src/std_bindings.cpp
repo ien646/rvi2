@@ -413,16 +413,15 @@ namespace rvi
 
         ctx.set_color(color);
         ctx.select_frame("__STD_GRID_FILL");
-        {
-            
-            for(float x = 0; x <= 1.0F; x += x_step)
+        {            
+            for(float x = x_step; x < 1.0F; x += x_step)
             {
                 ctx.draw_line(vector2(x, 0), vector2(x, 1));
             }
 
-            for(float y = 0; y <= 1.0F; y += y_step)
+            for(float y = y_step; y < 1.0F; y += y_step)
             {
-                ctx.draw_line(vector2(y, 0), vector2(y, 1));
+                ctx.draw_line(vector2(0, y), vector2(1, y));
             }
         }
         ctx.set_color(save_color);
@@ -440,8 +439,9 @@ namespace rvi
         frame* save_fptr = ctx.selected_frame();
         frame* calling_fptr = ctx.find_frame(calling_frame);
 
-        float x_step = grid_cell_sz;
-        float y_step = grid_cell_sz;
+        vector2 scale = ctx.selected_frame()->transform().scale;
+        float x_step = grid_cell_sz / scale.x;
+        float y_step = grid_cell_sz / scale.y;
 
         ctx.select_frame(calling_fptr);
         {
@@ -466,8 +466,9 @@ namespace rvi
        
         color_rgba grid_color = extract_color_rgba_from_arglist(args, 0);
 
-        float x_step = grid_cell_sz;
-        float y_step = grid_cell_sz;
+        vector2 scale = ctx.selected_frame()->transform().scale;
+        float x_step = grid_cell_sz / scale.x;
+        float y_step = grid_cell_sz / scale.y;
 
         ctx.select_frame(calling_fptr);
         {
@@ -480,8 +481,8 @@ namespace rvi
     {
         expect_argc(args, 2 + 1);
 
-        uint16_t x_cells = std::stof(args[0]);
-        uint16_t y_cells = std::stof(args[1]);
+        int x_cells = std::stoi(args[0]);
+        int y_cells = std::stoi(args[1]);
 
         const std::string& calling_frame = args.back();
         auto& ctx = c_inst.context;
@@ -503,8 +504,8 @@ namespace rvi
     {
         expect_argc(args, 6 + 1);
 
-        uint16_t x_cells = std::stof(args[0]);
-        uint16_t y_cells = std::stof(args[1]);
+        int x_cells = std::stoi(args[0]);
+        int y_cells = std::stoi(args[1]);
         
         color_rgba grid_color = extract_color_rgba_from_arglist(args, 2);
 
@@ -541,10 +542,21 @@ namespace rvi
 
         std::vector<vector2> points;
         bool top = false;
-        for(float x = 0.0F; x <= 1.0F; x += step_sz)
+        float x = 0.0F;
+        for(; x <= 1.0F; x += step_sz)
         {
             points.push_back(vector2(x, (top ? 1.0F : 0.0F)));
             top = !top;
+        }
+
+        if(x > 1.0F)
+        {
+            float q = step_sz - (1.0F - x);
+            if(top)
+            {
+                q = 1 - q;
+            }
+            points.push_back(vector2(1.0F, q));
         }
 
         auto current_it = points.begin();
@@ -594,12 +606,39 @@ namespace rvi
 
     void std_bindings::stitch_fill_rlt(client_instance& c_inst, const arglist_t& args)
     {
-        // ...
+        expect_argc(args, 1 + 1);
+        int step_count = std::stoi(args[0]);
+
+        float step_sz = 1.0F / step_count;
+
+        const std::string& calling_frame = args.back();
+        auto& ctx = c_inst.context;
+
+        frame* save_fptr = ctx.selected_frame();
+        frame* calling_fptr = ctx.find_frame(calling_frame);
+
+        ctx.select_frame(calling_fptr);
+        _stitch_fill(step_sz, ctx, ctx.current_color());
+        ctx.select_frame(save_fptr);
     }
 
     void std_bindings::stitch_fill_rlt_rgba(client_instance& c_inst, const arglist_t& args)
     {
-        // ...
+        expect_argc(args, 1 + 1);
+        int step_count = std::stoi(args[0]);
+        color_rgba color = extract_color_rgba_from_arglist(args, 1);
+
+        float step_sz = 1.0F / step_count;
+
+        const std::string& calling_frame = args.back();
+        auto& ctx = c_inst.context;
+
+        frame* save_fptr = ctx.selected_frame();
+        frame* calling_fptr = ctx.find_frame(calling_frame);
+
+        ctx.select_frame(calling_fptr);
+        _stitch_fill(step_sz, ctx, color);
+        ctx.select_frame(save_fptr);
     }
 
     void std_bindings::init_std_bindings(client_instance& c_inst)
