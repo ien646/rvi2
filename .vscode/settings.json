@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.inl": "cpp",
         "algorithm": "cpp",
         "array": "cpp",
         "cctype": "cpp",
@@ -67,6 +68,7 @@
         "xutility": "cpp",
         "map": "cpp",
         "set": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "forward_list": "cpp"
     }
 }

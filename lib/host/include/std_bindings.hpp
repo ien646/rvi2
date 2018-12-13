@@ -14,6 +14,9 @@ namespace rvi::std_bindings
     // -- GRID_FILL* constants
     static const float DEF_GRIDFILL_SEP = 0.02F;
 
+    // -- STITCH_FILL* constants
+    static const float DEF_STITCHFILL_SEP = 0.035F;
+
     extern void print(client_instance& c_inst, const arglist_t& args);
     extern void printw(client_instance& c_inst, const arglist_t& args);
     extern void printx(client_instance& c_inst, const arglist_t& args);
@@ -55,6 +58,11 @@ namespace rvi::std_bindings
     extern void grid_fill_abs_rgba(client_instance& c_inst, const arglist_t& args);
     extern void grid_fill_rlt(client_instance& c_inst, const arglist_t& args);
     extern void grid_fill_rlt_rgba(client_instance& c_inst, const arglist_t& args);
+
+    extern void stitch_fill_abs(client_instance& c_inst, const arglist_t& args);
+    extern void stitch_fill_abs_rgba(client_instance& c_inst, const arglist_t& args);
+    extern void stitch_fill_rlt(client_instance& c_inst, const arglist_t& args);
+    extern void stitch_fill_rlt_rgba(client_instance& c_inst, const arglist_t& args);
 
     extern void clear_context(client_instance& c_inst, const arglist_t& args);
 
