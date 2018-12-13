@@ -624,7 +624,7 @@ namespace rvi
 
     void std_bindings::stitch_fill_rlt_rgba(client_instance& c_inst, const arglist_t& args)
     {
-        expect_argc(args, 1 + 1);
+        expect_argc(args, 5 + 1);
         int step_count = std::stoi(args[0]);
         color_rgba color = extract_color_rgba_from_arglist(args, 1);
 
