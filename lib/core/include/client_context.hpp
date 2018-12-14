@@ -28,7 +28,7 @@ namespace rvi
         // Current frame selection 'stack'
         std::vector<frame*> _frame_stack;
 
-        // Framepaths of altered frames since last full or partial snapshot
+        // Altered frames since last full or partial snapshot
         std::unordered_set<frame*> _modified_frames;
 
         color_rgba _current_color;
