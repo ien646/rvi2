@@ -8,3 +8,9 @@ select_frame: hello_world;
 	call: {stitch_fill_rlt}, 25;
 	set_clickable: hello_click;
 release_frame;
+
+select_frame: hi_text;
+	set_position: 0.10, 0.70;
+	set_scale: 0.75, 0.10;
+	call: print, {HI THERE FRIEND};
+release_frame;

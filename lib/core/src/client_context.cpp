@@ -94,9 +94,26 @@ namespace rvi
         return _selected_frame;
     }
 
-    void  client_context::select_frame(frame* fptr)
+    void client_context::select_frame(frame* fptr)
     {
+        if(_selected_frame == fptr)
+        {
+            return;
+        }
+
         _selected_frame = fptr;
+
+        // Regenerate frame-stack
+        _frame_stack.clear();
+        std::vector<frame*> fstack_rev;
+        frame* cframe = _selected_frame;
+        while(cframe->has_parent())
+        {
+            fstack_rev.push_back(cframe);
+            cframe = cframe->parent();
+        }
+        fstack_rev.push_back(cframe);
+        std::copy(fstack_rev.rbegin(), fstack_rev.rend(), std::back_inserter(_frame_stack));
     }
 
     bool client_context::release_frame()
