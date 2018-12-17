@@ -58,7 +58,6 @@ namespace rvi
          * against another provided vector2
          * 
          * @param other vector2 to perform cross product against
-         * @return vector2 Resulting vector2
          */
         void cross_product_in_place(vector2 other) noexcept;
 

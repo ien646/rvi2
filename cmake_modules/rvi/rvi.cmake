@@ -25,8 +25,15 @@ function("rvi_set_compiler_flags" TARGETNAME)
 		
 	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	
-		add_definitions(-pedantic-errors -Wall -lstdc++fs)
-		
+		add_definitions(
+			-std=c++17 
+			-pedantic-errors 
+			-Wall
+			-lstdc++fs 
+			-Wno-c++98-compat 
+			-Wno-c++98-compat-pedantic
+			-Wno-newline-eof)
+			
 	endif()
 	
 	rvi_log(${TARGETNAME} "SET COMPILER FLAGS FOR ${CMAKE_CXX_COMPILER_ID}")
