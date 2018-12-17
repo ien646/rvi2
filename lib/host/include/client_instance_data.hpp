@@ -22,4 +22,4 @@ namespace rvi
         std::unordered_map<frame*, clickable_frame_data> clickable_frames;
         constrained_buffer<char, 128> key_buffer;
     };
-};
+}
