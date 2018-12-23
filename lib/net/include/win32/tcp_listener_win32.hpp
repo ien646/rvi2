@@ -15,34 +15,30 @@
 
 #include <functional>
 
-#include "tcp_socket_win32.hpp"
+#include "tcp_connection_win32.hpp"
 
 #pragma comment (lib, "Ws2_32.lib")
+#pragma comment (lib, "Mswsock.lib")
+#pragma comment (lib, "AdvApi32.lib")
 
 namespace rvi
 {
-    typedef std::function<void(tcp_socket)> accept_callback_t;
-
     class tcp_listener
     {
     private:
+        bool _wsa_initialized = false;
         WSADATA _wsadata;
         addrinfo* _addr_info;
         SOCKET _listen_sock;
 
     public: 
         tcp_listener(uint16_t port);
-        void enable_listen(accept_callback_t cback);
+        ~tcp_listener();
+        void enable_listen(connection_callback_t cback);
 
     private:
-        bool init_wsa();
-        addrinfo get_socket_hints();
-        bool fill_addrinfo(uint16_t port);
         bool init_listen_socket();
-        bool create_socket();
-        bool bind_socket();
-        
         bool start_listen();
-        void start_accept(accept_callback_t cback);
+        void start_accept(connection_callback_t cback);
     };
 }

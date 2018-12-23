@@ -69,6 +69,8 @@
         "map": "cpp",
         "set": "cpp",
         "xtree": "cpp",
-        "forward_list": "cpp"
+        "forward_list": "cpp",
+        "xthread": "cpp",
+        "thread": "cpp"
     }
 }
