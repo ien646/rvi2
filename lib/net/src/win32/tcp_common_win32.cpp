@@ -28,9 +28,9 @@ namespace rvi
         return true;
     }
 
-    bool fill_addrinfo(uint16_t port, const std::string host_addr, addrinfo* result)
+    bool fill_addrinfo(uint16_t port, const std::string host_addr, addrinfo* result, bool will_bind)
     {
-        addrinfo sock_hints = get_socket_hints();
+        addrinfo sock_hints = get_socket_hints(will_bind);
         int res = getaddrinfo(
             host_addr.empty() ? NULL : host_addr.c_str(),
             std::to_string(port).c_str(),

@@ -37,7 +37,8 @@ namespace rvi
             static_cast<int>(_addr_info->ai_addrlen)
         );
 
-        if (result == SOCKET_ERROR) {
+        if (result == SOCKET_ERROR) 
+        {
             closesocket(_client_sock);
             _client_sock = INVALID_SOCKET;
             return false;

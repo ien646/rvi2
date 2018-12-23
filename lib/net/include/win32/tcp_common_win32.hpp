@@ -1,6 +1,9 @@
 #include <ws2tcpip.h>
 #include <cinttypes>
 #include <string>
+#include <functional>
+
+#include "win32/tcp_connection_win32.hpp"
 
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
@@ -14,7 +17,7 @@ namespace rvi
 
     bool init_wsa(WSADATA* wsadata);
 
-    bool fill_addrinfo(uint16_t port, const std::string host_addr, addrinfo* result);
+    bool fill_addrinfo(uint16_t port, const std::string host_addr, addrinfo* result, bool will_bind);
 
     bool create_socket(addrinfo* ainfo, SOCKET* result);
 
