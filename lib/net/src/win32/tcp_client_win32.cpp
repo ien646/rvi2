@@ -13,7 +13,7 @@ namespace rvi
             return;
         }
         _wsa_initialized = true;
-        fill_addrinfo(port, host_addr.c_str(), _addr_info);
+        fill_addrinfo(port, host_addr.c_str(), _addr_info, false);
     }
 
     tcp_client::~tcp_client()

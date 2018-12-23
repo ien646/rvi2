@@ -1,3 +1,9 @@
+#pragma once
+
+#if !defined(_WIN32)
+#error "Unable to use Windows tcp sockets on non Windows compatible platform"
+#endif
+
 #include <ws2tcpip.h>
 #include <cinttypes>
 #include <string>

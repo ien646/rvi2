@@ -14,7 +14,7 @@ namespace rvi
             return;
         }
         _wsa_initialized = true;
-        fill_addrinfo(port, "", _addr_info);
+        fill_addrinfo(port, "", _addr_info, true);
     }
 
     tcp_listener::~tcp_listener()

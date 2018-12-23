@@ -1,7 +1,7 @@
 #pragma once
 
 #if !defined(_WIN32)
-#error "Unable to use Windows tcp_listener on non Windows compatible platform"
+#error "Unable to use Windows tcp sockets on non Windows compatible platform"
 #endif
 
 #define WIN32_LEAN_AND_MEAN
