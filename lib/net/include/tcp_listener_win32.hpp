@@ -1,6 +1,8 @@
 #pragma once
 
-#if defined(_WIN32)
+#if !defined(_WIN32)
+#error "Unable to use Windows tcp_listener on non Windows compatible platform"
+#endif
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -49,5 +51,3 @@ private:
     bool start_listen();
     void start_accept(accept_callback_t cback);
 };
-
-#endif

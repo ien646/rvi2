@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <functional>
-
 #if defined(_WIN32)
     #include "tcp_listener_win32.hpp"
 #elif defined(_POSIX_VERSION)
