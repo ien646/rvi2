@@ -1,5 +1,7 @@
 #pragma once
 
+#if defined(_WIN32)
+
 #define WIN32_LEAN_AND_MEAN
 
 #include <windows.h>
@@ -47,3 +49,5 @@ private:
     bool start_listen();
     void start_accept(accept_callback_t cback);
 };
+
+#endif

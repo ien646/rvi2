@@ -28,7 +28,7 @@ namespace rvi
     void line::apply_rotation(float rotation)
     {
         // Set the 'End' vertex relative to (0,0) and rotate
-        vector2 diff = start.position;
+        const vector2 diff = start.position;
         vector2 rotator = end.position - diff;
         rotator.rotate_in_place(rotation);
 

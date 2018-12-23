@@ -4,6 +4,13 @@ namespace rvi::str_utils
 {
     str_vec_t split(std::string_view strv, char delim)
     {
+        if (strv.size() <= 1)
+        {
+            str_vec_t result;
+            result.push_back(std::string(strv));
+            return result;
+        }
+
         str_vec_t result;
         auto beg_it = strv.begin();
         auto cur_it = strv.begin();
@@ -50,8 +57,8 @@ namespace rvi::str_utils
         str_pair_t result;
 
         // -- Reverse start/end iterators
-        auto start_it = strv.rbegin();
-        auto end_it = strv.rend();
+        const auto start_it = strv.rbegin();
+        const auto end_it = strv.rend();
 
         auto rfound_it = std::find(start_it, end_it, delim);
         auto found_it = rfound_it.base() - 1;
@@ -72,21 +79,19 @@ namespace rvi::str_utils
 
     std::string_view substr_from_delim(std::string_view strv, char delim)
     {
-        std::string_view result;
         auto found_it = std::find(strv.begin(), strv.end(), delim);
-        std::ptrdiff_t offset = (found_it - strv.begin()) + 1;
+        const std::ptrdiff_t offset = (found_it - strv.begin()) + 1;
         return strv.substr(offset);
     }
 
     std::string_view substr_until_delim(std::string_view strv, char delim)
     {
-        std::string_view result;
         auto found_it = std::find(strv.begin(), strv.end(), delim);
-        std::ptrdiff_t sslen = found_it - strv.begin();
+        const std::ptrdiff_t sslen = found_it - strv.begin();
         return strv.substr(0, sslen);
     }
 
-    std::string_view trim_ws_beg(std::string_view strv)
+    std::string_view trim_ws_beg(std::string_view strv) noexcept
     {
         int offset = 0;
         auto it = strv.begin();
@@ -105,7 +110,7 @@ namespace rvi::str_utils
 		return strv;
     }
 
-    std::string_view trim_ws_end(std::string_view strv)
+    std::string_view trim_ws_end(std::string_view strv) noexcept
     {
         int offset = 0;
         auto it = strv.rbegin();

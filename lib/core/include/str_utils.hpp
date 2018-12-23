@@ -105,7 +105,7 @@ namespace rvi::str_utils
      * @return std::string_view Resulting trimmed string
      */
     [[nodiscard]]
-    std::string_view trim_ws_beg(std::string_view strv);
+    std::string_view trim_ws_beg(std::string_view strv) noexcept;
  
     /**
      * @brief Trim whitespace characters from the end
@@ -115,7 +115,7 @@ namespace rvi::str_utils
      * @return std::string_view Resulting trimmed string
      */
     [[nodiscard]]
-    std::string_view trim_ws_end(std::string_view strv);
+    std::string_view trim_ws_end(std::string_view strv) noexcept;
 
     /**
      * @brief Trim whitespace characters from both the 

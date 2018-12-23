@@ -33,7 +33,7 @@ namespace rvi
 
     vector2 vector2::rotate(float angle) const noexcept
     {
-        float radAngle = rvi::math::deg2rad(angle);
+        const float radAngle = rvi::math::deg2rad(angle);
         const float angleSin = std::sin(radAngle);
         const float angleCos = std::cos(radAngle);
 	
@@ -47,7 +47,7 @@ namespace rvi
 
     void vector2::rotate_in_place(float angle) noexcept
     {
-        float radAngle = rvi::math::deg2rad(angle);
+        const float radAngle = rvi::math::deg2rad(angle);
         const float angleSin = std::sin(radAngle);
         const float angleCos = std::cos(radAngle);
 	
@@ -72,8 +72,8 @@ namespace rvi
 
     vector2 vector2::invert() const noexcept
     {
-        float fx = (x == 0) ? 0 : (1 / x);
-        float fy = (y == 0) ? 0 : (1 / y);
+        const float fx = (x == 0) ? 0 : (1 / x);
+        const float fy = (y == 0) ? 0 : (1 / y);
         return vector2(fx, fy);
     }
 
@@ -163,12 +163,12 @@ namespace rvi
         y /= other;
     }
 
-    bool vector2::operator==(vector2 other) const noexcept
+    bool vector2::operator==(vector2 other) const
     {
         return math::fpcmp(x, other.x) && math::fpcmp(y, other.y);
     }
 
-    bool vector2::operator!=(vector2 other) const noexcept
+    bool vector2::operator!=(vector2 other) const
     {
         return !(math::fpcmp(x, other.x) && math::fpcmp(y, other.y));
     }

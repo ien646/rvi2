@@ -55,8 +55,12 @@ namespace rvi
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
     static constexpr u16 _RVI_CEXPR_ENDIAN_MAGIC_NUMBER = 0x00FF;
-    static constexpr bool RVI_CEXPR_BIG_ENDIAN      = ((const uint8_t&)_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0x00;
-    static constexpr bool RVI_CEXPR_LITTLE_ENDIAN   = ((const uint8_t&)_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0xFF;
+
+    static constexpr bool RVI_CEXPR_BIG_ENDIAN      
+        = static_cast<uint8_t>(_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0x00;
+
+    static constexpr bool RVI_CEXPR_LITTLE_ENDIAN   
+        = static_cast<uint8_t>(_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0xFF;
 
     FWD_DECL_CLASS(client_context);
 

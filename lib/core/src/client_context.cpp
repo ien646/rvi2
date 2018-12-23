@@ -163,13 +163,13 @@ namespace rvi
         return _current_color;
     }
 
-    void client_context::set_transform(const transform2& tform) noexcept
+    void client_context::set_transform(const transform2& tform)
     {
         _selected_frame->set_transform(tform);
         mark_frame_modified();
     }
 
-    void client_context::set_transform(transform2&& tform) noexcept
+    void client_context::set_transform(transform2&& tform)
     {
         _selected_frame->set_transform(std::move(tform));
         mark_frame_modified();
@@ -185,19 +185,19 @@ namespace rvi
         return _selected_frame->transform();
     }
 
-    void client_context::set_position(vector2 offset) noexcept
+    void client_context::set_position(vector2 offset)
     {
         _selected_frame->set_position(offset);
         mark_frame_modified();
     }
 
-    void client_context::set_rotation(float rotation) noexcept
+    void client_context::set_rotation(float rotation)
     {
         _selected_frame->set_rotation(rotation);
         mark_frame_modified();
     }
 
-    void client_context::set_scale(vector2 scale) noexcept
+    void client_context::set_scale(vector2 scale)
     {
         _selected_frame->set_scale(scale);
         mark_frame_modified();
@@ -218,20 +218,20 @@ namespace rvi
         return _selected_frame->transform().scale;
     }
 
-    size_t client_context::frame_count() const noexcept
+    size_t client_context::frame_count() const
     {
         size_t result = 1;
         result += _main_frame->child_count(true);
         return result;
     }
 
-    void client_context::clear_frame() noexcept
+    void client_context::clear_frame()
     {
         _selected_frame->clear_lines();
         mark_frame_modified();
     }    
 
-    std::string client_context::get_full_frame_name(frame* fptr) noexcept
+    std::string client_context::get_full_frame_name(frame* fptr)
     {
         if(fptr == nullptr)
         {
@@ -256,8 +256,7 @@ namespace rvi
             frame_stack.pop();
         }
 
-        std::string fname = result.str();
-        return fname;
+        return result.str();
     }
 
     frame* client_context::find_frame(const std::string& fpath)
@@ -265,7 +264,6 @@ namespace rvi
         std::stringstream ss(fpath);
         std::string aux;
         frame* currentFrame = _main_frame.get();
-        transform2 currentTransform;
 		
         while (std::getline(ss, aux, FRAMEPATH_SEPARATOR))
         {
@@ -294,6 +292,7 @@ namespace rvi
         while(!remaining_frames.empty())
         {
             frame* fptr = remaining_frames.front();
+
             for(auto& ch_pair : fptr->children())
             {
                 remaining_frames.push(ch_pair.second);

@@ -178,8 +178,8 @@ namespace rvi
         void operator*=(vector2 other) noexcept;
         void operator/=(float other) noexcept;
 
-        bool operator==(vector2 other) const noexcept;
-        bool operator!=(vector2 other) const noexcept;
+        bool operator==(vector2 other) const;
+        bool operator!=(vector2 other) const;
 
         /**
          * @brief Zero initialized vector2

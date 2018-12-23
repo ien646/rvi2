@@ -45,6 +45,9 @@ namespace rvi
         ///Default constructor
         client_context();
 
+        ///Deleted default copy constructor
+        client_context(const client_context& cp_src) = delete;
+
         ///Default move constructor
         client_context(client_context&& mv_src) = default;
 
@@ -172,12 +175,12 @@ namespace rvi
         /**
          * @brief Set the currently selected frame's transform
          */
-        void set_transform(const transform2& tform) noexcept;
+        void set_transform(const transform2& tform);
 
         /**
          * @brief Set the currently selected frame's transform
          */
-        void set_transform(transform2&& tform) noexcept;
+        void set_transform(transform2&& tform);
 
         /*
          * @brief Set the currently selected frame's scale as
@@ -193,17 +196,17 @@ namespace rvi
         /**
          * @brief Set the currently selected frame's position
          */
-        void set_position(vector2 offset) noexcept;
+        void set_position(vector2 offset);
 
         /**
          * @brief Set the currently selected frame's rotation
          */
-        void set_rotation(float rotation) noexcept;
+        void set_rotation(float rotation);
 
         /**
          * @brief Set the currently selected frame's scale
          */
-        void set_scale(vector2 scale) noexcept;
+        void set_scale(vector2 scale);
 
         /**
          * @brief Get the currently selected frame's position
@@ -223,12 +226,12 @@ namespace rvi
         /**
          * @brief Get the count of all frames held by this context
          */
-        size_t frame_count() const noexcept;
+        size_t frame_count() const;
 
         /**
          * @brief Clear currently selected frame
          */
-        void clear_frame() noexcept;
+        void clear_frame();
 
         /**
          * @brief Get the full frame name (path) for a frame.
@@ -237,7 +240,7 @@ namespace rvi
          * If (fptr == nullptr) -> Use currently selected frame
          * @return std::string Full frame name (path)
          */
-        std::string get_full_frame_name(frame* fptr = nullptr) noexcept;
+        std::string get_full_frame_name(frame* fptr = nullptr);
 
         /**
          * @brief Find a frame with the given full frame name (path)

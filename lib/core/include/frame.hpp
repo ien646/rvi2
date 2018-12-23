@@ -103,7 +103,7 @@ namespace rvi
          * 
          * @return transform2 Absolute transform
          */
-        transform2 get_absolute_transform() noexcept;
+        transform2 get_absolute_transform();
 
         /**
          * Attempt to delete a child frame
@@ -129,7 +129,7 @@ namespace rvi
          * 
          * @param deep Recursive query
          */
-        size_t child_count(bool deep = false) const noexcept;
+        size_t child_count(bool deep = false) const;
 
         // ------------ GETTERS ------------
 
@@ -140,7 +140,7 @@ namespace rvi
         const std::vector<line>& lines() const noexcept;
 
         ///Get child frames
-        std::unordered_map<std::string, frame*> children() const noexcept;
+        std::unordered_map<std::string, frame*> children() const;
 
         ///Get relative frame transform
         const transform2& transform() const noexcept;

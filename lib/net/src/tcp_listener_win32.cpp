@@ -96,7 +96,12 @@ bool tcp_listener::init_listen_socket()
 
 bool tcp_listener::create_socket()
 {
-    _listen_sock = socket(_addr_info->ai_family, _addr_info->ai_socktype, _addr_info->ai_protocol);
+    _listen_sock = socket(
+        _addr_info->ai_family, 
+        _addr_info->ai_socktype, 
+        _addr_info->ai_protocol
+    );
+    
     if (_listen_sock == INVALID_SOCKET)
     {
         std::cout << "Error during socket initialization! ERR_N: "
@@ -114,7 +119,9 @@ bool tcp_listener::bind_socket()
     int res = bind(
         _listen_sock,
         _addr_info->ai_addr,
-        static_cast<int>(_addr_info->ai_addrlen));
+        static_cast<int>(_addr_info->ai_addrlen)
+    );
+
     if (res != 0)
     {
         std::cout << "Error binding socket! ERR_N: " << res << std::endl;
@@ -127,7 +134,7 @@ bool tcp_listener::bind_socket()
 }
 
 bool tcp_listener::start_listen()
-{                               
+{
     int result = listen(_listen_sock, SOMAXCONN);
     if(result != 0)
     {

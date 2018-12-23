@@ -112,7 +112,7 @@ namespace rvi
         return (_child_frames_index.count(name) > 0);
     }
 
-    size_t frame::child_count(bool deep) const noexcept
+    size_t frame::child_count(bool deep) const
     {
         if (!deep)
         {
@@ -175,7 +175,7 @@ namespace rvi
         return _lines;
     }
 
-    std::unordered_map<std::string, frame*> frame::children() const noexcept
+    std::unordered_map<std::string, frame*> frame::children() const
     {
         std::unordered_map<std::string, frame*> result;
         result.reserve(_child_frames_index.size());
@@ -204,7 +204,7 @@ namespace rvi
         return _parent;
     }
 
-    transform2 frame::get_absolute_transform() noexcept
+    transform2 frame::get_absolute_transform()
     {
         if(_cached_abs_tform_rebuild)
         {
@@ -221,7 +221,7 @@ namespace rvi
             _cached_abs_tform = transform2::default_value();
             while(!tform_stack.empty())
             {
-                transform2 tf = tform_stack.top();
+                const transform2 tf = tform_stack.top();
                 _cached_abs_tform.merge_in_place(tf);
                 tform_stack.pop();
             }
