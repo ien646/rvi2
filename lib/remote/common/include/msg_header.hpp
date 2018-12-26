@@ -4,7 +4,7 @@
 
 namespace rvi
 {
-    enum class message_header : uint8_t
+    enum class msg_header : uint8_t
     {
         ACK = 0x00,
         AWAITING_ACK = 0x01,
