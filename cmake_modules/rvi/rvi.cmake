@@ -59,7 +59,7 @@ function("rvi_static_lib" RVI_LIB_NAME)
 		message("   - ${ITEM}")
 	endforeach()	
 	
-	add_library(${RVI_LIB_NAME} STATIC ${SOURCES})	
+	add_library(${RVI_LIB_NAME} STATIC ${SOURCES})
 	
 	set_property(TARGET ${RVI_LIB_NAME} PROPERTY CXX_STANDARD 17)
 	set_property(TARGET ${RVI_LIB_NAME} PROPERTY LINKER_LANGUAGE CXX)

@@ -1,9 +1,9 @@
-#include "win32/tcp_listener_win32.hpp"
+#include "tcp_listener.hpp"
 
 #include <thread>
 #include <string>
 
-#include "win32/tcp_common_win32.hpp"
+#include "tcp_common.hpp"
 
 namespace rvi
 {   
@@ -79,7 +79,11 @@ namespace rvi
             {
                 std::cout << "Accepted invalid socket! Skipping..." << std::endl;
             }
-            cback(tcp_socket(csck));
+            auto th = std::thread([&]()
+            {
+                cback(tcp_connection(csck));
+            });
+            th.join();
         }
     }
 }

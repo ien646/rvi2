@@ -1,4 +1,4 @@
-#include "win32/tcp_common_win32.hpp"
+#include "tcp_common.hpp"
 
 #include <iostream>
 
@@ -28,7 +28,7 @@ namespace rvi
         return true;
     }
 
-    bool fill_addrinfo(uint16_t port, const std::string host_addr, addrinfo* result, bool will_bind)
+    bool fill_addrinfo(uint16_t port, const std::string host_addr, PADDRINFOA& result, bool will_bind)
     {
         addrinfo sock_hints = get_socket_hints(will_bind);
         int res = getaddrinfo(
@@ -50,7 +50,7 @@ namespace rvi
         return true;
     }
 
-    bool create_socket(addrinfo* ainfo, SOCKET* result)
+    bool create_socket(PADDRINFOA ainfo, SOCKET* result)
     {
         *result = socket(
             ainfo->ai_family, 
@@ -70,7 +70,7 @@ namespace rvi
         return true;
     }
 
-    bool bind_socket(SOCKET sock, addrinfo* ainfo)
+    bool bind_socket(SOCKET sock, PADDRINFOA ainfo)
     {
         int res = bind(
             sock,

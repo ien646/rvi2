@@ -1,8 +1,8 @@
-#include "win32/tcp_client_win32.hpp"
+#include "tcp_client.hpp"
 
 #include <iostream>
 
-#include "win32/tcp_common_win32.hpp"
+#include "tcp_common.hpp"
 
 namespace rvi
 {

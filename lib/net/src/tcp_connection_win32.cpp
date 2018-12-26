@@ -1,10 +1,14 @@
-#include "win32/tcp_connection_win32.hpp"
+#include "tcp_connection.hpp"
 
 #include <array>
 
 namespace rvi
 {
-    tcp_connection::~tcp_connection()
+    tcp_connection::tcp_connection(SOCKET sock)
+        : _sock(sock)
+    {    }
+
+    void tcp_connection::close()
     {
         closesocket(_sock);
     }
@@ -18,6 +22,7 @@ namespace rvi
             return false;
         }
         result.resize(bytes_read);
+        return true;
     }
 
     bool tcp_connection::send_data(const std::vector<char>& data)
