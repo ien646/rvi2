@@ -53,6 +53,8 @@ namespace rvi
     extern void serialize_color_rgba_bf(data_t& buff, const rvi::color_rgba& val);
     extern void serialize_transform2_bf(data_t& buff, const rvi::transform2& val);
 
+    void serialize_string(data_t& buff, const std::string& val);
+
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
     T deserialize_integral(const data_t& buff, size_t offset)
     {

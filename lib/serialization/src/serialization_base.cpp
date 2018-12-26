@@ -59,6 +59,15 @@ namespace rvi
         serialize_fp32_bf(buff, val.rotation);
     }
 
+    void serialize_string(data_t& buff, const std::string& val)
+    {
+        // frame name size
+        serialize_integral<uint16_t>(buff, SC_U16(val.size()));
+
+        // frame name
+        std::copy(val.begin(), val.end(), std::back_inserter(buff));
+    }
+
     cmd_header get_cmd_header(data_t& buff, size_t offset)
     {
         uint8_t h_val = buff[offset + 0];

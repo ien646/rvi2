@@ -9,11 +9,7 @@ namespace rvi
         // header
         result.push_back(SC_U8(cmd_header::SELECT_FRAME));
 
-        // frame name size
-        serialize_integral<uint16_t>(result, SC_U16(fname.size()));
-
-        // frame name
-        std::copy(fname.begin(), fname.end(), std::back_inserter(result));
+        serialize_string(result, fname);
 
         return result;
     }
@@ -35,11 +31,7 @@ namespace rvi
         // header
         result.push_back(SC_U8(cmd_header::DELETE_FRAME));
 
-        // frame name size
-        serialize_integral<uint16_t>(result, SC_U16(fname.size()));
-
-        // frame name
-        std::copy(fname.begin(), fname.end(), std::back_inserter(result));
+        serialize_string(result, fname);
 
         return result;
     }
