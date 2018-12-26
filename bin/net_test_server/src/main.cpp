@@ -17,20 +17,30 @@ int main()
 
     listener.enable_listen([&ccount](tcp_connection conn)
     {
-        std::cout << "Accepted client no. [" << ccount << "]" << std::endl;
+        ++ccount;
+        int lcc = ccount;
+        std::cout << "Accepted client no. [" << lcc << "]" << std::endl;
         std::vector<char> data;
         char value = 0;
         while(true)
         {
             data.clear();
             data.push_back(value);
-            conn.send_data(data);
+            if(!conn.send_data(data))
+            {
+                std::cout << "Disconnected client no. [" << lcc << "]" << std::endl;
+                break;
+            }
             
             if(!conn.receive_data(data, 512))
             {
-                std::cout << "Disconnected client no. [" << ccount << "]" << std::endl;
+                
+                std::cout << "Disconnected client no. [" << lcc << "]" << std::endl;
                 break;
             }
+            
+            value = data[0];
+            std::cout << "[" << lcc << "] Received data: " << data[0] << std::endl;
         }
     });
 }

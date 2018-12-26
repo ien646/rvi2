@@ -1,6 +1,7 @@
 #include "tcp_client.hpp"
 
 #include <iostream>
+#include <thread>
 
 #include "tcp_common.hpp"
 
@@ -48,16 +49,22 @@ namespace rvi
 
     bool tcp_client::enable_connect(connection_callback_t cback)
     {
-        if(!init_client_socket())
+        while(true)
         {
-            return false;
+            if(init_client_socket())
+            {
+                if(!connect_client_socket())
+                {
+                    std::cout << "Server not available, retrying..." << std::endl;
+                    using namespace std::chrono_literals;
+                    std::this_thread::sleep_for(1s);
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
-
-        if(!connect_client_socket())
-        {
-            return false;
-        }
-
         cback(tcp_connection(_client_sock));
         return true;
     }

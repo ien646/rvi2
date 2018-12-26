@@ -35,8 +35,7 @@ namespace rvi
         {
             return;
         }
-        std::thread th(&tcp_listener::start_accept, this, cback);
-        th.join();
+        tcp_listener::start_accept(cback);
     }
 
     bool tcp_listener::init_listen_socket()
@@ -83,7 +82,7 @@ namespace rvi
             {
                 cback(tcp_connection(csck));
             });
-            th.join();
+            th.detach();
         }
     }
 }
