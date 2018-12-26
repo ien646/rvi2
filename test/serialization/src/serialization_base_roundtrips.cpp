@@ -3,9 +3,9 @@
 
 #include <iostream>
 
-#include <serialization_base.hpp>
+#include <serialization.hpp>
 
-TEST(serialization_base_roundtrips, float_32)
+TEST(serialization_roundtrips, float_32)
 {
     float a = 0.0F;
     float b = 1.3700101F;
@@ -40,7 +40,7 @@ TEST(serialization_base_roundtrips, float_32)
     ASSERT_FLOAT_EQ(df, f);
 }
 
-TEST(serialization_base_roundtrips, float_64)
+TEST(serialization_roundtrips, float_64)
 {
     double a = 0.0;
     double b = 1.3700101;
@@ -101,7 +101,7 @@ static void test_serialize_integral()
     }
 }
 
-TEST(serialization_base_roundtrips, integers)
+TEST(serialization_roundtrips, integers)
 {
     test_serialize_integral<uint8_t>();
     test_serialize_integral<uint16_t>();
@@ -126,7 +126,7 @@ TEST(serialization_base_roundtrips, integers)
     test_serialize_integral<unsigned long long>();
 }
 
-TEST(serialization_base_roundtrips, color_rgba)
+TEST(serialization_roundtrips, color_rgba)
 {
     rvi::color_rgba a(0, 0, 0, 0);
     rvi::color_rgba b(127, 127, 127, 127);
@@ -157,7 +157,7 @@ TEST(serialization_base_roundtrips, color_rgba)
     ASSERT_TRUE(c == dc);
 }
 
-TEST(serialization_base_roundtrips, vector2)
+TEST(serialization_roundtrips, vector2)
 {
     rvi::vector2 a(0.0F, 0.0F);
     rvi::vector2 b(-1.0F, -1.0F);
@@ -184,7 +184,7 @@ TEST(serialization_base_roundtrips, vector2)
     ASSERT_TRUE(dd == d);
 }
 
-TEST(serialization_base_roundtrips, vertex)
+TEST(serialization_roundtrips, vertex)
 {
     rvi::vertex a(rvi::vector2(0.0F, 0.0F), rvi::color_rgba(0, 0, 0, 0));
     rvi::vertex b(rvi::vector2(1.0F, 1.0F), rvi::color_rgba(10, 20, 50, 100));

@@ -80,4 +80,6 @@ namespace rvi
     extern transform2 deserialize_transform2(const data_t& buff, size_t offset);
 
     extern line deserialize_line(const data_t& buff, size_t offset);
+
+    extern std::string deserialize_string(const data_t& buff, size_t offset);
 }

@@ -1,4 +1,4 @@
-#include "serialization_base.hpp"
+#include "serialization.hpp"
 
 namespace rvi
 {
@@ -139,6 +139,23 @@ namespace rvi
         line result;
         result.start = deserialize_vertex(buff, offset);
         result.end = deserialize_vertex(buff, offset + sizeof(vertex));
+        return result;
+    }
+
+    std::string deserialize_string(const data_t& buff, size_t offset)
+    {
+        std::string result;
+        
+        size_t current_offset = offset;
+        uint16_t str_len = deserialize_integral<uint16_t>(buff, current_offset);
+        current_offset += sizeof(uint16_t);
+
+        result.reserve(str_len);
+        std::copy(
+            buff.begin() + current_offset, 
+            buff.begin() + current_offset + str_len, 
+            std::back_inserter(result));
+
         return result;
     }
 }

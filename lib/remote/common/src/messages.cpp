@@ -1,7 +1,7 @@
 #include "messages.hpp"
 
 #include <vector>
-#include "serializer.hpp"
+#include "serialization.hpp"
 
 namespace rvi
 {
@@ -33,7 +33,7 @@ namespace rvi
         return no_data_msg(message_header::END_SEQUENCE);
     }
 
-    message_data_t select_frame(const std::string& fname)
+    message_data_t msg_select_frame(const std::string& fname)
     {
         message_data_t result;
         result.push_back(static_cast<uint8_t>(message_header::SELECT_FRAME));
@@ -41,12 +41,12 @@ namespace rvi
         return result;
     }
 
-    message_data_t release_frame()
+    message_data_t msg_release_frame()
     {
         return no_data_msg(message_header::RELEASE_FRAME);
     }
 
-    message_data_t delete_frame(const std::string& fname)
+    message_data_t msg_delete_frame(const std::string& fname)
     {
         message_data_t result;
         result.push_back(SC_U8(message_header::DELETE_FRAME));
@@ -54,7 +54,7 @@ namespace rvi
         return result;
     }
 
-    message_data_t draw_line(const rvi::line& ln)
+    message_data_t msg_draw_line(const rvi::line& ln)
     {
         message_data_t result;
         result.push_back(SC_U8(message_header::DRAW_LINE));
@@ -62,7 +62,7 @@ namespace rvi
         return result;
     }
 
-    message_data_t draw_lines(const std::vector<rvi::line>& lines)
+    message_data_t msg_draw_lines(const std::vector<rvi::line>& lines)
     {
         message_data_t result;
         result.push_back(SC_U8(message_header::DRAW_LINES));
@@ -73,7 +73,7 @@ namespace rvi
         return result;
     }
 
-    message_data_t set_transform(const rvi::transform2& tform)
+    message_data_t msg_set_transform(const rvi::transform2& tform)
     {
         message_data_t result;
         result.push_back(SC_U8(message_header::SET_TRANSFORM));
@@ -81,7 +81,7 @@ namespace rvi
         return result;
     }
 
-    message_data_t set_position(const rvi::vector2& pos)
+    message_data_t msg_set_position(const rvi::vector2& pos)
     {
         message_data_t result;
         result.push_back(SC_U8(message_header::SET_POSITION));
@@ -89,7 +89,7 @@ namespace rvi
         return result;
     }
 
-    message_data_t set_scale(const rvi::vector2& scl)
+    message_data_t msg_set_scale(const rvi::vector2& scl)
     {
         message_data_t result;
         result.push_back(SC_U8(message_header::SET_SCALE));
@@ -97,11 +97,45 @@ namespace rvi
         return result;
     }
 
-    message_data_t set_rotation(float rot)
+    message_data_t msg_set_rotation(float rot)
     {
         message_data_t result;
         result.push_back(SC_U8(message_header::SET_ROTATION));
         serialize_fp32_bf(result, rot);
         return result;
+    }
+
+    message_data_t msg_set_color(rvi::color_rgba color)
+    {
+        message_data_t result;
+        result.push_back(SC_U8(message_header::SET_COLOR));
+        serialize_color_rgba_bf(result, color);
+        return result;
+    }
+
+    message_data_t msg_user_click(rvi::vector2 clk_pos)
+    {
+        message_data_t result;
+        result.push_back(SC_U8(message_header::USER_CLICK));
+        serialize_vector2_bf(result, clk_pos);
+        return result;
+    }
+
+    message_data_t msg_user_key(char key)
+    {
+        message_data_t result;
+        result.push_back(SC_U8(message_header::USER_KEY));
+        serialize_integral<char>(result, key);
+        return result;
+    }
+
+    message_data_t msg_disconnect()
+    {
+        return no_data_msg(message_header::DISCONNECT);
+    }
+
+    message_data_t msg_error()
+    {
+        return no_data_msg(message_header::ERROR);
     }
 }
