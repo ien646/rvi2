@@ -43,7 +43,7 @@ namespace rvi
         }
 
         ///Pack channel data into a 4-byte scalar
-        u32 rgba()
+        u32 rgba() const noexcept
         {
             return (r << 24) | (g << 16) | (b << 8) | (a);
         }
