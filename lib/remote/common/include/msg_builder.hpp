@@ -31,6 +31,6 @@ namespace rvi
         message_data_t msg_user_key(char key);
 
         message_data_t msg_disconnect();
-        message_data_t msg_error();
+        message_data_t msg_unknown_error();
     }
 }

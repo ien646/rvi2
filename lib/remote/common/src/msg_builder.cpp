@@ -15,16 +15,6 @@ namespace rvi
         );
     }
 
-    message_data_t msg_builder::msg_ack()
-    {
-        return no_data_msg(msg_header::ACK);
-    }
-
-    message_data_t msg_builder::msg_awating_ack()
-    {
-        return no_data_msg(msg_header::AWAITING_ACK);
-    }
-
     message_data_t msg_builder::msg_begin_seq()
     {
         return no_data_msg(msg_header::BEGIN_SEQUENCE);
@@ -97,8 +87,8 @@ namespace rvi
         return no_data_msg(msg_header::DISCONNECT);
     }
 
-    message_data_t msg_builder::msg_error()
+    message_data_t msg_builder::msg_unknown_error()
     {
-        return no_data_msg(msg_header::ERROR);
+        return no_data_msg(msg_header::UNKNOWN_ERROR);
     }
 }

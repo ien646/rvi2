@@ -4,6 +4,8 @@
 #include <tcp_listener.hpp>
 #include <tcp_connection.hpp>
 
+#include "msg_builder.hpp"
+
 namespace rvi
 {
     class tcp_server
