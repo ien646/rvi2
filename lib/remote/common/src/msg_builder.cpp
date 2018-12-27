@@ -76,46 +76,6 @@ namespace rvi
         return result;
     }
 
-    message_data_t msg_builder::msg_set_transform(const rvi::transform2& tform)
-    {
-        message_data_t result;
-        result.push_back(SC_U8(msg_header::SET_TRANSFORM));
-        serialize_transform2_bf(result, tform);
-        return result;
-    }
-
-    message_data_t msg_builder::msg_set_position(const rvi::vector2& pos)
-    {
-        message_data_t result;
-        result.push_back(SC_U8(msg_header::SET_POSITION));
-        serialize_vector2_bf(result, pos);
-        return result;
-    }
-
-    message_data_t msg_builder::msg_set_scale(const rvi::vector2& scl)
-    {
-        message_data_t result;
-        result.push_back(SC_U8(msg_header::SET_SCALE));
-        serialize_vector2_bf(result, scl);
-        return result;
-    }
-
-    message_data_t msg_builder::msg_set_rotation(float rot)
-    {
-        message_data_t result;
-        result.push_back(SC_U8(msg_header::SET_ROTATION));
-        serialize_fp32_bf(result, rot);
-        return result;
-    }
-
-    message_data_t msg_builder::msg_set_color(rvi::color_rgba color)
-    {
-        message_data_t result;
-        result.push_back(SC_U8(msg_header::SET_COLOR));
-        serialize_color_rgba_bf(result, color);
-        return result;
-    }
-
     message_data_t msg_builder::msg_user_click(rvi::vector2 clk_pos)
     {
         message_data_t result;

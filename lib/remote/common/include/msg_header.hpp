@@ -22,13 +22,6 @@ namespace rvi
         DRAW_LINE = 0x40,
         DRAW_LINES = 0x41,
 
-        SET_TRANSFORM = 0x50,
-        SET_POSITION = 0x51,
-        SET_SCALE = 0x52,
-        SET_ROTATION = 0x53,
-
-        SET_COLOR = 0x60,
-
         USER_CLICK = 0xA0,
         USER_KEY = 0xB0,
 
