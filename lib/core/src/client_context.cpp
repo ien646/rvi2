@@ -355,7 +355,7 @@ namespace rvi
             entry.lines = std::move(entry_lines);
             entry.deleted = false;
 
-            result.entries.push_back(std::move(entry));
+            result.push_back(std::move(entry));
 
             remaining_frames.pop();
         }
@@ -411,7 +411,7 @@ namespace rvi
             entry.lines = std::move(entry_lines);
             entry.deleted = false;
 
-            result.entries.push_back(std::move(entry));
+            result.push_back(std::move(entry));
 
             remaining_frames.pop();
         }
@@ -427,7 +427,7 @@ namespace rvi
             relative_snapshot_entry entry;
             entry.deleted = true;
             entry.name = deleted_frame;
-            sh.entries.push_back(std::move(entry));
+            sh.push_back(std::move(entry));
         }
         _deleted_frame_queue.clear();
     }

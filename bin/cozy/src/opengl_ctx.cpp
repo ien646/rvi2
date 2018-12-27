@@ -19,7 +19,7 @@ namespace rvi
     void opengl_ctx::refresh()
     {
         auto snapshot = _runtime_ptr->snapshot_diff_relative(_client_id);
-        for(auto&& frame_entry : snapshot.entries)
+        for(auto&& frame_entry : snapshot)
         {
             if(frame_entry.deleted)
             {

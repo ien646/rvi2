@@ -29,13 +29,8 @@ namespace rvi
     };
 
     /**
-     * @brief Contains relative snapshot entries.
+     * @brief Contains a snapshot of a client_context's frame's
+     * lines, alongside the frame names. 
      */
-    struct relative_snapshot
-    {
-        /**
-         * @brief Snapshot entries
-         */
-        std::vector<relative_snapshot_entry> entries;
-    };
+    typedef std::vector<relative_snapshot_entry> relative_snapshot;
 }

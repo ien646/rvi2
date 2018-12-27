@@ -6,14 +6,14 @@
 
 namespace rvi
 {
-    class server
+    class tcp_server
     {
     private:
         tcp_listener _listener;
         runtime _runtime;
 
     public:
-        server(uint16_t listen_port);
+        tcp_server(uint16_t listen_port);
         void start();
 
     private:

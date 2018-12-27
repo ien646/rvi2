@@ -1,3 +1,3 @@
 add_subdirectory("common")
-add_subdirectory("client")
-add_subdirectory("server")
+add_subdirectory("tcp_client")
+add_subdirectory("tcp_server")

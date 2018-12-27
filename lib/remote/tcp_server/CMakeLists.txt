@@ -1,9 +1,9 @@
 rvi_check_cmake_ver()
 
-rvi_static_lib("rvi2.remote.server")
+rvi_static_lib("rvi2.remote.tcp_server")
 
 target_link_libraries(
-    rvi2.remote.server 
+    rvi2.remote.tcp_server 
     rvi2.remote.common
     rvi2.core 
     rvi2.host
