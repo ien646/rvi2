@@ -68,6 +68,7 @@ namespace rvi
     {
         message_data_t result;
         result.push_back(SC_U8(msg_header::DRAW_LINES));
+        serialize_integral<uint16_t>(result, lines.size());
         for(auto& ln : lines)
         {
             serialize_line_bf(result, ln);

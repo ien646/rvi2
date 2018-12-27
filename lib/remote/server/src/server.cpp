@@ -41,12 +41,6 @@ namespace rvi
 
     void server::connection_init(tcp_connection conn, int cid)
     {
-        message_data_t begin_seq_msg = msg_builder::msg_begin_seq();
-        conn.send_data(begin_seq_msg);
-        {
-
-        }
-        message_data_t end_seq_msg = msg_builder::msg_end_seq();
-        conn.send_data(end_seq_msg);
+        // ...
     }
 }

@@ -90,7 +90,7 @@ namespace rvi
             glBindVertexArray(vfp.second.vao);
             glDrawArrays(GL_LINES, 0, vfp.second.line_data.size() * sizeof(line));
             glBindVertexArray(NULL);
-        }   
+        }
     }
 
     void opengl_ctx::setup_mouse_callbacks(GLFWwindow* wnd)
