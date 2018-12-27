@@ -1,3 +1,11 @@
 rvi_check_cmake_ver()
 
-rvi_static_lib("rvi2.server")
+rvi_static_lib("rvi2.remote.server")
+
+target_link_libraries(
+    rvi2.remote.server 
+    rvi2.remote.common
+    rvi2.core 
+    rvi2.host
+    rvi2.serialization 
+    rvi2.net)

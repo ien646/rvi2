@@ -25,9 +25,32 @@ namespace rvi
         return true;
     }
 
+    bool tcp_connection::receive_data(std::vector<uint8_t>& result, size_t maxbuff = 4096)
+    {
+        result.resize(4096);
+        int bytes_read = recv(_sock, reinterpret_cast<char*>(result.data()), maxbuff, NULL);
+        if(bytes_read == 0 || bytes_read == SOCKET_ERROR)
+        {
+            return false;
+        }
+        result.resize(bytes_read);
+        return true;
+    }
+
     bool tcp_connection::send_data(const std::vector<char>& data)
     {
         int bytes_sent = send(_sock, data.data(), data.size(), NULL);
+        return ((bytes_sent != 0) && (bytes_sent != SOCKET_ERROR));
+    }
+
+    bool tcp_connection::send_data(const std::vector<uint8_t>& data)
+    {
+        int bytes_sent = send(
+            _sock, 
+            reinterpret_cast<const char*>(data.data()), 
+            data.size(), 
+            NULL
+        );
         return ((bytes_sent != 0) && (bytes_sent != SOCKET_ERROR));
     }
 }

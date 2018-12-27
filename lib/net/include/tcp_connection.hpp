@@ -15,17 +15,20 @@ namespace rvi
     {
     private:
         SOCKET _sock;
+        bool _moved = false;
 
     public:
         tcp_connection() = delete;
         tcp_connection(SOCKET sock);
-        tcp_connection(const tcp_connection& cp_src) = delete;
+        tcp_connection(const tcp_connection& cp_src) = default;
         tcp_connection(tcp_connection&& mv_src) = default;
         
         void close();
 
         bool receive_data(std::vector<char>& result, size_t maxbuff);
+        bool receive_data(std::vector<uint8_t>& result, size_t maxbuff);
         bool send_data(const std::vector<char>& data);
+        bool send_data(const std::vector<uint8_t>& data);
     };
     
     typedef std::function<void(tcp_connection)> connection_callback_t;
