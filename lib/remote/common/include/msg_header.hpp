@@ -6,11 +6,7 @@ namespace rvi
 {
     enum class msg_header : uint8_t
     {
-        ACK = 0x00,
-        AWAITING_ACK = 0x01,
-
-        SERVER_READY = 0x10,
-        CLIENT_READY = 0x11,
+        REQUEST_SNAPSHOT = 0x10,
 
         BEGIN_SEQUENCE = 0x20,
         END_SEQUENCE = 0x21,
@@ -26,6 +22,6 @@ namespace rvi
         USER_KEY = 0xB0,
 
         DISCONNECT = 0xDC,
-        ERROR = 0xEE
+        UNKNOWN_ERROR = 0xEE
     };
 }

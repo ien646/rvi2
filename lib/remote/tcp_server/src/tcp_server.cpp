@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "msg_builder.hpp"
+#include "msg_header.hpp"
 
 namespace rvi
 {
@@ -33,10 +34,32 @@ namespace rvi
     void tcp_server::connection_life(tcp_connection conn, int cid)
     {
         connection_init(conn, cid);
-        while(true)
+        message_data_t msg;
+        while(conn.receive_data(msg, 4096))
         {
-
+            switch(static_cast<msg_header>(msg[0]))
+            {
+                case msg_header::USER_CLICK:
+                    process_user_click_msg(msg, conn, cid);
+                    break;
+                case msg_header::USER_KEY:
+                    process_user_key_msg(msg, conn, cid);
+                    break;
+                case msg_header::REQUEST_SNAPSHOT:
+                    send_snapshot(conn, cid);
+                    break;
+            }
         }
+    }
+
+    void tcp_server::process_user_click_msg(message_data_t msg, tcp_connection conn, int cid)
+    {
+        // ...
+    }
+
+    void tcp_server::process_user_key_msg(message_data_t msg, tcp_connection conn, int cid)
+    {
+        // ...
     }
 
     void pack_msg_data(message_data_t& dst, message_data_t&& src)
@@ -46,6 +69,11 @@ namespace rvi
     }
 
     void tcp_server::connection_init(tcp_connection conn, int cid)
+    {
+        send_snapshot(conn, cid);
+    }
+
+    void tcp_server::send_snapshot(tcp_connection conn, int cid)
     {
         auto snapshot = _runtime.snapshot_diff_relative(cid);
 

@@ -29,7 +29,7 @@ namespace rvi
             {
                 auto& entry = vframe_from_snapshot_entry(frame_entry);
                 setup_vframe_ogl(entry);
-            }            
+            }
         }
     }
 
@@ -77,7 +77,7 @@ namespace rvi
     void opengl_ctx::draw(float delta_time)
     {
         glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);    
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glUseProgram(_shader_program);
         GLint uloc = glGetUniformLocation(_shader_program, "delta_time");
         if(uloc >= 0)
