@@ -2,46 +2,50 @@
 #include <functional>
 #include <iostream>
 
-#include "tcp_client.hpp"
-#include "tcp_connection.hpp"
+#include "rvi_tcp_client.hpp"
+#include "msg_header.hpp"
 
 using namespace rvi;
+
+static void msg_callback(tcp_connection conn, message_data_t&& msg)
+{
+    switch(static_cast<msg_header>(msg[0]))
+    {
+        case msg_header::BEGIN_SEQUENCE:
+            break;
+        case msg_header::END_SEQUENCE:
+            break;
+
+        case msg_header::SELECT_FRAME:
+            break;
+        case msg_header::RELEASE_FRAME:
+            break;
+        case msg_header::DELETE_FRAME:
+            break;
+        
+        case msg_header::DRAW_LINE:
+            break;
+        case msg_header::DRAW_LINES:
+            break;
+
+        case msg_header::DISCONNECT:
+            break;
+
+        case msg_header::UNKNOWN_ERROR:
+            break;
+
+        default:
+            break;
+    }
+}
 
 int main()
 {
     while(true)
     {
-        tcp_client client("127.0.0.1", 8512);
-
-        std::cout << "# AWAITING SERVER CONNECTION..." << std::endl;
-
-        int ccount = 0;
-
-        client.enable_connect([&ccount](tcp_connection conn)
-        {
-            std::cout << "Connected to server" << std::endl;
-            std::vector<char> data;
-            while(true)
-            {
-                if(!conn.receive_data(data, 512))
-                {
-                    std::cout << "Disconnected from server" << std::endl;
-                    break;
-                }
-                std::cout << "Received data: " << data[0] << std::endl;
-                data[0]++;
-
-                using namespace std::chrono_literals;
-                std::this_thread::sleep_for(100ms);
-
-                if(!conn.send_data(data))
-                {
-                    std::cout << "Disconnected from server" << std::endl;
-                    break;
-                }
-            }
-            conn.close();
-        });
+        rvi_tcp_client client("127.0.0.1", 8787);
+        client.setup_msg_callback(&msg_callback);
+        client.connect();
     }
 }
 

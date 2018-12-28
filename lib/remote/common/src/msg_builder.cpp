@@ -82,6 +82,11 @@ namespace rvi
         return result;
     }
 
+    message_data_t msg_request_snapshot()
+    {
+        return no_data_msg(msg_header::REQUEST_SNAPSHOT);
+    }
+
     message_data_t msg_builder::msg_disconnect()
     {
         return no_data_msg(msg_header::DISCONNECT);

@@ -29,6 +29,9 @@ namespace rvi
         bool receive_data(std::vector<uint8_t>& result, size_t maxbuff);
         bool send_data(const std::vector<char>& data);
         bool send_data(const std::vector<uint8_t>& data);
+
+        void operator=(const tcp_connection& cp_src);
+        void operator=(tcp_connection&& mv_src);
     };
     
     typedef std::function<void(tcp_connection)> connection_callback_t;

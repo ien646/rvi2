@@ -30,6 +30,8 @@ namespace rvi
         message_data_t msg_user_click(rvi::vector2 clk_pos);
         message_data_t msg_user_key(char key);
 
+        message_data_t msg_request_snapshot();
+
         message_data_t msg_disconnect();
         message_data_t msg_unknown_error();
     }

@@ -11,7 +11,7 @@ namespace rvi
     void tcp_connection::close()
     {
         closesocket(_sock);
-    }
+    }    
 
     bool tcp_connection::receive_data(std::vector<char>& result, size_t maxbuff = 4096)
     {
@@ -52,5 +52,18 @@ namespace rvi
             NULL
         );
         return ((bytes_sent != 0) && (bytes_sent != SOCKET_ERROR));
+    }
+
+    void tcp_connection::operator=(const tcp_connection& cp_src)
+    {
+        _sock = cp_src._sock;
+        _moved = cp_src._moved;
+    }
+
+    void tcp_connection::operator=(tcp_connection&& mv_src)
+    {
+        _sock = mv_src._sock;
+        _moved = mv_src._moved;
+        mv_src._moved = true;
     }
 }
