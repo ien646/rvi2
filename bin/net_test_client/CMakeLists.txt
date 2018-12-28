@@ -19,7 +19,7 @@ target_include_directories(net_test_client
 	PUBLIC ${CMAKE_BINARY_DIR}/lib/serialization/include
 	PUBLIC ${CMAKE_BINARY_DIR}/lib/net/include
 	PUBLIC ${CMAKE_BINARY_DIR}/lib/remote/common/include
-	PUBLIC ${CMAKE_BINARY_DIR}/lib/remote/client/include)
+	PUBLIC ${CMAKE_BINARY_DIR}/lib/remote/tcp_client/include)
 	
 target_link_libraries(
 	net_test_client 
@@ -27,4 +27,4 @@ target_link_libraries(
 	rvi2.serialization
 	rvi2.net 
 	rvi2.remote.common
-	rvi2.remote.client)
+	rvi2.remote.tcp_client)

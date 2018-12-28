@@ -56,9 +56,13 @@ namespace rvi
 
     message_data_t msg_builder::msg_draw_lines(const std::vector<rvi::line>& lines)
     {
+        if(lines.size() > std::numeric_limits<uint16_t>::max())
+        {
+            throw new std::overflow_error("Too many lines to send in a single command!");
+        }
         message_data_t result;
         result.push_back(SC_U8(msg_header::DRAW_LINES));
-        serialize_integral<uint16_t>(result, lines.size());
+        serialize_integral<uint16_t>(result, static_cast<uint16_t>(lines.size()));
         for(auto& ln : lines)
         {
             serialize_line_bf(result, ln);
@@ -82,7 +86,7 @@ namespace rvi
         return result;
     }
 
-    message_data_t msg_request_snapshot()
+    message_data_t msg_builder::msg_request_snapshot()
     {
         return no_data_msg(msg_header::REQUEST_SNAPSHOT);
     }
