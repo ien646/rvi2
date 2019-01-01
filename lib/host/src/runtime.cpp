@@ -8,6 +8,8 @@
 #include "cmd_def_map.hpp"
 #include "std_bindings.hpp"
 
+using namespace RVI_STD_FILESYSTEM_NAMESPACE;
+
 namespace rvi
 {
     runtime::runtime()
@@ -75,9 +77,8 @@ namespace rvi
     {
         #if !(defined RVI_HAS_STD_FILESYSTEM)
             #error Current version of RVI2 requires std::filesystem support!
-        #endif
+        #endif        
         
-        using namespace RVI_STD_FILESYSTEM_NAMESPACE;
         _include_dir = dir;
 
         for(auto& file : recursive_directory_iterator(_include_dir))
