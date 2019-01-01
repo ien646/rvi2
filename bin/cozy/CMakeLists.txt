@@ -20,7 +20,9 @@ target_include_directories(cozy
 	PUBLIC ${CMAKE_BINARY_DIR}/lib/core/include
 	PUBLIC third-party/glfw/include)
 	
-target_link_libraries(cozy rvi2.host rvi2.serialization rvi2.core glfw opengl32.lib)
+find_package(OpenGL REQUIRED)
+	
+target_link_libraries(cozy rvi2.host rvi2.serialization rvi2.core glfw ${OPENGL_LIBRARIES})
 
 file(COPY shaders DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
