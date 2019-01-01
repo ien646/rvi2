@@ -42,8 +42,8 @@ void compile_shaders(GLuint vertex_shader, GLuint frag_shader)
 {
     std::string vxshsrc = read_file(VX_SHADER_SRC_PATH);
     std::string pxshsrc = read_file(PX_SHADER_SRC_PATH);
-    vxshsrc.append('\0');
-    pxshsrc.append('\0');
+    vxshsrc.append("\0");
+    pxshsrc.append("\0");
 
     auto vxshsrc_ptr = vxshsrc.c_str();
     auto pxshsrc_ptr = pxshsrc.c_str();
