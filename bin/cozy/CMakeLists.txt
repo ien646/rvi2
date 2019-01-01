@@ -20,6 +20,7 @@ target_include_directories(cozy
 	PUBLIC ${CMAKE_BINARY_DIR}/lib/core/include
 	PUBLIC third-party/glfw/include)
 	
+set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 
 set(CXX_STDFS "")
