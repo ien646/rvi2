@@ -18,7 +18,7 @@
         #elif __clang_major__ >= 6
             #include <experimental/filesystem>
             #define RVI_HAS_STD_FILESYSTEM
-            #define RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL
+            #define RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL            
         #else
             #warning At least Clang version 6.x is required for <filesystem> support!
         #endif
@@ -56,5 +56,14 @@
         #define RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL
     #else
         #warning At least version 1800 of Intel C/C++ Compiler (18.0.0) is required for <filesystem> support!
+    #endif
+#endif
+
+// Filesystem namespace macros
+#ifdef RVI_HAS_STD_FILESYSTEM
+    #if RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL
+        #define RVI_STD_FILESYSTEM_NAMESPACE std::experimental::filesystem
+    #else
+        #define RVI_STD_FILESYSTEM_NAMESPACE std::filesystem
     #endif
 #endif

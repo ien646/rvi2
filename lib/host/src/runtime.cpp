@@ -77,7 +77,7 @@ namespace rvi
             #error Current version of RVI2 requires std::filesystem support!
         #endif
         
-        using namespace std::filesystem;
+        using namespace RVI_STD_FILESYSTEM_NAMESPACE;
         _include_dir = dir;
 
         for(auto& file : recursive_directory_iterator(_include_dir))

@@ -21,7 +21,7 @@ function("rvi_set_compiler_flags" TARGETNAME)
 		
 	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	
-		add_definitions(-pedantic-errors -Wall -lstdc++fs)
+		add_definitions(-pedantic-errors -Wall -lstdc++fs -std=c++17)
 		
 	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	
