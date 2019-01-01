@@ -1,3 +1,5 @@
+#if defined(_WIN32)
+
 #include "tcp_connection.hpp"
 
 #include <array>
@@ -67,3 +69,5 @@ namespace rvi
         mv_src._moved = true;
     }
 }
+
+#endif

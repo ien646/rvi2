@@ -1,3 +1,5 @@
+#if defined(_WIN32)
+
 #include "tcp_listener.hpp"
 
 #include <thread>
@@ -86,3 +88,5 @@ namespace rvi
         }
     }
 }
+
+#endif

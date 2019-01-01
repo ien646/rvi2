@@ -1,3 +1,5 @@
+#if defined(_WIN32)
+
 #include "tcp_client.hpp"
 
 #include <iostream>
@@ -69,3 +71,5 @@ namespace rvi
         return true;
     }
 }
+
+#endif
