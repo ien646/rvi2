@@ -21,8 +21,15 @@ target_include_directories(cozy
 	PUBLIC third-party/glfw/include)
 	
 find_package(OpenGL REQUIRED)
+
+set(CXX_STDFS "")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	set(CXX_STDFS stdc++fs)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+	set(CXX_STDFS stdc++fs)
+endif()
 	
-target_link_libraries(cozy rvi2.host rvi2.serialization rvi2.core glfw ${OPENGL_LIBRARIES})
+target_link_libraries(cozy rvi2.host rvi2.serialization ${CXX_STDFS} rvi2.core glfw ${OPENGL_LIBRARIES})
 
 file(COPY shaders DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
