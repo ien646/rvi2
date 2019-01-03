@@ -461,8 +461,6 @@ namespace rvi
 
         frame* save_fptr = ctx.selected_frame();
         frame* calling_fptr = ctx.find_frame(calling_frame);
-        color_rgba save_color = ctx.current_color();
-
        
         color_rgba grid_color = extract_color_rgba_from_arglist(args, 0);
 

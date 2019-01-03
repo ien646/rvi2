@@ -13,6 +13,8 @@
 
 namespace rvi
 {
+    static const GLuint GLUINT_NULL = 0u;
+
     class opengl_ctx
     {
     private:

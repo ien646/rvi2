@@ -70,8 +70,8 @@ namespace rvi
         glEnableVertexAttribArray(0);
 
         // Unbind vao/vbo
-        glBindBuffer(GL_ARRAY_BUFFER, NULL);
-        glBindVertexArray(NULL);
+        glBindBuffer(GL_ARRAY_BUFFER, GLUINT_NULL);
+        glBindVertexArray(GLUINT_NULL);
     }
 
     void opengl_ctx::draw(float delta_time)
@@ -89,7 +89,7 @@ namespace rvi
         {
             glBindVertexArray(vfp.second.vao);
             glDrawArrays(GL_LINES, 0, vfp.second.line_data.size() * sizeof(line));
-            glBindVertexArray(NULL);
+            glBindVertexArray(GLUINT_NULL);
         }
     }
 

@@ -6,14 +6,14 @@ namespace rvi
 {
     frame::frame(const std::string& name, frame* parent)
         : _name(name)
-        , _transform(DEFAULT_TRANSFORM)
         , _parent(parent)
+        , _transform(DEFAULT_TRANSFORM)        
     { }
 
     frame::frame(std::string&& name, frame* parent)
         : _name(std::move(name))
-        , _transform(DEFAULT_TRANSFORM)
         , _parent(parent)
+        , _transform(DEFAULT_TRANSFORM)        
     { }
 
     std::unique_ptr<frame> frame::create_copy(frame* fptr_parent)
