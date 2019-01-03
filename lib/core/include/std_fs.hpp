@@ -34,7 +34,7 @@
             #include <experimental/filesystem>
             #define RVI_HAS_STD_FILESYSTEM
             #define RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL
-            #define RVI_STD_FILESYSTEM_NAMESPACE std::experimental::v1::filesystem
+            #define RVI_STD_FILESYSTEM_NAMESPACE std::experimental::filesystem::v1
         #else
             #warning At least GCC version 7.x is required for <filesystem> support!
         #endif
