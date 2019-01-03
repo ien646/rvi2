@@ -15,10 +15,12 @@
         #if __clang_major__ >= 7
             #include <filesystem>
             #define RVI_HAS_STD_FILESYSTEM
+            #define RVI_STD_FILESYSTEM_NAMESPACE std::filesystem
         #elif __clang_major__ >= 6
             #include <experimental/filesystem>
             #define RVI_HAS_STD_FILESYSTEM
-            #define RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL            
+            #define RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL
+            #define RVI_STD_FILESYSTEM_NAMESPACE std::experimental::filesystem
         #else
             #warning At least Clang version 6.x is required for <filesystem> support!
         #endif
@@ -27,10 +29,12 @@
         #if __GNUC__ >= 8
             #include <filesystem>
             #define RVI_HAS_STD_FILESYSTEM
+            #define RVI_STD_FILESYSTEM_NAMESPACE std::filesystem
         #elif __GNUC__ >= 7
             #include <experimental/filesystem>
             #define RVI_HAS_STD_FILESYSTEM
             #define RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL
+            #define RVI_STD_FILESYSTEM_NAMESPACE std::experimental::v1::filesystem
         #else
             #warning At least GCC version 7.x is required for <filesystem> support!
         #endif
@@ -39,10 +43,12 @@
     #if _MSC_VER >= 1911 // VS 2017
         #include <filesystem>
         #define RVI_HAS_STD_FILESYSTEM
+        #define RVI_STD_FILESYSTEM_NAMESPACE std::filesystem
     #elif _MSC_VER >= 1900 // VS 2015
         #include <experimental/filesystem>
         #define RVI_HAS_STD_FILESYSTEM
         #define RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL
+        #define RVI_STD_FILESYSTEM_NAMESPACE std::experimental::filesystem
     #else
         #warning At least version 1900 of MSVC (VS 2015) is required for <filesystem> support!
     #endif
@@ -50,20 +56,13 @@
     #if __INTEL_COMPILER >= 1900
         #include <filesystem>
         #define RVI_HAS_STD_FILESYSTEM
+        #define RVI_STD_FILESYSTEM_NAMESPACE std::filesystem
     #elif __INTEL_COMPILER >= 1800
         #include <experimental/filesystem>
         #define RVI_HAS_STD_FILESYSTEM
         #define RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL
-    #else
-        #warning At least version 1800 of Intel C/C++ Compiler (18.0.0) is required for <filesystem> support!
-    #endif
-#endif
-
-// Filesystem namespace macros
-#ifdef RVI_HAS_STD_FILESYSTEM
-    #if RVI_HAS_STD_FILESYSTEM_EXPERIMENTAL
         #define RVI_STD_FILESYSTEM_NAMESPACE std::experimental::filesystem
     #else
-        #define RVI_STD_FILESYSTEM_NAMESPACE std::filesystem
+        #warning At least version 1800 of Intel C/C++ Compiler (18.0.0) is required for <filesystem> support!
     #endif
 #endif
