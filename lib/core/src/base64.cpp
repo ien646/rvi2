@@ -12,11 +12,11 @@
 
 void rvi::base64::encode(std::istream& in, std::ostringstream& out)
 {
-    std::array<char, 3> buff1;
-    std::array<char, 4> buff2;
+    std::array<unsigned char, 3> buff1;
+    std::array<unsigned char, 4> buff2;
 
     uint8_t i = 0, j = 0;
-    while (in.readsome(&buff1[i++], 1))
+    while (in.readsome(reinterpret_cast<char*>(&buff1[i++]), 1))
         if (i == 3)
         {
             out << ENCODE_TABLE[(buff1[0] & 0xfc) >> 2];
@@ -35,7 +35,10 @@ void rvi::base64::encode(std::istream& in, std::ostringstream& out)
         buff2[2] = ((buff1[1] & 0x0f) << 2) + ((buff1[2] & 0xc0) >> 6);
         buff2[3] = buff1[2] & 0x3f;
 
-        for (j = 0; j < (i + 1); j++) out << ENCODE_TABLE[buff2[j]];
+        for (j = 0; j < (i + 1); j++)
+        { 
+            out << ENCODE_TABLE[buff2[j]];
+        }
 
         while (i++ < 3) out << '=';
     }
@@ -43,12 +46,12 @@ void rvi::base64::encode(std::istream& in, std::ostringstream& out)
 
 void rvi::base64::decode(std::istringstream & in, std::ostream & out)
 {
-    std::array<char, 4> buff1;
-    std::array<char, 4> buff2;
+    std::array<unsigned char, 4> buff1;
+    std::array<unsigned char, 4> buff2;
 
     uint8_t i = 0, j = 0;
 
-    while (in.readsome(&buff2[i], 1) && buff2[i] != '=')
+    while (in.readsome(reinterpret_cast<char*>(&buff2[i]), 1) && buff2[i] != '=')
     {
         if (++i == 4)
         {
