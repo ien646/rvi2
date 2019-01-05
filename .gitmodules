@@ -1,6 +1,3 @@
 [submodule "test/third-party/googletest"]
 	path = test/third-party/googletest
 	url = https://github.com/bigiansen/googletest
-[submodule "bin/cozy/third-party/glfw"]
-	path = bin/cozy/third-party/glfw
-	url = https://github.com/bigiansen/glfw
