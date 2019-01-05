@@ -5,7 +5,6 @@
 #include <limits>
 
 #include <line.hpp>
-#include "cmd_header.hpp"
 
 namespace rvi
 {
@@ -32,8 +31,6 @@ namespace rvi
     {
         return static_cast<std::uint16_t>(val);
     }
-
-    extern cmd_header get_cmd_header(const data_t& buff, size_t offset);
 
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
     void serialize_integral(data_t& buff, T val)

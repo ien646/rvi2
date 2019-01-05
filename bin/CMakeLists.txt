@@ -1,1 +1,1 @@
-add_subdirectory("cozy")
+add_subdirectory("cozy_desktop")

@@ -68,12 +68,6 @@ namespace rvi
         std::copy(val.begin(), val.end(), std::back_inserter(buff));
     }
 
-    cmd_header get_cmd_header(data_t& buff, size_t offset)
-    {
-        uint8_t h_val = buff[offset + 0];
-        return static_cast<cmd_header>(h_val);
-    }
-
     float deserialize_fp32(const data_t& buff, size_t offset)
     {
         restrict_ieee_754();
