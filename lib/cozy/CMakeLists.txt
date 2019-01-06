@@ -1,5 +1,3 @@
-add_subdirectory("third-party")
-
 # -- SOURCE FILES --
 set(RVI2_COZY_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/glad.cpp

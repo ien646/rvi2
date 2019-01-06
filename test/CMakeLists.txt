@@ -14,7 +14,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${PROJECT_BINARY_DIR}/test_output/lib
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${PROJECT_BINARY_DIR}/test_output/lib/static)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_BINARY_DIR}/test_output/bin)
 
-add_subdirectory(third-party)
 add_subdirectory(core)
 add_subdirectory(host)
 add_subdirectory(serialization)
