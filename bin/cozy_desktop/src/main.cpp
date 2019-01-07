@@ -7,13 +7,12 @@
 #include <fstream>
 #include <chrono>
 
-#include <runtime.hpp>
-#include <line.hpp>
-#include <vertex.hpp>
+#include <rvi/runtime.hpp>
+#include <rvi/line.hpp>
+#include <rvi/vertex.hpp>
 
-#include "window.hpp"
-#include "shader_utils.hpp"
-#include "opengl_ctx.hpp"
+#include <rvi/window.hpp>
+#include <rvi/opengl_ctx.hpp>
 
 static void hello_click(rvi::client_instance& inst, const rvi::arglist_t&)
 {
@@ -36,7 +35,7 @@ static void hello_click(rvi::client_instance& inst, const rvi::arglist_t&)
 
 int main()
 {
-    window wnd(800, 600, "COZY");
+    rvi::window wnd(800, 600, "COZY");
 
     rvi::runtime rtm;
     int client = rtm.create_client();

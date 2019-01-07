@@ -6,10 +6,10 @@
 #include <vector>
 #include <type_traits>
 
-#include "rvi_base.hpp"
-#include "frame.hpp"
-#include "line.hpp"
-#include "relative_snapshot.hpp"
+#include <rvi/base.hpp>
+#include <rvi/frame.hpp>
+#include <rvi/line.hpp>
+#include <rvi/relative_snapshot.hpp>
 
 namespace rvi
 {

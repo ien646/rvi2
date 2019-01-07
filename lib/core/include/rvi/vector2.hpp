@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rvi_base.hpp"
+#include <rvi/base.hpp>
 
 namespace rvi
 {

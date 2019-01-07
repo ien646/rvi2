@@ -1,4 +1,4 @@
-#include "str_utils.hpp"
+#include <rvi/str_utils.hpp>
 
 namespace rvi::str_utils
 {

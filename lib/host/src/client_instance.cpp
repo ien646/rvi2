@@ -1,8 +1,7 @@
-#include "client_instance.hpp"
+#include <rvi/client_instance.hpp>
 
 #include <iostream>
-
-#include "cmd_def_map.hpp"
+#include <rvi/cmd_def_map.hpp>
 
 namespace rvi
 {

@@ -1,8 +1,7 @@
 #pragma once
 
 #include <string>
-
-#include "rvi_base.hpp"
+#include <rvi/base.hpp>
 
 namespace rvi
 {

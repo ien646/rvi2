@@ -2,8 +2,8 @@
 
 #include <unordered_map>
 
-#include "cmd_type.hpp"
-#include "runtime_cmd.hpp"
+#include <rvi/cmd_type.hpp>
+#include <rvi/runtime_cmd.hpp>
 
 namespace rvi
 {

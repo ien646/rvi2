@@ -1,4 +1,4 @@
-#include "rvi_math.hpp"
+#include <rvi/math.hpp>
 
 #include <cmath>
 

@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-#include "line.hpp"
+#include <rvi/line.hpp>
 
 namespace rvi
 {

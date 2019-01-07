@@ -1,8 +1,8 @@
 #pragma once
 
-#include "rvi_base.hpp"
-#include "vector2.hpp"
-#include "color_rgba.hpp"
+#include <rvi/base.hpp>
+#include <rvi/vector2.hpp>
+#include <rvi/color_rgba.hpp>
 
 namespace rvi
 {

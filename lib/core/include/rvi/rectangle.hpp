@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector2.hpp"
+#include <rvi/vector2.hpp>
 
 namespace rvi
 {

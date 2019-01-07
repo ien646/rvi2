@@ -1,4 +1,4 @@
-#include "opengl_ctx.hpp"
+#include <rvi/opengl_ctx.hpp>
 
 #define SCFLOAT(f) static_cast<float>(f)
 
@@ -12,7 +12,7 @@ namespace rvi
     {
         _runtime_ptr = rptr;
         _client_id = cid;
-        init_default_shaders(&_shader_program);
+        shader_utils::init_default_shaders(&_shader_program);
         glLineWidth(1);
     }
 

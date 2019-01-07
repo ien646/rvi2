@@ -1,13 +1,13 @@
 # -- SOURCE FILES --
 set(RVI2_CORE_SOURCES 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/base64.cpp     
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/assert.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/base64.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/client_context.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/color_rgba
     ${CMAKE_CURRENT_SOURCE_DIR}/src/frame.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/line.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/rectangle.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvi_assert.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/rvi_math.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/math.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rectangle.cpp    
     ${CMAKE_CURRENT_SOURCE_DIR}/src/str_utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/transform2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/vector2.cpp

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "rvi_base.hpp"
-#include "transform2.hpp"
-#include "vertex.hpp"
-#include "vector2.hpp"
+#include <rvi/base.hpp>
+#include <rvi/transform2.hpp>
+#include <rvi/vertex.hpp>
+#include <rvi/vector2.hpp>
 
 #include <utility>
 

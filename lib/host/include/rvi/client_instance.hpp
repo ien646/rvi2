@@ -1,8 +1,7 @@
 #pragma once
 
-#include <client_context.hpp>
-
-#include "client_instance_data.hpp"
+#include <rvi/client_context.hpp>
+#include <rvi/client_instance_data.hpp>
 
 namespace rvi
 {

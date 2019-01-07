@@ -6,10 +6,10 @@
 #include <vector>
 #include <unordered_map>
 
-#include <runtime.hpp>
+#include <rvi/runtime.hpp>
 
-#include "shader_utils.hpp"
-#include "vframe.hpp"
+#include <rvi/shader_utils.hpp>
+#include <rvi/vframe.hpp>
 
 namespace rvi
 {

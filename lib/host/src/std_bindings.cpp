@@ -1,4 +1,4 @@
-#include "std_bindings.hpp"
+#include <rvi/std_bindings.hpp>
 
 #include <algorithm>
 
@@ -6,7 +6,7 @@ namespace rvi
 {
     static void expect_argc(const arglist_t& args, size_t count)
     {
-        rvi_assert(
+        assert(
             args.size() >= count,
             "Expected argument count of " 
                 + std::to_string(count) 
@@ -17,7 +17,7 @@ namespace rvi
 
     color_rgba extract_color_rgba_from_arglist(const arglist_t& args, int start_idx)
     {
-        rvi_assert(
+        assert(
             (args.size() - start_idx) > 3, 
             "Not enough arguments in argument list!"
         );

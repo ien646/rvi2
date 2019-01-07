@@ -10,5 +10,5 @@ namespace rvi
      * @param cond Assertion condition
      * @param msg Failure message
      */
-    extern void rvi_assert(bool cond, const std::string& msg);
+    extern void assert(bool cond, const std::string& msg);
 }

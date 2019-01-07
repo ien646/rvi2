@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <unordered_map>
 
-#include "cmd_type.hpp"
+#include <rvi/cmd_type.hpp>
 
 namespace rvi
 {

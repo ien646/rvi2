@@ -1,6 +1,7 @@
-#include "vector2.hpp"
-#include "transform2.hpp"
+#include <rvi/vector2.hpp>
+
 #include <cmath>
+#include <rvi/transform2.hpp>
 
 namespace rvi
 {

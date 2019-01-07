@@ -1,14 +1,13 @@
-#include "cmd_def_map.hpp"
+#include <rvi/cmd_def_map.hpp>
 
 #include <fstream>
 #include <utility>
 
-#include <client_instance.hpp>
-#include <runtime.hpp>
-#include <rvi_assert.hpp>
-
-#include "reader.hpp"
-#include "parsed_stmt.hpp"
+#include <rvi/client_instance.hpp>
+#include <rvi/runtime.hpp>
+#include <rvi/assert.hpp>
+#include <rvi/reader.hpp>
+#include <rvi/parsed_stmt.hpp>
 
 #define RT_CMD_ENTRY(name) \
     void name( \
@@ -22,7 +21,7 @@ namespace rvi
     // -- HELPER METHODS --
     void expect_argc(const arglist_t& args, size_t count)
     {
-        rvi_assert(
+        assert(
             args.size() >= count,
             "Expected argument count of " 
                 + STR(count) 

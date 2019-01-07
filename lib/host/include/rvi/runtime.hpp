@@ -3,8 +3,8 @@
 #include <unordered_map>
 #include <string>
 
-#include "client_instance.hpp"
-#include "parsed_stmt.hpp"
+#include <rvi/client_instance.hpp>
+#include <rvi/parsed_stmt.hpp>
 
 namespace rvi
 {

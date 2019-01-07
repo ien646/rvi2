@@ -2,7 +2,8 @@
 
 #include <vector>
 #include <string>
-#include <cmd_type.hpp>
+
+#include <rvi/cmd_type.hpp>
 
 namespace rvi
 {

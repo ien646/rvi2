@@ -6,10 +6,10 @@
 #include <unordered_set>
 #include <deque>
 
-#include "runtime_cmd.hpp"
-#include "parsed_stmt.hpp"
-#include "clickable_frame_data.hpp"
-#include "constrained_buffer.hpp"
+#include <rvi/constrained_buffer.hpp>
+#include <rvi/runtime_cmd.hpp>
+#include <rvi/parsed_stmt.hpp>
+#include <rvi/clickable_frame_data.hpp>
 
 namespace rvi
 {

@@ -1,4 +1,4 @@
-#include "line.hpp"
+#include <rvi/line.hpp>
 
 namespace rvi
 {

@@ -1,11 +1,11 @@
 #if defined(_WIN32)
 
-#include "tcp_client.hpp"
+#include <rvi/tcp_client.hpp>
 
 #include <iostream>
 #include <thread>
 
-#include "tcp_common.hpp"
+#include <rvi/tcp_common.hpp>
 
 namespace rvi
 {

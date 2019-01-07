@@ -1,6 +1,6 @@
 #pragma once
 
-#include "client_instance.hpp"
+#include <rvi/client_instance.hpp>
 
 namespace rvi::std_bindings
 {

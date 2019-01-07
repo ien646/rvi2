@@ -1,8 +1,8 @@
 #pragma once
 
-#include "vector2.hpp"
-#include "rvi_math.hpp"
-#include "line.hpp"
+#include <rvi/vector2.hpp>
+#include <rvi/math.hpp>
+#include <rvi/line.hpp>
 
 #include <vector>
 

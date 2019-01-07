@@ -1,7 +1,7 @@
-#include "base64.hpp"
-#include "rvi_base.hpp"
+#include <rvi/base64.hpp>
 
 #include <array>
+#include <rvi/base.hpp>
 
 #ifdef RVI_COMPILER_MSVC
 	#pragma warning(disable: 26446)

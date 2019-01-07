@@ -1,4 +1,4 @@
-#include "rectangle.hpp"
+#include <rvi/rectangle.hpp>
 
 namespace rvi
 {

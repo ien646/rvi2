@@ -4,7 +4,7 @@
 #include <cinttypes>
 #include <limits>
 
-#include <line.hpp>
+#include <rvi/line.hpp>
 
 namespace rvi
 {

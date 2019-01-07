@@ -8,8 +8,8 @@
 #include <functional>
 #include <stdexcept>
 
-#include "str_utils.hpp"
-#include "rvi_assert.hpp"
+#include <rvi/str_utils.hpp>
+#include <rvi/assert.hpp>
 
 namespace rvi
 {

@@ -1,4 +1,4 @@
-#include "cmd_map.hpp"
+#include <rvi/cmd_map.hpp>
 
 namespace rvi
 {
