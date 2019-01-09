@@ -6,7 +6,7 @@ namespace rvi
 {
     static void expect_argc(const arglist_t& args, size_t count)
     {
-        assert(
+        r_assert(
             args.size() >= count,
             "Expected argument count of " 
                 + std::to_string(count) 
@@ -17,7 +17,7 @@ namespace rvi
 
     color_rgba extract_color_rgba_from_arglist(const arglist_t& args, int start_idx)
     {
-        assert(
+        r_assert(
             (args.size() - start_idx) > 3, 
             "Not enough arguments in argument list!"
         );

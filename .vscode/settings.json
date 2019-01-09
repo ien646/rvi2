@@ -71,7 +71,10 @@
         "xtree": "cpp",
         "forward_list": "cpp",
         "xthread": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "optional": "cpp",
+        "regex": "cpp",
+        "variant": "cpp"
     },
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }

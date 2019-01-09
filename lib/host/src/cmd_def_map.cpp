@@ -21,7 +21,7 @@ namespace rvi
     // -- HELPER METHODS --
     void expect_argc(const arglist_t& args, size_t count)
     {
-        assert(
+        r_assert(
             args.size() >= count,
             "Expected argument count of " 
                 + STR(count) 

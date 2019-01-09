@@ -85,7 +85,7 @@ namespace rvi
         parsed_stmt result;
         std::string cmd_str = state.cmd.str();
 
-        assert(
+        r_assert(
             cmd_map.count(cmd_str) > 0,
             "Command '" + cmd_str + "' is not a valid command!"
         );
@@ -101,7 +101,7 @@ namespace rvi
 
     void reader::handle_cmdargs_separator(processing_state& state)
     {
-        assert(
+        r_assert(
             state.str_escape > 0 || !state.past_cmd,
             "Unexpected cmd-args separator character!"
         );
@@ -126,7 +126,7 @@ namespace rvi
 
     void reader::handle_string_end_token(processing_state& state)
     {
-        assert(
+        r_assert(
             state.str_escape > 0,
             "Unexpected end of string escape sequence!"
         );
