@@ -16,7 +16,8 @@ namespace rvi
 
     float math::clamp_angle_deg(float angle) noexcept
     {
-        return std::fabs(std::fmod(angle, 360.0F));
+        float clamped = std::fabs(std::fmod(angle, 360.0F));
+        return angle > 0 ? clamped : 360 - clamped;
     }
 
     bool math::fpcmp(float a, float b, int dec_precision)

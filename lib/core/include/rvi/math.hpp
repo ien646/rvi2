@@ -38,7 +38,19 @@ namespace rvi
          */
         constexpr double deg2rad(double angle_deg)
         {
-            return angle_deg * PI / 180;
+            return angle_deg * (PI / 180);
+        }
+
+        /**
+         * @brief Convert an angle represented in radians to its
+         * equivalent angle, represented in degrees.
+         * 
+         * @param angle_deg Angle to convert, in radians
+         * @return constexpr float Converted angle, in degrees
+         */
+        constexpr double rad2deg(double angle_deg)
+        {
+            return angle_deg * (180 / PI);
         }
 
         /**
