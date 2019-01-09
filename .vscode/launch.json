@@ -16,32 +16,10 @@
         "externalConsole": true
     },
     {
-        "name": "Net Test Server Debug",
-        "type": "cppvsdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/build_debug/output/bin/net_test_server/net_test_server.exe",
-        "args": [],
-        "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build_debug/output/bin/net_test_server",
-        "environment": [],
-        "externalConsole": true
-    },
-    {
-        "name": "Net Test Client Debug",
-        "type": "cppvsdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/build_debug/output/bin/net_test_client/net_test_client.exe",
-        "args": [],
-        "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build_debug/output/bin/net_test_client",
-        "environment": [],
-        "externalConsole": true
-    },
-    {
         "name": "Test-Core Debug",
         "type": "cppvsdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build_debug/test_output/bin/test.core.exe",
+        "program": "${workspaceFolder}/build_debug/test_output/bin/test.rvi2.core.exe",
         "args": [],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}/build_debug/test_output/bin",

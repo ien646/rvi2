@@ -76,7 +76,7 @@ namespace rvi
          * 
          * @param offset Offset value
          */
-        void offset_in_place(vector2 offset) noexcept;
+        void offset_in_place(vector2 offset) noexcept;        
 
         /**
          * @brief Obtain the result of applying a rotation
@@ -164,6 +164,21 @@ namespace rvi
          * @param scale Scale value, vectorial
          */
         void scale_in_place(vector2 scale) noexcept;
+
+        /**
+         * @brief Get a normalized vector2
+         * 
+         * @return vector2 Normalized vector2
+         */
+        vector2 normalized() const noexcept;
+
+        /**
+         * @brief Obtain this vector's angle, relative
+         * to (0, 0)
+         * 
+         * @return float Angle
+         */
+        float angle() const noexcept;
 
         vector2 operator+(vector2 other) const noexcept;
         vector2 operator-(vector2 other) const noexcept;

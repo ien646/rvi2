@@ -7,7 +7,7 @@ namespace rvi
 {
     float vector2::magnitude() const noexcept
     {
-        return std::sqrt(powf(x, 2) + powf(y, 2));
+        return std::sqrt(std::pow(x, 2) + std::pow(y, 2));
     }
 
     vector2 vector2::cross_product(vector2 other) const noexcept
@@ -103,6 +103,17 @@ namespace rvi
     void vector2::scale_in_place(vector2 scale) noexcept
     {
         cross_product_in_place(scale);
+    }
+
+    vector2 vector2::normalized() const noexcept
+    {
+        float mag = magnitude();
+        return vector2(x / mag, y / mag);
+    }
+
+    float vector2::angle() const noexcept
+    {
+        return math::clamp_angle_deg(math::rad2deg(std::atan2(y, x)));
     }
 
     vector2 vector2::operator+(vector2 other) const noexcept

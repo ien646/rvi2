@@ -36,19 +36,15 @@ TEST_CASE("rvi::vector2::magnitude()")
     }
 }
 
-void test_vector2_rotation(double angle_deg)
+void test_vector2_rotation(float angle_deg)
 {
     vector2 vec(rand_float(), rand_float());
     vector2 rotated_vec = vec.rotate(angle_deg);
 
-    double proportion_sin = std::sin(angle_deg);
-    double proportion_cos = std::cos(angle_deg);
+    float vec_angle = vec.angle();
+    float rvec_angle = rotated_vec.angle();
 
-    double expected_x = vec.magnitude() * proportion_cos;
-    double expected_y = vec.magnitude() * proportion_sin;
-
-    REQUIRE((double)rotated_vec.x == expected_x);
-    REQUIRE((double)rotated_vec.y == expected_y);
+    REQUIRE(Approx(rvec_angle - vec_angle) == angle_deg);
 }
 
 TEST_CASE("rvi::vector2::rotate()")
