@@ -16,10 +16,12 @@ namespace rvi
 
     float math::clamp_angle_deg(float angle) noexcept
     {
-        // Benchmarking (gcc/clang -O3) showed that conditionally avoiding std::fmod
-        // improves performance around 15% to 20% on average using a random set
-        // of angles (std::rand), and considerably more (+200%) if the set is already 
-        // pre-clamped, probably due to branch prediction
+        /*************************************************************************************
+         * Benchmarking (gcc-8/clang-7 -O3 x86-64) showed that conditionally avoiding 'fmod' 
+         * keeps roughly the same performance (<1% difference) as unconditionally applying it 
+         * on a random set of angles (std::rand()), while improving performance over 1000% on
+         * sets of angles with absolute values lower than 360 degrees on average. 
+        *************************************************************************************/
 
         if(angle >= 0.0F)
         {
