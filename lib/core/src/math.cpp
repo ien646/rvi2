@@ -36,7 +36,7 @@ namespace rvi
         }
         else
         {
-            if(angle > -360.0F)
+            if(angle >= -360.0F)
             {
                 return 360 + angle;
             }
