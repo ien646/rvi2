@@ -38,13 +38,19 @@ TEST_CASE("rvi::vector2::magnitude()")
 
 void test_vector2_rotation(float angle_deg)
 {
-    vector2 vec(rand_float(), rand_float());
-    vector2 rotated_vec = vec.rotate(angle_deg);
+    std::string section_name = "Angle - [" + std::to_string(angle_deg) + "]";
+    SECTION(section_name)
+    {
+        float clamped_angle_deg = rvi::math::clamp_angle_deg(angle_deg);
+        vector2 vec(rand_float(), rand_float());
+        vector2 rotated_vec = vec.rotate(clamped_angle_deg);
 
-    float vec_angle = vec.angle();
-    float rvec_angle = rotated_vec.angle();
+        float vec_angle = vec.angle();
+        float rvec_angle = rotated_vec.angle();
 
-    REQUIRE(Approx(rvec_angle - vec_angle) == angle_deg);
+        float expected_angle = rvi::math::clamp_angle_deg(rvec_angle - vec_angle);
+        REQUIRE(Approx(expected_angle) == rvi::math::clamp_angle_deg(clamped_angle_deg));
+    }
 }
 
 TEST_CASE("rvi::vector2::rotate()")
