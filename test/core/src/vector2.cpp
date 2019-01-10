@@ -37,40 +37,64 @@ TEST_CASE("rvi::vector2::magnitude()")
 }
 
 void test_vector2_rotation(float angle_deg)
-{
-    std::string section_name = "Angle - [" + std::to_string(angle_deg) + "]";
-    SECTION(section_name)
-    {
-        float clamped_angle_deg = rvi::math::clamp_angle_deg(angle_deg);
-        vector2 vec(rand_float(), rand_float());
-        vector2 rotated_vec = vec.rotate(clamped_angle_deg);
+{    
+    float clamped_angle_deg = rvi::math::clamp_angle_deg(angle_deg);
+    vector2 vec(rand_float(), rand_float());
+    vector2 rotated_vec = vec.rotate(clamped_angle_deg);
 
-        float vec_angle = vec.angle();
-        float rvec_angle = rotated_vec.angle();
+    float vec_angle = vec.angle();
+    float rvec_angle = rotated_vec.angle();
 
-        float expected_angle = rvi::math::clamp_angle_deg(rvec_angle - vec_angle);
-        REQUIRE(Approx(expected_angle) == rvi::math::clamp_angle_deg(clamped_angle_deg));
-    }
+    float expected_angle = rvi::math::clamp_angle_deg(rvec_angle - vec_angle);
+    REQUIRE(Approx(expected_angle).margin(0.00001F) == rvi::math::clamp_angle_deg(clamped_angle_deg));
 }
 
 TEST_CASE("rvi::vector2::rotate()")
 {
-    test_vector2_rotation(0);
-    test_vector2_rotation(1);
-    test_vector2_rotation(5);
-    test_vector2_rotation(15);
-    test_vector2_rotation(30);
-    test_vector2_rotation(45);
-    test_vector2_rotation(90);
-    test_vector2_rotation(135);
-    test_vector2_rotation(180);
-    test_vector2_rotation(270);
-    test_vector2_rotation(360);
-    test_vector2_rotation(-1);
-    test_vector2_rotation(-60);
-    test_vector2_rotation(-90);
-    test_vector2_rotation(-180);
-    test_vector2_rotation(-360);
-    test_vector2_rotation(2222);
-    test_vector2_rotation(-3333);
+    SECTION("Exactly 0 degrees")
+    {
+        test_vector2_rotation(0);
+    }
+
+    SECTION("Positive values between 0.01 - 359.99 degrees")
+    {
+        for(float i = 0.01F; i < 360.0F; i+= 1.23F)
+        {
+            test_vector2_rotation(i);
+        }
+    }
+
+    SECTION("Exactly 360 degrees")
+    {
+        test_vector2_rotation(360);
+    }
+
+    SECTION("Positive values larger than 360 degrees")
+    {
+        for(float i = 360.01F; i < 3600.0F; i += 11.73F)
+        {
+            test_vector2_rotation(i);
+        }
+    }
+    
+    SECTION("Negative values between -0.01 - -359.99")
+    {
+        for(float i = -0.01F; i > -360.0F; i -= 1.23F)
+        {
+            test_vector2_rotation(i);
+        }
+    }
+
+    SECTION("Exactly -360 degrees")
+    {
+        test_vector2_rotation(-360.0F);
+    }
+
+    SECTION("Values lower than -360 degrees")
+    {
+        for(float i = -360.01F; i > -3600.0F; i -= 11.73F)
+        {
+            test_vector2_rotation(i);
+        }
+    }
 }
