@@ -63,18 +63,4 @@ namespace rvi
         = static_cast<uint8_t>(_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0xFF;
 
     FWD_DECL_CLASS(client_context);
-
-    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    // to_string-able interface
-    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-    /**
-     * @brief Interface for textually representable types
-     */
-    class string_representable
-    {
-    public:
-        ///Represent object as string
-        virtual std::string to_string() const = 0;
-    };
 }
