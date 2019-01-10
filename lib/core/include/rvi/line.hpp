@@ -12,7 +12,7 @@ namespace rvi
     /**
      * @brief Basic line data structure, consisting of two vertices.
      */
-    struct line : public string_representable
+    struct line
     {
         ///Start vertex
         vertex start;
@@ -45,6 +45,6 @@ namespace rvi
         bool operator!=(line other) const noexcept;
 
         ///Represent as string
-        std::string to_string() const final;
+        std::string to_string() const;
     };
 }
