@@ -96,24 +96,54 @@ namespace rvi
 
     void client_context::select_frame(frame* fptr)
     {
+        // Nullptr reselects the root
+        if(fptr == nullptr)
+        {
+            select_root();
+            return;
+        }
+
+        // Ignore self-reselection
         if(_selected_frame == fptr)
         {
             return;
         }
 
-        _selected_frame = fptr;
-
-        // Regenerate frame-stack
-        _frame_stack.clear();
-        std::vector<frame*> fstack_rev;
-        frame* cframe = _selected_frame;
-        while(cframe->has_parent())
+        // Prevent frame stack regeneration for simpler cases
+        if(fptr == _selected_frame->parent())
         {
-            fstack_rev.push_back(cframe);
-            cframe = cframe->parent();
+            _frame_stack.pop_back();
+            _selected_frame = fptr;
         }
-        fstack_rev.push_back(cframe);
-        std::copy(fstack_rev.rbegin(), fstack_rev.rend(), std::back_inserter(_frame_stack));
+        else if(_selected_frame->find_child(fptr))
+        {
+            _frame_stack.push_back(fptr);
+            _selected_frame = fptr;
+        }
+        else
+        {
+            // Regenerate frame-stack
+            _selected_frame = fptr;
+            _frame_stack.clear();
+            std::vector<frame*> fstack_rev;
+            frame* cframe = _selected_frame;
+            while(cframe->has_parent())
+            {
+                fstack_rev.push_back(cframe);
+                cframe = cframe->parent();
+            }
+            fstack_rev.push_back(cframe);
+            std::copy(fstack_rev.rbegin(), fstack_rev.rend(), std::back_inserter(_frame_stack));
+        }
+    }
+
+    void client_context::select_root()
+    {
+        _selected_frame = _main_frame.get();
+
+        // Clear frame-stack
+        _frame_stack.clear();
+        _frame_stack.push_back(_selected_frame);
     }
 
     bool client_context::release_frame()

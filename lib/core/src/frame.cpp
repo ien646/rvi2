@@ -112,6 +112,15 @@ namespace rvi
         return (_child_frames_index.count(name) > 0);
     }
 
+    bool frame::contains_child(frame* fptr)
+    {
+        auto it = std::find_if(_children.begin(), _children.end(), [](auto& ch)
+        {
+            return ch.get() == fptr;
+        });
+        return it != _children.end();
+    }
+
     size_t frame::child_count(bool deep) const
     {
         if (!deep)

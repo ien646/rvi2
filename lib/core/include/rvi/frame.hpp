@@ -98,7 +98,7 @@ namespace rvi
         void clear_children();
 
         /**
-         * Obtain this frame's transform, applying all parent
+         * @brief Obtain this frame's transform, applying all parent
          * transform information before its own.
          * 
          * @return transform2 Absolute transform
@@ -106,7 +106,7 @@ namespace rvi
         transform2 get_absolute_transform();
 
         /**
-         * Attempt to delete a child frame
+         * @brief Attempt to delete a child frame
          * 
          * @param name Child frame name
          * @return true Deletion succesful
@@ -115,11 +115,18 @@ namespace rvi
         bool delete_child(const std::string& name);
 
         /**
-         * Query if a child frame with the given name exists
+         * @brief Query if a child frame with the given name exists
          * 
          * @param name Child frame name
          */
         bool contains_child(const std::string& name);
+
+        /**
+         * @brief Query if a child frame with the given pointer value exists
+         * 
+         * @param fptr Child frame pointer
+         */
+        bool contains_child(frame* fptr);
 
         ///Query if this frame has a parent frame
         bool has_parent() const noexcept;

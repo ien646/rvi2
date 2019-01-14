@@ -127,6 +127,11 @@ namespace rvi
         void select_frame(frame* fptr);
 
         /**
+         * @brief Set the root frame as the new selected frame
+         */
+        void select_root();
+
+        /**
          * @brief Releases the currently selected frame, selecting its
          * parent as the new selected frame.
          * If the selected frame is the main frame (has no parent),
