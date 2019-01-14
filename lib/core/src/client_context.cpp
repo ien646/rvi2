@@ -96,25 +96,24 @@ namespace rvi
 
     void client_context::select_frame(frame* fptr)
     {
-        // Nullptr reselects the root
+        // Nullptr reselects the root frame
         if(fptr == nullptr)
         {
             select_root();
             return;
         }
-
         // Ignore self-reselection
-        if(_selected_frame == fptr)
+        else if(fptr == _selected_frame)
         {
             return;
         }
-
-        // Prevent frame stack regeneration for simpler cases
-        if(fptr == _selected_frame->parent())
+        // Prevent frame stack regeneration for parent
+        else if(fptr == _selected_frame->parent())
         {
             _frame_stack.pop_back();
             _selected_frame = fptr;
         }
+        // Prevent frame stack regeneration for child
         else if(_selected_frame->contains_child(fptr))
         {
             _frame_stack.push_back(fptr);
@@ -122,18 +121,8 @@ namespace rvi
         }
         else
         {
-            // Regenerate frame-stack
             _selected_frame = fptr;
-            _frame_stack.clear();
-            std::vector<frame*> fstack_rev;
-            frame* cframe = _selected_frame;
-            while(cframe->has_parent())
-            {
-                fstack_rev.push_back(cframe);
-                cframe = cframe->parent();
-            }
-            fstack_rev.push_back(cframe);
-            std::copy(fstack_rev.rbegin(), fstack_rev.rend(), std::back_inserter(_frame_stack));
+            regenerate_frame_stack();
         }
     }
 
@@ -460,5 +449,19 @@ namespace rvi
             sh.push_back(std::move(entry));
         }
         _deleted_frame_queue.clear();
+    }
+
+    void client_context::regenerate_frame_stack()
+    {        
+        _frame_stack.clear();
+        std::vector<frame*> fstack_rev;
+        frame* cframe = _selected_frame;
+        while(cframe->has_parent())
+        {
+            fstack_rev.push_back(cframe);
+            cframe = cframe->parent();
+        }
+        fstack_rev.push_back(cframe);
+        std::copy(fstack_rev.rbegin(), fstack_rev.rend(), std::back_inserter(_frame_stack));
     }
 }

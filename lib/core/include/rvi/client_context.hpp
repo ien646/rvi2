@@ -286,5 +286,6 @@ namespace rvi
 
     private:
         void add_deleted_frames_to_snapshot(relative_snapshot& sh);
+        void regenerate_frame_stack();
     };
 }
