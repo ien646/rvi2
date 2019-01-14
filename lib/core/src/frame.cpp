@@ -114,7 +114,7 @@ namespace rvi
 
     bool frame::contains_child(frame* fptr)
     {
-        auto it = std::find_if(_children.begin(), _children.end(), [](auto& ch)
+        auto it = std::find_if(_children.begin(), _children.end(), [fptr](auto& ch)
         {
             return ch.get() == fptr;
         });

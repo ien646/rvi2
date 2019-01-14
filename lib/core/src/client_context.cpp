@@ -115,7 +115,7 @@ namespace rvi
             _frame_stack.pop_back();
             _selected_frame = fptr;
         }
-        else if(_selected_frame->find_child(fptr))
+        else if(_selected_frame->contains_child(fptr))
         {
             _frame_stack.push_back(fptr);
             _selected_frame = fptr;
