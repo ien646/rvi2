@@ -177,6 +177,103 @@ namespace rvi
         );
     }
 
+    void std_bindings::printx(
+        client_instance& c_inst, 
+        const std::string& calling_frame, 
+        const std::string& text,
+        float font_sz,
+        float font_sep,
+        float font_margin)
+    {
+        std_bindings::_print(
+            c_inst,
+            calling_frame,
+            text,
+            font_sz,
+            font_sz,
+            font_sep,
+            0.0F,
+            font_margin,
+            font_margin
+        );
+    }
+
+    void std_bindings::printwx(
+        client_instance& c_inst, 
+        const std::string& calling_frame, 
+        const std::string& text,
+        float font_sz,
+        float font_sep,
+        float font_margin,
+        float wrap_v_sep)
+    {
+        std_bindings::_printw(
+            c_inst, 
+            calling_frame,
+            text,
+            font_sz, 
+            font_sz,
+            font_sep,
+            0.0F,
+            font_margin,
+            font_margin,
+            DEF_FONT_WRAP_SEP_CH,
+            wrap_v_sep
+        );
+    }
+
+    void std_bindings::printc(
+        client_instance& c_inst,
+        const std::string& calling_frame,
+        const std::string& text,
+        float font_sz_h,
+        float font_sz_v,
+        float font_sep_h,
+        float font_sep_v,
+        float font_margin_h,
+        float font_margin_v)
+    {
+        _print(
+            c_inst,
+            calling_frame,
+            text,
+            font_sz_h,
+            font_sz_v,
+            font_sep_h,
+            font_sep_v,
+            font_margin_h,
+            font_margin_v
+        );
+    }
+
+    void std_bindings::printcw(
+        client_instance& c_inst,
+        const std::string& calling_frame,
+        const std::string& text,
+        float font_sz_h,
+        float font_sz_v,
+        float font_sep_h,
+        float font_sep_v,
+        float font_margin_h,
+        float font_margin_v,
+        char wrap_sep_char,
+        float wrap_vsep)
+    {
+        _printw(
+            c_inst,
+            calling_frame,
+            text,
+            font_sz_h,
+            font_sz_v,
+            font_sep_h,
+            font_sep_v,
+            font_margin_h,
+            font_margin_v,
+            wrap_sep_char,
+            wrap_vsep
+        );
+    }
+
     extern void std_bindings::_print(
         client_instance& c_inst,
         const std::string& calling_frame,
@@ -639,14 +736,18 @@ namespace rvi
         ctx.select_frame(save_fptr);
     }
 
+// Macro for selecting script-side binding function pointer overload
+#define RVI_SELECT_SCRIPT_OVERLOAD(x) \
+    static_cast<void(*)(client_instance&, const arglist_t&)>(x)
+
     void std_bindings::init_std_bindings(client_instance& c_inst)
     {
-        c_inst.create_binding("print", &std_bindings::print);
-        c_inst.create_binding("printw", &std_bindings::printw);
-        c_inst.create_binding("printx", &std_bindings::printx);
-        c_inst.create_binding("printwx", &std_bindings::printwx);
-        c_inst.create_binding("printc", &std_bindings::printc);
-        c_inst.create_binding("printwc", &std_bindings::printcw);
+        c_inst.create_binding("print",   &std_bindings::print);
+        c_inst.create_binding("printw",  &std_bindings::printw);
+        c_inst.create_binding("printx",  RVI_SELECT_SCRIPT_OVERLOAD(&std_bindings::printx));
+        c_inst.create_binding("printwx", RVI_SELECT_SCRIPT_OVERLOAD(&std_bindings::printwx));
+        c_inst.create_binding("printc",  RVI_SELECT_SCRIPT_OVERLOAD(&std_bindings::printc));
+        c_inst.create_binding("printwc", RVI_SELECT_SCRIPT_OVERLOAD(&std_bindings::printcw));
 
         c_inst.create_binding("box_border", &std_bindings::box_border);
         c_inst.create_binding("box_border_rgba", &std_bindings::box_border);

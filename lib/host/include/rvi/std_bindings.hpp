@@ -17,6 +17,7 @@ namespace rvi::std_bindings
     // -- STITCH_FILL* constants
     static const float DEF_STITCHFILL_SEP = 0.035F;
 
+    // -- ARGLIST print_xyz bindings --------------------------------------
     extern void print(client_instance& c_inst, const arglist_t& args);
     extern void printw(client_instance& c_inst, const arglist_t& args);
     extern void printx(client_instance& c_inst, const arglist_t& args);
@@ -24,6 +25,54 @@ namespace rvi::std_bindings
     extern void printc(client_instance& c_inst, const arglist_t& args);
     extern void printcw(client_instance& c_inst, const arglist_t& args);
     
+    // -- USER-CODE print_xyz bindings --------------------------------------
+    extern void printx(
+        client_instance& c_inst, 
+        const std::string& calling_frame, 
+        const std::string& text,
+        float font_sz = DEF_FONT_SZ,
+        float font_sep = DEF_FONT_HSEP,
+        float font_margin = DEF_FONT_MARGIN
+    );
+
+    extern void printwx(
+        client_instance& c_inst, 
+        const std::string& calling_frame, 
+        const std::string& text,
+        float font_sz = DEF_FONT_SZ,
+        float font_sep = DEF_FONT_HSEP,
+        float font_margin = DEF_FONT_MARGIN,
+        float wrap_v_sep = DEF_FONT_WRAP_LINE_VSEP
+    );
+
+    extern void printc(
+        client_instance& c_inst,
+        const std::string& calling_frame,
+        const std::string& text,
+        float font_sz_h,
+        float font_sz_v,
+        float font_sep_h,
+        float font_sep_v,
+        float font_margin_h,
+        float font_margin_v
+    );
+
+    extern void printcw(
+        client_instance& c_inst,
+        const std::string& calling_frame,
+        const std::string& text,
+        float font_sz_h,
+        float font_sz_v,
+        float font_sep_h,
+        float font_sep_v,
+        float font_margin_h,
+        float font_margin_v,
+        char wrap_sep_char,
+        float wrap_vsep
+    );
+
+    // ----------------------------------------------------------------------------
+
     extern void _print(
         client_instance& c_inst,
         const std::string& calling_frame,
@@ -33,7 +82,8 @@ namespace rvi::std_bindings
         float font_sep_h,
         float font_sep_v,
         float font_margin_h,
-        float font_margin_v);
+        float font_margin_v
+    );
 
     extern void _printw(
         client_instance& c_inst,
@@ -46,7 +96,11 @@ namespace rvi::std_bindings
         float font_margin_h,
         float font_margin_v,
         char wrap_sep_char,
-        float wrap_vsep);
+        float wrap_vsep
+    );
+
+    // ----------------------------------------------------------------------------
+
 
     extern void box_border(client_instance& c_inst, const arglist_t& args);
     extern void box_border_rgba(client_instance& c_inst, const arglist_t& args);

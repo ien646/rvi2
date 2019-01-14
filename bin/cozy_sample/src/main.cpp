@@ -8,11 +8,10 @@
 #include <chrono>
 
 #include <rvi/runtime.hpp>
-#include <rvi/line.hpp>
-#include <rvi/vertex.hpp>
 
 #include <rvi/window.hpp>
 #include <rvi/opengl_ctx.hpp>
+#include <rvi/std_bindings.hpp>
 
 static void hello_click(rvi::client_instance& inst, const rvi::arglist_t&)
 {
@@ -25,11 +24,7 @@ static void hello_click(rvi::client_instance& inst, const rvi::arglist_t&)
     ctx.clear_frame();
     ctx.clear_children();
     ctx.set_position(rvi::vector2(0.10f, 0.15f));
-    inst.exec_binding("printx", rvi::arglist_t
-    {
-        "+-+-+ HELLO FRIEND +-+-+",
-        "0.02"
-    });
+    rvi::std_bindings::printx(inst, ctx.selected_frame()->name() , "+-+-+ HELLO FRIEND +-+-+");
     ctx.select_frame(save_ptr);
 }
 
@@ -57,10 +52,12 @@ int main()
     {
         auto delta_duration = (clk.now() - i_time).count();
         auto delta_time = static_cast<float>(delta_duration) / 1000000.0F;
+
         // --  Render  ------------------------------
         roglctx.refresh();
         roglctx.draw(delta_time);
         // ------------------------------------------
+
         glfwSwapBuffers(wnd.wnd_ptr());
         glfwPollEvents();
     }
