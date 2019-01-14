@@ -8,10 +8,10 @@
         "name": "Cozy Debug",
         "type": "cppvsdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build_debug/output/bin/cozy/cozy.exe",
+        "program": "${workspaceFolder}/build_debug/output/bin/cozy_sample/cozy_sample.exe",
         "args": [],
         "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build_debug/output/bin/cozy",
+        "cwd": "${workspaceFolder}/build_debug/output/bin/cozy_sample",
         "environment": [],
         "externalConsole": true
     },
