@@ -527,7 +527,7 @@ namespace rvi
     {
         expect_argc(args, 0 + 1);
         auto& ctx = c_inst.context;
-        while(ctx.release_frame()) { continue; }
+        ctx.select_root();
         ctx.clear_children();
     }
 
