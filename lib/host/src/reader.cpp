@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <cstdio>
 
-#include <rvi/cmd_map.hpp>
+#include <rvi/command_type_map.hpp>
 #include <rvi/assert.hpp>
 #include <rvi/str_utils.hpp>
 
@@ -86,11 +86,11 @@ namespace rvi
         std::string cmd_str = state.cmd.str();
 
         r_assert(
-            cmd_map.count(cmd_str) > 0,
+            command_type_map.count(cmd_str) > 0,
             "Command '" + cmd_str + "' is not a valid command!"
         );
 
-        result.cmd = cmd_map.at(state.cmd.str());
+        result.cmd = command_type_map.at(state.cmd.str());
         if(state.past_cmd)
         {
             result.args = parse_arg_str(state.args.str());

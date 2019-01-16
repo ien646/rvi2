@@ -4,7 +4,7 @@
 
 #include <rvi/std_fs.hpp>
 #include <rvi/reader.hpp>
-#include <rvi/cmd_def_map.hpp>
+#include <rvi/command_definitions.hpp>
 #include <rvi/std_bindings.hpp>
 
 using namespace RVI_STD_FILESYSTEM_NAMESPACE;
@@ -38,7 +38,7 @@ namespace rvi
         auto stmt_col = rdr.process();
         for(auto& stmt : stmt_col)
         {
-            auto& cmd = cmd_def_map.at(stmt.cmd);
+            auto& cmd = command_definitions.at(stmt.cmd);
             cmd(client, stmt.args);
         }
     }

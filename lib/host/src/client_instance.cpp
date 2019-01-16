@@ -1,7 +1,7 @@
 #include <rvi/client_instance.hpp>
 
 #include <iostream>
-#include <rvi/cmd_def_map.hpp>
+#include <rvi/command_definitions.hpp>
 
 namespace rvi
 {
@@ -41,7 +41,7 @@ namespace rvi
             auto& def = data.macros.at(mname);
             for(auto& inst : def)
             {
-                auto& cmd = cmd_def_map.at(inst.cmd);
+                auto& cmd = command_definitions.at(inst.cmd);
                 cmd(*this, inst.args);
             }
         }

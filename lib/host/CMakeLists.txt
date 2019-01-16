@@ -1,8 +1,8 @@
 # -- SOURCE FILES --
 set(RVI2_HOST_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/client_instance.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd_def_map.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd_map.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/command_definitions.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/command_type_map.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/reader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/runtime.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/std_bindings.cpp

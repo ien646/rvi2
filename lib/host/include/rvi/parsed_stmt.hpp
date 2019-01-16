@@ -3,13 +3,13 @@
 #include <vector>
 #include <string>
 
-#include <rvi/cmd_type.hpp>
+#include <rvi/command_type.hpp>
 
 namespace rvi
 {
     struct parsed_stmt
     {
-        cmd_type cmd = cmd_type::INVALID_CMD;
+        command_type cmd = command_type::INVALID_CMD;
         std::vector<std::string> args;
     };
 }

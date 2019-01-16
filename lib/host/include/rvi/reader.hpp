@@ -6,7 +6,7 @@
 #include <vector>
 #include <unordered_set>
 
-#include <rvi/cmd_type.hpp>
+#include <rvi/command_type.hpp>
 #include <rvi/parsed_stmt.hpp>
 
 namespace rvi

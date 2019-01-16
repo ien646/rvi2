@@ -2,7 +2,7 @@
 
 namespace rvi
 {
-    enum class cmd_type
+    enum class command_type
     {
         INVALID_CMD,
 

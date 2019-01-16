@@ -1,23 +1,23 @@
-#include <rvi/cmd_map.hpp>
+#include <rvi/command_type_map.hpp>
 
 namespace rvi
 {
-    std::string get_cmd_name(cmd_type ct)
+    std::string get_cmd_name(command_type ct)
     {
         auto it = std::find_if(
-            cmd_map.begin(), cmd_map.end(), 
+            command_type_map.begin(), command_type_map.end(), 
             [ct](auto&& pair)
             { 
                 return pair.second == ct;
             }
         );
-        if(it != cmd_map.end())
+        if(it != command_type_map.end())
         {
             return it->first;
         }
         else
         {
-            throw std::invalid_argument("Invalid cmd_type!");
+            throw std::invalid_argument("Invalid command_type!");
         }
     }
 }
