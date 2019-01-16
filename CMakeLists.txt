@@ -11,8 +11,10 @@ message("")
 
 project(rvi2 LANGUAGES CXX C)
 
-option(RVI2_BUILD_SAMPLES "Build sample application(s)" ON)
-option(RVI2_BUILD_TESTS "Build tests" ON)
+option(RVI2_BUILD_SAMPLES 	"Build sample application(s)" 	ON)
+option(RVI2_BUILD_TESTS	 	"Build tests" 					ON)
+option(RVI2_BUILD_COZY 		"Build cozy openGL backend" 	ON)
+option(RVI2_BUILD_NETLIB 	"Build net library" 			OFF)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

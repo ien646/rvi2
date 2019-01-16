@@ -15,6 +15,7 @@ build/
 output/
 build_debug/
 build_release/
+build*/
 latex/
 html/
 mintty.exe.stackdump
