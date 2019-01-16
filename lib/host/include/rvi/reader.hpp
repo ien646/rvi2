@@ -11,13 +11,13 @@
 
 namespace rvi
 {
-    struct processing_state
+    struct reader_parse_state
     {
         std::stringstream cmd;
         std::stringstream args;
         bool past_cmd = false;
         int str_escape = 0;
-    };  
+    };
 
     class reader
     {
@@ -35,14 +35,14 @@ namespace rvi
         std::vector<parsed_stmt> process();
 
     private:
-        void handle_instruction_separator(processing_state& state, std::vector<parsed_stmt>& result);
-        void handle_cmdargs_separator(processing_state& state);
-        void handle_string_beg_token(processing_state& state);
-        void handle_string_end_token(processing_state& state);
-        void handle_character(processing_state& state, char ch);
-        parsed_stmt parse_state(processing_state& state);
+        void handle_instruction_separator(reader_parse_state& state, std::vector<parsed_stmt>& result);
+        void handle_cmdargs_separator(reader_parse_state& state);
+        void handle_string_beg_token(reader_parse_state& state);
+        void handle_string_end_token(reader_parse_state& state);
+        void handle_character(reader_parse_state& state, char ch);
+        parsed_stmt parse_state(reader_parse_state& state);
         std::vector<std::string> parse_arg_str(std::string_view arg_str);
-        void push_char_uncond(processing_state& state, char ch);
+        void push_char_uncond(reader_parse_state& state, char ch);
         bool is_ignored_char(char ch);
     };
 }

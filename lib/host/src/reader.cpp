@@ -15,8 +15,7 @@ namespace rvi
     const char reader::ARGUMENTS_SEP_CH = ',';
     const char reader::STRING_ESC_CH_BEG = '{';
     const char reader::STRING_ESC_CH_END = '}';
-    const std::unordered_set<char> reader::IGNORED_CHARS = { ' ', '\r', '\n', '\t' };    
-      
+    const std::unordered_set<char> reader::IGNORED_CHARS = { ' ', '\r', '\n', '\t' };
 
     reader::reader(std::basic_istream<char>& stream)
         : _stream(stream)
@@ -27,7 +26,7 @@ namespace rvi
     std::vector<parsed_stmt> reader::process()
     {
         std::vector<parsed_stmt> result;
-        processing_state current_state;
+        reader_parse_state current_state;
 
         char ch;
         while(_stream >> ch)
@@ -55,7 +54,7 @@ namespace rvi
         return result;
     }
 
-    void reader::push_char_uncond(processing_state& state, char ch)
+    void reader::push_char_uncond(reader_parse_state& state, char ch)
     {
         if(!state.past_cmd)
         {
@@ -67,7 +66,7 @@ namespace rvi
         }
     }
 
-    void reader::handle_instruction_separator(processing_state& state, std::vector<parsed_stmt>& result)
+    void reader::handle_instruction_separator(reader_parse_state& state, std::vector<parsed_stmt>& result)
     {
         if(state.str_escape > 0)
         {
@@ -76,11 +75,11 @@ namespace rvi
         else
         {
             result.push_back(parse_state(state));
-            state = processing_state();
+            state = reader_parse_state();
         }
     }
 
-    parsed_stmt reader::parse_state(processing_state& state)
+    parsed_stmt reader::parse_state(reader_parse_state& state)
     {
         parsed_stmt result;
         std::string cmd_str = state.cmd.str();
@@ -99,7 +98,7 @@ namespace rvi
         return result;
     }
 
-    void reader::handle_cmdargs_separator(processing_state& state)
+    void reader::handle_cmdargs_separator(reader_parse_state& state)
     {
         r_assert(
             state.str_escape > 0 || !state.past_cmd,
@@ -115,7 +114,7 @@ namespace rvi
         }
     }
 
-    void reader::handle_string_beg_token(processing_state& state)
+    void reader::handle_string_beg_token(reader_parse_state& state)
     {
         if(state.str_escape > 0)
         {
@@ -124,7 +123,7 @@ namespace rvi
         state.str_escape++;
     }
 
-    void reader::handle_string_end_token(processing_state& state)
+    void reader::handle_string_end_token(reader_parse_state& state)
     {
         r_assert(
             state.str_escape > 0,
@@ -138,7 +137,7 @@ namespace rvi
         }
     }
 
-    void reader::handle_character(processing_state& state, char ch)
+    void reader::handle_character(reader_parse_state& state, char ch)
     {
         if(state.str_escape > 0)
         {
