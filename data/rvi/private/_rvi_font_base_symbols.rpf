@@ -75,26 +75,31 @@ define:#,
 	draw_line:0.0,0.75,	1.0,0.75;
 };
 
+### Whitespace (no escaping) ###
 define:{ },
 {
 };
 
-define:$ss,
+### Whitespace ###
+define:$ss, 
 {
 };
 
+### Comma sign [,] ###
 define:$cs,
 {
 	draw_line:0.5,0.2,	0.5,0.0;
 	draw_line:0.5,0.0,  0.3,0.0;
 };
 
+### Double quotes [:] ###
 define:$dq,
 {
 	draw_line:0.35,1.0,	0.35,0.6;
 	draw_line:0.65,1.0,	0.65,0.6;
 };
 
+### Dollar sign [$] ###
 define:$ds,
 {
 	draw_line:1.0,0.8,	0.0,0.8;

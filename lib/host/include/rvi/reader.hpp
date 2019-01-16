@@ -8,6 +8,7 @@
 
 #include <rvi/command_type.hpp>
 #include <rvi/parsed_stmt.hpp>
+#include <rvi/constrained_buffer.hpp>
 
 namespace rvi
 {
@@ -17,6 +18,8 @@ namespace rvi
         std::stringstream args;
         bool past_cmd = false;
         int str_escape = 0;
+        bool comment = false;
+        constrained_buffer<char, 3> buffer;
     };
 
     class reader
@@ -29,6 +32,7 @@ namespace rvi
         static const char STRING_ESC_CH_BEG;
         static const char STRING_ESC_CH_END;
         static const std::unordered_set<char> IGNORED_CHARS;
+        static const std::string COMMENT_SEQ_STR;
 
     public:
         reader(std::basic_istream<char>& stream);

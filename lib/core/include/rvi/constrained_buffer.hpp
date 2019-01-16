@@ -78,5 +78,22 @@ namespace rvi
         {
             return buffer.end();
         }
+
+        ///Buffer reverse begin iterator
+        auto rbegin() noexcept
+        {
+            return buffer.rbegin();
+        }
+
+        ///Buffer reverse end iterator
+        auto rend() noexcept
+        {
+            return buffer.rend();
+        }
+
+        T operator[](size_t index)
+        {
+            return buffer[index];
+        }
     };
 }

@@ -16,6 +16,7 @@ namespace rvi
     const char reader::STRING_ESC_CH_BEG = '{';
     const char reader::STRING_ESC_CH_END = '}';
     const std::unordered_set<char> reader::IGNORED_CHARS = { ' ', '\r', '\n', '\t' };
+    const std::string reader::COMMENT_SEQ_STR = "###";
 
     reader::reader(std::basic_istream<char>& stream)
         : _stream(stream)
@@ -27,27 +28,38 @@ namespace rvi
     {
         std::vector<parsed_stmt> result;
         reader_parse_state current_state;
+        current_state.buffer.push_back('\0');
+        current_state.buffer.push_back('\0');
+        current_state.buffer.push_back('\0');
 
         char ch;
         while(_stream >> ch)
         {
-            switch (ch)
+            current_state.buffer.push_back(ch);
+            if(current_state.comment)
             {
-                case INSTRUCTION_SEP_CH:
-                    handle_instruction_separator(current_state, result);
-                    break;
-                case CMDARGS_SEP_CH:
-                    handle_cmdargs_separator(current_state);
-                    break;
-                case STRING_ESC_CH_BEG:
-                    handle_string_beg_token(current_state);
-                    break;
-                case STRING_ESC_CH_END:
-                    handle_string_end_token(current_state);
-                    break;
-                default:
-                    handle_character(current_state, ch);
-                    break;
+                handle_character(current_state, ch);
+            }
+            else
+            {
+                switch (ch)
+                {
+                    case INSTRUCTION_SEP_CH:
+                        handle_instruction_separator(current_state, result);
+                        break;
+                    case CMDARGS_SEP_CH:
+                        handle_cmdargs_separator(current_state);
+                        break;
+                    case STRING_ESC_CH_BEG:
+                        handle_string_beg_token(current_state);
+                        break;
+                    case STRING_ESC_CH_END:
+                        handle_string_end_token(current_state);
+                        break;
+                    default:
+                        handle_character(current_state, ch);
+                        break;
+                }
             }
         }
 
@@ -76,6 +88,9 @@ namespace rvi
         {
             result.push_back(parse_state(state));
             state = reader_parse_state();
+            state.buffer.push_back('\0');
+            state.buffer.push_back('\0');
+            state.buffer.push_back('\0');
         }
     }
 
@@ -139,6 +154,54 @@ namespace rvi
 
     void reader::handle_character(reader_parse_state& state, char ch)
     {
+        // Check for comments
+        std::string last_three;
+        last_three += state.buffer[0];
+        last_three += state.buffer[1];
+        last_three += state.buffer[2];
+        
+        if(last_three == COMMENT_SEQ_STR)
+        {
+            state.comment = !state.comment;
+            if(state.comment)
+            {
+                if(state.past_cmd)
+                {
+                    std::string args = state.args.str();
+                    args = args.substr(0, args.size() - 2);
+                    state.args.str(args);
+                }
+                else
+                {
+                    std::string cmd = state.cmd.str();
+                    cmd = cmd.substr(0, cmd.size() - 2);
+                    state.cmd.str(cmd);
+                }
+            }
+            else
+            {
+                if(state.past_cmd)
+                {
+                    std::string args = state.args.str();
+                    args = args.substr(0, args.size() - 1);
+                    state.args.str(args);
+                }
+                else
+                {
+                    std::string cmd = state.cmd.str();
+                    cmd = cmd.substr(0, cmd.size() - 1);
+                    state.cmd.str(cmd);
+                }
+            }
+            state.buffer.push_back('\0'); // Invalidate comment buffer
+            return;
+        }
+        
+        if(state.comment)
+        {
+            return;
+        }
+
         if(state.str_escape > 0)
         {
             if(ch == ARGUMENTS_SEP_CH)
