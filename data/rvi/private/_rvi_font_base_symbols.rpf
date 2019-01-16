@@ -17,12 +17,6 @@ define:_,
 	draw_line:0.0,0.0,	1.0,0.0;
 };
 
-define:$cs,
-{
-	draw_line:0.5,0.2,	0.5,0.0;
-	draw_line:0.5,0.0,  0.3,0.0;
-};
-
 define:+,
 {
 	draw_line:0.0,0.5,	1.0,0.5;
@@ -87,6 +81,12 @@ define:{ },
 
 define:$ss,
 {
+};
+
+define:$cs,
+{
+	draw_line:0.5,0.2,	0.5,0.0;
+	draw_line:0.5,0.0,  0.3,0.0;
 };
 
 define:$dq,
