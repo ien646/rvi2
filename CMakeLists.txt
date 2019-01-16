@@ -9,9 +9,10 @@ message("**               ------               **")
 message("****************************************")
 message("")
 
-set(RVI_PROJ_NAME "rvi2")
-
 project(rvi2 LANGUAGES CXX C)
+
+option(RVI2_BUILD_SAMPLES "Build sample application(s)" ON)
+option(RVI2_BUILD_TESTS "Build tests" ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -31,5 +32,11 @@ set(RVI2_DATA_DIR ${PROJECT_SOURCE_DIR}/data)
 
 add_subdirectory("third-party")
 add_subdirectory("lib")
-add_subdirectory("bin")
-add_subdirectory("test")
+
+if(RVI2_BUILD_SAMPLES)
+    add_subdirectory("samples")
+endif()
+
+if(RVI2_BUILD_TESTS)
+    add_subdirectory("test")
+endif()
