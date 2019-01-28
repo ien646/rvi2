@@ -4,3 +4,9 @@
 [submodule "third-party/catch2"]
 	path = third-party/catch2
 	url = https://github.com/bigiansen/Catch2
+[submodule "third-party/lua"]
+	path = third-party/lua
+	url = https://github.com/bigiansen/lua
+[submodule "third-party/sol2"]
+	path = third-party/sol2
+	url = https://github.com/bigiansen/sol2
