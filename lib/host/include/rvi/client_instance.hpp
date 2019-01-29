@@ -8,6 +8,7 @@
 #include <unordered_map>
 
 #include <rvi/client_context.hpp>
+#include <rvi/clickable_frame_data.hpp>
 
 namespace rvi
 {
@@ -17,15 +18,18 @@ namespace rvi
     private:
         std::unique_ptr<client_context> _ctx;
         std::unordered_map<std::string, std::vector<std::string>> _macros;
-        std::vector<frame*> _clickable_frames;
+        std::unordered_map<frame*, clickable_frame_data> _clickable_frames;
 
     public:
         client_instance();
 
         client_context* get_context();
 
-        void define_macro(const std::string& name, std::vector<std::string>& funs);
-        std::optional<const std::vector<std::string>&> get_macro(std::string& name);
+        void define_macro(const std::string& name, const std::vector<std::string>& funs);
+        std::optional<const std::vector<std::string>&> get_macro(const std::string& name);
+
+        void set_current_frame_clickable(clickable_frame_data::click_call_t call);
+        void user_click(vector2 pos);
 
         std::vector<line> snapshot_full_flat() const;
         relative_snapshot snapshot_full_relative();

@@ -1,5 +1,7 @@
 #include <rvi/client_instance.hpp>
 
+#include <map>
+
 namespace rvi
 {
     client_instance::client_instance()
@@ -26,6 +28,48 @@ namespace rvi
         return std::optional<const std::vector<std::string>&>(std::nullopt);
     }
 
+    void client_instance::set_current_frame_clickable(clickable_frame_data::click_call_t call)
+    {
+        frame* fptr = _ctx->selected_frame();
+        clickable_frame_data fdata(fptr, call);
+        _clickable_frames.emplace(fptr, fdata);
+    }
+
+    void client_instance::user_click(vector2 pos)
+    {
+        auto& ctx_frames = _ctx->frames();
+        std::map<uint64_t, frame*> hits;
+        std::vector<frame*> pending_delete;
+
+        // Get hits
+        for(auto& entry : _clickable_frames)
+        {
+            clickable_frame_data& fdata = entry.second;
+            if(fdata.rect.contains(pos))
+            {
+                frame* fptr = fdata.fptr;
+                if(ctx_frames.count(fptr) == 0)
+                {
+                    pending_delete.push_back(fptr);
+                }
+                else
+                {
+                    hits.emplace(fdata.uid, fptr);
+                }
+            }
+        }
+
+        // Remove deleted hit frames
+        for(frame* fptr : pending_delete)
+        {
+            _clickable_frames.erase(fptr);
+        }
+
+        // Hit frame with the latest uid (added last)
+        auto pair = *(hits.rbegin()); // std::map keys are ordered
+        _clickable_frames[pair.second].click_call(*this);
+    }
+
     std::vector<line> client_instance::snapshot_full_flat() const
     {
         return _ctx->snapshot_full_flat();
@@ -44,18 +88,18 @@ namespace rvi
     void client_instance::cleanup_clickable_frames()
     {
         auto& children = _ctx->frames();
-        std::vector<int> pending_deletion_idx;
-        for(size_t i = 0; i < _clickable_frames.size(); ++i)
+        std::vector<frame*> pending_deletion;
+        for(auto& entry : _clickable_frames)
         {
-            frame* fptr = _clickable_frames[i];
-            if(children.count(fptr) > 0)
+            frame* fptr = entry.first;
+            if(children.count(fptr) == 0)
             {
-                pending_deletion_idx.push_back(i);
+                pending_deletion.push_back(fptr);
             }
         }
-        for(int i : pending_deletion_idx)
+        for(frame* fptr : pending_deletion)
         {
-            _clickable_frames.erase(_clickable_frames.begin() + i);
+            _clickable_frames.erase(fptr);
         }
     }
 }
