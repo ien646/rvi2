@@ -3,7 +3,7 @@
 #include <string>
 #include <rvi/client_instance.hpp>
 
-namespace rvi::std
+namespace rvi::standard
 {
     extern void print(
         client_instance& c_inst,

@@ -1,8 +1,14 @@
+/*
+ * ===============================
+ * TODO: CLEANUP STANDARD BINDINGS
+ * ===============================
+*/
+
 #include <rvi/std_bindings.hpp>
 
 #include <algorithm>
 
-namespace rvi::std
+namespace rvi::standard
 {
     void print(
         client_instance& c_inst,

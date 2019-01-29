@@ -2,6 +2,10 @@
 
 #include <map>
 
+using std::vector;
+using std::string;
+using std::unordered_map;
+
 namespace rvi
 {
     client_instance::client_instance()
@@ -14,18 +18,18 @@ namespace rvi
         return _ctx.get();
     }
 
-    void client_instance::define_macro(const std::string& name, const std::vector<std::string>& funs)
+    void client_instance::define_macro(const string& name, const vector<string>& funs)
     {
         _macros.emplace(name, funs);
     }
 
-    std::optional<const std::vector<std::string>&> client_instance::get_macro(const std::string& name)
+    std::optional<const vector<string>&> client_instance::get_macro(const string& name)
     {
         if(_macros.count(name) > 0)
         {
-            return std::optional<const std::vector<std::string>&>(_macros[name]);
+            return std::optional<const vector<string>&>(_macros[name]);
         }
-        return std::optional<const std::vector<std::string>&>(std::nullopt);
+        return std::optional<const vector<string>&>(std::nullopt);
     }
 
     void client_instance::set_current_frame_clickable(clickable_frame_data::click_call_t call)
@@ -39,7 +43,7 @@ namespace rvi
     {
         auto& ctx_frames = _ctx->frames();
         std::map<uint64_t, frame*> hits;
-        std::vector<frame*> pending_delete;
+        vector<frame*> pending_delete;
 
         // Get hits
         for(auto& entry : _clickable_frames)
@@ -70,7 +74,7 @@ namespace rvi
         _clickable_frames[pair.second].click_call(*this);
     }
 
-    std::vector<line> client_instance::snapshot_full_flat() const
+    vector<line> client_instance::snapshot_full_flat() const
     {
         return _ctx->snapshot_full_flat();
     }
@@ -88,7 +92,7 @@ namespace rvi
     void client_instance::cleanup_clickable_frames()
     {
         auto& children = _ctx->frames();
-        std::vector<frame*> pending_deletion;
+        vector<frame*> pending_deletion;
         for(auto& entry : _clickable_frames)
         {
             frame* fptr = entry.first;
