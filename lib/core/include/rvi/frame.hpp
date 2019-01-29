@@ -9,6 +9,7 @@
 #include <rvi/line.hpp>
 #include <rvi/transform2.hpp>
 #include <rvi/color_rgba.hpp>
+#include <rvi/rectangle.hpp>
 
 namespace rvi
 {
@@ -167,6 +168,8 @@ namespace rvi
 
         ///Parent frame
         frame* parent() const noexcept;
+
+        rectangle bounding_rect() const noexcept;
 
         // ------------ SETTERS ------------
 

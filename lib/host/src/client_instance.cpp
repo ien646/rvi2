@@ -1,163 +1,61 @@
 #include <rvi/client_instance.hpp>
 
-#include <iostream>
-#include <rvi/command_definitions.hpp>
-
 namespace rvi
 {
-    client_instance::client_instance(runtime* rptr)
-        : _runtime_ptr(rptr)
-    { }
-
-    void client_instance::push_include(const std::string& inc_file)
+    client_instance::client_instance()
     {
-        data.include_stack.push_back(inc_file);
+        _ctx = std::make_unique<client_context>();
     }
 
-    const std::string& client_instance::peek_current_include() const
+    client_context* client_instance::get_context()
     {
-        return data.include_stack.back();
+        return _ctx.get();
     }
 
-    void client_instance::pop_include()
+    void client_instance::define_macro(const std::string& name, const std::vector<std::string>& funs)
     {
-        data.include_stack.pop_back();
+        _macros.emplace(name, funs);
     }
 
-    void client_instance::mark_include_once()
+    std::optional<const std::vector<std::string>&> client_instance::get_macro(const std::string& name)
     {
-        data.include_once_ids.emplace(peek_current_include());
-    }
-
-    runtime* client_instance::runtime_ptr()
-    {
-        return _runtime_ptr;
-    }
-
-    void client_instance::exec_macro(const std::string& mname)
-    {
-        if(data.macros.count(mname) > 0)
+        if(_macros.count(name) > 0)
         {
-            auto& def = data.macros.at(mname);
-            for(auto& inst : def)
+            return std::optional<const std::vector<std::string>&>(_macros[name]);
+        }
+        return std::optional<const std::vector<std::string>&>(std::nullopt);
+    }
+
+    std::vector<line> client_instance::snapshot_full_flat() const
+    {
+        return _ctx->snapshot_full_flat();
+    }
+
+    relative_snapshot client_instance::snapshot_full_relative()
+    {
+        return _ctx->snapshot_full_relative();
+    }
+
+    relative_snapshot client_instance::snapshot_diff_relative()
+    {
+        return _ctx->snapshot_diff_relative();
+    }
+
+    void client_instance::cleanup_clickable_frames()
+    {
+        auto& children = _ctx->frames();
+        std::vector<int> pending_deletion_idx;
+        for(size_t i = 0; i < _clickable_frames.size(); ++i)
+        {
+            frame* fptr = _clickable_frames[i];
+            if(children.count(fptr) > 0)
             {
-                auto& cmd = command_definitions.at(inst.cmd);
-                cmd(*this, inst.args);
+                pending_deletion_idx.push_back(i);
             }
         }
-        else
+        for(int i : pending_deletion_idx)
         {
-            std::cerr   << "Attempt to execute undefined macro ["
-                        << mname
-                        << "]"
-                        << std::endl;
+            _clickable_frames.erase(_clickable_frames.begin() + i);
         }
-    }
-
-    void client_instance::exec_binding(const std::string& bname, const arglist_t& args)
-    {
-        if(data.bindings.count(bname) > 0)
-        {
-            auto& binding = data.bindings.at(bname);
-            arglist_t n_args = args;
-            n_args.push_back(context.get_full_frame_name());
-            binding(*this, n_args);
-        }
-        else
-        {
-            std::cerr   << "Attempt to execute undefined binding ["
-                        << bname
-                        << "]"
-                        << std::endl;
-        }
-    }
-
-    void client_instance::create_binding(const std::string& bname, runtime_cmd_t call)
-    {
-        if(data.bindings.count(bname) > 0)
-        {
-            data.bindings.erase(bname);
-        }
-        data.bindings.emplace(bname, call);
-    }
-
-    void client_instance::delete_binding(const std::string& bname)
-    {
-        data.bindings.erase(bname);
-    }
-
-    void client_instance::set_clickable_frame(
-            frame* fptr, 
-            const std::string& binding_name,
-            float depth,
-            const std::vector<std::string>& binding_args)
-    {
-        rectangle rect(fptr->transform().position, fptr->transform().scale);
-
-        clickable_frame_data cfdata;
-        cfdata.binding_name = binding_name;
-        cfdata.binding_args = std::move(binding_args);
-        cfdata.rect = rect;
-        cfdata.depth_value = depth;
-        cfdata.fptr = fptr;
-
-        unset_clickable_frame(fptr);
-        data.clickable_frames.emplace(fptr, cfdata);
-    }
-
-    void client_instance::unset_clickable_frame(frame* fptr)
-    {
-        if(data.clickable_frames.count(fptr) > 0)
-        {
-            data.clickable_frames.erase(fptr);
-        }
-    }
-
-    void client_instance::user_click(vector2 pos)
-    {
-        std::vector<clickable_frame_data*> matches;
-        for(auto& dt : data.clickable_frames)
-        {
-            auto& sdata = dt.second;
-            if(sdata.rect.contains(pos))
-            {
-                if(matches.size() == 0)
-                {
-                    matches.push_back(&sdata);
-                }
-                else
-                {
-                    if(sdata.depth_value > matches.back()->depth_value)
-                    {
-                        continue;
-                    }
-                    else if(sdata.depth_value == matches.back()->depth_value)
-                    {
-                        matches.push_back(&sdata);
-                    }
-                    else //if (data.depth_value < matches.back().depth_value)
-                    {
-                        matches.clear();
-                        matches.push_back(&sdata);
-                    }
-                }
-            }
-        }
-
-        for(auto& match : matches)
-        {
-            auto& binding_name = match->binding_name;
-            auto& frame_name = match->fptr->name();
-
-            rvi::arglist_t args = match->binding_args;
-            args.push_back(frame_name);
-            
-            exec_binding(binding_name, args);
-        }
-    }
-
-    void client_instance::key_press(char kval)
-    {
-        data.key_buffer.push_back(kval);
     }
 }

@@ -30,6 +30,7 @@ namespace rvi
         result._modified_frames.clear();
         result._modified_frames.emplace(_main_frame.get());
         result._current_color = _current_color;
+        result.regenerate_frame_index();
         return result;
     }
 
@@ -77,6 +78,7 @@ namespace rvi
             _selected_frame = _selected_frame->get_child(name);
         }
         _frame_stack.push_back(_selected_frame);
+        _frame_index.emplace(_selected_frame);
         return _selected_frame;
     }
 
@@ -91,6 +93,7 @@ namespace rvi
             _selected_frame = _selected_frame->get_child(name);
         }
         _frame_stack.push_back(_selected_frame);
+        _frame_index.emplace(_selected_frame);
         return _selected_frame;
     }
 
@@ -148,7 +151,10 @@ namespace rvi
 
     bool client_context::delete_frame(const std::string& name)
     {
-        std::string full_name = get_full_frame_name(_selected_frame->get_child(name));
+        frame* fptr = _selected_frame->get_child(name);
+        _frame_index.erase(fptr);
+
+        std::string full_name = get_full_frame_name(fptr);
         _deleted_frame_queue.push_back(full_name);
         return _selected_frame->delete_child(name);
     }
@@ -157,7 +163,9 @@ namespace rvi
     {
         for (auto& ch : _selected_frame->children())
         {
-            _deleted_frame_queue.push_back(get_full_frame_name(ch.second));
+            frame* fptr = ch.second;
+            _frame_index.erase(fptr);
+            _deleted_frame_queue.push_back(get_full_frame_name(fptr));
         }
         _selected_frame->clear_children();
     }
@@ -289,6 +297,10 @@ namespace rvi
             if (aux != MAIN_FRAMENAME)
             {
                 currentFrame = currentFrame->get_child(aux);
+                if(currentFrame == nullptr)
+                {
+                    return nullptr;
+                }
             }
         }
         return currentFrame;
@@ -299,13 +311,18 @@ namespace rvi
         _modified_frames.insert(_selected_frame);
     }
 
+    const std::unordered_set<frame*>& client_context::frames() const noexcept
+    {
+        return _frame_index;
+    }
+
     std::vector<line> client_context::snapshot_full_flat() const
     {
         std::vector<line> result;
         std::queue<frame*> remaining_frames;
 
         // Initial set consists of the main frame (== all frames)
-        remaining_frames.push(_main_frame.get());        
+        remaining_frames.push(_main_frame.get());
 
         // Iterate all frames, while procedurally adding children
         while(!remaining_frames.empty())
@@ -452,7 +469,7 @@ namespace rvi
     }
 
     void client_context::regenerate_frame_stack()
-    {        
+    {
         _frame_stack.clear();
         std::vector<frame*> fstack_rev;
         frame* cframe = _selected_frame;
@@ -463,5 +480,29 @@ namespace rvi
         }
         fstack_rev.push_back(cframe);
         std::copy(fstack_rev.rbegin(), fstack_rev.rend(), std::back_inserter(_frame_stack));
+    }
+
+    void client_context::regenerate_frame_index()
+    {
+        _frame_index.clear();
+        frame* current_frame = _main_frame.get();
+        _frame_index.emplace(current_frame);
+
+        std::vector<frame*> pending_children;
+        for(auto& entry : current_frame->children())
+        {
+            pending_children.push_back(entry.second);
+        }
+
+        while(!pending_children.empty())
+        {
+            current_frame = pending_children.back();
+            _frame_index.emplace(current_frame);
+            for(auto& entry : current_frame->children())
+            {
+                pending_children.push_back(entry.second);
+            }
+            pending_children.pop_back();
+        }
     }
 }

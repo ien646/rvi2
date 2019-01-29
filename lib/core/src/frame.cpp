@@ -7,13 +7,13 @@ namespace rvi
     frame::frame(const std::string& name, frame* parent)
         : _name(name)
         , _parent(parent)
-        , _transform(DEFAULT_TRANSFORM)        
+        , _transform(DEFAULT_TRANSFORM)
     { }
 
     frame::frame(std::string&& name, frame* parent)
         : _name(std::move(name))
         , _parent(parent)
-        , _transform(DEFAULT_TRANSFORM)        
+        , _transform(DEFAULT_TRANSFORM)
     { }
 
     std::unique_ptr<frame> frame::create_copy(frame* fptr_parent)
@@ -240,8 +240,17 @@ namespace rvi
         return _cached_abs_tform;
     }
 
+    rectangle frame::bounding_rect() const noexcept
+    {
+        return rectangle(_transform.position, _transform.scale);
+    }
+
     frame* frame::get_child(const std::string& name)
     {
+        if(_child_frames_index.count(name) == 0)
+        {
+            return nullptr;
+        }
         return _child_frames_index.at(name);
     }
 

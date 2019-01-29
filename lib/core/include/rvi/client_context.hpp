@@ -25,6 +25,9 @@ namespace rvi
         std::unique_ptr<frame> _main_frame;
         frame* _selected_frame;
 
+        // Set holding pointers to all frames
+        std::unordered_set<frame*> _frame_index;
+
         // Current frame selection 'stack'
         std::vector<frame*> _frame_stack;
 
@@ -228,6 +231,8 @@ namespace rvi
          */
         vector2 scale() const noexcept;
 
+        const std::unordered_set<frame*>& frames() const noexcept;
+
         /**
          * @brief Get the count of all frames held by this context
          */
@@ -287,5 +292,6 @@ namespace rvi
     private:
         void add_deleted_frames_to_snapshot(relative_snapshot& sh);
         void regenerate_frame_stack();
+        void regenerate_frame_index();
     };
 }
