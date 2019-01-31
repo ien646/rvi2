@@ -5,9 +5,18 @@
 
 namespace rvi::standard
 {
+    extern float DEFAULT_FONT_SZ_H;
+    extern float DEFAULT_FONT_SZ_V;
+    extern float DEFAULT_FONT_SEP_H;
+    extern float DEFAULT_FONT_SEP_V;
+    extern float DEFAULT_FONT_MARGIN_H;
+    extern float DEFAULT_FONT_MARGIN_V;
+    extern char  DEFAULT_WRAP_SEP_CHAR;
+    extern float DEFAULT_WRAP_LNSEP_V;
+
     extern void print(
         client_instance& c_inst,
-        const frame* calling_frame,
+        frame* calling_frame,
         const std::string& text,
         float font_sz_h = 0.05F,
         float font_sz_v = 0.05F,
@@ -19,7 +28,7 @@ namespace rvi::standard
 
     extern void printw(
         client_instance& c_inst,
-        const frame* calling_frame,
+        frame* calling_frame,
         const std::string& text,
         float font_sz_h,
         float font_sz_v,

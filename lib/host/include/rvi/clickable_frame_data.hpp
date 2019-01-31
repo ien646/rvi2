@@ -4,25 +4,26 @@
 #include <functional>
 
 #include <rvi/frame.hpp>
-
 namespace rvi
 {
-    uint64_t clickable_frame_data_c_uid = 0ul;
+    class client_instance; //fwd
+    typedef std::function<void(client_instance&)> click_call_t;
+
+    uint64_t _clickable_frame_data_c_uid = 0ul;
+
     struct clickable_frame_data
     {
-        typedef std::function<void(client_instance&)> click_call_t;
-
         uint64_t uid;
         frame* fptr;
         rectangle rect;
-        click_call_t click_call;
+        std::string binding_name;
 
-        clickable_frame_data(frame* fptr, std::function<void(client_instance&)> call)
+        clickable_frame_data(frame* fptr, const std::string& binding_name)
             : fptr(fptr)
             , rect(fptr->bounding_rect())
-            , click_call(call)
+            , binding_name(binding_name)
         {  
-            uid = clickable_frame_data_c_uid++;
+            uid = _clickable_frame_data_c_uid++;
         }
     };
 }

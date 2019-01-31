@@ -1,18 +1,21 @@
-/*
- * ===============================
- * TODO: CLEANUP STANDARD BINDINGS
- * ===============================
-*/
-
-#include <rvi/std_bindings.hpp>
+#include <rvi/standard_library.hpp>
 
 #include <algorithm>
 
 namespace rvi::standard
 {
+    float DEFAULT_FONT_SZ_H      = 0.04F;
+    float DEFAULT_FONT_SZ_V      = 0.04F;
+    float DEFAULT_FONT_SEP_H     = 0.01F;
+    float DEFAULT_FONT_SEP_V     = 0.00F;
+    float DEFAULT_FONT_MARGIN_H  = 0.00F;
+    float DEFAULT_FONT_MARGIN_V  = 0.00F;
+    char  DEFAULT_WRAP_SEP_CHAR  = ' ';
+    float DEFAULT_WRAP_LNSEP_V   = 0.02F;
+
     void print(
         client_instance& c_inst,
-        const std::string& calling_frame,
+        frame* calling_frame,
         const std::string& text,
         float font_sz_h,
         float font_sz_v,
@@ -22,13 +25,12 @@ namespace rvi::standard
         float font_margin_v)
     {
         std::string buff = { 0, 0, 0 };
-        auto& ctx = c_inst.context;
-        frame* save_fptr = ctx.selected_frame();
-        frame* calling_fptr = ctx.find_frame(calling_frame);
+        client_context* ctx = c_inst.get_context();
+        frame* save_fptr = ctx->selected_frame();
 
         vector2 offset(font_margin_h, font_margin_v);
 
-        ctx.select_frame(calling_fptr);
+        ctx->select_frame(calling_frame);
         int idx = 0;
         for (auto& ch : text)
         {
@@ -50,24 +52,24 @@ namespace rvi::standard
                 defn = std::string(1, ch);
             }
             
-            ctx.select_frame("char_" + std::to_string(idx));
+            ctx->select_frame("char_" + std::to_string(idx));
             {
-                ctx.set_scale(vector2(font_sz_h, font_sz_v));
-                ctx.set_transform_scale_abs(true);
-                ctx.set_position(offset);
+                ctx->set_scale(vector2(font_sz_h, font_sz_v));
+                ctx->set_transform_scale_abs(true);
+                ctx->set_position(offset);
                 c_inst.exec_macro(defn);
             }
-            ctx.release_frame();
+            ctx->release_frame();
 
             offset += vector2(font_sz_h + font_sep_h, font_sep_v);
             ++idx;
         }
-        ctx.select_frame(save_fptr);
+        ctx->select_frame(save_fptr);
     }
 
     void printw(
         client_instance& c_inst,
-        const std::string& calling_frame,
+        frame* calling_frame,
         const std::string& text,
         float font_sz_h,
         float font_sz_v,
@@ -79,12 +81,11 @@ namespace rvi::standard
         float wrap_vsep)
     {
         std::string buff = { 0, 0, 0 };
-        auto& ctx = c_inst.context;
-        frame* save_fptr = ctx.selected_frame();
-        frame* calling_fptr = ctx.find_frame(calling_frame);
+        client_context* ctx = c_inst.get_context();
+        frame* save_fptr = ctx->selected_frame();
 
-        float x_max_sz = calling_fptr->get_absolute_transform().scale.x;
-        float y_max_sz = calling_fptr->get_absolute_transform().scale.y;
+        float x_max_sz = calling_frame->get_absolute_transform().scale.x;
+        float y_max_sz = calling_frame->get_absolute_transform().scale.y;
 
         vector2 offset(
             font_margin_h,
@@ -93,7 +94,7 @@ namespace rvi::standard
 
         bool first = true;
 
-        ctx.select_frame(calling_fptr);
+        ctx->select_frame(calling_frame);
         std::stringstream tstr(text);
         std::string line;
         int idx = 0;
@@ -133,20 +134,20 @@ namespace rvi::standard
                     defn = std::string(1, ch);
                 }
                 
-                ctx.select_frame("char_" + std::to_string(idx));
+                ctx->select_frame("char_" + std::to_string(idx));
                 {
-                    ctx.set_scale(vector2(font_sz_h, font_sz_v));
-                    ctx.set_transform_scale_abs(true);
-                    ctx.set_position(offset);
+                    ctx->set_scale(vector2(font_sz_h, font_sz_v));
+                    ctx->set_transform_scale_abs(true);
+                    ctx->set_position(offset);
                     c_inst.exec_macro(defn);
                 }
-                ctx.release_frame();
+                ctx->release_frame();
 
                 offset += vector2(font_sz_h + font_sep_h, font_sep_v);
                 ++idx;
             }
         }
-        ctx.select_frame(save_fptr);
+        ctx->select_frame(save_fptr);
     }
 
     void box_border(client_context& ctx, color_rgba color)
@@ -163,7 +164,7 @@ namespace rvi::standard
         ctx.set_color(save_color);
     }
 
-    void grid_fill(float x_step, float y_step, client_context& ctx, color_rgba color)
+    void grid_fill(client_context& ctx, float x_step, float y_step, color_rgba color)
     {
         color_rgba save_color = ctx.current_color();
 
@@ -183,7 +184,7 @@ namespace rvi::standard
         ctx.set_color(save_color);
     }
 
-    void stitch_fill(float step_sz, client_context& ctx, color_rgba color)
+    void stitch_fill(client_context& ctx, float step_sz, color_rgba color)
     {
         color_rgba save_color = ctx.current_color();
 
