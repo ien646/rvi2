@@ -40,7 +40,7 @@ namespace rvi
     {
         if(_macros.count(mname) > 0)
         {
-            auto& macro = _macros[mname];
+            auto& macro = _macros.at(mname);
             for(auto& entry : macro)
             {
                 _lua_ctx.exec_script(entry);
@@ -52,7 +52,7 @@ namespace rvi
     {
         if(_macros.count(name) > 0)
         {
-            return _macros[name];
+            return _macros.at(name);
         }
         return vector<string>();
     }
@@ -101,7 +101,7 @@ namespace rvi
 
         // Hit frame with the latest uid (added last)
         auto pair = *(hits.rbegin()); // std::map keys are ordered
-        auto& binding_name = _clickable_frames[pair.second].binding_name;
+        auto& binding_name = _clickable_frames.at(pair.second).binding_name;
         _runtime_ptr->exec_binding(*this, binding_name, pair.second);
     }
 

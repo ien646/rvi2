@@ -4,6 +4,7 @@ set(RVI2_HOST_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/standard_library.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lua_context.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/runtime.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/clickable_frame_data.cpp
 )
 
 # -- INCLUDE DIR --

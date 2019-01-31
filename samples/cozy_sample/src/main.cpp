@@ -8,24 +8,25 @@
 #include <chrono>
 
 #include <rvi/runtime.hpp>
-
+#include <rvi/client_instance.hpp>
+#include <rvi/client_context.hpp>
 #include <rvi/window.hpp>
 #include <rvi/opengl_ctx.hpp>
-#include <rvi/std_bindings.hpp>
+#include <rvi/standard_library.hpp>
 
-static void hello_click(rvi::client_instance& inst, const rvi::arglist_t&)
+static void hello_click(rvi::client_instance& inst, rvi::frame* fptr)
 {
     // Save current selected frame
-    auto& ctx = inst.context;
-    rvi::frame* save_ptr = ctx.selected_frame();
+    rvi::client_context* ctx = inst.get_context();
+    rvi::frame* save_ptr = ctx->selected_frame();
 
     // Return to root frame
-    ctx.select_frame("hello_friend");
-    ctx.clear_frame();
-    ctx.clear_children();
-    ctx.set_position(rvi::vector2(0.10f, 0.15f));
-    rvi::std_bindings::printx(inst, ctx.selected_frame()->name() , "+-+-+ HELLO FRIEND +-+-+");
-    ctx.select_frame(save_ptr);
+    ctx->select_frame(fptr);
+    ctx->clear_frame();
+    ctx->clear_children();
+    ctx->set_position(rvi::vector2(0.10f, 0.15f));
+    rvi::standard::print(inst, ctx->selected_frame(), "+-+-+ HELLO FRIEND +-+-+");
+    ctx->select_frame(save_ptr);
 }
 
 int main()
@@ -36,7 +37,7 @@ int main()
     int client = rtm.create_client();
     rtm.start_client(client);
 
-    rtm.get_instance(client).create_binding("hello_click", &hello_click);
+    rtm.create_binding("hello_click", &hello_click);
 
     rvi::opengl_ctx roglctx(&rtm, client);
     roglctx.setup_mouse_callbacks(wnd.wnd_ptr());

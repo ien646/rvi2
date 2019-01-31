@@ -4,12 +4,13 @@
 #include <functional>
 
 #include <rvi/frame.hpp>
+
 namespace rvi
 {
     class client_instance; //fwd
     typedef std::function<void(client_instance&)> click_call_t;
 
-    uint64_t _clickable_frame_data_c_uid = 0ul;
+    extern uint64_t _clickable_frame_data_c_uid;
 
     struct clickable_frame_data
     {
