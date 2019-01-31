@@ -13,9 +13,8 @@ namespace rvi
     client_instance::client_instance(runtime* rptr)
         : _lua_ctx(*this)
         , _runtime_ptr(rptr)
-    {
-        _ctx = std::make_unique<client_context>();
-    }
+        , _ctx(std::make_unique<client_context>())
+    { }
 
     client_context* client_instance::get_context()
     {
@@ -55,6 +54,11 @@ namespace rvi
             return _macros.at(name);
         }
         return vector<string>();
+    }
+
+    void client_instance::run_script_file(const std::string& filepath)
+    {
+        _lua_ctx.exec_script_file(filepath);
     }
 
     void client_instance::set_current_frame_clickable(const std::string& call)
@@ -98,6 +102,8 @@ namespace rvi
         {
             _clickable_frames.erase(fptr);
         }
+
+        if(hits.empty()) { return; }
 
         // Hit frame with the latest uid (added last)
         auto pair = *(hits.rbegin()); // std::map keys are ordered

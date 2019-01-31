@@ -43,6 +43,8 @@ namespace rvi
         relative_snapshot snapshot_full_relative();
         relative_snapshot snapshot_diff_relative();
 
+        void run_script_file(const std::string& filepath);
+
         const std::unordered_map<std::string, std::vector<std::string>>& macros();
     private:
         void cleanup_clickable_frames();

@@ -1,6 +1,0 @@
-no_reinclude;
-
-include:{_rvi_font_base_caps.rpf};
-include:{_rvi_font_base_lcase.rpf};
-include:{_rvi_font_base_numeric.rpf};
-include:{_rvi_font_base_symbols.rpf};

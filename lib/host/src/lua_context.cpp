@@ -130,4 +130,9 @@ namespace rvi
     {
         _lua.script(scr);
     }
+
+    void lua_context::exec_script_file(const std::string& scr_filepath)
+    {
+        _lua.script_file(scr_filepath);
+    }
 }

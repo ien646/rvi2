@@ -11,7 +11,8 @@ namespace rvi
 
     void runtime::start_client(rvi_cid_t cid)
     {
-        return; // ...
+        auto& inst = _client_instances.at(cid);
+        inst->run_script_file("data/main.lua");
     }
 
     client_instance& runtime::get_instance(rvi_cid_t cid)

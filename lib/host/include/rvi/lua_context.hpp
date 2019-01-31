@@ -18,6 +18,7 @@ namespace rvi
         lua_context(client_instance& inst);
 
         void exec_script(const std::string& scr);
+        void exec_script_file(const std::string& scr_filepath);
     private:
         void init_lua_interface();
         void init_std_library();
