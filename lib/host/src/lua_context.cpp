@@ -14,12 +14,17 @@ namespace rvi
 
     void lua_context::init_lua_interface()
     {
-        _lua.set_function("select_frame",  [&](std::string&& name)
+        _lua.set_function("include", [&](const std::string& name)
+        {
+            _lua.script_file("data/" + name);
+        });
+
+        _lua.set_function("select_frame",  [&](const std::string& name)
         {
             _inst_ctx->select_frame(name);
         });
 
-        _lua.set_function("delete_frame",  [&](std::string&& name)
+        _lua.set_function("delete_frame",  [&](const std::string& name)
         { 
             _inst_ctx->delete_frame(name);
         });
@@ -71,6 +76,11 @@ namespace rvi
             _inst.undefine_macro(name);
         });
 
+        _lua.set_function("macro", [&](const std::string& name)
+        {
+            _inst.exec_macro(name);
+        });
+
         _lua.set_function("set_clickable", [&](const std::string& binding_name)
         {
             _inst.set_current_frame_clickable(binding_name);
@@ -84,7 +94,7 @@ namespace rvi
 
     void lua_context::init_std_library()
     {
-        _lua.set_function("print", [&](const std::string text, sol::variadic_args vargs)
+        _lua.set_function("rprint", [&](const std::string text, sol::variadic_args vargs)
         {
             float font_sz_h     = rvi::standard::DEFAULT_FONT_SZ_H;
             float font_sz_v     = rvi::standard::DEFAULT_FONT_SZ_V;

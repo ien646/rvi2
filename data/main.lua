@@ -1,3 +1,5 @@
+include("rvi/rvi_font_base.lua");
+
 select_frame("hello_world");
 
 	set_position(0.10, 0.45);
@@ -6,5 +8,7 @@ select_frame("hello_world");
 	
 	draw_line(0.0,0.0,1.0,0.0);
 	draw_line(0.0,0.0,0.0,1.0);
+    
+    macro("a");
 	
 release_frame();
