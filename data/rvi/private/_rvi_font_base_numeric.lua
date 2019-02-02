@@ -1,5 +1,3 @@
-no_reinclude;
-
 define("0",
 	"draw_line(0.0,0.0, 0.0,1.0);",
 	"draw_line(1.0,0.0, 1.0,1.0);",
