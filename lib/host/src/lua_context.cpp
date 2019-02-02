@@ -10,6 +10,7 @@ namespace rvi
         , _inst_ctx(inst.get_context())
     { 
         init_lua_interface();
+        init_std_library();
     }
 
     void lua_context::init_lua_interface()
