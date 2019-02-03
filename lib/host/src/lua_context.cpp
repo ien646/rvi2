@@ -152,7 +152,7 @@ namespace rvi
 
             switch(vargs.size())
             {
-                default:  [[fallthrough]];
+                default: [[fallthrough]];
                 case 8: wrap_sep_v    = vargs[7].as<float>(); [[fallthrough]];
                 case 7: wrap_sep_ch   = vargs[6].as<char>();  [[fallthrough]];
                 case 6: font_margin_v = vargs[5].as<float>(); [[fallthrough]];
