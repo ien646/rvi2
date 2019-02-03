@@ -24,7 +24,6 @@ namespace rvi::standard
         float font_margin_h,
         float font_margin_v)
     {
-        std::string buff = { 0, 0, 0 };
         client_context* ctx = c_inst.get_context();
         frame* save_fptr = ctx->selected_frame();
 
@@ -34,25 +33,8 @@ namespace rvi::standard
         int idx = 0;
         for (auto& ch : text)
         {
-            buff[0] = buff[1];
-            buff[1] = buff[2];
-            buff[2] = ch;
-
-            std::string defn;
-            if (buff[0] == '$')
-            {
-                defn = buff;
-            }
-            else if (buff[1] == '$' || buff[2] == '$')
-            {
-                continue;
-            }
-            else
-            {
-                defn = std::string(1, ch);
-            }
-            
-            ctx->select_frame("char_" + std::to_string(idx));
+            std::string defn = std::string(1, ch);
+            ctx->select_frame("char_" + std::to_string(idx) + "_[" + defn + "]");
             {
                 ctx->set_scale(vector2(font_sz_h, font_sz_v));
                 ctx->set_transform_scale_abs(true);
@@ -80,7 +62,6 @@ namespace rvi::standard
         char wrap_sep_char,
         float wrap_vsep)
     {
-        std::string buff = { 0, 0, 0 };
         client_context* ctx = c_inst.get_context();
         frame* save_fptr = ctx->selected_frame();
 
@@ -116,25 +97,9 @@ namespace rvi::standard
             first = false;
             for (auto& ch : line)
             {
-                buff[0] = buff[1];
-                buff[1] = buff[2];
-                buff[2] = ch;
-
-                std::string defn;
-                if (buff[0] == '$')
-                {
-                    defn = buff;
-                }
-                else if (buff[1] == '$' || buff[2] == '$')
-                {
-                    continue;
-                }
-                else
-                {
-                    defn = std::string(1, ch);
-                }
+                std::string defn = std::string(1, ch);
                 
-                ctx->select_frame("char_" + std::to_string(idx));
+                ctx->select_frame("char_" + std::to_string(idx) + "_[" + defn + "]");
                 {
                     ctx->set_scale(vector2(font_sz_h, font_sz_v));
                     ctx->set_transform_scale_abs(true);
