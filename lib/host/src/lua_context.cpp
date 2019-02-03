@@ -178,6 +178,34 @@ namespace rvi
                 wrap_sep_v
             );
         });
+
+        _lua.set_function("rbox_border", [&]
+        {
+            rvi::standard::box_border(*_inst_ctx);
+        });
+
+        _lua.set_function("rgrid_fill", [&](float x_step, float y_step)
+        {
+            rvi::standard::grid_fill(*_inst_ctx, x_step, y_step);
+        });
+
+        _lua.set_function("rgrid_fill_rel", [&](int x_count, int y_count)
+        {
+            float x_sz = 1.0F / x_count;
+            float y_sz = 1.0F / y_count;
+            rvi::standard::grid_fill(*_inst_ctx, x_sz, y_sz);
+        });
+
+        _lua.set_function("rstitch_fill", [&](float step_sz)
+        {
+            rvi::standard::stitch_fill(*_inst_ctx, step_sz);
+        });
+
+        _lua.set_function("rstitch_fill_rel", [&](int step_count)
+        {
+            float step_sz = 1.0F / step_count;
+            rvi::standard::stitch_fill(*_inst_ctx, step_sz);
+        });
     }
 
     void lua_context::exec_script(const std::string& scr)

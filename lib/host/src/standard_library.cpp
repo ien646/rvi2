@@ -4,14 +4,14 @@
 
 namespace rvi::standard
 {
-    float DEFAULT_FONT_SZ_H      = 0.04F;
-    float DEFAULT_FONT_SZ_V      = 0.04F;
-    float DEFAULT_FONT_SEP_H     = 0.01F;
-    float DEFAULT_FONT_SEP_V     = 0.00F;
-    float DEFAULT_FONT_MARGIN_H  = 0.00F;
-    float DEFAULT_FONT_MARGIN_V  = 0.00F;
+    float DEFAULT_FONT_SZ_H      = 0.025F;
+    float DEFAULT_FONT_SZ_V      = 0.025F;
+    float DEFAULT_FONT_SEP_H     = 0.010F;
+    float DEFAULT_FONT_SEP_V     = 0.000F;
+    float DEFAULT_FONT_MARGIN_H  = 0.000F;
+    float DEFAULT_FONT_MARGIN_V  = 0.000F;
     char  DEFAULT_WRAP_SEP_CHAR  = ' ';
-    float DEFAULT_WRAP_LNSEP_V   = 0.02F;
+    float DEFAULT_WRAP_LNSEP_V   = 0.020F;
 
     void print(
         client_instance& c_inst,
@@ -30,6 +30,7 @@ namespace rvi::standard
         vector2 offset(font_margin_h, font_margin_v);
 
         ctx->select_frame(calling_frame);
+        ctx->select_frame("__STD_PRINT");
         int idx = 0;
         for (auto& ch : text)
         {
@@ -46,6 +47,7 @@ namespace rvi::standard
             offset += vector2(font_sz_h + font_sep_h, font_sep_v);
             ++idx;
         }
+        ctx->release_frame(); // "text_print"
         ctx->select_frame(save_fptr);
     }
 
@@ -76,6 +78,7 @@ namespace rvi::standard
         bool first = true;
 
         ctx->select_frame(calling_frame);
+        ctx->select_frame("__STD_PRINT_WRAP");
         std::stringstream tstr(text);
         std::string line;
         int idx = 0;
@@ -112,28 +115,23 @@ namespace rvi::standard
                 ++idx;
             }
         }
+        ctx->release_frame();
         ctx->select_frame(save_fptr);
     }
 
-    void box_border(client_context& ctx, color_rgba color)
+    void box_border(client_context& ctx)
     {
-        color_rgba save_color = ctx.current_color();
         ctx.select_frame("__STD_BOX_BORDER");
         {
-            ctx.set_color(color);
             ctx.draw_line(vector2(0, 0), vector2(1, 0)); //  -
             ctx.draw_line(vector2(0, 1), vector2(1, 1)); //  =
             ctx.draw_line(vector2(0, 0), vector2(0, 1)); // |=
             ctx.draw_line(vector2(1, 0), vector2(1, 1)); // |=|
-        }
-        ctx.set_color(save_color);
+        } ctx.release_frame();
     }
 
-    void grid_fill(client_context& ctx, float x_step, float y_step, color_rgba color)
+    void grid_fill(client_context& ctx, float x_step, float y_step)
     {
-        color_rgba save_color = ctx.current_color();
-
-        ctx.set_color(color);
         ctx.select_frame("__STD_GRID_FILL");
         {            
             for(float x = x_step; x < 1.0F; x += x_step)
@@ -145,16 +143,12 @@ namespace rvi::standard
             {
                 ctx.draw_line(vector2(0, y), vector2(1, y));
             }
-        }
-        ctx.set_color(save_color);
+        } ctx.release_frame();
     }
 
-    void stitch_fill(client_context& ctx, float step_sz, color_rgba color)
+    void stitch_fill(client_context& ctx, float step_sz)
     {
-        color_rgba save_color = ctx.current_color();
-
         ctx.select_frame("__STD_STITCH_FILL");
-        ctx.set_color(color);
 
         std::vector<vector2> points;
         bool top = false;
@@ -182,7 +176,6 @@ namespace rvi::standard
             ctx.draw_line(*current_it, *it);
             current_it = it;
         }
-
-        ctx.set_color(save_color);
+        ctx.release_frame();
     }
 }
