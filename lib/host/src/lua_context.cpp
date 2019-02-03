@@ -95,7 +95,12 @@ namespace rvi
 
     void lua_context::init_std_library()
     {
-        _lua.set_function("rprint", [&](const std::string text, sol::variadic_args vargs)
+        // ====================================================================
+        // -- rprint ----------------------------------------------------------
+        // ====================================================================
+
+        _lua.set_function("rprint", 
+        [&](const std::string text, sol::variadic_args vargs)
         {
             float font_sz_h     = rvi::standard::DEFAULT_FONT_SZ_H;
             float font_sz_v     = rvi::standard::DEFAULT_FONT_SZ_V;
@@ -106,21 +111,14 @@ namespace rvi
 
             switch(vargs.size())
             {
-                default:
-                case 6:
-                    font_margin_v = vargs[5];
-                case 5:
-                    font_margin_h = vargs[4];
-                case 4:
-                    font_sep_v = vargs[3];
-                case 3:
-                    font_sep_h = vargs[2];
-                case 2:
-                    font_sz_v = vargs[1];
-                case 1:
-                    font_sz_h = vargs[0];
-                case 0:
-                    break;
+                default: [[fallthrough]];
+                case 6: font_margin_v = vargs[5].as<float>(); [[fallthrough]];
+                case 5: font_margin_h = vargs[4].as<float>(); [[fallthrough]];
+                case 4: font_sep_v    = vargs[3].as<float>(); [[fallthrough]];
+                case 3: font_sep_h    = vargs[2].as<float>(); [[fallthrough]];
+                case 2: font_sz_v     = vargs[1].as<float>(); [[fallthrough]];
+                case 1: font_sz_h     = vargs[0].as<float>(); [[fallthrough]];
+                case 0: break;
             }
 
             rvi::standard::print(
@@ -133,6 +131,51 @@ namespace rvi
                 font_sep_v,
                 font_margin_h,
                 font_margin_v
+            );
+        });
+
+        // ====================================================================
+        // -- rprint_wrap -----------------------------------------------------
+        // ====================================================================
+
+        _lua.set_function("rprint_wrap", 
+        [&](const std::string& text, sol::variadic_args vargs)
+        {
+            float font_sz_h     = rvi::standard::DEFAULT_FONT_SZ_H;
+            float font_sz_v     = rvi::standard::DEFAULT_FONT_SZ_V;
+            float font_sep_h    = rvi::standard::DEFAULT_FONT_SEP_H;
+            float font_sep_v    = rvi::standard::DEFAULT_FONT_SEP_V;
+            float font_margin_h = rvi::standard::DEFAULT_FONT_MARGIN_H;
+            float font_margin_v = rvi::standard::DEFAULT_FONT_MARGIN_V;
+            char  wrap_sep_ch   = rvi::standard::DEFAULT_WRAP_SEP_CHAR;
+            float wrap_sep_v    = rvi::standard::DEFAULT_WRAP_LNSEP_V;
+
+            switch(vargs.size())
+            {
+                default:  [[fallthrough]];
+                case 8: wrap_sep_v    = vargs[7].as<float>(); [[fallthrough]];
+                case 7: wrap_sep_ch   = vargs[6].as<char>();  [[fallthrough]];
+                case 6: font_margin_v = vargs[5].as<float>(); [[fallthrough]];
+                case 5: font_margin_h = vargs[4].as<float>(); [[fallthrough]];
+                case 4: font_sep_v    = vargs[3].as<float>(); [[fallthrough]];
+                case 3: font_sep_h    = vargs[2].as<float>(); [[fallthrough]];
+                case 2: font_sz_v     = vargs[1].as<float>(); [[fallthrough]];
+                case 1: font_sz_h     = vargs[0].as<float>(); [[fallthrough]];
+                case 0: break;
+            }
+
+            rvi::standard::printw(
+                _inst,
+                _inst_ctx->selected_frame(),
+                text,
+                font_sz_h,
+                font_sz_v,
+                font_sep_h,
+                font_sep_v,
+                font_margin_h,
+                font_margin_v,
+                wrap_sep_ch,
+                wrap_sep_v
             );
         });
     }
