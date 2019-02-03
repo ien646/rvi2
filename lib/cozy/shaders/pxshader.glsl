@@ -8,10 +8,10 @@ uniform float delta_time;
 void main()
 {
     vec4 fcol = vec4(
-		vxColor.x,
-		vxColor.y,
-		vxColor.z,
-		vxColor.w
+		vxColor.a,
+		vxColor.b,
+		vxColor.g,
+		vxColor.r
 	);
     color = fcol;
 }

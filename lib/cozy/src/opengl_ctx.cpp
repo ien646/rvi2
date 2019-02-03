@@ -1,6 +1,6 @@
 #include <rvi/opengl_ctx.hpp>
 
-#define SCFLOAT(f) static_cast<float>(f)
+#define RCFLOAT(f) *reinterpret_cast<float*>(&f)
 
 namespace rvi
 {
@@ -42,10 +42,13 @@ namespace rvi
         {
             vf.line_data.push_back(line.start.position.x);
             vf.line_data.push_back(line.start.position.y);
-            vf.line_data.push_back(SCFLOAT(line.start.color.rgba()));
+            u32 scolor = line.start.color.rgba();
+            vf.line_data.push_back(RCFLOAT(scolor));
+
             vf.line_data.push_back(line.end.position.x);
             vf.line_data.push_back(line.end.position.y);
-            vf.line_data.push_back(SCFLOAT(line.end.color.rgba()));
+            u32 ecolor = line.end.color.rgba();
+            vf.line_data.push_back(RCFLOAT(ecolor));
         }
         _vframes.emplace(entry.name, std::move(vf));
         return _vframes[entry.name];
@@ -66,8 +69,11 @@ namespace rvi
         );
 
         // Setup shader inputs
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 12, (void*)0);
         glEnableVertexAttribArray(0);
+
+        glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 12, (void*)8);
+        glEnableVertexAttribArray(1);
 
         // Unbind vao/vbo
         glBindBuffer(GL_ARRAY_BUFFER, GLUINT_NULL);
