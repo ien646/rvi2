@@ -99,7 +99,7 @@ namespace rvi
         // -- rprint ----------------------------------------------------------
         // ====================================================================
 
-        _lua.set_function("rprint", 
+        _lua.set_function("printr", 
         [&](const std::string text, sol::variadic_args vargs)
         {
             float font_sz_h     = rvi::standard::DEFAULT_FONT_SZ_H;
@@ -138,7 +138,7 @@ namespace rvi
         // -- rprint_wrap -----------------------------------------------------
         // ====================================================================
 
-        _lua.set_function("rprint_wrap", 
+        _lua.set_function("printr_wrap", 
         [&](const std::string& text, sol::variadic_args vargs)
         {
             float font_sz_h     = rvi::standard::DEFAULT_FONT_SZ_H;
@@ -179,32 +179,54 @@ namespace rvi
             );
         });
 
-        _lua.set_function("rbox_border", [&]
+        _lua.set_function("box_border", [&]
         {
             rvi::standard::box_border(*_inst_ctx);
         });
 
-        _lua.set_function("rgrid_fill", [&](float x_step, float y_step)
+        _lua.set_function("grid_fill", [&](float x_step, float y_step)
         {
             rvi::standard::grid_fill(*_inst_ctx, x_step, y_step);
         });
 
-        _lua.set_function("rgrid_fill_rel", [&](int x_count, int y_count)
+        _lua.set_function("grid_fill_rlt", [&](int x_count, int y_count)
         {
             float x_sz = 1.0F / x_count;
             float y_sz = 1.0F / y_count;
             rvi::standard::grid_fill(*_inst_ctx, x_sz, y_sz);
         });
 
-        _lua.set_function("rstitch_fill", [&](float step_sz)
+        _lua.set_function("stitch_fill", [&](float step_sz)
         {
             rvi::standard::stitch_fill(*_inst_ctx, step_sz);
         });
 
-        _lua.set_function("rstitch_fill_rel", [&](int step_count)
+        _lua.set_function("stitch_fill_rlt", [&](int step_count)
         {
             float step_sz = 1.0F / step_count;
             rvi::standard::stitch_fill(*_inst_ctx, step_sz);
+        });
+
+        _lua.set_function("horizontal_fill", [&](float step_sz)
+        {
+            rvi::standard::horizontal_fill(*_inst_ctx, step_sz);
+        });
+
+        _lua.set_function("horizontal_fill_rlt", [&](int step_count)
+        {
+            float step_sz = 1.0F / step_count;
+            rvi::standard::horizontal_fill(*_inst_ctx, step_sz);
+        });
+
+        _lua.set_function("vertical_fill", [&](float step_sz)
+        {
+            rvi::standard::vertical_fill(*_inst_ctx, step_sz);
+        });
+
+        _lua.set_function("horizontal_fill", [&](int step_count)
+        {
+            float step_sz = 1.0F / step_count;
+            rvi::standard::vertical_fill(*_inst_ctx, step_sz);
         });
     }
 

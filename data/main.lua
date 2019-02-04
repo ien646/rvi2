@@ -6,8 +6,8 @@ select_frame("test_a");
 	set_scale(0.75, 0.10);
 	rset_color(rvi_color["orange"]);
     
-	rbox_border();
-	rset_color(rvi_color["l_blue"]);
-	rstitch_fill_rel(20);
+	box_border();
+	r_set_color(rvi_color["l_blue"]);
+	stitch_fill_rlt(20);
 	set_clickable("hello_click");
 release_frame();

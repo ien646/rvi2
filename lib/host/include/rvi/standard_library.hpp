@@ -53,5 +53,15 @@ namespace rvi::standard
     extern void stitch_fill(
         client_context& ctx, 
         float step_sz
+    );  
+
+    extern void horizontal_fill(
+        client_context& ctx, 
+        float step_sz
+    );
+
+    extern void vertical_fill(
+        client_context& ctx, 
+        float step_sz
     );
 }

@@ -178,4 +178,30 @@ namespace rvi::standard
         }
         ctx.release_frame();
     }
+
+    void horizontal_fill(client_context& ctx, float step_sz)
+    {
+        ctx.select_frame("__STD_HORIZONTAL_FILL");
+        {
+            float y_accum = step_sz;
+            while(y_accum <= 1.00F)
+            {
+                ctx.draw_line(vector2(0.0F, y_accum), vector2(1, y_accum));
+                y_accum += step_sz;
+            }
+        }
+        ctx.release_frame();
+    }
+
+    void vertical_fill(client_context& ctx, float step_sz)
+    {
+        ctx.select_frame("__STD_VERTICAL_FILL");
+        float x_accum = step_sz;
+        while(x_accum <= 1.00F)
+        {
+            ctx.draw_line(vector2(x_accum, 0.0F), vector2(x_accum, 1.0F));
+            x_accum += step_sz;
+        }
+        ctx.release_frame();
+    }
 }
