@@ -4,11 +4,11 @@
 
 namespace rvi
 {
-    int opengl_ctx::_client_id;
+    rvi_cid_t opengl_ctx::_client_id;
     runtime* opengl_ctx::_runtime_ptr;
     vector2 opengl_ctx::_cursor_pos;
 
-    opengl_ctx::opengl_ctx(runtime* rptr, int cid)
+    opengl_ctx::opengl_ctx(runtime* rptr, rvi_cid_t cid)
     {
         _runtime_ptr = rptr;
         _client_id = cid;

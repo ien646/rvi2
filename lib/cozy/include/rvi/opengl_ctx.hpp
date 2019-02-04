@@ -23,12 +23,12 @@ namespace rvi
         
         size_t _line_count = 0;
 
-        static int _client_id;
+        static rvi_cid_t _client_id;
         static runtime* _runtime_ptr;
         static vector2 _cursor_pos;
 
     public:
-        opengl_ctx(runtime* rptr, int client_id);
+        opengl_ctx(runtime* rptr, rvi_cid_t client_id);
         void refresh();
         void draw(float delta_time);
         

@@ -4,7 +4,7 @@ include("rvi/rvi_color.lua");
 select_frame("test_a");
 	set_position(0.10, 0.45);
 	set_scale(0.75, 0.10);
-	rset_color(rvi_color["orange"]);
+	r_set_color(rvi_color["orange"]);
     
 	box_border();
 	r_set_color(rvi_color["l_blue"]);

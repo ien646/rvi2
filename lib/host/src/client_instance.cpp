@@ -1,6 +1,8 @@
 #include <rvi/client_instance.hpp>
 
 #include <map>
+#include <optional>
+#include <functional>
 
 #include <rvi/runtime.hpp>
 
@@ -46,14 +48,15 @@ namespace rvi
             }
         }
     }
-
-    const vector<string>& client_instance::get_macro(const string& name)
+    
+    std::optional<std::reference_wrapper<std::vector<std::string>>>
+    client_instance::get_macro(const string& name)
     {
         if(_macros.count(name) > 0)
         {
             return _macros.at(name);
         }
-        return vector<string>();
+        return std::optional<std::reference_wrapper<std::vector<std::string>>>();
     }
 
     void client_instance::run_script_file(const std::string& filepath)

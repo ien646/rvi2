@@ -15,6 +15,6 @@ rvi_color = {
 	pink	= { 255,	100,	200,	255 }
 };
 
-function rset_color(color)
+function r_set_color(color)
 	set_color(color[1], color[2], color[3], color[4]);
 end

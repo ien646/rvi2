@@ -17,7 +17,7 @@ TEST_CASE("rvi::frame::get_absolute_transform()")
     ch1->set_position(vector2(-0.05F, -0.5F));
     ch2->set_position(vector2(0.5F, 0.5F));
     ch3->set_position(vector2(0.113F, 0.031F));
-    vector2 expected_position((0.01 - 0.05F + 0.5F + 0.113F), (0.05F -0.5F + 0.5F + 0.031F));
+    vector2 expected_position((0.01F - 0.05F + 0.5F + 0.113F), (0.05F -0.5F + 0.5F + 0.031F));
 
     fp.set_scale(vector2(1, 1));
     ch1->set_scale(vector2(0.5F, 0.5F));

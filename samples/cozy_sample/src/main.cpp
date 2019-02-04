@@ -34,7 +34,7 @@ int main()
     rvi::window wnd(800, 600, "COZY");
 
     rvi::runtime rtm;
-    int client = rtm.create_client();
+    rvi::rvi_cid_t client = rtm.create_client();
     rtm.start_client(client);
 
     rtm.create_binding("hello_click", &hello_click);

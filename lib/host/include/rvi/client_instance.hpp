@@ -31,7 +31,10 @@ namespace rvi
 
         void define_macro(const std::string& name, const std::vector<std::string>& funs);
         void undefine_macro(const std::string& name);
-        const std::vector<std::string>& get_macro(const std::string& name);
+
+        std::optional<std::reference_wrapper<std::vector<std::string>>>
+        get_macro(const std::string& name);
+
         void exec_macro(const std::string& mname);
 
         void set_current_frame_clickable(const std::string& binding_name);
