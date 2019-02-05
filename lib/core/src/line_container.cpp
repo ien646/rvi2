@@ -1,15 +1,17 @@
 #include <rvi/line_container.hpp>
 
 namespace rvi
-{        
-    line_position_data line_container::position_data_at(size_t index)
+{
+    void line_container::clear() noexcept
     {
-        return line_position_data(&_positions[index * 4]);
+        _positions.clear();
+        _colors.clear();
     }
-    
-    line_color_data line_container::color_data_at(size_t index)
+
+    void line_container::reserve(size_t sz)
     {
-        return line_color_data(&_colors[index * 2]);
+        _positions.reserve(sz * 4);
+        _colors.reserve(sz * 2);
     }
 
     size_t line_container::size() const noexcept
@@ -23,8 +25,20 @@ namespace rvi
         _positions.push_back(s_pos.y);
         _positions.push_back(e_pos.x);
         _positions.push_back(e_pos.y);
-        _colors.push_back(s_col);
-        _colors.push_back(e_col);
+        _colors.push_back(s_col.rgba());
+        _colors.push_back(e_col.rgba());
+    }
+    
+    void line_container::copy_into(line_container& target)
+    {
+        std::copy(_positions.begin(), _positions.end(), std::back_inserter(target._positions));
+        std::copy(_colors.begin(), _colors.end(), std::back_inserter(target._colors));
+    }
+
+    void line_container::move_into(line_container& target)
+    {
+        std::move(_positions.begin(), _positions.end(), std::back_inserter(target._positions));
+        std::move(_colors.begin(), _colors.end(), std::back_inserter(target._colors));
     }
 
     void line_container::transform_pos_in_place(std::function<void(float*)> func)
@@ -95,5 +109,15 @@ namespace rvi
         apply_scale_both(tform.scale);
         apply_rotation(tform.rotation);
         apply_offset(tform.position);
+    }
+
+    float* line_container::position_buff()
+    {
+        return _positions.data();
+    }
+    
+    uint32_t* line_container::color_buff()
+    {
+        return _colors.data();
     }
 }

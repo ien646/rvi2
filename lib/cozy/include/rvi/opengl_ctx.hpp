@@ -19,7 +19,7 @@ namespace rvi
     {
     private:
         GLuint _shader_program;
-        std::unordered_map<std::string, vframe> _vframes;        
+        std::unordered_map<std::string, vframe> _vframes;
         
         size_t _line_count = 0;
 
@@ -36,7 +36,7 @@ namespace rvi
     private:        
         static void mouse_pos_callback(GLFWwindow* wnd, double px, double py);
         static void mouse_press_callback(GLFWwindow* wnd, int key, int act, int mods);
-        const vframe& vframe_from_snapshot_entry(relative_snapshot_entry& entry);
-        void setup_vframe_ogl(const vframe& vf);
+        vframe& vframe_from_snapshot_entry(relative_snapshot_entry& entry);
+        void setup_vframe_ogl(vframe& vf);
     };
 }

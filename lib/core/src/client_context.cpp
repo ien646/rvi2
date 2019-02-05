@@ -316,9 +316,9 @@ namespace rvi
         return _frame_index;
     }
 
-    std::vector<line> client_context::snapshot_full_flat() const
+    line_container client_context::snapshot_full_flat() const
     {
-        std::vector<line> result;
+        line_container result;
         std::queue<frame*> remaining_frames;
 
         // Initial set consists of the main frame (== all frames)
@@ -334,19 +334,12 @@ namespace rvi
                 remaining_frames.push(ch_pair.second);
             }
 
-            auto& lines = fptr->lines();
+            line_container lines = fptr->lines();
             result.reserve(lines.size());
             
-            for(line ln : lines) // expl. copy
-            {
-                transform2 tform = fptr->get_absolute_transform();
-                if (fptr->transform_scale_abs())
-                {
-                    tform.scale = fptr->transform().scale;
-                }
-                ln.apply_transform(tform);
-                result.push_back(ln);
-            }
+            transform2 tform = fptr->get_absolute_transform();
+            lines.apply_transform(tform);
+            lines.move_into(result);
 
             remaining_frames.pop();
         }
@@ -356,7 +349,7 @@ namespace rvi
 
     relative_snapshot client_context::snapshot_full_relative()
     {
-        relative_snapshot result;        
+        relative_snapshot result;
 
         std::queue<frame*> remaining_frames;
         remaining_frames.push(_main_frame.get());
@@ -370,25 +363,17 @@ namespace rvi
                 remaining_frames.push(ch_pair.second);
             }
 
-            auto& lines = fptr->lines();
-            
-            std::vector<line> entry_lines;
-            entry_lines.reserve(lines.size());
-            
-            for(line ln : lines) // expl. copy
+            line_container lines = fptr->lines();
+            transform2 tform = fptr->get_absolute_transform();
+            if (fptr->transform_scale_abs())
             {
-                transform2 tform = fptr->get_absolute_transform();
-                if (fptr->transform_scale_abs())
-                {
-                    tform.scale = fptr->transform().scale;
-                }
-                ln.apply_transform(tform);
-                entry_lines.push_back(ln);
+                tform.scale = fptr->transform().scale;
             }
+            lines.apply_transform(tform);
 
             relative_snapshot_entry entry;
             entry.name = get_full_frame_name(fptr);
-            entry.lines = std::move(entry_lines);
+            lines.move_into(entry.lines);
             entry.deleted = false;
 
             result.push_back(std::move(entry));
@@ -426,25 +411,17 @@ namespace rvi
                 remaining_frames.push(ch_pair.second);
             }
 
-            auto& lines = fptr->lines();
-            
-            std::vector<line> entry_lines;
-            entry_lines.reserve(lines.size());
-            
-            for(line ln : lines) // expl. copy
+            line_container lines = fptr->lines();
+            transform2 tform = fptr->get_absolute_transform();
+            if (fptr->transform_scale_abs())
             {
-                transform2 tform = fptr->get_absolute_transform();
-                if (fptr->transform_scale_abs())
-                {
-                    tform.scale = fptr->transform().scale;
-                }
-                ln.apply_transform(tform);
-                entry_lines.push_back(ln);
+                tform.scale = fptr->transform().scale;
             }
+            lines.apply_transform(tform);
 
             relative_snapshot_entry entry;
             entry.name = get_full_frame_name(fptr);
-            entry.lines = std::move(entry_lines);
+            lines.move_into(entry.lines);
             entry.deleted = false;
 
             result.push_back(std::move(entry));

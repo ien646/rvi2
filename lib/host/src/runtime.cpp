@@ -43,7 +43,7 @@ namespace rvi
         }
     }
 
-    std::vector<line> runtime::snapshot_full_flat(rvi_cid_t cid) const
+    line_container runtime::snapshot_full_flat(rvi_cid_t cid) const
     {
         return _client_instances.at(cid)->snapshot_full_flat();
     }

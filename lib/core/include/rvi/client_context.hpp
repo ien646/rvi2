@@ -10,6 +10,7 @@
 #include <rvi/frame.hpp>
 #include <rvi/line.hpp>
 #include <rvi/relative_snapshot.hpp>
+#include <rvi/line_container.hpp>
 
 namespace rvi
 {
@@ -269,9 +270,9 @@ namespace rvi
          * @brief Generate a full, flattened snapshot of the context's
          * current state.
          * 
-         * @return std::vector<line> Snapshot data
+         * @return line_container Snapshot data
          */
-        std::vector<line> snapshot_full_flat() const;
+        line_container snapshot_full_flat() const;
 
         /**
          * @brief Generate a full, frame-name-relative snapshot of the

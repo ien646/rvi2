@@ -33,50 +33,47 @@ namespace rvi
         }
     }
 
-    const vframe& opengl_ctx::vframe_from_snapshot_entry(relative_snapshot_entry& entry)
+    vframe& opengl_ctx::vframe_from_snapshot_entry(relative_snapshot_entry& entry)
     {
         vframe vf;
         glGenVertexArrays(1, &vf.vao);
-        glGenBuffers(1, &vf.vbo);
-        for(auto& line : entry.lines)
-        {
-            vf.line_data.push_back(line.start.position.x);
-            vf.line_data.push_back(line.start.position.y);
-            u32 scolor = line.start.color.rgba();
-            vf.line_data.push_back(RCFLOAT(scolor));
-
-            vf.line_data.push_back(line.end.position.x);
-            vf.line_data.push_back(line.end.position.y);
-            u32 ecolor = line.end.color.rgba();
-            vf.line_data.push_back(RCFLOAT(ecolor));
-        }
+        glGenBuffers(1, &vf.vbo_pos);
+        glGenBuffers(1, &vf.vbo_col);
+        entry.lines.copy_into(vf.line_data);
         _vframes.emplace(entry.name, std::move(vf));
         return _vframes[entry.name];
     }
 
-    void opengl_ctx::setup_vframe_ogl(const vframe& vf)
+    void opengl_ctx::setup_vframe_ogl(vframe& vf)
     {
-        // Bind vao/vbo
+        // Bind position vao/vbo
         glBindVertexArray(vf.vao);
-        glBindBuffer(GL_ARRAY_BUFFER, vf.vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vf.vbo_pos);
 
         // Bind data to vbo
         glBufferData(
             GL_ARRAY_BUFFER, 
-            vf.line_data.size() * sizeof(float),
-            vf.line_data.data(),
+            vf.line_data.size() * 4 * sizeof(float),
+            vf.line_data.position_buff(),
             GL_DYNAMIC_DRAW
         );
 
         // Setup shader inputs
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 12, (void*)0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 8, NULL);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 12, (void*)8);
+        // Bind color vbo
+        glBindBuffer(GL_ARRAY_BUFFER, vf.vbo_col);
+        // Bind data to vbo
+        glBufferData(
+            GL_ARRAY_BUFFER,
+            vf.line_data.size() * 2 * sizeof(uint32_t),
+            vf.line_data.color_buff(),
+            GL_DYNAMIC_DRAW
+        );
+        glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 4, NULL);
         glEnableVertexAttribArray(1);
 
-        // Unbind vao/vbo
-        glBindBuffer(GL_ARRAY_BUFFER, GLUINT_NULL);
         glBindVertexArray(GLUINT_NULL);
     }
 

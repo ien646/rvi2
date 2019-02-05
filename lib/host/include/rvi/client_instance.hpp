@@ -42,7 +42,7 @@ namespace rvi
         
         void user_click(vector2 pos);
 
-        std::vector<line> snapshot_full_flat() const;
+        line_container snapshot_full_flat() const;
         relative_snapshot snapshot_full_relative();
         relative_snapshot snapshot_diff_relative();
 

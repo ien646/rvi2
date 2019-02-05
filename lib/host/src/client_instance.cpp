@@ -119,7 +119,7 @@ namespace rvi
         return _macros;
     }
 
-    vector<line> client_instance::snapshot_full_flat() const
+    line_container client_instance::snapshot_full_flat() const
     {
         return _ctx->snapshot_full_flat();
     }

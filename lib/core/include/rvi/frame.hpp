@@ -10,6 +10,7 @@
 #include <rvi/transform2.hpp>
 #include <rvi/color_rgba.hpp>
 #include <rvi/rectangle.hpp>
+#include <rvi/line_container.hpp>
 
 namespace rvi
 {
@@ -23,7 +24,7 @@ namespace rvi
         const transform2 DEFAULT_TRANSFORM = transform2(vector2(0, 0), vector2(1, 1), 0);
 
         std::string _name;
-        std::vector<line> _lines;
+        line_container _lines;
         std::vector<std::unique_ptr<frame>> _children;
         std::unordered_map<std::string, frame*> _child_frames_index;
         frame* _parent = nullptr;
@@ -77,13 +78,6 @@ namespace rvi
          * @param ln Line to be inserted
          */
         void add_line(const line& ln);
-
-        /**
-         * Insert a new line
-         * 
-         * @param ln Line to be inserted
-         */
-        void add_line(line&& ln);
 
         /**
          * Construct a new frame and append it to this frame.
@@ -145,7 +139,7 @@ namespace rvi
         const std::string& name() const noexcept;
 
         ///Get contained lines
-        const std::vector<line>& lines() const noexcept;
+        line_container& lines();
 
         ///Get child frames
         std::unordered_map<std::string, frame*> children() const;

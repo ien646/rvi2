@@ -20,11 +20,7 @@ namespace rvi
     {
         auto result = std::make_unique<frame>(_name, fptr_parent);
 
-        // copy lines
-        for (auto& ln : _lines)
-        {
-            result->_lines.push_back(ln);
-        }
+        result->_lines = _lines;
 
         // copy children
         for (auto& chfr_up : _children)
@@ -58,12 +54,12 @@ namespace rvi
 
     void frame::add_line(const line& ln)
     {
-        _lines.push_back(ln);
-    }
-
-    void frame::add_line(line&& ln)
-    {
-        _lines.push_back(std::move(ln));
+        _lines.push_back(
+            ln.start.position, 
+            ln.start.color,
+            ln.end.position,
+            ln.end.color
+        );
     }
 
     frame* frame::add_child(const std::string& name)
@@ -179,7 +175,7 @@ namespace rvi
         return _name;
     }
 
-    const std::vector<line>& frame::lines() const noexcept
+    line_container& frame::lines()
     {
         return _lines;
     }

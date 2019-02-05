@@ -31,7 +31,7 @@ namespace rvi
         void delete_binding(const std::string& bname);
         void exec_binding(client_instance& cinst, const std::string& bname, frame* fptr);
 
-        std::vector<line> snapshot_full_flat(rvi_cid_t) const;
+        line_container snapshot_full_flat(rvi_cid_t) const;
         relative_snapshot snapshot_full_relative(rvi_cid_t);
         relative_snapshot snapshot_diff_relative(rvi_cid_t);
     };

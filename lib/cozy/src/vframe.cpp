@@ -5,7 +5,8 @@ namespace rvi
     vframe::vframe(vframe&& mv_src) noexcept
     {
         vao = mv_src.vao;
-        vbo = mv_src.vbo;
+        vbo_pos = mv_src.vbo_pos;
+        vbo_col = mv_src.vbo_col;
         line_data = std::move(mv_src.line_data);
         mv_src._moved = true;
     }
@@ -15,7 +16,8 @@ namespace rvi
         if (!_moved)
         {
             glDeleteVertexArrays(1, &vao);
-            glDeleteBuffers(1, &vbo);
+            glDeleteBuffers(1, &vbo_pos);
+            glDeleteBuffers(1, &vbo_col);
         }
     }
 }

@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include <rvi/line.hpp>
+#include <rvi/line_container.hpp>
 
 namespace rvi
 {
@@ -19,7 +20,7 @@ namespace rvi
         /**
          * @brief Frame lines
          */
-        std::vector<line> lines;
+        line_container lines;
 
         /**
          * @brief In differential snapshots, used to signal
