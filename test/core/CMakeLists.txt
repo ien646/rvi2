@@ -3,6 +3,7 @@ set(TEST_RVI2_CORE_SOURCES
     src/vector2.cpp
     src/math.cpp
     src/frame.cpp
+    src/line_container.cpp
 )
 
 add_executable(test.rvi2.core ${TEST_RVI2_CORE_SOURCES})

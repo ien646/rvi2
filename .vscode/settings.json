@@ -76,7 +76,9 @@
         "regex": "cpp",
         "variant": "cpp",
         "numeric": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "atomic": "cpp",
+        "mutex": "cpp"
     },
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
     "lua.targetVersion": "5.3"
