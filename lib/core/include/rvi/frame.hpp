@@ -89,6 +89,16 @@ namespace rvi
          */
         frame* add_child(const std::string& name);
 
+        /**
+         * Construct a new frame and append it to this frame.
+         * If a child with the same name existed previously,
+         * no frame is created.
+         * 
+         * @param name Child frame name
+         * @return frame* Pointer to the appended child frame
+         */
+        frame* add_child(std::string&& name);
+
         ///Safely delete all children
         void clear_children();
 

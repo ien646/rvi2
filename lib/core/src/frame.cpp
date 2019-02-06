@@ -77,6 +77,21 @@ namespace rvi
         }
     }
 
+    frame* frame::add_child(std::string&& name)
+    {
+        if (_child_frames_index.count(name) > 0)
+        {
+            return _child_frames_index.at(name);
+        }
+        else
+        {
+            _children.push_back(std::make_unique<frame>(name, this));
+            frame* f_ptr = _children.back().get();
+            _child_frames_index.emplace(std::move(name), f_ptr);
+            return f_ptr;
+        }
+    }
+
     void frame::clear_children()
     {
         _children.clear();
