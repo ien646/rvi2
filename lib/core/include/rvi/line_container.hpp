@@ -38,5 +38,11 @@ namespace rvi
 
         float* position_buff();
         uint32_t* color_buff();
+
+        std::vector<float>::const_iterator position_cbegin();
+        std::vector<float>::const_iterator position_cend();
+
+        std::vector<uint32_t>::const_iterator color_cbegin();
+        std::vector<uint32_t>::const_iterator color_cend();
     };
 };
