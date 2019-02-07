@@ -31,12 +31,18 @@ namespace rvi
     
     void line_container::copy_into(line_container& target)
     {
+        target._positions.reserve(target._positions.size() + _positions.size());
+        target._colors.reserve(target._colors.size() + _colors.size());
+
         std::copy(_positions.begin(), _positions.end(), std::back_inserter(target._positions));
         std::copy(_colors.begin(), _colors.end(), std::back_inserter(target._colors));
     }
 
     void line_container::move_into(line_container& target)
     {
+        target._positions.reserve(target._positions.size() + _positions.size());
+        target._colors.reserve(target._colors.size() + _colors.size());
+
         std::move(_positions.begin(), _positions.end(), std::back_inserter(target._positions));
         std::move(_colors.begin(), _colors.end(), std::back_inserter(target._colors));
     }
