@@ -27,19 +27,19 @@ namespace rvi
             }
             else if (frame_entry.lines.size() > 0)
             {
-                auto& entry = vframe_from_snapshot_entry(frame_entry);
+                auto& entry = vframe_from_snapshot_entry(std::move(frame_entry));
                 setup_vframe_ogl(entry);
             }
         }
     }
 
-    vframe& opengl_ctx::vframe_from_snapshot_entry(relative_snapshot_entry& entry)
+    vframe& opengl_ctx::vframe_from_snapshot_entry(relative_snapshot_entry&& entry)
     {
         vframe vf;
         glGenVertexArrays(1, &vf.vao);
         glGenBuffers(1, &vf.vbo_pos);
         glGenBuffers(1, &vf.vbo_col);
-        entry.lines.copy_into(vf.line_data);
+        entry.lines.move_into(vf.line_data);
         _vframes.emplace(entry.name, std::move(vf));
         return _vframes[entry.name];
     }
