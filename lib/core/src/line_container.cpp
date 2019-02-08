@@ -146,4 +146,24 @@ namespace rvi
     {
         return _colors.cend();
     }
+
+    std::vector<float>::iterator line_container::position_begin()
+    {
+        return _positions.begin();
+    }
+
+    std::vector<float>::iterator line_container::position_end()
+    {
+        return _positions.end();
+    }
+
+    std::vector<uint32_t>::iterator line_container::color_begin()
+    {
+        return _colors.begin();
+    }
+    
+    std::vector<uint32_t>::iterator line_container::color_end()
+    {
+        return _colors.end();
+    }
 }

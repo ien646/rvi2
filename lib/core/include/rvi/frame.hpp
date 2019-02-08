@@ -194,5 +194,17 @@ namespace rvi
 
         ///Set relative frame transform scale
         void set_scale(vector2 scale) noexcept;
+
+        /**
+         * @brief Distort this frame's contained lines, along with
+         * its children, by offsetting each corner of this frame's
+         * bounds by the given offset vectors.
+         * 
+         * @param ul Upper Left bounds corner
+         * @param ur Upper Right bounds corner
+         * @param ll Lower Left bounds corner
+         * @param lr Lower Right bounds corner
+         */
+        void distort(vector2 ul, vector2 ur, vector2 ll, vector2 lr);
     };
 }

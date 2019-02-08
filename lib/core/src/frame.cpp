@@ -269,4 +269,24 @@ namespace rvi
     {
         return _lines.size();
     }
+
+    void frame::distort(vector2 ul, vector2 ur, vector2 ll, vector2 lr)
+    {
+        auto distort = [ul, ur, ll, lr](frame* fptr)
+        {
+            auto& lines = fptr->lines();
+            for(auto it = lines.position_begin(); it != lines.position_end(); it += 2)
+            {
+                float& x = *it;
+                float& y = *(it + 1);
+
+                // ...
+            }
+        };
+        distort(this);
+        for(auto& ch_uptr : _children)
+        {
+            distort(ch_uptr.get());
+        }
+    }
 }

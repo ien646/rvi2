@@ -44,5 +44,11 @@ namespace rvi
 
         std::vector<uint32_t>::const_iterator color_cbegin();
         std::vector<uint32_t>::const_iterator color_cend();
+
+        std::vector<float>::iterator position_begin();
+        std::vector<float>::iterator position_end();
+
+        std::vector<uint32_t>::iterator color_begin();
+        std::vector<uint32_t>::iterator color_end();
     };
 };

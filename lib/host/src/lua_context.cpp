@@ -91,6 +91,20 @@ namespace rvi
         {
             _inst.unset_current_frame_clickable();
         });
+
+        _lua.set_function("distort", [&](
+            float ul_x, float ul_y,
+            float ur_x, float ur_y,
+            float ll_x, float ll_y,
+            float lr_x, float lr_y)
+        {
+            _inst.get_context()->selected_frame()->distort(
+                vector2(ul_x, ul_y),
+                vector2(ur_x, ur_y),
+                vector2(ll_x, ll_y),
+                vector2(lr_x, lr_y)
+            );
+        });
     }
 
     void lua_context::init_std_library()
