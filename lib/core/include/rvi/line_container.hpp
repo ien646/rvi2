@@ -51,7 +51,7 @@ namespace rvi
         void copy_into(line_container& target);
         void move_into(line_container& target);
 
-        void transform_positions(std::function<void(line_span)> func);
+        void transform_positions(std::function<void(line_span)> func, bool parallel = false);
 
         void apply_offset(vector2 offset);
         void apply_scale_end(vector2 scale);

@@ -1,5 +1,7 @@
 #include <rvi/line_container.hpp>
 
+#include <thread>
+
 namespace rvi
 {
     void line_container::clear() noexcept
@@ -47,11 +49,61 @@ namespace rvi
         std::move(_colors.begin(), _colors.end(), std::back_inserter(target._colors));
     }
 
-    void line_container::transform_positions(std::function<void(line_span)> func)
+    void line_container::transform_positions(std::function<void(line_span)> func, bool parallel)
     {
-        for(size_t i = 0; i < _positions.size(); i += 4)
+        r_assert(_positions.size() % 4 == 0, "line_container position data is corrupted!");
+
+        // Minimum elements per thread to allow parallel algorithm
+        const unsigned int MIN_ELEMS_PER_THREAD_FOR_PARALLEL = 128;
+
+        static const unsigned int max_threads = std::thread::hardware_concurrency();
+        bool parallel_enabled = 
+            parallel && 
+            max_threads > 1 && 
+            size() > (max_threads * MIN_ELEMS_PER_THREAD_FOR_PARALLEL);
+
+        //+-+-+-+-+-+-+-+-+-+-+
+        // Parallel
+        //+-+-+-+-+-+-+-+-+-+-+
+        if (parallel_enabled) 
         {
-            func(&_positions[i]);
+            std::vector<std::thread> threads;
+            threads.reserve(max_threads);
+
+            auto thread_act = [&](size_t idx_start, size_t idx_end)
+            {
+                for(auto i = idx_start; i < idx_end; i += 4)
+                {
+                    func(line_span(&_positions[i]));
+                }
+            };
+
+            // -- First n-1 threads --
+            size_t th_range_sz = size() / max_threads;
+            for(size_t th_idx = 0; th_idx < max_threads - 1; th_idx++)
+            {
+                size_t idx_start = th_range_sz * th_idx;
+                size_t idx_end = idx_start + th_range_sz;
+
+                threads.push_back(std::thread(thread_act, idx_start, idx_end));
+            }
+            // -- Last thread [n] --
+            size_t idx_start = th_range_sz * (max_threads - 1);
+            size_t idx_end = _positions.size();
+            std::thread(thread_act, idx_start, idx_end).join();
+
+            // Wait for all other threads to finish
+            for(auto& th : threads) { th.join(); }
+        }
+        //+-+-+-+-+-+-+-+-+-+-+
+        // Single-threaded
+        //+-+-+-+-+-+-+-+-+-+-+
+        else
+        {
+            for(size_t i = 0; i < _positions.size(); i += 4)
+            {
+                func(line_span(&_positions[i]));
+            }
         }
     }
 
