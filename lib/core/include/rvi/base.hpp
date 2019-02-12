@@ -61,6 +61,4 @@ namespace rvi
 
     static constexpr bool RVI_CEXPR_LITTLE_ENDIAN   
         = static_cast<uint8_t>(_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0xFF;
-
-    FWD_DECL_CLASS(client_context);
 }
