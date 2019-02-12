@@ -57,56 +57,68 @@ namespace rvi
 
     void line_container::apply_offset(vector2 offset)
     {
-        for(size_t i = 0; i < _positions.size(); i += 4)
+        if(offset != transform2::default_value().position)
         {
-            _positions[i + 0] += offset.x; //start
-            _positions[i + 1] += offset.y;
-            _positions[i + 2] += offset.x; //end
-            _positions[i + 3] += offset.y;
+            for(size_t i = 0; i < _positions.size(); i += 4)
+            {
+                _positions[i + 0] += offset.x; //start
+                _positions[i + 1] += offset.y;
+                _positions[i + 2] += offset.x; //end
+                _positions[i + 3] += offset.y;
+            }
         }
     }
 
     void line_container::apply_scale_end(vector2 scale)
     {
-        for(size_t i = 0; i < _positions.size(); i += 4)
+        if(scale != transform2::default_value().scale)
         {
-            _positions[i + 2] *= scale.x; //end
-            _positions[i + 3] *= scale.y;
+            for(size_t i = 0; i < _positions.size(); i += 4)
+            {
+                _positions[i + 2] *= scale.x; //end
+                _positions[i + 3] *= scale.y;
+            }
         }
     }
 
     void line_container::apply_scale_both(vector2 scale)
     {
-        for(size_t i = 0; i < _positions.size(); i += 4)
+        if(scale != transform2::default_value().scale)
         {
-            _positions[i + 0] *= scale.x; //end
-            _positions[i + 1] *= scale.y;
-            _positions[i + 2] *= scale.x; //end
-            _positions[i + 3] *= scale.y;
+            for(size_t i = 0; i < _positions.size(); i += 4)
+            {
+                _positions[i + 0] *= scale.x; //end
+                _positions[i + 1] *= scale.y;
+                _positions[i + 2] *= scale.x; //end
+                _positions[i + 3] *= scale.y;
+            }
         }
     }
 
     void line_container::apply_rotation(float angle)
     {
-        for(size_t i = 0; i < _positions.size(); i += 4)
+        if(angle != 0.0F)
         {
-            _positions[i + 2] -= _positions[i + 0];
-            _positions[i + 3] -= _positions[i + 1];
+            for(size_t i = 0; i < _positions.size(); i += 4)
+            {
+                _positions[i + 2] -= _positions[i + 0];
+                _positions[i + 3] -= _positions[i + 1];
 
-            const float radAngle = rvi::math::deg2rad(angle);
-            const float angleSin = std::sin(radAngle);
-            const float angleCos = std::cos(radAngle);
-        
-            const float aux_x = _positions[i + 2];
-            const float aux_y = _positions[i + 3];
+                const float radAngle = rvi::math::deg2rad(angle);
+                const float angleSin = std::sin(radAngle);
+                const float angleCos = std::cos(radAngle);
+            
+                const float aux_x = _positions[i + 2];
+                const float aux_y = _positions[i + 3];
 
-            // [rx] = [cos(a) , -sin(a)][x]
-            _positions[i + 2] = (aux_x * +angleCos) + (aux_y * -angleSin);
-            // [ry] = [sin(a) ,  cos(a)][y]
-            _positions[i + 3] = (aux_x * +angleSin) + (aux_y * +angleCos);
+                // [rx] = [cos(a) , -sin(a)][x]
+                _positions[i + 2] = (aux_x * +angleCos) + (aux_y * -angleSin);
+                // [ry] = [sin(a) ,  cos(a)][y]
+                _positions[i + 3] = (aux_x * +angleSin) + (aux_y * +angleCos);
 
-            _positions[i + 2] += _positions[i + 0];
-            _positions[i + 3] += _positions[i + 1];
+                _positions[i + 2] += _positions[i + 0];
+                _positions[i + 3] += _positions[i + 1];
+            }
         }
     }
 
