@@ -47,7 +47,7 @@ namespace rvi
         std::move(_colors.begin(), _colors.end(), std::back_inserter(target._colors));
     }
 
-    void line_container::transform_pos_in_place(std::function<void(float*)> func)
+    void line_container::transform_positions(std::function<void(line_span)> func)
     {
         for(size_t i = 0; i < _positions.size(); i += 4)
         {

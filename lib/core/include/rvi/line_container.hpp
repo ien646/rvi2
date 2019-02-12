@@ -10,6 +10,29 @@
 
 namespace rvi
 {
+    class line_span
+    {
+    private:
+        float* _ptr;
+
+    public:
+        float& start_x;
+        float& start_y;
+        float& end_x;
+        float& end_y;
+
+        line_span(float* lptr)
+            : _ptr(lptr)
+            , start_x(_ptr[0])
+            , start_y(_ptr[1])
+            , end_x(_ptr[2])
+            , end_y(_ptr[3])
+        { }
+
+        float* data() { return _ptr; }
+        float& operator[](size_t index) { return _ptr[index]; }
+    };
+
     class line_container
     {
     private:
@@ -28,7 +51,7 @@ namespace rvi
         void copy_into(line_container& target);
         void move_into(line_container& target);
 
-        void transform_pos_in_place(std::function<void(float*)> func);
+        void transform_positions(std::function<void(line_span)> func);
 
         void apply_offset(vector2 offset);
         void apply_scale_end(vector2 scale);
