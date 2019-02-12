@@ -14,20 +14,25 @@
 namespace rvi
 {
     class runtime; //fwd
-    
+    typedef uint64_t rvi_cid_t;
     class client_instance
     {
     private:
         std::unique_ptr<client_context> _ctx;
         std::unordered_map<std::string, std::vector<std::string>> _macros;
         std::unordered_map<frame*, clickable_frame_data> _clickable_frames;
-        lua_context _lua_ctx;
+        std::unique_ptr<lua_context> _lua_ctx;
         runtime* _runtime_ptr;
+        rvi_cid_t _cid;
 
     public:
-        client_instance(runtime*);
+        client_instance(runtime* rptr, rvi_cid_t cid);
+
+        void reload();
 
         client_context* get_context();
+        runtime* get_runtime();
+        rvi_cid_t client_id();
 
         void define_macro(const std::string& name, const std::vector<std::string>& funs);
         void undefine_macro(const std::string& name);

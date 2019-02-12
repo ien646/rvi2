@@ -12,15 +12,35 @@ using std::unordered_map;
 
 namespace rvi
 {
-    client_instance::client_instance(runtime* rptr)
-        : _lua_ctx(*this)
+    client_instance::client_instance(runtime* rptr, rvi_cid_t cid)
+        : _lua_ctx(std::make_unique<lua_context>(*this))
         , _runtime_ptr(rptr)
         , _ctx(std::make_unique<client_context>())
+        , _cid(cid)
     { }
+
+    void client_instance::reload()
+    {
+        this->_clickable_frames.clear();
+        this->_ctx = std::make_unique<client_context>();
+        this->_lua_ctx = std::make_unique<lua_context>(*this);
+        this->_macros.clear();
+        _runtime_ptr->start_client(_cid);
+    }
 
     client_context* client_instance::get_context()
     {
         return _ctx.get();
+    }
+
+    runtime* client_instance::get_runtime()
+    {
+        return _runtime_ptr;
+    }
+
+    rvi_cid_t client_instance::client_id()
+    {
+        return _cid;
     }
 
     void client_instance::define_macro(const string& name, const vector<string>& funs)
@@ -44,7 +64,7 @@ namespace rvi
             auto& macro = _macros.at(mname);
             for(auto& entry : macro)
             {
-                _lua_ctx.exec_script(entry);
+                _lua_ctx->exec_script(entry);
             }
         }
     }
@@ -61,7 +81,7 @@ namespace rvi
 
     void client_instance::run_script_file(const std::string& filepath)
     {
-        _lua_ctx.exec_script_file(filepath);
+        _lua_ctx->exec_script_file(filepath);
     }
 
     void client_instance::set_current_frame_clickable(const std::string& call)

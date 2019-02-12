@@ -16,17 +16,7 @@
 
 static void hello_click(rvi::client_instance& inst, rvi::frame* fptr)
 {
-    // Save current selected frame
-    rvi::client_context* ctx = inst.get_context();
-    rvi::frame* save_ptr = ctx->selected_frame();
-
-    // Return to root frame
-    ctx->select_root();
-    ctx->select_frame("hello_click");
-    ctx->set_position(rvi::vector2(0.10f, 0.15f));
-    rvi::standard::print(inst, ctx->selected_frame(), "+-+-+ HELLO FRIEND +-+-+");
-
-    ctx->select_frame(save_ptr);
+    
 }
 
 int main()

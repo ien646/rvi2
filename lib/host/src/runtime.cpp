@@ -5,7 +5,7 @@ namespace rvi
     rvi_cid_t runtime::create_client()
     {
         rvi_cid_t cid = _cid_accum++;
-        _client_instances.emplace(cid, std::make_unique<client_instance>(this));
+        _client_instances.emplace(cid, std::make_unique<client_instance>(this, cid));
         return cid;
     }
 

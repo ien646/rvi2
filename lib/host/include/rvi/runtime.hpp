@@ -11,14 +11,13 @@
 
 namespace rvi
 {
-    typedef std::function<void(client_instance&, frame*)> binding_t;
-    typedef uint64_t rvi_cid_t;
+    typedef std::function<void(client_instance&, frame*)> binding_t;    
 
     class runtime
     {
     private:
         uint64_t _cid_accum = 0ul; // client-id accumulator
-        std::unordered_map<rvi_cid_t ,std::unique_ptr<client_instance>> _client_instances;
+        std::unordered_map<rvi_cid_t, std::unique_ptr<client_instance>> _client_instances;
         std::unordered_map<std::string, binding_t> _bindings;
 
     public:
