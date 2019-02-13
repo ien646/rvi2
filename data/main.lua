@@ -8,6 +8,6 @@ select_frame("test_a");
     
 	box_border();
 	stitch_fill_rlt(10);
-	distort(0, 0.5, 0, 0, 0, 0, 0, 0);
+	distort(0.25, 0, 0.25, 0.25, -0.25, -0.25, -0.25, 0);
 	set_clickable("hello_click");
 release_frame();

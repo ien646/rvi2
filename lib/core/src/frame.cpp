@@ -280,7 +280,31 @@ namespace rvi
                 float& x = *it;
                 float& y = *(it + 1);
 
-                // ...
+                float offset_x = 0.0F;
+                float offset_y = 0.0F;
+
+                // ul
+                float ul_f_sample = y * (1 - x);
+                offset_x += ul.x * ul_f_sample;
+                offset_y += ul.y * ul_f_sample;
+
+                // ur
+                float ur_f_sample = y * x;
+                offset_x += ur.x * ur_f_sample;
+                offset_y += ur.y * ur_f_sample;
+
+                // ll
+                float ll_f_sample = (1 - y) * (1 - x);
+                offset_x += ll.x * ll_f_sample;
+                offset_y += ll.y * ll_f_sample;
+
+                // lr
+                float lr_f_sample = (1 - y) * x;
+                offset_x += lr.x * lr_f_sample;
+                offset_y += lr.y * lr_f_sample;
+
+                x += offset_x;
+                y += offset_y;
             }
         };
         distort(this);
