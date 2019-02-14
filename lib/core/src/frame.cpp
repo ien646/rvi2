@@ -308,9 +308,25 @@ namespace rvi
             }
         };
         distort(this);
-        for(auto& ch_uptr : _children)
+        std::vector<frame*> pending_children;
+        std::transform(
+            _children.begin(), 
+            _children.end(), 
+            std::back_inserter(pending_children), 
+            [&](auto& uptr) { return uptr.get(); });
+
+        while(!pending_children.empty())
         {
-            distort(ch_uptr.get());
+            frame* child = pending_children.back();
+            pending_children.pop_back();
+
+            std::transform(
+                child->_children.begin(), 
+                child->_children.end(), 
+                std::back_inserter(pending_children), 
+                [&](auto& uptr) { return uptr.get(); });
+
+            distort(child);
         }
     }
 }

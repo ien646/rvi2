@@ -21,7 +21,7 @@ static void hello_click(rvi::client_instance& inst, rvi::frame* fptr)
 
 int main()
 {
-    rvi::window wnd(200, 200, "COZY");
+    rvi::window wnd(800, 600, "COZY");
 
     rvi::runtime rtm;
     rvi::rvi_cid_t client = rtm.create_client();
