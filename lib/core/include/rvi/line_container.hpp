@@ -74,4 +74,4 @@ namespace rvi
         std::vector<uint32_t>::iterator color_begin();
         std::vector<uint32_t>::iterator color_end();
     };
-};
+}

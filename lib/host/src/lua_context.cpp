@@ -34,29 +34,24 @@ namespace rvi
 
         _lua.set_function("release_frame", [&]{ _inst_ctx->release_frame(); });
 
-        _lua.set_function("draw_line", [&](float fx, float fy, float tx, float ty)
+        _lua.set_function("draw_line", [&](vector2 from, vector2 to)
         {
-            _inst_ctx->draw_line(vector2(fx, fy), vector2(tx, ty));
+            _inst_ctx->draw_line(from, to);
         });
 
-        _lua.set_function("set_color", [&](int r, int g, int b, int a)
+        _lua.set_function("set_color", [&](color_rgba color)
         {
-            _inst_ctx->set_color(color_rgba(
-                static_cast<u8>(r),
-                static_cast<u8>(g),
-                static_cast<u8>(b),
-                static_cast<u8>(a)
-            ));
+            _inst_ctx->set_color(color);
         });
 
-        _lua.set_function("set_position", [&](float x, float y)
+        _lua.set_function("set_position", [&](vector2 position)
         {
-            _inst_ctx->set_position(vector2(x, y));
+            _inst_ctx->set_position(position);
         });
 
-        _lua.set_function("set_scale", [&](float x, float y)
+        _lua.set_function("set_scale", [&](vector2 scale)
         {
-            _inst_ctx->set_scale(vector2(x, y));
+            _inst_ctx->set_scale(scale);
         });
 
         _lua.set_function("set_rotation", [&](float angle)
@@ -94,20 +89,14 @@ namespace rvi
             _inst.unset_current_frame_clickable();
         });
 
-        _lua.set_function("distort", [&](
-            float ul_x, float ul_y,
-            float ur_x, float ur_y,
-            float ll_x, float ll_y,
-            float lr_x, float lr_y)
+        _lua.set_function("distort", [&](vector2 ul, vector2 ur, vector2 ll, vector2 lr)
         {
-            _inst.get_context()->selected_frame()->distort(
-                vector2(ul_x, ul_y),
-                vector2(ur_x, ur_y),
-                vector2(ll_x, ll_y),
-                vector2(lr_x, lr_y)
-            );
+            _inst.get_context()->selected_frame()->distort(ul, ur, ll, lr);
         });
     }
+
+#define RVI_VEC2_MULDIV_OVERLOAD(fp) \
+    static_cast<vector2(vector2::*)(float) const noexcept>(fp)
 
     void lua_context::init_types()
     {
@@ -120,11 +109,16 @@ namespace rvi
             "y",            &vector2::y,
             "add",          &vector2::operator+,
             "sub",          &vector2::operator-,
-            "mul",          (vector2(vector2::*)(float))(&vector2::operator*),
-            "div",          (vector2(vector2::*)(float))(&vector2::operator/),
-            "cross",        (vector2(vector2::*)(vector2))(&vector2::operator*),
+            "mul",          RVI_VEC2_MULDIV_OVERLOAD(&vector2::operator*),
+            "div",          RVI_VEC2_MULDIV_OVERLOAD(&vector2::operator/),
+            "cross",        &vector2::cross_product,
             "normalized",   &vector2::normalized
         );
+
+        _lua.set_function("vec2", [](float x, float y)
+        {
+            return vector2(x, y);
+        });
 
         /*-- print_settings --*/
         _lua.new_usertype<print_settings>(
@@ -135,26 +129,34 @@ namespace rvi
             "wrap_sep_char",    &print_settings::wrap_sep_char,
             "wrap_vsep",        &print_settings::wrap_vsep
         );
+
+        _lua.new_usertype<color_rgba>(
+            "color_rgba", sol::constructors<color_rgba(), color_rgba(u8, u8, u8, u8)>(),
+            "rgba", &color_rgba::rgba
+        );
     }
 
     void lua_context::init_std_library()
     {
         using rvi::standard::print_settings;
-        // ====================================================================
-        // -- rprint ----------------------------------------------------------
-        // ====================================================================
 
-        _lua.set_function("printr", [&](const std::string text, print_settings p_set)
+        _lua.set_function("printr", [&](const std::string text, sol::variadic_args args)
         {
+            print_settings p_set;
+            if(args.size() >= 1)
+            {
+                p_set = args.get<print_settings>(0);
+            }
             rvi::standard::print(_inst, _inst_ctx->selected_frame(), text, p_set);
         });
 
-        // ====================================================================
-        // -- rprint_wrap -----------------------------------------------------
-        // ====================================================================
-
-        _lua.set_function("printr_wrap", [&](const std::string& text, print_settings p_set)
+        _lua.set_function("printr_wrap", [&](const std::string& text, sol::variadic_args args)
         {
+            print_settings p_set;
+            if(args.size() >= 1)
+            {
+                p_set = args.get<print_settings>(0);
+            }
             rvi::standard::printw(_inst, _inst_ctx->selected_frame(), text, p_set);
         });
 

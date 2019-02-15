@@ -15,6 +15,7 @@ rvi_color = {
 	pink	= { 255,	100,	200,	255 }
 };
 
-function r_set_color(color)
-	set_color(color[1], color[2], color[3], color[4]);
+function r_set_color(name)
+	entry = rvi_color[name];
+	set_color(color_rgba.new(entry[1], entry[2], entry[3], entry[4]))
 end
