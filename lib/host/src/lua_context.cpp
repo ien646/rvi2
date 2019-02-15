@@ -2,6 +2,7 @@
 
 #include <rvi/client_instance.hpp>
 #include <rvi/standard_library.hpp>
+#include <rvi/vector2.hpp>
 
 namespace rvi
 {
@@ -9,6 +10,7 @@ namespace rvi
         : _inst(inst)
         , _inst_ctx(inst.get_context())
     { 
+        init_types();
         init_lua_interface();
         init_std_library();
     }
@@ -107,90 +109,53 @@ namespace rvi
         });
     }
 
+    void lua_context::init_types()
+    {
+        using rvi::standard::print_settings;
+
+        /*-- vector2 --*/
+        _lua.new_usertype<vector2>(
+            "vector2",      sol::constructors<vector2(), vector2(float, float)>(),
+            "x",            &vector2::x,
+            "y",            &vector2::y,
+            "add",          &vector2::operator+,
+            "sub",          &vector2::operator-,
+            "mul",          (vector2(vector2::*)(float))(&vector2::operator*),
+            "div",          (vector2(vector2::*)(float))(&vector2::operator/),
+            "cross",        (vector2(vector2::*)(vector2))(&vector2::operator*),
+            "normalized",   &vector2::normalized
+        );
+
+        /*-- print_settings --*/
+        _lua.new_usertype<print_settings>(
+            "print_settings",   sol::constructors<print_settings()>(),
+            "font_size" ,       &print_settings::font_size,
+            "font_sep",         &print_settings::font_sep,
+            "font_margin",      &print_settings::font_margin,
+            "wrap_sep_char",    &print_settings::wrap_sep_char,
+            "wrap_vsep",        &print_settings::wrap_vsep
+        );
+    }
+
     void lua_context::init_std_library()
     {
+        using rvi::standard::print_settings;
         // ====================================================================
         // -- rprint ----------------------------------------------------------
         // ====================================================================
 
-        _lua.set_function("printr", 
-        [&](const std::string text, sol::variadic_args vargs)
+        _lua.set_function("printr", [&](const std::string text, print_settings p_set)
         {
-            float font_sz_h     = rvi::standard::DEFAULT_FONT_SZ_H;
-            float font_sz_v     = rvi::standard::DEFAULT_FONT_SZ_V;
-            float font_sep_h    = rvi::standard::DEFAULT_FONT_SEP_H;
-            float font_sep_v    = rvi::standard::DEFAULT_FONT_SEP_V;
-            float font_margin_h = rvi::standard::DEFAULT_FONT_MARGIN_H;
-            float font_margin_v = rvi::standard::DEFAULT_FONT_MARGIN_V;
-
-            switch(vargs.size())
-            {
-                default: [[fallthrough]];
-                case 6: font_margin_v = vargs[5].as<float>(); [[fallthrough]];
-                case 5: font_margin_h = vargs[4].as<float>(); [[fallthrough]];
-                case 4: font_sep_v    = vargs[3].as<float>(); [[fallthrough]];
-                case 3: font_sep_h    = vargs[2].as<float>(); [[fallthrough]];
-                case 2: font_sz_v     = vargs[1].as<float>(); [[fallthrough]];
-                case 1: font_sz_h     = vargs[0].as<float>(); [[fallthrough]];
-                case 0: break;
-            }
-
-            rvi::standard::print(
-                _inst,
-                _inst_ctx->selected_frame(),
-                text,
-                font_sz_h,
-                font_sz_v,
-                font_sep_h,
-                font_sep_v,
-                font_margin_h,
-                font_margin_v
-            );
+            rvi::standard::print(_inst, _inst_ctx->selected_frame(), text, p_set);
         });
 
         // ====================================================================
         // -- rprint_wrap -----------------------------------------------------
         // ====================================================================
 
-        _lua.set_function("printr_wrap", 
-        [&](const std::string& text, sol::variadic_args vargs)
+        _lua.set_function("printr_wrap", [&](const std::string& text, print_settings p_set)
         {
-            float font_sz_h     = rvi::standard::DEFAULT_FONT_SZ_H;
-            float font_sz_v     = rvi::standard::DEFAULT_FONT_SZ_V;
-            float font_sep_h    = rvi::standard::DEFAULT_FONT_SEP_H;
-            float font_sep_v    = rvi::standard::DEFAULT_FONT_SEP_V;
-            float font_margin_h = rvi::standard::DEFAULT_FONT_MARGIN_H;
-            float font_margin_v = rvi::standard::DEFAULT_FONT_MARGIN_V;
-            char  wrap_sep_ch   = rvi::standard::DEFAULT_WRAP_SEP_CHAR;
-            float wrap_sep_v    = rvi::standard::DEFAULT_WRAP_LNSEP_V;
-
-            switch(vargs.size())
-            {
-                default: [[fallthrough]];
-                case 8: wrap_sep_v    = vargs[7].as<float>(); [[fallthrough]];
-                case 7: wrap_sep_ch   = vargs[6].as<char>();  [[fallthrough]];
-                case 6: font_margin_v = vargs[5].as<float>(); [[fallthrough]];
-                case 5: font_margin_h = vargs[4].as<float>(); [[fallthrough]];
-                case 4: font_sep_v    = vargs[3].as<float>(); [[fallthrough]];
-                case 3: font_sep_h    = vargs[2].as<float>(); [[fallthrough]];
-                case 2: font_sz_v     = vargs[1].as<float>(); [[fallthrough]];
-                case 1: font_sz_h     = vargs[0].as<float>(); [[fallthrough]];
-                case 0: break;
-            }
-
-            rvi::standard::printw(
-                _inst,
-                _inst_ctx->selected_frame(),
-                text,
-                font_sz_h,
-                font_sz_v,
-                font_sep_h,
-                font_sep_v,
-                font_margin_h,
-                font_margin_v,
-                wrap_sep_ch,
-                wrap_sep_v
-            );
+            rvi::standard::printw(_inst, _inst_ctx->selected_frame(), text, p_set);
         });
 
         _lua.set_function("box_border", [&]

@@ -21,6 +21,7 @@ namespace rvi
         void exec_script_file(const std::string& scr_filepath);
     private:
         void init_lua_interface();
+        void init_types();
         void init_std_library();
     };
 }

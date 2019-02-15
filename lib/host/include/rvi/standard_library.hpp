@@ -5,39 +5,33 @@
 
 namespace rvi::standard
 {
-    extern float DEFAULT_FONT_SZ_H;
-    extern float DEFAULT_FONT_SZ_V;
-    extern float DEFAULT_FONT_SEP_H;
-    extern float DEFAULT_FONT_SEP_V;
-    extern float DEFAULT_FONT_MARGIN_H;
-    extern float DEFAULT_FONT_MARGIN_V;
-    extern char  DEFAULT_WRAP_SEP_CHAR;
-    extern float DEFAULT_WRAP_LNSEP_V;
+    extern vector2  DEFAULT_FONT_SZ;
+    extern vector2  DEFAULT_FONT_SEP;
+    extern vector2  DEFAULT_FONT_MARGIN;
+    extern char     DEFAULT_WRAP_SEP_CHAR;
+    extern float    DEFAULT_WRAP_LNSEP_V;
+
+    struct print_settings
+    {
+        vector2 font_size   = DEFAULT_FONT_SZ;
+        vector2 font_sep    = DEFAULT_FONT_SEP;
+        vector2 font_margin = DEFAULT_FONT_MARGIN;
+        char wrap_sep_char  = DEFAULT_WRAP_SEP_CHAR;
+        float wrap_vsep     = DEFAULT_WRAP_LNSEP_V;
+    };
 
     extern void print(
         client_instance& c_inst,
         frame* calling_frame,
         const std::string& text,
-        float font_sz_h = DEFAULT_FONT_SZ_H,
-        float font_sz_v = DEFAULT_FONT_SZ_V,
-        float font_sep_h = DEFAULT_FONT_SEP_H,
-        float font_sep_v = DEFAULT_FONT_SEP_V,
-        float font_margin_h = DEFAULT_FONT_MARGIN_H,
-        float font_margin_v = DEFAULT_FONT_MARGIN_V
+        const print_settings& p_set = print_settings()
     );
 
     extern void printw(
         client_instance& c_inst,
         frame* calling_frame,
         const std::string& text,
-        float font_sz_h = DEFAULT_FONT_SZ_H,
-        float font_sz_v = DEFAULT_FONT_SZ_V,
-        float font_sep_h = DEFAULT_FONT_SEP_H,
-        float font_sep_v = DEFAULT_FONT_SEP_V,
-        float font_margin_h = DEFAULT_FONT_MARGIN_H,
-        float font_margin_v = DEFAULT_FONT_MARGIN_V,
-        char wrap_sep_char = DEFAULT_WRAP_SEP_CHAR,
-        float wrap_vsep = DEFAULT_WRAP_LNSEP_V
+        const print_settings& p_set = print_settings()
     );
 
     extern void box_border(

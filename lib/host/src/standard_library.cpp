@@ -4,12 +4,9 @@
 
 namespace rvi::standard
 {
-    float DEFAULT_FONT_SZ_H      = 0.025F;
-    float DEFAULT_FONT_SZ_V      = 0.025F;
-    float DEFAULT_FONT_SEP_H     = 0.010F;
-    float DEFAULT_FONT_SEP_V     = 0.000F;
-    float DEFAULT_FONT_MARGIN_H  = 0.000F;
-    float DEFAULT_FONT_MARGIN_V  = 0.000F;
+    vector2 DEFAULT_FONT_SZ      = vector2(0.025F, 0.025F);
+    vector2 DEFAULT_FONT_SEP     = vector2(0.010F, 0.0F);
+    vector2 DEFAULT_FONT_MARGIN  = vector2(0.0F, 0.0F);
     char  DEFAULT_WRAP_SEP_CHAR  = ' ';
     float DEFAULT_WRAP_LNSEP_V   = 0.020F;
 
@@ -17,17 +14,12 @@ namespace rvi::standard
         client_instance& c_inst,
         frame* calling_frame,
         const std::string& text,
-        float font_sz_h,
-        float font_sz_v,
-        float font_sep_h,
-        float font_sep_v,
-        float font_margin_h,
-        float font_margin_v)
+        const print_settings& p_set)
     {
         client_context* ctx = c_inst.get_context();
         frame* save_fptr = ctx->selected_frame();
 
-        vector2 offset(font_margin_h, font_margin_v);
+        vector2 offset(p_set.font_margin.x, p_set.font_margin.y);
 
         ctx->select_frame(calling_frame);
         ctx->select_frame("__STD_PRINT");
@@ -37,14 +29,14 @@ namespace rvi::standard
             std::string defn = std::string(1, ch);
             ctx->select_frame("char_" + std::to_string(idx) + "_[" + defn + "]");
             {
-                ctx->set_scale(vector2(font_sz_h, font_sz_v));
+                ctx->set_scale(vector2(p_set.font_size.x, p_set.font_size.y));
                 ctx->set_transform_scale_abs(true);
                 ctx->set_position(offset);
                 c_inst.exec_macro(defn);
             }
             ctx->release_frame();
 
-            offset += vector2(font_sz_h + font_sep_h, font_sep_v);
+            offset += vector2(p_set.font_size.x + p_set.font_sep.x, p_set.font_sep.y);
             ++idx;
         }
         ctx->release_frame(); // "text_print"
@@ -55,14 +47,7 @@ namespace rvi::standard
         client_instance& c_inst,
         frame* calling_frame,
         const std::string& text,
-        float font_sz_h,
-        float font_sz_v,
-        float font_sep_h,
-        float font_sep_v,
-        float font_margin_h,
-        float font_margin_v,
-        char wrap_sep_char,
-        float wrap_vsep)
+        const print_settings& p_set)
     {
         client_context* ctx = c_inst.get_context();
         frame* save_fptr = ctx->selected_frame();
@@ -71,8 +56,8 @@ namespace rvi::standard
         float y_max_sz = calling_frame->get_absolute_transform().scale.y;
 
         vector2 offset(
-            font_margin_h,
-            (y_max_sz - font_sz_v) - font_margin_v
+            p_set.font_margin.x,
+            (y_max_sz - p_set.font_size.y) - p_set.font_margin.y
         );
 
         bool first = true;
@@ -82,19 +67,19 @@ namespace rvi::standard
         std::stringstream tstr(text);
         std::string line;
         int idx = 0;
-        while(std::getline(tstr, line, wrap_sep_char))
+        while(std::getline(tstr, line, p_set.wrap_sep_char))
         {
-            line += wrap_sep_char;
+            line += p_set.wrap_sep_char;
             if(!first)
             {
                 float finalPos = offset.x + 
-                    (line.size() * font_sz_h) + 
-                    ((line.size() - 1) * font_sep_h);
+                    (line.size() * p_set.font_size.x) + 
+                    ((line.size() - 1) * p_set.font_sep.x);
 
                 if(finalPos > x_max_sz)
                 {
-                    offset.x = font_margin_h;
-                    offset.y -= (font_sz_v + wrap_vsep);
+                    offset.x = p_set.font_margin.x;
+                    offset.y -= (p_set.font_size.y + p_set.wrap_vsep);
                 }
             }
             first = false;
@@ -104,14 +89,14 @@ namespace rvi::standard
                 
                 ctx->select_frame("char_" + std::to_string(idx) + "_[" + defn + "]");
                 {
-                    ctx->set_scale(vector2(font_sz_h, font_sz_v));
+                    ctx->set_scale(vector2(p_set.font_size.x, p_set.font_size.y));
                     ctx->set_transform_scale_abs(true);
                     ctx->set_position(offset);
                     c_inst.exec_macro(defn);
                 }
                 ctx->release_frame();
 
-                offset += vector2(font_sz_h + font_sep_h, font_sep_v);
+                offset += vector2(p_set.font_size.x + p_set.font_sep.x, p_set.font_sep.y);
                 ++idx;
             }
         }
