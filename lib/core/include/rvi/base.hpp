@@ -54,11 +54,9 @@ namespace rvi
     // Endianess constant expressions
     //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-    static constexpr u16 _RVI_CEXPR_ENDIAN_MAGIC_NUMBER = 0x00FF;
+    static constexpr bool RVI_BIG_ENDIAN
+        = static_cast<uint8_t>(0x00FF) == 0x00;
 
-    static constexpr bool RVI_CEXPR_BIG_ENDIAN      
-        = static_cast<uint8_t>(_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0x00;
-
-    static constexpr bool RVI_CEXPR_LITTLE_ENDIAN   
-        = static_cast<uint8_t>(_RVI_CEXPR_ENDIAN_MAGIC_NUMBER) == 0xFF;
+    static constexpr bool RVI_LITTLE_ENDIAN
+        = static_cast<uint8_t>(0x00FF) == 0xFF;
 }
