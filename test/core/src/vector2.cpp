@@ -31,7 +31,7 @@ TEST_CASE("rvi::vector2::magnitude()")
         float vx = 1.22F;
         float vy = 2.11F;
         vector2 vec(vx, vy);
-        float expected = std::sqrt(std::powf(vx, 2) + std::powf(vy, 2));
+        float expected = std::sqrt(std::pow(vx, 2) + std::pow(vy, 2));
         REQUIRE(vec.magnitude() == expected);
     }
 }
