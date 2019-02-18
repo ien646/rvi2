@@ -131,9 +131,9 @@ namespace rvi::standard
         } ctx.release_frame();
     }
 
-    void stitch_fill(client_context& ctx, float step_sz)
+    void stitch_fill_h(client_context& ctx, float step_sz)
     {
-        ctx.select_frame("__STD_STITCH_FILL");
+        ctx.select_frame("__STD_STITCH_FILL_H");
 
         std::vector<vector2> points;
         bool top = false;
@@ -164,9 +164,42 @@ namespace rvi::standard
         ctx.release_frame();
     }
 
-    void horizontal_fill(client_context& ctx, float step_sz)
+    void stitch_fill_v(client_context& ctx, float step_sz)
     {
-        ctx.select_frame("__STD_HORIZONTAL_FILL");
+        ctx.select_frame("__STD_STITCH_FILL_H");
+
+        std::vector<vector2> points;
+        bool top = false;
+        float y = 0.0F;
+        for(; y <= 1.0F; y += step_sz)
+        {
+            points.push_back(vector2((top ? 1.0F : 0.0F), y));
+            top = !top;
+        }
+
+        if(y > 1.0F)
+        {
+            float q = step_sz - (1.0F - y);
+            if(top)
+            {
+                q = 1 - q;
+            }
+            points.push_back(vector2(q, 1.0F));
+        }
+
+        auto current_it = points.begin();
+
+        for(auto it = points.begin() + 1; it != points.end(); ++it)
+        {
+            ctx.draw_line(*current_it, *it);
+            current_it = it;
+        }
+        ctx.release_frame();
+    }
+
+    void parallel_fill_h(client_context& ctx, float step_sz)
+    {
+        ctx.select_frame("__STD_PARALLEL_FILL_H");
         {
             float y_accum = step_sz;
             while(y_accum <= 1.00F)
@@ -178,9 +211,9 @@ namespace rvi::standard
         ctx.release_frame();
     }
 
-    void vertical_fill(client_context& ctx, float step_sz)
+    void parallel_fill_v(client_context& ctx, float step_sz)
     {
-        ctx.select_frame("__STD_VERTICAL_FILL");
+        ctx.select_frame("__STD_PARALLEL_FILL_V");
         float x_accum = step_sz;
         while(x_accum <= 1.00F)
         {

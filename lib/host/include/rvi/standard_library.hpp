@@ -44,17 +44,22 @@ namespace rvi::standard
         float y_step
     );
 
-    extern void stitch_fill(
-        client_context& ctx, 
-        float step_sz
-    );  
-
-    extern void horizontal_fill(
+    extern void stitch_fill_h(
         client_context& ctx, 
         float step_sz
     );
 
-    extern void vertical_fill(
+    extern void stitch_fill_v(
+        client_context& ctx, 
+        float step_sz
+    );  
+
+    extern void parallel_fill_h(
+        client_context& ctx, 
+        float step_sz
+    );
+
+    extern void parallel_fill_v(
         client_context& ctx, 
         float step_sz
     );

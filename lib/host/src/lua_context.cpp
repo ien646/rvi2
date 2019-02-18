@@ -177,37 +177,48 @@ namespace rvi
             rvi::standard::grid_fill(*_inst_ctx, x_sz, y_sz);
         });
 
-        _lua.set_function("stitch_fill", [&](float step_sz)
+        _lua.set_function("stitch_fill_h", [&](float step_sz)
         {
-            rvi::standard::stitch_fill(*_inst_ctx, step_sz);
+            rvi::standard::stitch_fill_h(*_inst_ctx, step_sz);
         });
 
-        _lua.set_function("stitch_fill_rlt", [&](int step_count)
+        _lua.set_function("stitch_fill_v", [&](float step_sz)
+        {
+            rvi::standard::stitch_fill_v(*_inst_ctx, step_sz);
+        });
+
+        _lua.set_function("stitch_fill_rlt_h", [&](int step_count)
         {
             float step_sz = 1.0F / step_count;
-            rvi::standard::stitch_fill(*_inst_ctx, step_sz);
+            rvi::standard::stitch_fill_h(*_inst_ctx, step_sz);
         });
 
-        _lua.set_function("horizontal_fill", [&](float step_sz)
-        {
-            rvi::standard::horizontal_fill(*_inst_ctx, step_sz);
-        });
-
-        _lua.set_function("horizontal_fill_rlt", [&](int step_count)
+        _lua.set_function("stitch_fill_rlt_v", [&](int step_count)
         {
             float step_sz = 1.0F / step_count;
-            rvi::standard::horizontal_fill(*_inst_ctx, step_sz);
+            rvi::standard::stitch_fill_v(*_inst_ctx, step_sz);
         });
 
-        _lua.set_function("vertical_fill", [&](float step_sz)
+        _lua.set_function("parallel_fill_h", [&](float step_sz)
         {
-            rvi::standard::vertical_fill(*_inst_ctx, step_sz);
+            rvi::standard::parallel_fill_h(*_inst_ctx, step_sz);
         });
 
-        _lua.set_function("horizontal_fill", [&](int step_count)
+        _lua.set_function("parallel_fill_v", [&](float step_sz)
+        {
+            rvi::standard::parallel_fill_v(*_inst_ctx, step_sz);
+        });
+
+        _lua.set_function("parallel_fill_rlt_h", [&](int step_count)
         {
             float step_sz = 1.0F / step_count;
-            rvi::standard::vertical_fill(*_inst_ctx, step_sz);
+            rvi::standard::parallel_fill_h(*_inst_ctx, step_sz);
+        });
+
+        _lua.set_function("parallel_fill_rlt_v", [&](float step_count)
+        {
+            float step_sz = 1.0F / step_count;
+            rvi::standard::parallel_fill_v(*_inst_ctx, step_sz);
         });
     }
 
