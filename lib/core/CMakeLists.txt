@@ -18,7 +18,10 @@ set(RVI2_CORE_SOURCES
 # -- INCLUDE DIR --
 set(RVI2_CORE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+find_package(Threads)
+
 add_library(rvi2.core STATIC ${RVI2_CORE_SOURCES})
+target_link_libraries(rvi2.core ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(rvi2.core PUBLIC ${RVI2_CORE_INCLUDE_DIR})
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
