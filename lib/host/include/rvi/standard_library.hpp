@@ -64,6 +64,8 @@ namespace rvi::standard
         float step_sz
     );
 
+    extern void distort(frame* fptr, vector2 ul, vector2 ur, vector2 ll, vector2 lr);
+
     /**
      * @brief Distort a frame's contained lines, along with
      * its children, by offsetting each corner of the frame's
@@ -75,5 +77,5 @@ namespace rvi::standard
      * @param ll Lower Left bounds corner
      * @param lr Lower Right bounds corner
      */
-    extern void distort(frame* fptr, vector2 ul, vector2 ur, vector2 ll, vector2 lr);
+    extern void distort_recursive(frame* fptr, vector2 ul, vector2 ur, vector2 ll, vector2 lr);
 }

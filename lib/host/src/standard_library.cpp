@@ -223,44 +223,58 @@ namespace rvi::standard
         ctx.release_frame();
     }
 
+    vector2 get_distort_point_offset(
+        vector2 point, 
+        vector2 ul, 
+        vector2 ur, 
+        vector2 ll, 
+        vector2 lr)
+    {
+        float offset_x = 0.0F;
+        float offset_y = 0.0F;
+
+        // ul
+        float ul_f_sample = point.y * (1 - point.x);
+        offset_x += ul.x * ul_f_sample;
+        offset_y += ul.y * ul_f_sample;
+
+        // ur
+        float ur_f_sample = point.y * point.x;
+        offset_x += ur.x * ur_f_sample;
+        offset_y += ur.y * ur_f_sample;
+
+        // ll
+        float ll_f_sample = (1 - point.y) * (1 - point.x);
+        offset_x += ll.x * ll_f_sample;
+        offset_y += ll.y * ll_f_sample;
+
+        // lr
+        float lr_f_sample = (1 - point.y) * point.x;
+        offset_x += lr.x * lr_f_sample;
+        offset_y += lr.y * lr_f_sample;
+
+        return vector2(offset_x, offset_y);
+    }
+
     void distort(frame* fptr, vector2 ul, vector2 ur, vector2 ll, vector2 lr)
     {
-        auto distort = [ul, ur, ll, lr](frame* fp)
+        auto& lines = fptr->lines();
+        for(auto it = lines.position_begin(); it != lines.position_end(); it += 2)
         {
-            auto& lines = fp->lines();
-            for(auto it = lines.position_begin(); it != lines.position_end(); it += 2)
-            {
-                float& x = *it;
-                float& y = *(it + 1);
+            float& x = *it;
+            float& y = *(it + 1);
 
-                float offset_x = 0.0F;
-                float offset_y = 0.0F;
+            vector2 offset = get_distort_point_offset(vector2(x, y), ul, ur, ll, lr);
 
-                // ul
-                float ul_f_sample = y * (1 - x);
-                offset_x += ul.x * ul_f_sample;
-                offset_y += ul.y * ul_f_sample;
+            x += offset.x;
+            y += offset.y;
+        }
+    }    
 
-                // ur
-                float ur_f_sample = y * x;
-                offset_x += ur.x * ur_f_sample;
-                offset_y += ur.y * ur_f_sample;
+    void distort_recursive(frame* fptr, vector2 ul, vector2 ur, vector2 ll, vector2 lr)
+    {
+        distort(fptr, ul, ur, ll, lr);
 
-                // ll
-                float ll_f_sample = (1 - y) * (1 - x);
-                offset_x += ll.x * ll_f_sample;
-                offset_y += ll.y * ll_f_sample;
-
-                // lr
-                float lr_f_sample = (1 - y) * x;
-                offset_x += lr.x * lr_f_sample;
-                offset_y += lr.y * lr_f_sample;
-
-                x += offset_x;
-                y += offset_y;
-            }
-        };
-        distort(fptr);
         std::vector<frame*> pending_children;
         std::transform(
             fptr->children().begin(), 
@@ -278,8 +292,14 @@ namespace rvi::standard
                 child->children().end(), 
                 std::back_inserter(pending_children), 
                 [&](auto& uptr) { return uptr.get(); });
+            
+            vector2 child_offset = get_distort_point_offset(
+                child->transform().position,
+                ul, ur, ll, lr
+            );
 
-            distort(child);
+            child->set_position(child->transform().position + child_offset);
+            distort(child, ul, ur, ll, lr);
         }
     }
 }
