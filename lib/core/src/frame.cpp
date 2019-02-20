@@ -195,18 +195,14 @@ namespace rvi
         return _lines;
     }
 
-    std::unordered_map<std::string, frame*> frame::children() const
+    const std::unordered_map<std::string, frame*>& frame::child_index() const
     {
-        std::unordered_map<std::string, frame*> result;
-        result.reserve(_child_frames_index.size());
-        for (auto& p : _child_frames_index)
-        {
-            const std::string& name = p.first;
-            frame* f_ptr = _child_frames_index.at(name);
-            result.emplace(name, f_ptr);
-        }
+        return _child_frames_index;
+    }
 
-        return result;
+    std::vector<std::unique_ptr<frame>>& frame::children()
+    {
+        return _children;
     }
 
     const transform2& frame::transform() const noexcept
@@ -268,65 +264,5 @@ namespace rvi
     size_t frame::line_count() const noexcept
     {
         return _lines.size();
-    }
-
-    void frame::distort(vector2 ul, vector2 ur, vector2 ll, vector2 lr)
-    {
-        auto distort = [ul, ur, ll, lr](frame* fptr)
-        {
-            auto& lines = fptr->lines();
-            for(auto it = lines.position_begin(); it != lines.position_end(); it += 2)
-            {
-                float& x = *it;
-                float& y = *(it + 1);
-
-                float offset_x = 0.0F;
-                float offset_y = 0.0F;
-
-                // ul
-                float ul_f_sample = y * (1 - x);
-                offset_x += ul.x * ul_f_sample;
-                offset_y += ul.y * ul_f_sample;
-
-                // ur
-                float ur_f_sample = y * x;
-                offset_x += ur.x * ur_f_sample;
-                offset_y += ur.y * ur_f_sample;
-
-                // ll
-                float ll_f_sample = (1 - y) * (1 - x);
-                offset_x += ll.x * ll_f_sample;
-                offset_y += ll.y * ll_f_sample;
-
-                // lr
-                float lr_f_sample = (1 - y) * x;
-                offset_x += lr.x * lr_f_sample;
-                offset_y += lr.y * lr_f_sample;
-
-                x += offset_x;
-                y += offset_y;
-            }
-        };
-        distort(this);
-        std::vector<frame*> pending_children;
-        std::transform(
-            _children.begin(), 
-            _children.end(), 
-            std::back_inserter(pending_children), 
-            [&](auto& uptr) { return uptr.get(); });
-
-        while(!pending_children.empty())
-        {
-            frame* child = pending_children.back();
-            pending_children.pop_back();
-
-            std::transform(
-                child->_children.begin(), 
-                child->_children.end(), 
-                std::back_inserter(pending_children), 
-                [&](auto& uptr) { return uptr.get(); });
-
-            distort(child);
-        }
     }
 }

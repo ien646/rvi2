@@ -63,4 +63,17 @@ namespace rvi::standard
         client_context& ctx, 
         float step_sz
     );
+
+    /**
+     * @brief Distort a frame's contained lines, along with
+     * its children, by offsetting each corner of the frame's
+     * bounds by the given offset vectors.
+     * 
+     * @param fptr Frame to distort
+     * @param ul Upper Left bounds corner
+     * @param ur Upper Right bounds corner
+     * @param ll Lower Left bounds corner
+     * @param lr Lower Right bounds corner
+     */
+    extern void distort(frame* fptr, vector2 ul, vector2 ur, vector2 ll, vector2 lr);
 }

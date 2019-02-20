@@ -91,7 +91,7 @@ namespace rvi
 
         _lua.set_function("distort", [&](vector2 ul, vector2 ur, vector2 ll, vector2 lr)
         {
-            _inst.get_context()->selected_frame()->distort(ul, ur, ll, lr);
+            standard::distort(_inst.get_context()->selected_frame(), ul, ur, ll, lr);
         });
     }
 

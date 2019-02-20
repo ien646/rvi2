@@ -222,4 +222,64 @@ namespace rvi::standard
         }
         ctx.release_frame();
     }
+
+    void distort(frame* fptr, vector2 ul, vector2 ur, vector2 ll, vector2 lr)
+    {
+        auto distort = [ul, ur, ll, lr](frame* fp)
+        {
+            auto& lines = fp->lines();
+            for(auto it = lines.position_begin(); it != lines.position_end(); it += 2)
+            {
+                float& x = *it;
+                float& y = *(it + 1);
+
+                float offset_x = 0.0F;
+                float offset_y = 0.0F;
+
+                // ul
+                float ul_f_sample = y * (1 - x);
+                offset_x += ul.x * ul_f_sample;
+                offset_y += ul.y * ul_f_sample;
+
+                // ur
+                float ur_f_sample = y * x;
+                offset_x += ur.x * ur_f_sample;
+                offset_y += ur.y * ur_f_sample;
+
+                // ll
+                float ll_f_sample = (1 - y) * (1 - x);
+                offset_x += ll.x * ll_f_sample;
+                offset_y += ll.y * ll_f_sample;
+
+                // lr
+                float lr_f_sample = (1 - y) * x;
+                offset_x += lr.x * lr_f_sample;
+                offset_y += lr.y * lr_f_sample;
+
+                x += offset_x;
+                y += offset_y;
+            }
+        };
+        distort(fptr);
+        std::vector<frame*> pending_children;
+        std::transform(
+            fptr->children().begin(), 
+            fptr->children().end(), 
+            std::back_inserter(pending_children), 
+            [&](auto& uptr) { return uptr.get(); });
+
+        while(!pending_children.empty())
+        {
+            frame* child = pending_children.back();
+            pending_children.pop_back();
+
+            std::transform(
+                child->children().begin(), 
+                child->children().end(), 
+                std::back_inserter(pending_children), 
+                [&](auto& uptr) { return uptr.get(); });
+
+            distort(child);
+        }
+    }
 }

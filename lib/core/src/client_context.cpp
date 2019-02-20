@@ -161,9 +161,9 @@ namespace rvi
 
     void client_context::clear_children()
     {
-        for (auto& ch : _selected_frame->children())
+        for (auto& fuptr : _selected_frame->children())
         {
-            frame* fptr = ch.second;
+            frame* fptr = fuptr.get();
             _frame_index.erase(fptr);
             _deleted_frame_queue.push_back(get_full_frame_name(fptr));
         }
@@ -329,9 +329,9 @@ namespace rvi
         {
             frame* fptr = remaining_frames.front();
 
-            for(auto& ch_pair : fptr->children())
+            for(auto& fuptr : fptr->children())
             {
-                remaining_frames.push(ch_pair.second);
+                remaining_frames.push(fuptr.get());
             }
 
             line_container lines = fptr->lines();
@@ -358,9 +358,9 @@ namespace rvi
         while(!remaining_frames.empty())
         {
             frame* fptr = remaining_frames.front();
-            for(auto& ch_pair : fptr->children())
+            for(auto& fuptr : fptr->children())
             {
-                remaining_frames.push(ch_pair.second);
+                remaining_frames.push(fuptr.get());
             }
 
             line_container lines = fptr->lines();
@@ -395,9 +395,9 @@ namespace rvi
         for(frame* fptr : _modified_frames)
         {
             remaining_frames.push(fptr);
-            for(auto& ch_pair : fptr->children())
+            for(auto& fuptr : fptr->children())
             {
-                remaining_frames.push(ch_pair.second);
+                remaining_frames.push(fuptr.get());
             }
         }
 
@@ -406,9 +406,9 @@ namespace rvi
         while(!remaining_frames.empty())
         {
             frame* fptr = remaining_frames.front();
-            for(auto& ch_pair : fptr->children())
+            for(auto& fuptr : fptr->children())
             {
-                remaining_frames.push(ch_pair.second);
+                remaining_frames.push(fuptr.get());
             }
 
             line_container lines = fptr->lines();
@@ -466,18 +466,18 @@ namespace rvi
         _frame_index.emplace(current_frame);
 
         std::vector<frame*> pending_children;
-        for(auto& entry : current_frame->children())
+        for(auto& fuptr : current_frame->children())
         {
-            pending_children.push_back(entry.second);
+            pending_children.push_back(fuptr.get());
         }
 
         while(!pending_children.empty())
         {
             current_frame = pending_children.back();
             _frame_index.emplace(current_frame);
-            for(auto& entry : current_frame->children())
+            for(auto& fuptr : current_frame->children())
             {
-                pending_children.push_back(entry.second);
+                pending_children.push_back(fuptr.get());
             }
             pending_children.pop_back();
         }

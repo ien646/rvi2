@@ -151,8 +151,11 @@ namespace rvi
         ///Get contained lines
         line_container& lines();
 
+        ///Get child frames index
+        const std::unordered_map<std::string, frame*>& child_index() const;
+
         ///Get child frames
-        std::unordered_map<std::string, frame*> children() const;
+        std::vector<std::unique_ptr<frame>>& children();
 
         ///Get relative frame transform
         const transform2& transform() const noexcept;
@@ -194,17 +197,5 @@ namespace rvi
 
         ///Set relative frame transform scale
         void set_scale(vector2 scale) noexcept;
-
-        /**
-         * @brief Distort this frame's contained lines, along with
-         * its children, by offsetting each corner of this frame's
-         * bounds by the given offset vectors.
-         * 
-         * @param ul Upper Left bounds corner
-         * @param ur Upper Right bounds corner
-         * @param ll Lower Left bounds corner
-         * @param lr Lower Right bounds corner
-         */
-        void distort(vector2 ul, vector2 ur, vector2 ll, vector2 lr);
     };
 }
