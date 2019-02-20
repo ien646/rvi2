@@ -40,5 +40,5 @@ if(RVI2_BUILD_SAMPLES)
 endif()
 
 if(RVI2_BUILD_TESTS)
-    add_subdirectory("test")
+    #add_subdirectory("test")
 endif()

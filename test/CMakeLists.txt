@@ -1,7 +1,5 @@
 enable_testing()
 
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/test_output/lib/shared)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/test_output/lib/static)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/test_output/bin)
