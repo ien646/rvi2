@@ -12,7 +12,7 @@ message("")
 project(rvi2 LANGUAGES CXX C)
 
 option(RVI2_BUILD_SAMPLES 	"Build sample application(s)" 	ON)
-option(RVI2_BUILD_TESTS	 	"Build tests" 					ON)
+option(RVI2_BUILD_TESTS	 	"Build tests" 					OFF)
 option(RVI2_BUILD_COZY 		"Build cozy openGL backend" 	ON)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -40,5 +40,5 @@ if(RVI2_BUILD_SAMPLES)
 endif()
 
 if(RVI2_BUILD_TESTS)
-    #add_subdirectory("test")
+    add_subdirectory("test")
 endif()
