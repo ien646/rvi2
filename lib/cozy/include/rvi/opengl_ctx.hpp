@@ -20,8 +20,6 @@ namespace rvi
     private:
         GLuint _shader_program;
         std::unordered_map<std::string, vframe> _vframes;
-        
-        size_t _line_count = 0;
 
         static rvi_cid_t _client_id;
         static runtime* _runtime_ptr;

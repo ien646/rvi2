@@ -25,9 +25,9 @@ target_link_libraries(rvi2.core ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(rvi2.core PUBLIC ${RVI2_CORE_INCLUDE_DIR})
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    add_definitions(-lstdc++fs -Wall -pedantic-errors)
+    add_definitions(-Wall -Wextra -Wpedantic)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    add_definitions(-lstdc++fs -Wall -pedantic-errors)  
+    add_definitions(-Wall -Wextra -Wpedantic)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
     #Unsupported
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")

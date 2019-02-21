@@ -8,10 +8,10 @@ namespace rvi
     {
         const float angleRadians = deg2rad(angle);
         return Matrix2x2
-        {
+        {{
             std::cos(angleRadians), -std::sin(angleRadians),
             std::sin(angleRadians),  std::cos(angleRadians)
-        };
+        }};
     }
 
     float math::clamp_angle_deg(float angle) noexcept

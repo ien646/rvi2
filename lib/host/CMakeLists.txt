@@ -15,9 +15,9 @@ target_include_directories(rvi2.host PUBLIC ${RVI2_HOST_INCLUDE_DIR})
 target_link_libraries(rvi2.host rvi2.core sol2 lua)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    add_definitions(-Wall -pedantic-errors)
+    add_definitions(-Wall -Wextra -Wpedantic)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    add_definitions(-Wall -pedantic-errors)  
+    add_definitions(-Wall -Wextra -Wpedantic)  
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
     #Unsupported
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")

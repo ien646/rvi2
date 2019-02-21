@@ -13,9 +13,9 @@ using std::unordered_map;
 namespace rvi
 {
     client_instance::client_instance(runtime* rptr, rvi_cid_t cid)
-        : _lua_ctx(std::make_unique<lua_context>(*this))
+        : _ctx(std::make_unique<client_context>())
+        , _lua_ctx(std::make_unique<lua_context>(*this))
         , _runtime_ptr(rptr)
-        , _ctx(std::make_unique<client_context>())
         , _cid(cid)
     { }
 
