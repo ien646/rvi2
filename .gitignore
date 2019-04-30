@@ -19,3 +19,4 @@ build*/
 latex/
 html/
 mintty.exe.stackdump
+.vscode/ipch/

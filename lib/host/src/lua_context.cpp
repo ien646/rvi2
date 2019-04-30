@@ -93,6 +93,22 @@ namespace rvi
         {
             standard::distort_recursive(_inst.get_context()->selected_frame(), ul, ur, ll, lr);
         });
+
+        _lua.set_function("get_selected_frame_name", [&]() -> std::string
+        {
+            return _inst.get_context()->selected_frame()->name();
+        });
+
+        _lua.set_function("get_selected_frame_ptr", [&]() -> uintptr_t
+        {
+            return (uintptr_t)(_inst.get_context()->selected_frame());
+        });
+
+        _lua.set_function("select_frame_by_ptr", [&](uintptr_t ptr)
+        {
+            frame* fptr = (frame*)(ptr);
+            _inst.get_context()->select_frame(fptr);
+        });
     }
 
 #define RVI_VEC2_MULDIV_OVERLOAD(fp) \
@@ -148,6 +164,16 @@ namespace rvi
                 p_set = args.get<print_settings>(0);
             }
             rvi::standard::print(_inst, _inst_ctx->selected_frame(), text, p_set);
+        });
+
+        _lua.set_function("printv", [&](const long double val, sol::variadic_args args)
+        {
+            print_settings p_set;
+            if(args.size() >= 1)
+            {
+                p_set = args.get<print_settings>(0);
+            }
+            rvi::standard::print(_inst, _inst_ctx->selected_frame(), std::to_string(val), p_set);
         });
 
         _lua.set_function("printr_wrap", [&](const std::string& text, sol::variadic_args args)
