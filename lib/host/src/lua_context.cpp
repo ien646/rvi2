@@ -248,6 +248,11 @@ namespace rvi
         });
     }
 
+    sol::state* lua_context::get_lua_state()
+    {
+        return &_lua;
+    }
+
     void lua_context::exec_script(const std::string& scr)
     {
         _lua.script(scr);
