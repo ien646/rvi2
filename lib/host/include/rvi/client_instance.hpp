@@ -53,6 +53,8 @@ namespace rvi
 
         void run_script_file(const std::string& filepath);
 
+        lua_context* get_lua_context();
+
         const std::unordered_map<std::string, std::vector<std::string>>& macros();
     private:
         void cleanup_clickable_frames();

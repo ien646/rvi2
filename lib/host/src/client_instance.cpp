@@ -154,6 +154,11 @@ namespace rvi
         return _ctx->snapshot_diff_relative();
     }
 
+    lua_context* client_instance::get_lua_context()
+    {
+        return _lua_ctx.get();
+    }
+
     void client_instance::cleanup_clickable_frames()
     {
         auto& children = _ctx->frames();
