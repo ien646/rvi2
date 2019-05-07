@@ -119,8 +119,8 @@ namespace rvi
     {
         if(key == GLFW_MOUSE_BUTTON_LEFT && act == GLFW_PRESS)
         {
-            auto& inst = _runtime_ptr->get_instance(_client_id);
-            inst.user_click(_cursor_pos);
+            auto inst = _runtime_ptr->get_instance(_client_id);
+            inst->user_click(_cursor_pos);
         }
     }
 }

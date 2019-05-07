@@ -24,7 +24,7 @@ namespace rvi
         rvi_cid_t create_client();
         void start_client(rvi_cid_t cid);
 
-        client_instance& get_instance(rvi_cid_t);
+        client_instance* get_instance(rvi_cid_t);
 
         void create_binding(const std::string& bname, binding_t bcall);
         void delete_binding(const std::string& bname);

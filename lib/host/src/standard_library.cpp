@@ -11,12 +11,12 @@ namespace rvi::standard
     float DEFAULT_WRAP_LNSEP_V   = 0.020F;
 
     void print(
-        client_instance& c_inst,
+        client_instance* c_inst,
         frame* calling_frame,
         const std::string& text,
         const print_settings& p_set)
     {
-        client_context* ctx = c_inst.get_context();
+        client_context* ctx = c_inst->get_context();
         frame* save_fptr = ctx->selected_frame();
 
         vector2 offset(p_set.font_margin.x, p_set.font_margin.y);
@@ -32,7 +32,7 @@ namespace rvi::standard
                 ctx->set_scale(vector2(p_set.font_size.x, p_set.font_size.y));
                 ctx->set_transform_scale_abs(true);
                 ctx->set_position(offset);
-                c_inst.exec_macro(defn);
+                c_inst->exec_macro(defn);
             }
             ctx->release_frame();
 
@@ -44,12 +44,12 @@ namespace rvi::standard
     }
 
     void printw(
-        client_instance& c_inst,
+        client_instance* c_inst,
         frame* calling_frame,
         const std::string& text,
         const print_settings& p_set)
     {
-        client_context* ctx = c_inst.get_context();
+        client_context* ctx = c_inst->get_context();
         frame* save_fptr = ctx->selected_frame();
 
         float x_max_sz = calling_frame->get_absolute_transform().scale.x;
@@ -92,7 +92,7 @@ namespace rvi::standard
                     ctx->set_scale(vector2(p_set.font_size.x, p_set.font_size.y));
                     ctx->set_transform_scale_abs(true);
                     ctx->set_position(offset);
-                    c_inst.exec_macro(defn);
+                    c_inst->exec_macro(defn);
                 }
                 ctx->release_frame();
 
@@ -104,36 +104,36 @@ namespace rvi::standard
         ctx->select_frame(save_fptr);
     }
 
-    void box_border(client_context& ctx)
+    void box_border(client_context* ctx)
     {
-        ctx.select_frame("__STD_BOX_BORDER");
+        ctx->select_frame("__STD_BOX_BORDER");
         {
-            ctx.draw_line(vector2(0, 0), vector2(1, 0)); //  -
-            ctx.draw_line(vector2(0, 1), vector2(1, 1)); //  =
-            ctx.draw_line(vector2(0, 0), vector2(0, 1)); // |=
-            ctx.draw_line(vector2(1, 0), vector2(1, 1)); // |=|
-        } ctx.release_frame();
+            ctx->draw_line(vector2(0, 0), vector2(1, 0)); //  -
+            ctx->draw_line(vector2(0, 1), vector2(1, 1)); //  =
+            ctx->draw_line(vector2(0, 0), vector2(0, 1)); // |=
+            ctx->draw_line(vector2(1, 0), vector2(1, 1)); // |=|
+        } ctx->release_frame();
     }
 
-    void grid_fill(client_context& ctx, float x_step, float y_step)
+    void grid_fill(client_context* ctx, float x_step, float y_step)
     {
-        ctx.select_frame("__STD_GRID_FILL");
+        ctx->select_frame("__STD_GRID_FILL");
         {            
             for(float x = x_step; x < 1.0F; x += x_step)
             {
-                ctx.draw_line(vector2(x, 0), vector2(x, 1));
+                ctx->draw_line(vector2(x, 0), vector2(x, 1));
             }
 
             for(float y = y_step; y < 1.0F; y += y_step)
             {
-                ctx.draw_line(vector2(0, y), vector2(1, y));
+                ctx->draw_line(vector2(0, y), vector2(1, y));
             }
-        } ctx.release_frame();
+        } ctx->release_frame();
     }
 
-    void stitch_fill_h(client_context& ctx, float step_sz)
+    void stitch_fill_h(client_context* ctx, float step_sz)
     {
-        ctx.select_frame("__STD_STITCH_FILL_H");
+        ctx->select_frame("__STD_STITCH_FILL_H");
 
         std::vector<vector2> points;
         bool top = false;
@@ -158,15 +158,15 @@ namespace rvi::standard
 
         for(auto it = points.begin() + 1; it != points.end(); ++it)
         {
-            ctx.draw_line(*current_it, *it);
+            ctx->draw_line(*current_it, *it);
             current_it = it;
         }
-        ctx.release_frame();
+        ctx->release_frame();
     }
 
-    void stitch_fill_v(client_context& ctx, float step_sz)
+    void stitch_fill_v(client_context* ctx, float step_sz)
     {
-        ctx.select_frame("__STD_STITCH_FILL_H");
+        ctx->select_frame("__STD_STITCH_FILL_H");
 
         std::vector<vector2> points;
         bool top = false;
@@ -191,36 +191,36 @@ namespace rvi::standard
 
         for(auto it = points.begin() + 1; it != points.end(); ++it)
         {
-            ctx.draw_line(*current_it, *it);
+            ctx->draw_line(*current_it, *it);
             current_it = it;
         }
-        ctx.release_frame();
+        ctx->release_frame();
     }
 
-    void parallel_fill_h(client_context& ctx, float step_sz)
+    void parallel_fill_h(client_context* ctx, float step_sz)
     {
-        ctx.select_frame("__STD_PARALLEL_FILL_H");
+        ctx->select_frame("__STD_PARALLEL_FILL_H");
         {
             float y_accum = step_sz;
             while(y_accum <= 1.00F)
             {
-                ctx.draw_line(vector2(0.0F, y_accum), vector2(1, y_accum));
+                ctx->draw_line(vector2(0.0F, y_accum), vector2(1, y_accum));
                 y_accum += step_sz;
             }
         }
-        ctx.release_frame();
+        ctx->release_frame();
     }
 
-    void parallel_fill_v(client_context& ctx, float step_sz)
+    void parallel_fill_v(client_context* ctx, float step_sz)
     {
-        ctx.select_frame("__STD_PARALLEL_FILL_V");
+        ctx->select_frame("__STD_PARALLEL_FILL_V");
         float x_accum = step_sz;
         while(x_accum <= 1.00F)
         {
-            ctx.draw_line(vector2(x_accum, 0.0F), vector2(x_accum, 1.0F));
+            ctx->draw_line(vector2(x_accum, 0.0F), vector2(x_accum, 1.0F));
             x_accum += step_sz;
         }
-        ctx.release_frame();
+        ctx->release_frame();
     }
 
     vector2 get_distort_point_offset(

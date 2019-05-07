@@ -6,9 +6,9 @@
 
 namespace rvi
 {
-    lua_context::lua_context(client_instance& inst)
+    lua_context::lua_context(client_instance* inst)
         : _inst(inst)
-        , _inst_ctx(inst.get_context())
+        , _inst_ctx(inst->get_context())
     { 
         init_types();
         init_lua_interface();
@@ -66,48 +66,48 @@ namespace rvi
             {
                 macro_funs.push_back(v.as<std::string>());
             }
-            _inst.define_macro(name, macro_funs);
+            _inst->define_macro(name, macro_funs);
         });
 
         _lua.set_function("undefine", [&](const std::string& name)
         {
-            _inst.undefine_macro(name);
+            _inst->undefine_macro(name);
         });
 
         _lua.set_function("macro", [&](const std::string& name)
         {
-            _inst.exec_macro(name);
+            _inst->exec_macro(name);
         });
 
         _lua.set_function("set_clickable", [&](const std::string& binding_name)
         {
-            _inst.set_current_frame_clickable(binding_name);
+            _inst->set_current_frame_clickable(binding_name);
         });
 
         _lua.set_function("unset_clickable", [&]
         {
-            _inst.unset_current_frame_clickable();
+            _inst->unset_current_frame_clickable();
         });
 
         _lua.set_function("distort", [&](vector2 ul, vector2 ur, vector2 ll, vector2 lr)
         {
-            standard::distort_recursive(_inst.get_context()->selected_frame(), ul, ur, ll, lr);
+            standard::distort_recursive(_inst->get_context()->selected_frame(), ul, ur, ll, lr);
         });
 
         _lua.set_function("get_selected_frame_name", [&]() -> std::string
         {
-            return _inst.get_context()->selected_frame()->name();
+            return _inst->get_context()->selected_frame()->name();
         });
 
         _lua.set_function("get_selected_frame_ptr", [&]() -> uintptr_t
         {
-            return (uintptr_t)(_inst.get_context()->selected_frame());
+            return (uintptr_t)(_inst->get_context()->selected_frame());
         });
 
         _lua.set_function("select_frame_by_ptr", [&](uintptr_t ptr)
         {
             frame* fptr = (frame*)(ptr);
-            _inst.get_context()->select_frame(fptr);
+            _inst->get_context()->select_frame(fptr);
         });
     }
 
@@ -188,63 +188,63 @@ namespace rvi
 
         _lua.set_function("box_border", [&]
         {
-            rvi::standard::box_border(*_inst_ctx);
+            rvi::standard::box_border(_inst_ctx);
         });
 
         _lua.set_function("grid_fill", [&](float x_step, float y_step)
         {
-            rvi::standard::grid_fill(*_inst_ctx, x_step, y_step);
+            rvi::standard::grid_fill(_inst_ctx, x_step, y_step);
         });
 
         _lua.set_function("grid_fill_rlt", [&](int x_count, int y_count)
         {
             float x_sz = 1.0F / x_count;
             float y_sz = 1.0F / y_count;
-            rvi::standard::grid_fill(*_inst_ctx, x_sz, y_sz);
+            rvi::standard::grid_fill(_inst_ctx, x_sz, y_sz);
         });
 
         _lua.set_function("stitch_fill_h", [&](float step_sz)
         {
-            rvi::standard::stitch_fill_h(*_inst_ctx, step_sz);
+            rvi::standard::stitch_fill_h(_inst_ctx, step_sz);
         });
 
         _lua.set_function("stitch_fill_v", [&](float step_sz)
         {
-            rvi::standard::stitch_fill_v(*_inst_ctx, step_sz);
+            rvi::standard::stitch_fill_v(_inst_ctx, step_sz);
         });
 
         _lua.set_function("stitch_fill_rlt_h", [&](int step_count)
         {
             float step_sz = 1.0F / step_count;
-            rvi::standard::stitch_fill_h(*_inst_ctx, step_sz);
+            rvi::standard::stitch_fill_h(_inst_ctx, step_sz);
         });
 
         _lua.set_function("stitch_fill_rlt_v", [&](int step_count)
         {
             float step_sz = 1.0F / step_count;
-            rvi::standard::stitch_fill_v(*_inst_ctx, step_sz);
+            rvi::standard::stitch_fill_v(_inst_ctx, step_sz);
         });
 
         _lua.set_function("parallel_fill_h", [&](float step_sz)
         {
-            rvi::standard::parallel_fill_h(*_inst_ctx, step_sz);
+            rvi::standard::parallel_fill_h(_inst_ctx, step_sz);
         });
 
         _lua.set_function("parallel_fill_v", [&](float step_sz)
         {
-            rvi::standard::parallel_fill_v(*_inst_ctx, step_sz);
+            rvi::standard::parallel_fill_v(_inst_ctx, step_sz);
         });
 
         _lua.set_function("parallel_fill_rlt_h", [&](int step_count)
         {
             float step_sz = 1.0F / step_count;
-            rvi::standard::parallel_fill_h(*_inst_ctx, step_sz);
+            rvi::standard::parallel_fill_h(_inst_ctx, step_sz);
         });
 
         _lua.set_function("parallel_fill_rlt_v", [&](float step_count)
         {
             float step_sz = 1.0F / step_count;
-            rvi::standard::parallel_fill_v(*_inst_ctx, step_sz);
+            rvi::standard::parallel_fill_v(_inst_ctx, step_sz);
         });
     }
 

@@ -15,9 +15,9 @@ namespace rvi
         inst->run_script_file("data/main.lua");
     }
 
-    client_instance& runtime::get_instance(rvi_cid_t cid)
+    client_instance* runtime::get_instance(rvi_cid_t cid)
     {
-        return *_client_instances.at(cid);
+        return _client_instances.at(cid).get();
     }
 
     void runtime::create_binding(const std::string& bname, binding_t bcall)

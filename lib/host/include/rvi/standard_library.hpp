@@ -21,46 +21,46 @@ namespace rvi::standard
     };
 
     extern void print(
-        client_instance& c_inst,
+        client_instance* c_inst,
         frame* calling_frame,
         const std::string& text,
         const print_settings& p_set = print_settings()
     );
 
     extern void printw(
-        client_instance& c_inst,
+        client_instance* c_inst,
         frame* calling_frame,
         const std::string& text,
         const print_settings& p_set = print_settings()
     );
 
     extern void box_border(
-        client_context& ctx
+        client_context* ctx
     );
 
     extern void grid_fill(
-        client_context& ctx, 
+        client_context* ctx, 
         float x_step, 
         float y_step
     );
 
     extern void stitch_fill_h(
-        client_context& ctx, 
+        client_context* ctx, 
         float step_sz
     );
 
     extern void stitch_fill_v(
-        client_context& ctx, 
+        client_context* ctx, 
         float step_sz
     );  
 
     extern void parallel_fill_h(
-        client_context& ctx, 
+        client_context* ctx, 
         float step_sz
     );
 
     extern void parallel_fill_v(
-        client_context& ctx, 
+        client_context* ctx, 
         float step_sz
     );
 

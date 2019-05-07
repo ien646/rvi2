@@ -14,7 +14,7 @@ namespace rvi
 {
     client_instance::client_instance(runtime* rptr, rvi_cid_t cid)
         : _ctx(std::make_unique<client_context>())
-        , _lua_ctx(std::make_unique<lua_context>(*this))
+        , _lua_ctx(std::make_unique<lua_context>(this))
         , _runtime_ptr(rptr)
         , _cid(cid)
     { }
@@ -23,7 +23,7 @@ namespace rvi
     {
         this->_clickable_frames.clear();
         this->_ctx = std::make_unique<client_context>();
-        this->_lua_ctx = std::make_unique<lua_context>(*this);
+        this->_lua_ctx = std::make_unique<lua_context>(this);
         this->_macros.clear();
         _runtime_ptr->start_client(_cid);
     }
