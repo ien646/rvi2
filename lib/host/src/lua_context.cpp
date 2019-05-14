@@ -32,6 +32,16 @@ namespace rvi
             _inst_ctx->delete_frame(name);
         });
 
+        _lua.set_function("clear_frame", [&]()
+        {
+            _inst_ctx->clear_frame();
+        });
+
+        _lua.set_function("clear_children", [&]()
+        {
+            _inst_ctx->clear_children();
+        });
+
         _lua.set_function("release_frame", [&]{ _inst_ctx->release_frame(); });
 
         _lua.set_function("draw_line", [&](vector2 from, vector2 to)
@@ -108,6 +118,11 @@ namespace rvi
         {
             frame* fptr = (frame*)(ptr);
             _inst->get_context()->select_frame(fptr);
+        });
+
+        _lua.set_function("add_click_handler", [&](const std::string& hname)
+        {
+            _inst->add_client_handler(hname);
         });
     }
 

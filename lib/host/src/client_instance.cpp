@@ -130,7 +130,12 @@ namespace rvi
 
         // Hit frame with the latest uid (added last)
         auto pair = *(hits.rbegin()); // std::map keys are ordered
-        auto& binding_name = _clickable_frames.at(pair.second).binding_name;
+        clickable_frame_data& cfdata = _clickable_frames.at(pair.second); 
+        auto& binding_name = cfdata.binding_name;
+        for(auto h : cfdata.lua_handlers)
+        {
+            (*_lua_ctx->get_lua_state())[h]();
+        }
         _runtime_ptr->exec_binding(*this, binding_name, pair.second);
     }
 
@@ -174,6 +179,15 @@ namespace rvi
         for(frame* fptr : pending_deletion)
         {
             _clickable_frames.erase(fptr);
+        }
+    }
+
+    void client_instance::add_client_handler(const std::string& hname)
+    {
+        frame* selected_frame = _ctx->selected_frame();
+        if(_clickable_frames.count(selected_frame) > 0)
+        {
+            _clickable_frames.at(selected_frame).lua_handlers.push_back(hname);
         }
     }
 }

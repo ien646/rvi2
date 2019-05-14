@@ -56,6 +56,9 @@ namespace rvi
         lua_context* get_lua_context();
 
         const std::unordered_map<std::string, std::vector<std::string>>& macros();
+
+        void add_client_handler(const std::string& hname);
+
     private:
         void cleanup_clickable_frames();
     };

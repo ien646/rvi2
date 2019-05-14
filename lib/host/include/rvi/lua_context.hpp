@@ -3,6 +3,8 @@
 #include <rvi/client_context.hpp>
 #include <sol.hpp>
 
+#include <unordered_map>
+
 namespace rvi
 {
     class client_instance;

@@ -1,9 +1,10 @@
 #pragma once
 
+#include <rvi/frame.hpp>
+
 #include <vector>
 #include <functional>
-
-#include <rvi/frame.hpp>
+#include <string>
 
 namespace rvi
 {
@@ -18,6 +19,7 @@ namespace rvi
         frame* fptr;
         rectangle rect;
         std::string binding_name;
+        std::vector<std::string> lua_handlers;
 
         clickable_frame_data(frame* fptr, const std::string& binding_name)
             : fptr(fptr)

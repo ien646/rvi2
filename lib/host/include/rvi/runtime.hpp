@@ -11,7 +11,7 @@
 
 namespace rvi
 {
-    typedef std::function<void(client_instance&, frame*)> binding_t;    
+    typedef std::function<void(client_instance&, frame*)> binding_t;
 
     class runtime
     {

@@ -4,6 +4,13 @@ include("rvi/text_format.lua")
 
 sfptr = 0;
 
+function fff()
+	select_frame("test_a");
+		clear_frame();
+		clear_children();
+	release_frame();
+end
+
 select_frame("test_a");
 	sfptr = get_selected_frame_ptr();
 	set_position(vec2(0.25, 0.25));
@@ -11,7 +18,8 @@ select_frame("test_a");
 	r_set_color("orange");	
 
 	printr_wrap("Hi there friend");
-	
+	set_clickable("ttt");
+	add_click_handler("fff");
 release_frame();
 
 select_frame_by_ptr(sfptr);	
