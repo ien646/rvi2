@@ -8,10 +8,10 @@
         "name": "Cozy Debug",
         "type": "cppvsdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build_debug/output/bin/cozy_sample/cozy_sample.exe",
+        "program": "${workspaceFolder}/build_debug_win64/output/bin/cozy_sample/cozy_sample.exe",
         "args": [],
         "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build_debug/output/bin/cozy_sample",
+        "cwd": "${workspaceFolder}/build_debug_win64/output/bin/cozy_sample",
         "environment": [],
         "externalConsole": true
     },
@@ -19,10 +19,10 @@
         "name": "Test-Core Debug",
         "type": "cppvsdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build_debug/test_output/bin/test.rvi2.core.exe",
+        "program": "${workspaceFolder}/build_debug_win64/test_output/bin/test.rvi2.core.exe",
         "args": [],
         "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build_debug/test_output/bin",
+        "cwd": "${workspaceFolder}/build_debug_win64/test_output/bin",
         "environment": [],
         "externalConsole": true
     },    
@@ -30,10 +30,10 @@
         "name": "Test-Serialization Debug",
         "type": "cppvsdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build_debug/test_output/bin/test.serialization.exe",
+        "program": "${workspaceFolder}/build_debug_win64/test_output/bin/test.serialization.exe",
         "args": [],
         "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build_debug/test_output/bin",
+        "cwd": "${workspaceFolder}/build_debug_win64/test_output/bin",
         "environment": [],
         "externalConsole": true
     }

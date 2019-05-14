@@ -191,12 +191,6 @@ namespace rvi
          */
         void set_transform(transform2&& tform);
 
-        /*
-         * @brief Set the currently selected frame's scale as
-         * absolute (ignores parent scale)
-         */
-        void set_transform_scale_abs(bool enabled) noexcept;
-
         /**
          * @brief Get the currently selected frame's transform
          */
@@ -216,6 +210,11 @@ namespace rvi
          * @brief Set the currently selected frame's scale
          */
         void set_scale(vector2 scale);
+
+        /**
+         * @brief Set the currently selected frame's absolute scale
+         */
+        void set_scale_abs(vector2 scale);
 
         /**
          * @brief Get the currently selected frame's position

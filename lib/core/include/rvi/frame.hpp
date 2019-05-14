@@ -30,7 +30,6 @@ namespace rvi
         frame* _parent = nullptr;
 
         transform2 _transform;
-        bool _transform_scale_absolute = false;
 
         transform2 _cached_abs_tform;
         bool _cached_abs_tform_rebuild = true;
@@ -160,11 +159,6 @@ namespace rvi
         ///Get relative frame transform
         const transform2& transform() const noexcept;
 
-        /*
-         * @brief Return absolute scale flag value
-         */
-        bool transform_scale_abs();
-
         /**
          * @brief Query for a child frame pointer
          * 
@@ -183,9 +177,6 @@ namespace rvi
         ///Set relative frame transform
         void set_transform(const transform2& tform) noexcept;
 
-        ///Set transform scale as absolute (ignore parent scale)
-        void set_transform_scale_absolute(bool enabled) noexcept;
-
         ///Set relative frame transform
         void set_transform(transform2&& tform) noexcept;
 
@@ -197,5 +188,8 @@ namespace rvi
 
         ///Set relative frame transform scale
         void set_scale(vector2 scale) noexcept;
+
+        ///Set absolute frame transform scale
+        void set_scale_abs(vector2 scale) noexcept;
     };
 }

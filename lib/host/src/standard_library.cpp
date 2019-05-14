@@ -29,8 +29,7 @@ namespace rvi::standard
             std::string defn = std::string(1, ch);
             ctx->select_frame("char_" + std::to_string(idx) + "_[" + defn + "]");
             {
-                ctx->set_scale(vector2(p_set.font_size.x, p_set.font_size.y));
-                ctx->set_transform_scale_abs(true);
+                ctx->set_scale_abs(vector2(p_set.font_size.x, p_set.font_size.y));
                 ctx->set_position(offset);
                 c_inst->exec_macro(defn);
             }
@@ -89,8 +88,7 @@ namespace rvi::standard
                 
                 ctx->select_frame("char_" + std::to_string(idx) + "_[" + defn + "]");
                 {
-                    ctx->set_scale(vector2(p_set.font_size.x, p_set.font_size.y));
-                    ctx->set_transform_scale_abs(true);
+                    ctx->set_scale_abs(vector2(p_set.font_size.x, p_set.font_size.y));
                     ctx->set_position(offset);
                     c_inst->exec_macro(defn);
                 }

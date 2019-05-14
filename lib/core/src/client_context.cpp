@@ -202,11 +202,6 @@ namespace rvi
         mark_frame_modified();
     }
 
-    void client_context::set_transform_scale_abs(bool enabled) noexcept
-    {
-        _selected_frame->set_transform_scale_absolute(enabled);
-    }
-
     const transform2& client_context::transform() const noexcept
     {
         return _selected_frame->transform();
@@ -227,6 +222,12 @@ namespace rvi
     void client_context::set_scale(vector2 scale)
     {
         _selected_frame->set_scale(scale);
+        mark_frame_modified();
+    }
+
+    void client_context::set_scale_abs(vector2 scale)
+    {
+        _selected_frame->set_scale_abs(scale);
         mark_frame_modified();
     }
 
@@ -365,10 +366,6 @@ namespace rvi
 
             line_container lines = fptr->lines();
             transform2 tform = fptr->get_absolute_transform();
-            if (fptr->transform_scale_abs())
-            {
-                tform.scale = fptr->transform().scale;
-            }
             lines.apply_transform(tform);
 
             relative_snapshot_entry entry;
@@ -413,10 +410,6 @@ namespace rvi
 
             line_container lines = fptr->lines();
             transform2 tform = fptr->get_absolute_transform();
-            if (fptr->transform_scale_abs())
-            {
-                tform.scale = fptr->transform().scale;
-            }
             lines.apply_transform(tform);
 
             relative_snapshot_entry entry;

@@ -162,11 +162,6 @@ namespace rvi
         _cached_abs_tform_rebuild = true;
     }
 
-    void frame::set_transform_scale_absolute(bool enabled) noexcept
-    {
-        _transform_scale_absolute = enabled;
-    }
-
     void frame::set_position(vector2 offset) noexcept
     {
         _transform.position = offset;
@@ -182,6 +177,15 @@ namespace rvi
     void frame::set_scale(vector2 scale) noexcept
     {
         _transform.scale = scale;
+        _cached_abs_tform_rebuild = true;
+    }
+
+    void frame::set_scale_abs(vector2 scale) noexcept
+    {
+        _transform.scale = has_parent() ? 
+            scale / _parent->get_absolute_transform().scale
+            : scale;
+            
         _cached_abs_tform_rebuild = true;
     }
 
@@ -208,11 +212,6 @@ namespace rvi
     const transform2& frame::transform() const noexcept
     {
         return _transform;
-    }
-
-    bool frame::transform_scale_abs()
-    {
-        return _transform_scale_absolute;
     }
 
     frame* frame::parent() const noexcept

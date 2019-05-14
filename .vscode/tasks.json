@@ -6,7 +6,7 @@
         {
             "label": "Build_Debug",
             "type": "shell",
-            "command": "./s_build_debug.sh",
+            "command": "./build_debug_win64.bat",
             "group": {
                 "kind": "build",
                 "isDefault": true
