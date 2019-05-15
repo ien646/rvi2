@@ -161,12 +161,6 @@ namespace rvi
 
     void client_context::clear_children()
     {
-        for (auto& fuptr : _selected_frame->children())
-        {
-            frame* fptr = fuptr.get();
-            _frame_index.erase(fptr);
-            _deleted_frame_queue.push_back(get_full_frame_name(fptr));
-        }
         _selected_frame->clear_children();
     }
 

@@ -18,12 +18,17 @@ namespace rvi
 
     void opengl_ctx::refresh()
     {
-        auto snapshot = _runtime_ptr->snapshot_diff_relative(_client_id);
+        _vframes.clear();
+        auto snapshot = _runtime_ptr->snapshot_full_relative(_client_id);
         for(auto&& frame_entry : snapshot)
         {
             if(frame_entry.deleted)
             {
-                _vframes.erase(frame_entry.name);
+                if(_vframes.count(frame_entry.name))
+                {
+                    _vframes.at(frame_entry.name).line_data.clear();
+                    _vframes.erase(frame_entry.name);
+                }
             }
             else if (frame_entry.lines.size() > 0)
             {
@@ -35,13 +40,16 @@ namespace rvi
 
     vframe& opengl_ctx::vframe_from_snapshot_entry(relative_snapshot_entry&& entry)
     {
-        vframe vf;
-        glGenVertexArrays(1, &vf.vao);
-        glGenBuffers(1, &vf.vbo_pos);
-        glGenBuffers(1, &vf.vbo_col);
-        entry.lines.move_into(vf.line_data);
-        _vframes.emplace(entry.name, std::move(vf));
-        return _vframes[entry.name];
+        const std::string key = entry.name;
+        vframe vf(std::move(entry.lines));
+
+        glGenVertexArrays(1, &(vf.vao));
+        glGenBuffers(1, &(vf.vbo_pos));
+        glGenBuffers(1, &(vf.vbo_col));
+
+        _vframes.emplace(key, std::move(vf));
+
+        return _vframes.at(key);
     }
 
     void opengl_ctx::setup_vframe_ogl(vframe& vf)

@@ -40,7 +40,6 @@ namespace rvi
         std::vector<uint32_t> _colors;
 
     public:
-
         void clear() noexcept;
 
         void reserve(size_t sz);

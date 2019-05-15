@@ -4,6 +4,7 @@ set(RVI2_COZY_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/opengl_ctx.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/shader_utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/vframe.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vframe_container.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/window.cpp
 )
 

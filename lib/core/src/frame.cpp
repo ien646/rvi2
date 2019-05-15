@@ -94,8 +94,10 @@ namespace rvi
 
     void frame::clear_children()
     {
-        _children.clear();
-        _child_frames_index.clear();
+        while(!_children.empty())
+        {
+            delete_child(_children.front()->name());
+        }
     }
 
     bool frame::delete_child(const std::string& name)
@@ -106,14 +108,13 @@ namespace rvi
         }
         
         frame* f_ptr = _child_frames_index.at(name);
-
         auto it = std::find_if(_children.begin(), _children.end(), [&](auto& fuptr)
         {
             return fuptr.get() == f_ptr;
         });
 
-        _children.erase(it);
         _child_frames_index.erase(name);
+        _children.erase(it);
         
         return true;
     }

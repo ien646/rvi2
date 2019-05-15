@@ -5,11 +5,13 @@
 
 #include <vector>
 #include <unordered_map>
+#include <memory>
 
 #include <rvi/runtime.hpp>
 
 #include <rvi/shader_utils.hpp>
 #include <rvi/vframe.hpp>
+#include <rvi/vframe_container.hpp>
 
 namespace rvi
 {
@@ -19,7 +21,7 @@ namespace rvi
     {
     private:
         GLuint _shader_program;
-        std::unordered_map<std::string, vframe> _vframes;
+        vframe_container _vframes;
 
         static rvi_cid_t _client_id;
         static runtime* _runtime_ptr;

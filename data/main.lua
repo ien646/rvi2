@@ -6,7 +6,6 @@ sfptr = 0;
 
 function fff()
 	select_frame("test_a");
-		clear_frame();
 		clear_children();
 	release_frame();
 end

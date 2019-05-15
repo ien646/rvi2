@@ -16,14 +16,13 @@ namespace rvi
         GLuint vbo_col = 0u;
         line_container line_data;
 
-        vframe() = default;
+        vframe() = delete;
+        vframe(line_container&& line_data);
+        
         vframe(const vframe& cp_src) = delete;
 
         vframe(vframe&& mv_src) noexcept;
 
-        ~vframe();
-
-    private:
-        bool _moved = false;
+        void destroy();
     };
 }
