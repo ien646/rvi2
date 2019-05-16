@@ -45,6 +45,9 @@ namespace rvi
         void reserve(size_t sz);
 
         size_t size() const noexcept;
+
+        bool empty() const noexcept;
+
         void push_back(vector2 s_pos, color_rgba s_col, vector2 e_pos, color_rgba e_col);
 
         void copy_into(line_container& target);

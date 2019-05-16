@@ -1,5 +1,6 @@
 #include <rvi/line_container.hpp>
 
+#include <rvi/assert.hpp>
 #include <thread>
 
 namespace rvi
@@ -19,6 +20,11 @@ namespace rvi
     size_t line_container::size() const noexcept
     {
         return _positions.size() / 4;
+    }
+
+    bool line_container::empty() const noexcept
+    {
+        return _positions.size() == 0;
     }
 
     void line_container::push_back(vector2 s_pos, color_rgba s_col, vector2 e_pos, color_rgba e_col)
