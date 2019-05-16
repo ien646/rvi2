@@ -11,4 +11,11 @@ namespace rvi
         if(!cond)        
             throw std::logic_error(msg);
     }
+
+    void debug_assert(bool cond, const std::string& msg)
+    {
+        #ifdef DEBUG
+            r_assert(cond, msg);
+        #endif
+    }
 }
