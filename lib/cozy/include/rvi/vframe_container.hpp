@@ -1,7 +1,8 @@
-#include <unordered_map>
+#pragma once
 
 #include <rvi/vframe.hpp>
 
+#include <unordered_map>
 #include <utility>
 
 namespace rvi
