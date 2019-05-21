@@ -36,11 +36,6 @@ namespace rvi
         
     public:
         frame() = delete;
-
-        /**
-         * Copy construction is disabled, as it can be quite heavy.
-         * Use explicit create_copy method instead
-         */
         frame(const frame&) = delete;
 
         ///Move constructor
