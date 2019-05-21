@@ -10,6 +10,9 @@
 
 namespace rvi
 {
+    /**
+     * @brief Line-object view for line_container class
+     */
     class line_span
     {
     private:
@@ -38,6 +41,9 @@ namespace rvi
         float& operator[](size_t index) { return _ptr[index]; }
     };
 
+    /**
+     * @brief SOA-Style line data container 
+     */
     class line_container
     {
     private:
@@ -58,7 +64,7 @@ namespace rvi
         bool empty() const noexcept;
 
         /**
-         * Insert a new line at the back of the container
+         * @brief Insert a new line at the back of the container
          * 
          * @param Start vertex position 
          * @param Start vertex color
@@ -74,7 +80,7 @@ namespace rvi
         void move_into(line_container& target);
 
         /**
-         * Apply a transforming operation to all the lines in the container. 
+         * @brief Apply a transforming operation to all the lines in the container. 
          * 
          * @param func Function to apply
          * @param parallel If true, execution might be paralellized to improve performance.
@@ -85,7 +91,7 @@ namespace rvi
         void apply_offset(vector2 offset);
 
         /**
-         * Apply a 2D scale to all the end vertexes 
+         * @brief Apply a 2D scale to all the end vertices 
          * from the lines in the container
          * 
          * @param scale Scale to apply
@@ -93,7 +99,7 @@ namespace rvi
         void apply_scale_end(vector2 scale);
 
         /**
-         * Apply a 2D scale to all the start and end vertexes 
+         * @brief Apply a 2D scale to all the start and end vertices 
          * from the lines in the container
          * 
          * @param scale Scale to apply
@@ -104,7 +110,7 @@ namespace rvi
         void apply_rotation(float angle);
 
         /**
-         * Apply a transform's properties (offset, scale, rotation) 
+         * @brief Apply a transform's properties (offset, scale, rotation) 
          * to all the lines in the container
          * @param tform 
          */
