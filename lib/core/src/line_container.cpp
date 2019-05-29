@@ -178,13 +178,56 @@ namespace rvi
                 _positions[i + 3] += _positions[i + 1];
             }
         }
-    }
+    }    
 
     void line_container::apply_transform(const transform2& tform)
     {
-        apply_scale_both(tform.scale);
-        apply_rotation(tform.rotation);
-        apply_offset(tform.position);
+        bool scale = tform.scale != transform2::default_value().scale;
+        bool position = tform.position != transform2::default_value().position;
+        bool rotation = tform.rotation != transform2::default_value().rotation;
+
+        for(size_t i = 0; i < _positions.size(); i += 4)
+        {
+            // -- SCALE --
+            if(scale)
+            {
+                _positions[i + 0] *= tform.scale.x; //end
+                _positions[i + 1] *= tform.scale.y;
+                _positions[i + 2] *= tform.scale.x; //end
+                _positions[i + 3] *= tform.scale.y;
+            }
+
+            // -- ROTATION --
+            if(rotation)
+            {            
+                _positions[i + 2] -= _positions[i + 0];
+                _positions[i + 3] -= _positions[i + 1];            
+            
+                const float radAngle = rvi::math::deg2rad(tform.rotation);
+                const float angleSin = std::sin(radAngle);
+                const float angleCos = std::cos(radAngle);
+            
+                const float aux_x = _positions[i + 2];
+                const float aux_y = _positions[i + 3];
+
+                // [rx] = [cos(a) , -sin(a)][x]
+                _positions[i + 2] = (aux_x * +angleCos) + (aux_y * -angleSin);
+                // [ry] = [sin(a) ,  cos(a)][y]
+                _positions[i + 3] = (aux_x * +angleSin) + (aux_y * +angleCos);
+
+                _positions[i + 2] += _positions[i + 0];
+                _positions[i + 3] += _positions[i + 1];
+            }
+
+            if(position)
+            {
+                // -- OFFSET --
+                _positions[i + 0] += tform.position.x; //start
+                _positions[i + 1] += tform.position.y;
+                _positions[i + 2] += tform.position.x; //end
+                _positions[i + 3] += tform.position.y;
+            }
+        }
     }
 
     float* line_container::position_buff()
