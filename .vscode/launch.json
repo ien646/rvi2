@@ -16,6 +16,17 @@
         "externalConsole": true
     },
     {
+        "name": "SIMD Debug",
+        "type": "cppvsdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build_debug_win64/output/bin/simd_bench/simd_bench.exe",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}/build_debug_win64/output/bin/simd_bench",
+        "environment": [],
+        "externalConsole": true
+    },
+    {
         "name": "Test-Core Debug",
         "type": "cppvsdbg",
         "request": "launch",

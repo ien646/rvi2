@@ -12,7 +12,7 @@ message("")
 project(rvi2 LANGUAGES CXX C)
 
 option(RVI2_BUILD_SAMPLES 	"Build sample application(s)" 	ON)
-option(RVI2_BUILD_TESTS	 	"Build tests" 					OFF)
+option(RVI2_BUILD_TESTS	 	"Build tests" 					ON)
 option(RVI2_BUILD_COZY 		"Build cozy openGL backend" 	ON)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -34,6 +34,8 @@ get_property(RVI2_DATA_DIR GLOBAL PROPERTY RVI2_DATA_DIR)
 
 add_subdirectory("third-party")
 add_subdirectory("lib")
+
+add_definitions(/arch:AVX)
 
 if(RVI2_BUILD_SAMPLES)
     add_subdirectory("samples")
