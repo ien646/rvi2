@@ -112,11 +112,14 @@ void ff_simd(transform2& tform)
 
 #include <iostream>
 #include <chrono>
+#include <rvi/cpu_support.hpp>
 
 using cclock = std::chrono::high_resolution_clock;
 
 int main()
-{
+{    
+    cpu_support::x86::print_enabled_features(std::cout);
+
     refill_all();
 
     transform2 tform = RAND_TFORM();

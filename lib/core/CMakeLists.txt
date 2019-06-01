@@ -3,7 +3,8 @@ set(RVI2_CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/assert.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/base64.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/client_context.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/color_rgba
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/color_rgba.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cpu_support.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/frame.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/line.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/line_container.cpp
