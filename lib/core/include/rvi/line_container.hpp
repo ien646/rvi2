@@ -7,6 +7,7 @@
 #include <rvi/vector2.hpp>
 #include <rvi/color_rgba.hpp>
 #include <rvi/transform2.hpp>
+#include <rvi/cpu_support.hpp>
 
 namespace rvi
 {
@@ -145,5 +146,11 @@ namespace rvi
 
         ///End iterator of the lines color-buffer
         std::vector<uint32_t>::iterator color_end();
+
+    private:
+    #if CURRENT_ARCH_X86_32 || CURRENT_ARCH_X86_64
+        void apply_transform_sse(const transform2& tform);
+        void apply_offset_sse(const vector2& offset);
+    #endif
     };
 }
