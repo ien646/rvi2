@@ -35,8 +35,6 @@ get_property(RVI2_DATA_DIR GLOBAL PROPERTY RVI2_DATA_DIR)
 add_subdirectory("third-party")
 add_subdirectory("lib")
 
-add_definitions(/arch:AVX)
-
 if(RVI2_BUILD_SAMPLES)
     add_subdirectory("samples")
 endif()

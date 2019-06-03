@@ -1,10 +1,17 @@
 #include <rvi/line_container.hpp>
 
 #include <rvi/assert.hpp>
+#include <rvi/cpu_support.hpp>
 #include <thread>
 
 namespace rvi
 {
+
+#if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32    
+    void apply_transform_sse(line_container& lc, const transform2& tform);
+    void apply_offset_sse(line_container& lc, const vector2& tform);
+#endif
+
     void line_container::clear() noexcept
     {
         _positions.clear();
@@ -118,12 +125,12 @@ namespace rvi
         if(offset == transform2::default_value().position) { return; }
 
         #if CURRENT_ARCH_X86_64
-        apply_offset_sse(offset);
+        apply_offset_sse(*this, offset);
 
         #elif CURRENT_ARCH_X86_32
         if(cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
         {
-            apply_offset_sse(offset);
+            apply_offset_sse(*this, offset);
         }
 
         #else
@@ -196,12 +203,12 @@ namespace rvi
 
         // All x86-64 cpus support at least SSE2
         #if CURRENT_ARCH_X86_64
-        apply_transform_sse(tform);
+        apply_transform_sse(*this, tform);
 
         #elif CURRENT_ARCH_X86_32
         if(cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
         {
-            apply_transform_sse(tform);
+            apply_transform_sse(*this, tform);
         }
 
         #else // Default
@@ -304,11 +311,21 @@ namespace rvi
         return _colors.end();
     }
 
+    float* line_container::positions_data()
+    {
+        return _positions.data();
+    }
+
+    uint32_t* line_container::colors_data()
+    {
+        return _colors.data();
+    }
+
 #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
 #include <xmmintrin.h>
 #include <rvi/math.hpp>
 
-    void line_container::apply_transform_sse(const transform2& tform)
+    void apply_transform_sse(line_container& lc, const transform2& tform)
     {
         float _iv_zero[4] = { 0, 0, 0, 0 };
         __m128 vzero = _mm_load_ps(_iv_zero);
@@ -325,12 +342,12 @@ namespace rvi
         float _iv_rot_table[4] = { angle_cos, -angle_sin, angle_sin, angle_cos };
         __m128 vrot_table = _mm_load_ps(_iv_rot_table);
 
-        float* _fptr0 = _positions.data();
+        float* _fptr0 = lc.positions_data();
 
-        for(size_t i = 0; i < _positions.size(); i += 4)
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
         {
             float* fptr = _fptr0 + i;
-            __m128 vvec = _mm_load_ps(fptr);      
+            __m128 vvec = _mm_load_ps(fptr);
 
             // -- SCALE --
             vvec = _mm_mul_ps(vvec, vscale);
@@ -354,23 +371,23 @@ namespace rvi
             vvec = _mm_add_ps(vvec, vposition);
             
             _mm_store_ps(fptr, vvec);
-        }    
+        }
     }
 
-    void line_container::apply_offset_sse(const vector2& offset)
+    void apply_offset_sse(line_container& lc, const vector2& offset)
     {
         if(offset == transform2::default_value().position) { return; }
 
         float _iv_offset[4] = { offset.x, offset.y, offset.x, offset.y };
         __m128 voffset = _mm_load_ps(_iv_offset);
 
-        float* fptr0 = _positions.data();
-        for(size_t i = 0; i < _positions.size(); i += 4)
+        float* fptr0 = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
         {
             float* fptr = fptr0 + i;
             __m128 vpos = _mm_load_ps(fptr);
             _mm_store_ps(fptr, _mm_add_ps(vpos, voffset));
-        }        
+        }
     }
 
 #endif
