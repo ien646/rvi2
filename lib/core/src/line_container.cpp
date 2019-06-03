@@ -334,7 +334,7 @@ namespace rvi
 
             // -- SCALE --
             vvec = _mm_mul_ps(vvec, vscale);
-            __m128 vspos = _mm_movehl_ps(vzero, vvec); // f[0], f[1], 0, 0
+            __m128 vspos = _mm_movelh_ps(vvec, vzero); // f[0], f[1], 0, 0
 
             // -- ROTATION --
             float _iv_rotator_temp_subadd[4] { 0, 0, fptr[0], fptr[1] };
@@ -345,7 +345,8 @@ namespace rvi
             vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y            
             vhi = _mm_mul_ps(vhi, vrot_table);
             vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
-            vhi = _mm_movehl_ps(vhi, vzero);
+            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
+            vhi = _mm_movehl_ps(vvec, vzero); // 0, 0, x, y
             vvec = _mm_or_ps(vspos, vhi);
             vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
         

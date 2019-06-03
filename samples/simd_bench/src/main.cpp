@@ -3,7 +3,7 @@
 
 using namespace rvi;
 
-#define LINES 10000000
+#define LINES 100000
 
 line_container lc_no_simd;
 line_container lc_simd;
