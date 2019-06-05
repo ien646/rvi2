@@ -5,9 +5,6 @@ using namespace rvi;
 
 #define LINES 100000
 
-line_container lc_no_simd;
-line_container lc_simd;
-
 std::mt19937 rand_eng;
 std::uniform_int_distribution<unsigned short> dist_ubyte(0, 255);
 std::uniform_real_distribution<float> dist_float(0.0F, 5.0F);
@@ -18,7 +15,7 @@ std::uniform_real_distribution<float> dist_float(0.0F, 5.0F);
 #define RAND_CRGBA() color_rgba(RAND_UBYTE(), RAND_UBYTE(), RAND_UBYTE(), RAND_UBYTE())
 #define RAND_TFORM() transform2(RAND_VEC2(), RAND_VEC2(), RAND_FLOAT())
 
-void refill_all()
+void refill_all(rvi::line_container& lc_simd, rvi::line_container& lc_no_simd)
 {
     lc_no_simd.clear();
     lc_simd.clear();
@@ -32,13 +29,13 @@ void refill_all()
     }
 }
 
-void ff_no_simd(transform2& tform)
+void ff_no_simd(rvi::line_container& lc_no_simd, transform2& tform)
 {
     lc_no_simd.apply_transform(tform);
 }
 
 #include <pmmintrin.h> // SSE3
-void ff_simd(transform2& tform)
+void ff_simd(rvi::line_container& lc_simd, transform2& tform)
 {
     float _iv_zero[4] = { 0, 0, 0, 0 };
     __m128 vzero = _mm_load_ps(_iv_zero);
@@ -116,39 +113,51 @@ void ff_simd(transform2& tform)
 
 using cclock = std::chrono::high_resolution_clock;
 
+#define STR_VALUE(arg) #arg
+#if CURRENT_OS_WINDOWS
+#define PAUSE pause
+#elif CURRENT_OS_LINUX || CURRENT_OS_MACOS
+#define PAUSE read -n1 -r -p "Press any key to continue..." key
+#endif
+
 int main()
 {    
+    line_container lc_no_simd;
+    line_container lc_simd;
+
     cpu_support::x86::print_enabled_features(std::cout);
 
-    refill_all();
+    refill_all(lc_simd, lc_no_simd);
 
     transform2 tform = RAND_TFORM();
     auto nstart = cclock::now();
-    ff_no_simd(tform);
+    ff_no_simd(lc_no_simd, tform);
     auto nend = cclock::now();
 
     auto sstart = cclock::now();
-    ff_simd(tform);
+    ff_simd(lc_simd ,tform);
     auto send = cclock::now();
 
     std::cout << "No SIMD: " << (nend - nstart).count() / 1000000.0F << std::endl;
     std::cout << "SIMD:    " << (send - sstart).count() / 1000000.0F << std::endl;
 
     size_t sz = lc_simd.size();
+    bool fail = false;
     for(size_t i = 0; i < sz; ++i)
     {
         float va = *(lc_no_simd.position_cbegin() + i);
         float vb= *(lc_simd.position_cbegin() + i);
         if(va != vb)
         {
+            fail = true;
             std::cout << "Found unequal values at index [" << i << "] " << va << "!=" << vb << std::endl;
         }
-        if(i % 100 == 0)
+        if(i % 100 == 0 || i == sz - 1)
         {
-            std::cout << "\r Verifiying values equality... " << i << '/' << sz;
+            std::cout << "\r Verifiying values equality... " << i+1 << '/' << sz;
         }
     }
     int ret = 0;
-    std::cin >> ret;
+    system(STR_VALUE(PAUSE));
     return ret;
 }

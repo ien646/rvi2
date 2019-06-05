@@ -6,11 +6,82 @@
 
 namespace rvi
 {
+    #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
 
-#if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32    
-    void apply_transform_sse(line_container& lc, const transform2& tform);
-    void apply_offset_sse(line_container& lc, const vector2& tform);
-#endif
+    void apply_transform_sse(line_container&, const transform2&);
+    void apply_offset_sse(line_container&, const vector2&);
+    void apply_scale_both_sse(line_container&, const vector2&);
+    void apply_scale_start_sse(line_container&, const vector2&);
+    void apply_scale_end_sse(line_container&, const vector2&);
+    void apply_rotation_sse(line_container&, float);
+    
+    #endif
+
+    struct _line_container_vtable
+    {
+        std::function<void(line_container&, const transform2&)>
+            apply_transform = 0;
+        std::function<void(line_container&, const vector2&)>
+            apply_offset = 0;
+        std::function<void(line_container&, const vector2&)>
+            apply_scale_both = 0;
+        std::function<void(line_container&, const vector2&)>
+            apply_scale_start = 0;
+        std::function<void(line_container&, const vector2&)>
+            apply_scale_end = 0;
+        std::function<void(line_container&, float)>
+            apply_rotation = 0;
+    };
+
+    _line_container_vtable init_vtable()
+    {
+        _line_container_vtable result;
+        
+        #if CURRENT_ARCH_X86_64
+        result.apply_offset = &apply_offset_sse;
+        result.apply_scale_both = &apply_scale_both_sse;
+        result.apply_scale_end = &apply_scale_end_sse;
+        result.apply_scale_start = &apply_scale_start_sse;
+        result.apply_transform = &apply_transform_sse;
+        result.apply_rotation = &apply_rotation_sse;
+
+        #elif CURRENT_ARCH_X86_32
+        if(cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
+        {
+            result.apply_offset = &apply_offset_sse;
+            result.apply_scale_both = &apply_scale_both_sse;
+            result.apply_scale_end = &apply_scale_end_sse;
+            result.apply_scale_start = &apply_scale_start_sse;
+            result.apply_transform = &apply_transform_sse;
+            result.apply_rotation = &apply_rotation_sse;
+        }
+        else
+        {
+            result.apply_offset = &apply_offset_std;
+            result.apply_scale_both = &apply_scale_both_std;
+            result.apply_scale_end = &apply_scale_end_std;
+            result.apply_scale_start = &apply_scale_start_std;
+            result.apply_transform = &apply_transform_std;
+            result.apply_rotation = &apply_rotation_std;
+        }
+
+        #else
+        result.apply_offset = &apply_offset_std;
+        result.apply_scale_both = &apply_scale_both_std;
+        result.apply_scale_end = &apply_scale_end_std;
+        result.apply_scale_start = &apply_scale_start_std;
+        result.apply_transform = &apply_transform_std;
+        result.apply_rotation = &apply_rotation_std;
+        #endif
+
+        return result;
+    }
+    _line_container_vtable _vtable = init_vtable();
+
+    line_container::line_container()
+    {
+        init_vtable();
+    }
 
     void line_container::clear() noexcept
     {
@@ -123,142 +194,31 @@ namespace rvi
     void line_container::apply_offset(vector2 offset)
     {
         if(offset == transform2::default_value().position) { return; }
-
-        #if CURRENT_ARCH_X86_64
-        apply_offset_sse(*this, offset);
-
-        #elif CURRENT_ARCH_X86_32
-        if(cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
-        {
-            apply_offset_sse(*this, offset);
-        }
-
-        #else
-        for(size_t i = 0; i < _positions.size(); i += 4)
-        {
-            _positions[i + 0] += offset.x; //start
-            _positions[i + 1] += offset.y;
-            _positions[i + 2] += offset.x; //end
-            _positions[i + 3] += offset.y;
-        }
-        #endif
+        _vtable.apply_offset(*this, offset);
     }
 
     void line_container::apply_scale_end(vector2 scale)
     {
-        if(scale != transform2::default_value().scale)
-        {
-            for(size_t i = 0; i < _positions.size(); i += 4)
-            {
-                _positions[i + 2] *= scale.x; //end
-                _positions[i + 3] *= scale.y;
-            }
-        }
+        if(scale == transform2::default_value().scale) { return; }
+        _vtable.apply_scale_end(*this, scale);
     }
 
     void line_container::apply_scale_both(vector2 scale)
     {
-        if(scale != transform2::default_value().scale)
-        {
-            for(size_t i = 0; i < _positions.size(); i += 4)
-            {
-                _positions[i + 0] *= scale.x; //end
-                _positions[i + 1] *= scale.y;
-                _positions[i + 2] *= scale.x; //end
-                _positions[i + 3] *= scale.y;
-            }
-        }
+        if(scale == transform2::default_value().scale) { return; }
+        _vtable.apply_scale_both(*this, scale);
     }
 
     void line_container::apply_rotation(float angle)
     {
-        if(angle != 0.0F)
-        {
-            for(size_t i = 0; i < _positions.size(); i += 4)
-            {
-                _positions[i + 2] -= _positions[i + 0];
-                _positions[i + 3] -= _positions[i + 1];
-
-                const float radAngle = math::deg2rad(angle);
-                const float angleSin = std::sin(radAngle);
-                const float angleCos = std::cos(radAngle);
-            
-                const float aux_x = _positions[i + 2];
-                const float aux_y = _positions[i + 3];
-
-                // [rx] = [cos(a) , -sin(a)][x]
-                _positions[i + 2] = (aux_x * +angleCos) + (aux_y * -angleSin);
-                // [ry] = [sin(a) ,  cos(a)][y]
-                _positions[i + 3] = (aux_x * +angleSin) + (aux_y * +angleCos);
-
-                _positions[i + 2] += _positions[i + 0];
-                _positions[i + 3] += _positions[i + 1];
-            }
-        }
+        if(angle == 0.0F) { return; }
+        _vtable.apply_rotation(*this, angle);
     }
 
     void line_container::apply_transform(const transform2& tform)
     {
         if(tform == transform2::default_value()) { return; }
-
-        // All x86-64 cpus support at least SSE2
-        #if CURRENT_ARCH_X86_64
-        apply_transform_sse(*this, tform);
-
-        #elif CURRENT_ARCH_X86_32
-        if(cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
-        {
-            apply_transform_sse(*this, tform);
-        }
-
-        #else // Default
-        bool scale = tform.scale != transform2::default_value().scale;
-        bool position = tform.position != transform2::default_value().position;
-        bool rotation = tform.rotation != transform2::default_value().rotation;
-
-        for(size_t i = 0; i < _positions.size(); i += 4)
-        {
-            // -- SCALE --
-            if(scale)
-            {
-                _positions[i + 0] *= tform.scale.x; //end
-                _positions[i + 1] *= tform.scale.y;
-                _positions[i + 2] *= tform.scale.x; //end
-                _positions[i + 3] *= tform.scale.y;
-            }
-
-            // -- ROTATION --
-            if(rotation)
-            {            
-                _positions[i + 2] -= _positions[i + 0];
-                _positions[i + 3] -= _positions[i + 1];            
-            
-                const float radAngle = rvi::math::deg2rad(tform.rotation);
-                const float angleSin = std::sin(radAngle);
-                const float angleCos = std::cos(radAngle);
-            
-                const float aux_x = _positions[i + 2];
-                const float aux_y = _positions[i + 3];
-
-                // [rx] = [cos(a) , -sin(a)][x]
-                _positions[i + 2] = (aux_x * +angleCos) + (aux_y * -angleSin);
-                // [ry] = [sin(a) ,  cos(a)][y]
-                _positions[i + 3] = (aux_x * +angleSin) + (aux_y * +angleCos);
-
-                _positions[i + 2] += _positions[i + 0];
-                _positions[i + 3] += _positions[i + 1];
-            }
-
-            if(position)
-            {
-                // -- OFFSET --
-                _positions[i + 0] += tform.position.x; //start
-                _positions[i + 1] += tform.position.y;
-                _positions[i + 2] += tform.position.x; //end
-                _positions[i + 3] += tform.position.y;
-            }
-        }
-    #endif
+        _vtable.apply_transform(*this, tform);
     }
 
     float* line_container::position_buff()
@@ -321,6 +281,134 @@ namespace rvi
         return _colors.data();
     }
 
+/*-------------------------
+    STD IMPL
+-------------------------*/
+
+    void apply_transform_std(line_container& lc, const transform2& tform)
+    {
+        bool scale = tform.scale != transform2::default_value().scale;
+        bool position = tform.position != transform2::default_value().position;
+        bool rotation = tform.rotation != transform2::default_value().rotation;
+
+        const float radAngle = rvi::math::deg2rad(tform.rotation);
+        const float angleSin = std::sin(radAngle);
+        const float angleCos = std::cos(radAngle);
+
+        float* pos_ptr = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
+        {
+            // -- SCALE --
+            if(scale)
+            {
+                pos_ptr[i + 0] *= tform.scale.x; //end
+                pos_ptr[i + 1] *= tform.scale.y;
+                pos_ptr[i + 2] *= tform.scale.x; //end
+                pos_ptr[i + 3] *= tform.scale.y;
+            }
+
+            // -- ROTATION --
+            if(rotation)
+            {
+                pos_ptr[i + 2] -= pos_ptr[i + 0];
+                pos_ptr[i + 3] -= pos_ptr[i + 1];
+            
+                const float aux_x = pos_ptr[i + 2];
+                const float aux_y = pos_ptr[i + 3];
+
+                // [rx] = [cos(a) , -sin(a)][x]
+                pos_ptr[i + 2] = (aux_x * +angleCos) + (aux_y * -angleSin);
+                // [ry] = [sin(a) ,  cos(a)][y]
+                pos_ptr[i + 3] = (aux_x * +angleSin) + (aux_y * +angleCos);
+
+                pos_ptr[i + 2] += pos_ptr[i + 0];
+                pos_ptr[i + 3] += pos_ptr[i + 1];
+            }
+
+            if(position)
+            {
+                // -- OFFSET --
+                pos_ptr[i + 0] += tform.position.x; //start
+                pos_ptr[i + 1] += tform.position.y;
+                pos_ptr[i + 2] += tform.position.x; //end
+                pos_ptr[i + 3] += tform.position.y;
+            }
+        }
+    }
+
+    void apply_offset_std(line_container& lc , const vector2& offset)
+    {
+        float* pos_ptr = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
+        {
+            pos_ptr[i + 0] += offset.x; //start
+            pos_ptr[i + 1] += offset.y;
+            pos_ptr[i + 2] += offset.x; //end
+            pos_ptr[i + 3] += offset.y;
+        }
+    }
+
+    void apply_rotation_std(line_container& lc , float rotation)
+    {
+        const float radAngle = math::deg2rad(rotation);
+        const float angleSin = std::sin(radAngle);
+        const float angleCos = std::cos(radAngle);
+
+        float* pos_ptr = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
+        {
+            pos_ptr[i + 2] -= pos_ptr[i + 0];
+            pos_ptr[i + 3] -= pos_ptr[i + 1];
+        
+            const float aux_x = pos_ptr[i + 2];
+            const float aux_y = pos_ptr[i + 3];
+
+            // [rx] = [cos(a) , -sin(a)][x]
+            pos_ptr[i + 2] = (aux_x * +angleCos) + (aux_y * -angleSin);
+            // [ry] = [sin(a) ,  cos(a)][y]
+            pos_ptr[i + 3] = (aux_x * +angleSin) + (aux_y * +angleCos);
+
+            pos_ptr[i + 2] += pos_ptr[i + 0];
+            pos_ptr[i + 3] += pos_ptr[i + 1];
+        }
+    }
+
+    void apply_scale_both_std(line_container& lc, const vector2 scale)
+    {
+        float* pos_ptr = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
+        {
+            pos_ptr[i + 0] *= scale.x;
+            pos_ptr[i + 1] *= scale.y;
+            pos_ptr[i + 2] *= scale.x;
+            pos_ptr[i + 3] *= scale.y;
+        }
+    }
+
+    void apply_scale_start_std(line_container& lc, const vector2 scale)
+    {
+        float* pos_ptr = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
+        {
+            pos_ptr[i + 0] *= scale.x;
+            pos_ptr[i + 1] *= scale.y;
+        }
+    }
+
+    void apply_scale_end_std(line_container& lc, const vector2 scale)
+    {
+        float* pos_ptr = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
+        {
+            pos_ptr[i + 2] *= scale.x;
+            pos_ptr[i + 3] *= scale.y;
+        }
+    }
+
+/*-------------------------
+    SSE IMPL
+-------------------------*/
+
 #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
 #include <xmmintrin.h>
 #include <rvi/math.hpp>
@@ -376,8 +464,6 @@ namespace rvi
 
     void apply_offset_sse(line_container& lc, const vector2& offset)
     {
-        if(offset == transform2::default_value().position) { return; }
-
         float _iv_offset[4] = { offset.x, offset.y, offset.x, offset.y };
         __m128 voffset = _mm_load_ps(_iv_offset);
 
@@ -387,6 +473,82 @@ namespace rvi
             float* fptr = fptr0 + i;
             __m128 vpos = _mm_load_ps(fptr);
             _mm_store_ps(fptr, _mm_add_ps(vpos, voffset));
+        }
+    }
+
+    void apply_scale_both_sse(line_container& lc, const vector2& scale)
+    {
+        float _iv_scale[4] = { scale.x, scale.y, scale.x, scale.y };
+        __m128 vscale = _mm_load_ps(_iv_scale);
+
+        float* fptr0 = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
+        {
+            float* fptr = fptr0 + i;
+            __m128 vpos = _mm_load_ps(fptr);
+            _mm_store_ps(fptr, _mm_mul_ps(vpos, vscale));
+        }
+    }
+
+    void apply_scale_start_sse(line_container& lc, const vector2& scale)
+    {
+        float _iv_scale[4] = { scale.x, scale.y, 1.0F, 1.0F };
+        __m128 vscale = _mm_load_ps(_iv_scale);
+
+        float* fptr0 = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
+        {
+            float* fptr = fptr0 + i;
+            __m128 vpos = _mm_load_ps(fptr);
+            _mm_store_ps(fptr, _mm_mul_ps(vpos, vscale));
+        }
+    }
+
+    void apply_scale_end_sse(line_container& lc, const vector2& scale)
+    {
+        float _iv_scale[4] = { 1.0F, 1.0F, scale.x, scale.y };
+        __m128 vscale = _mm_load_ps(_iv_scale);
+
+        float* fptr0 = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
+        {
+            float* fptr = fptr0 + i;
+            __m128 vpos = _mm_load_ps(fptr);
+            _mm_store_ps(fptr, _mm_mul_ps(vpos, vscale));
+        }
+    }
+
+    void apply_rotation_sse(line_container& lc, float angle)
+    {
+        const float rad_angle = math::deg2rad(angle);
+        const float angle_sin = std::sin(rad_angle);
+        const float angle_cos = std::cos(rad_angle);
+        float _iv_rot_table[4] = { angle_cos, -angle_sin, angle_sin, angle_cos };
+        __m128 vrot_table = _mm_load_ps(_iv_rot_table);
+
+        float _iv_zero[4] = { 0, 0, 0, 0 };
+        __m128 vzero = _mm_load_ps(_iv_zero);
+
+        float* _fptr0 = lc.positions_data();
+
+        for(size_t i = 0; i < lc.size() * 4; i += 4)
+        {
+            float* fptr = _fptr0 + i;
+            __m128 vvec = _mm_load_ps(fptr);
+
+            __m128 vspos = _mm_movelh_ps(vvec, vzero); // f[0], f[1], 0, 0
+
+            float _iv_rotator_temp_subadd[4] { 0, 0, fptr[0], fptr[1] };
+            __m128 vtemp_rot_subadd = _mm_load_ps(_iv_rotator_temp_subadd);
+            vvec = _mm_sub_ps(vvec, vtemp_rot_subadd);
+            __m128 vhi = _mm_unpackhi_ps(vvec, vvec); // sx,sy,ex,ey -> ex,ex,ey,ey
+            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y
+            vhi = _mm_mul_ps(vhi, vrot_table);
+            vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
+            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
+            vhi = _mm_movehl_ps(vhi, vzero); // 0, 0, x, y
+            vvec = _mm_or_ps(vspos, vhi);
+            vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
         }
     }
 

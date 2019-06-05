@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <utility>
+#include <functional>
 
 #include <rvi/base.hpp>
 #include <rvi/vector2.hpp>
@@ -51,6 +52,8 @@ namespace rvi
         std::vector<uint32_t> _colors;
 
     public:
+        line_container();
+
         ///Clear all lines contained
         void clear() noexcept;
 
