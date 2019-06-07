@@ -7,6 +7,9 @@
 
 namespace rvi
 {
+    //---------------------------------------
+    // VTable functions forward declarations
+    //---------------------------------------
     #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
 
     void apply_transform_sse(line_container&, const transform2&);
@@ -15,9 +18,26 @@ namespace rvi
     void apply_scale_start_sse(line_container&, const vector2&);
     void apply_scale_end_sse(line_container&, const vector2&);
     void apply_rotation_sse(line_container&, float);
+
+    void apply_transform_avx(line_container&, const transform2&);
+    void apply_offset_avx(line_container&, const vector2&);
+    void apply_scale_both_avx(line_container&, const vector2&);
+    void apply_scale_start_avx(line_container&, const vector2&);
+    void apply_scale_end_avx(line_container&, const vector2&);
+    void apply_rotation_avx(line_container&, float);
     
     #endif
 
+    void apply_transform_std(line_container&, const transform2&);
+    void apply_offset_std(line_container&, const vector2&);
+    void apply_scale_both_std(line_container&, const vector2&);
+    void apply_scale_start_std(line_container&, const vector2&);
+    void apply_scale_end_std(line_container&, const vector2&);
+    void apply_rotation_std(line_container&, float);
+
+    //---------------------------------
+    // Line container vtable structure
+    //---------------------------------
     struct _lc_vtable : public vtable<line_container>
     {
         VT_ENTRY<const transform2&> apply_transform;
@@ -28,20 +48,24 @@ namespace rvi
         VT_ENTRY<float> apply_rotation;
     };
 
-    _lc_vtable init_lc_vtable()
+    //------------------
+    // Vtable generator 
+    //------------------
+    _lc_vtable gen_vtable()
     {
         _lc_vtable result;
         
-        #if CURRENT_ARCH_X86_64
-        result.apply_offset = &apply_offset_sse;
-        result.apply_scale_both = &apply_scale_both_sse;
-        result.apply_scale_end = &apply_scale_end_sse;
-        result.apply_scale_start = &apply_scale_start_sse;
-        result.apply_transform = &apply_transform_sse;
-        result.apply_rotation = &apply_rotation_sse;
-
-        #elif CURRENT_ARCH_X86_32
-        if(cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
+        #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
+        if(cpu_support::x86::get_feature(cpu_support::x86::feature::AVX))
+        {
+            result.apply_offset = &apply_offset_avx;
+            result.apply_scale_both = &apply_scale_both_avx;
+            result.apply_scale_end = &apply_scale_end_avx;
+            result.apply_scale_start = &apply_scale_start_avx;
+            result.apply_transform = &apply_transform_avx;
+            result.apply_rotation = &apply_rotation_avx;
+        }
+        else if(cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
         {
             result.apply_offset = &apply_offset_sse;
             result.apply_scale_both = &apply_scale_both_sse;
@@ -59,7 +83,6 @@ namespace rvi
             result.apply_transform = &apply_transform_std;
             result.apply_rotation = &apply_rotation_std;
         }
-
         #else
         result.apply_offset = &apply_offset_std;
         result.apply_scale_both = &apply_scale_both_std;
@@ -72,7 +95,11 @@ namespace rvi
         result.initialized = true;
         return result;
     }
-    _lc_vtable vtable = init_lc_vtable();
+
+    //---------------
+    // Global vtable
+    //---------------
+    _lc_vtable vtable = gen_vtable();
 
     void line_container::clear() noexcept
     {
@@ -277,10 +304,9 @@ namespace rvi
         return _colors.data();
     }
 
-/*-------------------------
-    STD IMPL
--------------------------*/
-
+    //----------------------------------------
+    // Vtable methods standard implementation
+    //----------------------------------------
     void apply_transform_std(line_container& lc, const transform2& tform)
     {
         bool scale = tform.scale != transform2::default_value().scale;
@@ -344,7 +370,7 @@ namespace rvi
         }
     }
 
-    void apply_rotation_std(line_container& lc , float rotation)
+    void apply_rotation_std(line_container& lc, float rotation)
     {
         const float radAngle = math::deg2rad(rotation);
         const float angleSin = std::sin(radAngle);
@@ -369,7 +395,7 @@ namespace rvi
         }
     }
 
-    void apply_scale_both_std(line_container& lc, const vector2 scale)
+    void apply_scale_both_std(line_container& lc, const vector2& scale)
     {
         float* pos_ptr = lc.positions_data();
         for(size_t i = 0; i < lc.size() * 4; i += 4)
@@ -381,7 +407,7 @@ namespace rvi
         }
     }
 
-    void apply_scale_start_std(line_container& lc, const vector2 scale)
+    void apply_scale_start_std(line_container& lc, const vector2& scale)
     {
         float* pos_ptr = lc.positions_data();
         for(size_t i = 0; i < lc.size() * 4; i += 4)
@@ -391,7 +417,7 @@ namespace rvi
         }
     }
 
-    void apply_scale_end_std(line_container& lc, const vector2 scale)
+    void apply_scale_end_std(line_container& lc, const vector2& scale)
     {
         float* pos_ptr = lc.positions_data();
         for(size_t i = 0; i < lc.size() * 4; i += 4)
@@ -401,13 +427,12 @@ namespace rvi
         }
     }
 
-/*-------------------------
-    SSE IMPL
--------------------------*/
-
-#if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
-#include <xmmintrin.h>
-#include <rvi/math.hpp>
+    //----------------------------------------------
+    // Vtable methods SSE-vectorized implementation
+    //----------------------------------------------
+    #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
+    #include <xmmintrin.h>
+    #include <rvi/math.hpp>
 
     void apply_transform_sse(line_container& lc, const transform2& tform)
     {
@@ -545,6 +570,188 @@ namespace rvi
             vhi = _mm_movehl_ps(vhi, vzero); // 0, 0, x, y
             vvec = _mm_or_ps(vspos, vhi);
             vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
+            _mm_store_ps(fptr, vvec);
+        }
+    }
+
+
+    //----------------------------------------------
+    // Vtable methods AVX-vectorized implementation
+    //----------------------------------------------
+    #include <immintrin.h>
+
+    void apply_transform_avx(line_container& lc, const transform2& tform) 
+    {
+        rt_assert(false, "Not implemented!");
+    }
+
+    void apply_offset_avx(line_container& lc, const vector2& offset)
+    {
+        const float& x = offset.x;
+        const float& y = offset.y;
+        float _iv_offset[8] = { x, y, x, y, x, y, x, y };
+        __m256 voffset = _mm256_load_ps(_iv_offset);
+
+        float* fptr0 = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 8)
+        {
+            float* fptr = fptr0 + i;
+            __m256 vpos = _mm256_load_ps(fptr);
+            vpos = _mm256_add_ps(vpos, voffset);
+            _mm256_store_ps(fptr, vpos);
+        }
+
+        // Remaining line, for odd line sizes
+        if((lc.size() % 2) == 1)
+        {
+            float* fptr = lc.positions_data() + ((lc.size() - 1) * 4);
+            fptr[0] += x;
+            fptr[1] += y;
+            fptr[2] += x;
+            fptr[3] += y;
+        }
+    }
+
+    void apply_scale_both_avx(line_container& lc, const vector2& scale)
+    {
+        const float& x = scale.x;
+        const float& y = scale.y;
+        float _iv_scale[8] = { x, y, x, y, x, y, x, y };
+        __m256 vscale = _mm256_load_ps(_iv_scale);
+
+        float* fptr0 = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 8)
+        {
+            float* fptr = fptr0 + i;
+            __m256 vpos = _mm256_load_ps(fptr);
+            vpos = _mm256_mul_ps(vpos, vscale);
+            _mm256_store_ps(fptr, vpos);
+        }
+
+        // Remaining line, for odd line sizes
+        if((lc.size() % 2) == 1)
+        {
+            float* fptr = lc.positions_data() + ((lc.size() - 1) * 4);
+            fptr[0] *= x;
+            fptr[1] *= y;
+            fptr[2] *= x;
+            fptr[3] *= y;
+        }
+    }
+
+    void apply_scale_start_avx(line_container& lc, const vector2& scale)
+    {
+        const float& x = scale.x;
+        const float& y = scale.y;
+        float _iv_scale[8] = { x, y, 1, 1, x, y, 1, 1 };
+        __m256 vscale = _mm256_load_ps(_iv_scale);
+
+        float* fptr0 = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 8)
+        {
+            float* fptr = fptr0 + i;
+            __m256 vpos = _mm256_load_ps(fptr);
+            vpos = _mm256_mul_ps(vpos, vscale);
+            _mm256_store_ps(fptr, vpos);
+        }
+
+        // Remaining line, for odd line sizes
+        if((lc.size() % 2) == 1)
+        {
+            float* fptr = lc.positions_data() + ((lc.size() - 1) * 4);
+            fptr[0] *= x;
+            fptr[1] *= y;
+        }
+    }
+
+    void apply_scale_end_avx(line_container& lc, const vector2& scale)
+    {
+        const float& x = scale.x;
+        const float& y = scale.y;
+        float _iv_scale[8] = { 1, 1, x, y, 1, 1, x, y };
+        __m256 vscale = _mm256_load_ps(_iv_scale);
+
+        float* fptr0 = lc.positions_data();
+        for(size_t i = 0; i < lc.size() * 4; i += 8)
+        {
+            float* fptr = fptr0 + i;
+            __m256 vpos = _mm256_load_ps(fptr);
+            vpos = _mm256_mul_ps(vpos, vscale);
+            _mm256_store_ps(fptr, vpos);
+        }
+
+        // Remaining line, for odd line sizes
+        if((lc.size() % 2) == 1)
+        {
+            float* fptr = lc.positions_data() + ((lc.size() - 1) * 4);
+            fptr[2] *= x;
+            fptr[3] *= y;
+        }
+    }
+
+    void apply_rotation_avx(line_container& lc, float angle)
+    {
+        const float rad_angle = math::deg2rad(angle);
+        const float angle_sin = std::sin(rad_angle);
+        const float angle_cos = std::cos(rad_angle);
+        
+        float _iv_rot_table[8] = { 
+            angle_cos, -angle_sin, angle_sin, angle_cos,
+            angle_cos, -angle_sin, angle_sin, angle_cos
+        };
+        __m256 vrot_table = _mm256_load_ps(_iv_rot_table);
+
+        float _iv_zero[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+        __m256 vzero = _mm256_load_ps(_iv_zero);
+
+        float* _fptr0 = lc.positions_data();
+
+        for(size_t i = 0; i < lc.size() * 4; i += 8)
+        {
+            float* fptr = _fptr0 + i;
+            __m256 vvec = _mm256_load_ps(fptr);
+
+            __m256 vspos = _mm256_blend_ps(vzero, vvec, 0b11001100);
+
+            float _iv_rotator_temp_subadd[8] { 
+                0, 0, fptr[0], fptr[1],
+                0, 0, fptr[4], fptr[5]
+            };
+            __m256 vtemp_rot_subadd = _mm256_load_ps(_iv_rotator_temp_subadd);
+            vvec = _mm256_sub_ps(vvec, vtemp_rot_subadd);
+            __m256 vhi = _mm256_unpackhi_ps(vvec, vvec);
+            vhi = _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y
+            vhi = _mm256_mul_ps(vhi, vrot_table);
+            vhi = _mm256_add_ps(vhi, _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
+            vhi = _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
+            vhi = _mm256_blend_ps(vzero, vhi, 0b00110011); // 0, 0, x, y
+            vvec = _mm256_or_ps(vspos, vhi);
+            vvec = _mm256_add_ps(vvec, vtemp_rot_subadd);
+            _mm256_store_ps(fptr, vvec);
+        }
+
+        // Remainder (4 floats -> SSE)
+        if(lc.size() % 2 == 1)
+        {
+            float* fptr = _fptr0 + ((lc.size() - 1) * 4);
+            __m128 vzero_sse = _mm_load_ps(_iv_zero);
+            __m128 vrot_table_sse = _mm_load_ps(_iv_rot_table);
+
+            __m128 vvec = _mm_load_ps(fptr);
+            __m128 vspos = _mm_movelh_ps(vvec, vzero_sse); // f[0], f[1], 0, 0
+
+            float _iv_rotator_temp_subadd[4] { 0, 0, fptr[0], fptr[1] };
+            __m128 vtemp_rot_subadd = _mm_load_ps(_iv_rotator_temp_subadd);
+            vvec = _mm_sub_ps(vvec, vtemp_rot_subadd);
+            __m128 vhi = _mm_unpackhi_ps(vvec, vvec); // sx,sy,ex,ey -> ex,ex,ey,ey
+            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y
+            vhi = _mm_mul_ps(vhi, vrot_table_sse);
+            vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
+            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
+            vhi = _mm_movehl_ps(vhi, vzero_sse); // 0, 0, x, y
+            vvec = _mm_or_ps(vspos, vhi);
+            vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
+            _mm_store_ps(fptr, vvec);
         }
     }
 
