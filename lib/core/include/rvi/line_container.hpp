@@ -52,8 +52,6 @@ namespace rvi
         std::vector<uint32_t> _colors;
 
     public:
-        line_container();
-
         ///Clear all lines contained
         void clear() noexcept;
 

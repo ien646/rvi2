@@ -125,7 +125,7 @@ int main()
     line_container lc_no_simd;
     line_container lc_simd;
 
-    cpu_support::x86::print_enabled_features(std::cout);
+    //cpu_support::x86::print_enabled_features(std::cout);
 
     refill_all(lc_simd, lc_no_simd);
 
@@ -146,7 +146,7 @@ int main()
     for(size_t i = 0; i < sz; ++i)
     {
         float va = *(lc_no_simd.position_cbegin() + i);
-        float vb= *(lc_simd.position_cbegin() + i);
+        float vb = *(lc_simd.position_cbegin() + i);
         if(va != vb)
         {
             fail = true;

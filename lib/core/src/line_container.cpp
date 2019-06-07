@@ -2,6 +2,7 @@
 
 #include <rvi/assert.hpp>
 #include <rvi/cpu_support.hpp>
+#include <rvi/vtable.hpp>
 #include <thread>
 
 namespace rvi
@@ -17,25 +18,19 @@ namespace rvi
     
     #endif
 
-    struct _line_container_vtable
+    struct _lc_vtable : public vtable<line_container>
     {
-        std::function<void(line_container&, const transform2&)>
-            apply_transform = 0;
-        std::function<void(line_container&, const vector2&)>
-            apply_offset = 0;
-        std::function<void(line_container&, const vector2&)>
-            apply_scale_both = 0;
-        std::function<void(line_container&, const vector2&)>
-            apply_scale_start = 0;
-        std::function<void(line_container&, const vector2&)>
-            apply_scale_end = 0;
-        std::function<void(line_container&, float)>
-            apply_rotation = 0;
+        VT_ENTRY<const transform2&> apply_transform;
+        VT_ENTRY<const vector2&> apply_offset;
+        VT_ENTRY<const vector2&> apply_scale_both;
+        VT_ENTRY<const vector2&> apply_scale_start;
+        VT_ENTRY<const vector2&> apply_scale_end;
+        VT_ENTRY<float> apply_rotation;
     };
 
-    _line_container_vtable init_vtable()
+    _lc_vtable init_lc_vtable()
     {
-        _line_container_vtable result;
+        _lc_vtable result;
         
         #if CURRENT_ARCH_X86_64
         result.apply_offset = &apply_offset_sse;
@@ -74,14 +69,10 @@ namespace rvi
         result.apply_rotation = &apply_rotation_std;
         #endif
 
+        result.initialized = true;
         return result;
     }
-    _line_container_vtable _vtable = init_vtable();
-
-    line_container::line_container()
-    {
-        init_vtable();
-    }
+    _lc_vtable vtable = init_lc_vtable();
 
     void line_container::clear() noexcept
     {
@@ -135,7 +126,7 @@ namespace rvi
 
     void line_container::transform_positions(std::function<void(line_span)> func, bool parallel)
     {
-        r_assert(_positions.size() % 4 == 0, "line_container position data is corrupted!");
+        rt_assert(_positions.size() % 4 == 0, "line_container position data is corrupted!");
 
         // Minimum elements per thread to allow parallel algorithm
         const unsigned int MIN_ELEMS_PER_THREAD_FOR_PARALLEL = 128;
@@ -194,31 +185,36 @@ namespace rvi
     void line_container::apply_offset(vector2 offset)
     {
         if(offset == transform2::default_value().position) { return; }
-        _vtable.apply_offset(*this, offset);
+        debug_assert(vtable.initialized, "Vtable not initialized!");
+        vtable.apply_offset(*this, offset);
     }
 
     void line_container::apply_scale_end(vector2 scale)
     {
         if(scale == transform2::default_value().scale) { return; }
-        _vtable.apply_scale_end(*this, scale);
+        debug_assert(vtable.initialized, "Vtable not initialized!");
+        vtable.apply_scale_end(*this, scale);
     }
 
     void line_container::apply_scale_both(vector2 scale)
     {
         if(scale == transform2::default_value().scale) { return; }
-        _vtable.apply_scale_both(*this, scale);
+        debug_assert(vtable.initialized, "Vtable not initialized!");
+        vtable.apply_scale_both(*this, scale);
     }
 
     void line_container::apply_rotation(float angle)
     {
         if(angle == 0.0F) { return; }
-        _vtable.apply_rotation(*this, angle);
+        debug_assert(vtable.initialized, "Vtable not initialized!");
+        vtable.apply_rotation(*this, angle);
     }
 
     void line_container::apply_transform(const transform2& tform)
     {
         if(tform == transform2::default_value()) { return; }
-        _vtable.apply_transform(*this, tform);
+        debug_assert(vtable.initialized, "Vtable not initialized!");
+        vtable.apply_transform(*this, tform);
     }
 
     float* line_container::position_buff()
@@ -447,7 +443,7 @@ namespace rvi
             vtemp_rot_subadd = _mm_mul_ps(vtemp_rot_subadd, vscale);
             vvec = _mm_sub_ps(vvec, vtemp_rot_subadd);
             __m128 vhi = _mm_unpackhi_ps(vvec, vvec); // sx,sy,ex,ey -> ex,ex,ey,ey
-            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y            
+            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y
             vhi = _mm_mul_ps(vhi, vrot_table);
             vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
             vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));

@@ -78,7 +78,8 @@
         "numeric": "cpp",
         "bitset": "cpp",
         "atomic": "cpp",
-        "mutex": "cpp"
+        "mutex": "cpp",
+        "cassert": "cpp"
     },
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
     "lua.targetVersion": "5.3"

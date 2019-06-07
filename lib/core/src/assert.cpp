@@ -2,20 +2,23 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <cassert>
 
 namespace rvi
 {
-    void r_assert(bool cond, const std::string& msg)
+    void rt_assert(bool cond, const std::string& msg)
     {
-        std::cerr << msg << std::endl;
-        if(!cond)        
+        if(!cond)
+        {
+            std::cerr << msg << std::endl;
             throw std::logic_error(msg);
+        }
     }
 
     void debug_assert(bool cond, const std::string& msg)
     {
-        #ifdef DEBUG
-            r_assert(cond, msg);
+        #ifndef NDEBUG
+            rt_assert(cond, msg);
         #endif
     }
 }

@@ -10,7 +10,7 @@ namespace rvi
      * @param cond Assertion condition
      * @param msg Failure message
      */
-    extern void r_assert(bool cond, const std::string& msg);
+    extern void rt_assert(bool cond, const std::string& msg);
 
     /**
      * @brief Assert a condition. On failure, throws an std::logic_error
