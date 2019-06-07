@@ -139,18 +139,41 @@ static void bm_pos_avx(benchmark::State& state)
    }
 }
 
-BENCHMARK(bm_rot_std);
-BENCHMARK(bm_rot_sse);
-BENCHMARK(bm_rot_avx);
-BENCHMARK(bm_sca_std);
-BENCHMARK(bm_sca_sse);
-BENCHMARK(bm_sca_avx);
-BENCHMARK(bm_pos_std);
-BENCHMARK(bm_pos_sse);
-BENCHMARK(bm_pos_avx);
+// BENCHMARK(bm_rot_std);
+// BENCHMARK(bm_rot_sse);
+// BENCHMARK(bm_rot_avx);
+// BENCHMARK(bm_sca_std);
+// BENCHMARK(bm_sca_sse);
+// BENCHMARK(bm_sca_avx);
+// BENCHMARK(bm_pos_std);
+// BENCHMARK(bm_pos_sse);
+// BENCHMARK(bm_pos_avx);
 
-BENCHMARK_MAIN();
+// BENCHMARK_MAIN();
 
+int main()
+{
+    line_container lc_avx, lc_sse, lc_std;
+    rand_fill_container(lc_avx, 10000);
+    lc_sse = lc_avx;
+    lc_std = lc_avx;
+
+    float rot = rand_float();
+    apply_rotation_avx(lc_avx, rot);
+    apply_rotation_sse(lc_sse, rot);
+    apply_rotation_std(lc_std, rot);
+
+    for(int i = 0; i < 40000; ++i)
+    {
+        float a = lc_avx.positions_data()[i];
+        float s = lc_sse.positions_data()[i];
+        float n = lc_std.positions_data()[i];
+        if(!(a == s && a == n))
+        {
+            std::cout << "UNEQUAL{" << i << "}: [AVX]:" << a << " [SSE]:" << s << " [STD]:" << n << std::endl;
+        }
+    }
+}
 
     void apply_transform_std(line_container& lc, const transform2& tform)
     {
@@ -304,7 +327,7 @@ BENCHMARK_MAIN();
 
             // -- SCALE --
             vvec = _mm_mul_ps(vvec, vscale);
-            __m128 vspos = _mm_movelh_ps(vvec, vzero); // f[0], f[1], 0, 0
+            __m128 vspos = _mm_movelh_ps(vzero, vvec); // f[0], f[1], 0, 0
 
             // -- ROTATION --
             __m128 vtemp_rot_subadd = _mm_movehl_ps(vvec, vzero);
@@ -315,8 +338,7 @@ BENCHMARK_MAIN();
             vhi = _mm_mul_ps(vhi, vrot_table);
             vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
             vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
-            vhi = _mm_movehl_ps(vhi, vzero); // 0, 0, x, y
-            vvec = _mm_or_ps(vspos, vhi);
+            vvec = _mm_movehl_ps(vhi, vspos); // 0, 0, x, y
             vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
         
             // -- OFFSET --
@@ -400,7 +422,7 @@ BENCHMARK_MAIN();
             float* fptr = _fptr0 + i;
             __m128 vvec = _mm_load_ps(fptr);
 
-            __m128 vspos = _mm_movelh_ps(vvec, vzero); // f[0], f[1], 0, 0
+            __m128 vspos = _mm_movelh_ps(vzero, vvec); // f[0], f[1], 0, 0
             __m128 vtemp_rot_subadd = _mm_movelh_ps(vzero, vvec); // 0, 0, f[0], f[1]
             vvec = _mm_sub_ps(vvec, vtemp_rot_subadd);
             __m128 vhi = _mm_unpackhi_ps(vvec, vvec); // sx,sy,ex,ey -> ex,ex,ey,ey
@@ -408,8 +430,7 @@ BENCHMARK_MAIN();
             vhi = _mm_mul_ps(vhi, vrot_table);
             vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
             vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
-            vhi = _mm_movehl_ps(vhi, vzero); // 0, 0, x, y
-            vvec = _mm_or_ps(vspos, vhi);
+            vvec = _mm_movehl_ps(vhi, vspos); // 0, 0, x, y
             vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
             _mm_store_ps(fptr, vvec);
         }
@@ -560,8 +581,7 @@ BENCHMARK_MAIN();
             vhi = _mm256_mul_ps(vhi, vrot_table);
             vhi = _mm256_add_ps(vhi, _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
             vhi = _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
-            vhi = _mm256_blend_ps(vzero, vhi, 0b11001100); // 0, 0, x, y
-            vvec = _mm256_or_ps(vspos, vhi);
+            vvec = _mm256_blend_ps(vspos, vhi, 0b11001100); // 0, 0, x, y
             vvec = _mm256_add_ps(vvec, vtemp_rot_subadd);
             _mm256_store_ps(fptr, vvec);
         }
@@ -574,7 +594,7 @@ BENCHMARK_MAIN();
             __m128 vrot_table_sse = _mm256_castps256_ps128(vrot_table);
 
             __m128 vvec = _mm_load_ps(fptr);
-            __m128 vspos = _mm_movelh_ps(vvec, vzero_sse); // f[0], f[1], 0, 0
+            __m128 vspos = _mm_movelh_ps(vzero_sse, vvec); // f[0], f[1], 0, 0
 
             float _iv_rotator_temp_subadd[4] { 0, 0, fptr[0], fptr[1] };
             __m128 vtemp_rot_subadd = _mm_load_ps(_iv_rotator_temp_subadd);
@@ -584,8 +604,7 @@ BENCHMARK_MAIN();
             vhi = _mm_mul_ps(vhi, vrot_table_sse);
             vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
             vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
-            vhi = _mm_movehl_ps(vhi, vzero_sse); // 0, 0, x, y
-            vvec = _mm_or_ps(vspos, vhi);
+            vvec = _mm_movehl_ps(vhi, vspos); // 0, 0, x, y
             vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
             _mm_store_ps(fptr, vvec);
         }

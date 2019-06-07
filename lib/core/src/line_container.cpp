@@ -461,7 +461,7 @@ namespace rvi
 
             // -- SCALE --
             vvec = _mm_mul_ps(vvec, vscale);
-            __m128 vspos = _mm_movelh_ps(vvec, vzero); // f[0], f[1], 0, 0
+            __m128 vspos = _mm_movelh_ps(vzero, vvec); // f[0], f[1], 0, 0
 
             // -- ROTATION --
             __m128 vtemp_rot_subadd = _mm_movehl_ps(vvec, vzero);
@@ -472,8 +472,7 @@ namespace rvi
             vhi = _mm_mul_ps(vhi, vrot_table);
             vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
             vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
-            vhi = _mm_movehl_ps(vhi, vzero); // 0, 0, x, y
-            vvec = _mm_or_ps(vspos, vhi);
+            vvec = _mm_movehl_ps(vhi, vspos); // 0, 0, x, y
             vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
         
             // -- OFFSET --
@@ -557,7 +556,7 @@ namespace rvi
             float* fptr = _fptr0 + i;
             __m128 vvec = _mm_load_ps(fptr);
 
-            __m128 vspos = _mm_movelh_ps(vvec, vzero); // f[0], f[1], 0, 0
+            __m128 vspos = _mm_movelh_ps(vzero, vvec); // f[0], f[1], 0, 0
             __m128 vtemp_rot_subadd = _mm_movelh_ps(vzero, vvec); // 0, 0, f[0], f[1]
             vvec = _mm_sub_ps(vvec, vtemp_rot_subadd);
             __m128 vhi = _mm_unpackhi_ps(vvec, vvec); // sx,sy,ex,ey -> ex,ex,ey,ey
@@ -565,8 +564,7 @@ namespace rvi
             vhi = _mm_mul_ps(vhi, vrot_table);
             vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
             vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
-            vhi = _mm_movehl_ps(vhi, vzero); // 0, 0, x, y
-            vvec = _mm_or_ps(vspos, vhi);
+            vvec = _mm_movehl_ps(vhi, vspos); // 0, 0, x, y
             vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
             _mm_store_ps(fptr, vvec);
         }
@@ -717,8 +715,7 @@ namespace rvi
             vhi = _mm256_mul_ps(vhi, vrot_table);
             vhi = _mm256_add_ps(vhi, _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
             vhi = _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
-            vhi = _mm256_blend_ps(vzero, vhi, 0b11001100); // 0, 0, x, y
-            vvec = _mm256_or_ps(vspos, vhi);
+            vvec = _mm256_blend_ps(vspos, vhi, 0b11001100); // 0, 0, x, y
             vvec = _mm256_add_ps(vvec, vtemp_rot_subadd);
             _mm256_store_ps(fptr, vvec);
         }
@@ -731,7 +728,7 @@ namespace rvi
             __m128 vrot_table_sse = _mm256_castps256_ps128(vrot_table);
 
             __m128 vvec = _mm_load_ps(fptr);
-            __m128 vspos = _mm_movelh_ps(vvec, vzero_sse); // f[0], f[1], 0, 0
+            __m128 vspos = _mm_movelh_ps(vzero_sse, vvec); // f[0], f[1], 0, 0
 
             float _iv_rotator_temp_subadd[4] { 0, 0, fptr[0], fptr[1] };
             __m128 vtemp_rot_subadd = _mm_load_ps(_iv_rotator_temp_subadd);
@@ -741,8 +738,7 @@ namespace rvi
             vhi = _mm_mul_ps(vhi, vrot_table_sse);
             vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
             vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
-            vhi = _mm_movehl_ps(vhi, vzero_sse); // 0, 0, x, y
-            vvec = _mm_or_ps(vspos, vhi);
+            vvec = _mm_movehl_ps(vhi, vspos); // 0, 0, x, y
             vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
             _mm_store_ps(fptr, vvec);
         }
