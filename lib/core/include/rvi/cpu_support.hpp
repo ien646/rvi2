@@ -7,13 +7,29 @@
 #if defined(_M_IX86) || defined(_X86_) || defined(__i386__)
     #define CURRENT_ARCH_X86_32 1
 #elif defined(_M_AMD64) || defined(__amd64__) || defined(__x86_64__)
-    #define CURRENT_ARCH_X86_64 1
+    #define CURRENT_ARCH_X86_64 1    
 #elif defined(__arm__) || defined(_M_ARM)
     #define CURRENT_ARCH_ARM32 1
 #elif defined(__aarch64__)
     #define CURRENT_ARCH_ARM64 1
 #else
     #define CURRENT_ARCH_UNKNOWN 1
+#endif
+
+#if CURRENT_ARCH_X86_32 || CURRENT_ARCH_X86_64
+    #define CURRENT_ARCH_X86 1
+#endif
+
+#if CURRENT_ARCH_X86
+    #ifndef CURRENT_ARCH_X86_FORCE_AVX
+        #define CURRENT_ARCH_X86_FORCE_AVX 0
+    #endif
+    #ifndef CURRENT_ARCH_X86_FORCE_SSE
+        #define CURRENT_ARCH_X86_FORCE_SSE 0
+    #endif
+    #ifndef CURRENT_ARCH_X86_FORCE_NOVEC
+        #define CURRENT_ARCH_X86_FORCE_NOVEC 0
+    #endif
 #endif
 
 /*--------------------------------

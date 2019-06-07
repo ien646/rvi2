@@ -8,6 +8,7 @@
 #include <rvi/vector2.hpp>
 #include <rvi/color_rgba.hpp>
 #include <rvi/transform2.hpp>
+#include <rvi/cpu_support.hpp>
 
 namespace rvi
 {

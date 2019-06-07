@@ -56,6 +56,37 @@ namespace rvi
         _lc_vtable result;
         
         #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
+            #if CURRENT_ARCH_X86_FORCE_AVX
+            result.apply_offset = &apply_offset_avx;
+            result.apply_scale_both = &apply_scale_both_avx;
+            result.apply_scale_end = &apply_scale_end_avx;
+            result.apply_scale_start = &apply_scale_start_avx;
+            result.apply_transform = &apply_transform_avx;
+            result.apply_rotation = &apply_rotation_avx;
+            result.initialized = true;
+            return result;
+            #elif CURRENT_ARCH_X86_FORCE_SSE
+            result.apply_offset = &apply_offset_sse;
+            result.apply_scale_both = &apply_scale_both_sse;
+            result.apply_scale_end = &apply_scale_end_sse;
+            result.apply_scale_start = &apply_scale_start_sse;
+            result.apply_transform = &apply_transform_sse;
+            result.apply_rotation = &apply_rotation_sse;
+            result.initialized = true;
+            return result;
+            #elif CURRENT_ARCH_X86_FORCE_NOVEC
+            result.apply_offset = &apply_offset_std;
+            result.apply_scale_both = &apply_scale_both_std;
+            result.apply_scale_end = &apply_scale_end_std;
+            result.apply_scale_start = &apply_scale_start_std;
+            result.apply_transform = &apply_transform_std;
+            result.apply_rotation = &apply_rotation_std;
+            result.initialized = true;
+            return result;
+            #endif
+        #endif
+        
+        #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
         if(cpu_support::x86::get_feature(cpu_support::x86::feature::AVX))
         {
             result.apply_offset = &apply_offset_avx;
