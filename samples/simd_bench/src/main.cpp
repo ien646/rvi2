@@ -35,15 +35,18 @@ void rand_fill_container(line_container& lc, size_t sz)
     }
 }
 
-void apply_rotation_std(line_container& lc, float rotation);
-void apply_rotation_sse(line_container& lc, float rotation);
-void apply_rotation_avx(line_container& lc, float rotation);
-void apply_scale_both_std(line_container& lc, const vector2& );
-void apply_scale_both_sse(line_container& lc, const vector2&);
-void apply_scale_both_avx(line_container& lc, const vector2&);
-void apply_offset_std(line_container& lc, const vector2&);
-void apply_offset_sse(line_container& lc, const vector2&);
-void apply_offset_avx(line_container& lc, const vector2&);
+void apply_rotation_std(line_container&, float rotation);
+void apply_rotation_sse(line_container&, float rotation);
+void apply_rotation_avx(line_container&, float rotation);
+void apply_scale_both_std(line_container&, const vector2&);
+void apply_scale_both_sse(line_container&, const vector2&);
+void apply_scale_both_avx(line_container&, const vector2&);
+void apply_offset_std(line_container&, const vector2&);
+void apply_offset_sse(line_container&, const vector2&);
+void apply_offset_avx(line_container&, const vector2&);
+void apply_transform_std(line_container&, const transform2&);
+void apply_transform_sse(line_container&, const transform2&);
+void apply_transform_avx(line_container&, const transform2&);
 
 static void bm_rot_std(benchmark::State& state)
 {
@@ -158,10 +161,10 @@ int main()
     lc_sse = lc_avx;
     lc_std = lc_avx;
 
-    float rot = rand_float();
-    apply_rotation_avx(lc_avx, rot);
-    apply_rotation_sse(lc_sse, rot);
-    apply_rotation_std(lc_std, rot);
+    transform2 tform = rand_tform();
+    apply_transform_std(lc_std, tform);
+    apply_transform_sse(lc_sse, tform);
+    apply_transform_sse(lc_avx, tform);
 
     for(int i = 0; i < 40000; ++i)
     {
@@ -315,7 +318,7 @@ int main()
         const float rad_angle = math::deg2rad(tform.rotation);
         const float angle_sin = std::sin(rad_angle);
         const float angle_cos = std::cos(rad_angle);
-        float _iv_rot_table[4] = { angle_cos, -angle_sin, angle_sin, angle_cos };
+        float _iv_rot_table[4] = { angle_cos, angle_sin, -angle_sin, angle_cos };
         __m128 vrot_table = _mm_load_ps(_iv_rot_table);
 
         float* _fptr0 = lc.positions_data();
@@ -327,17 +330,15 @@ int main()
 
             // -- SCALE --
             vvec = _mm_mul_ps(vvec, vscale);
-            __m128 vspos = _mm_movelh_ps(vzero, vvec); // f[0], f[1], 0, 0
 
             // -- ROTATION --
-            __m128 vtemp_rot_subadd = _mm_movehl_ps(vvec, vzero);
-            vtemp_rot_subadd = _mm_mul_ps(vtemp_rot_subadd, vscale);
+            __m128 vspos = _mm_movelh_ps(vvec, vvec); // f[0], f[1], f[0], f[1]
+            __m128 vtemp_rot_subadd = _mm_movelh_ps(vzero, vvec); // 0, 0, f[0], f[1]
             vvec = _mm_sub_ps(vvec, vtemp_rot_subadd);
             __m128 vhi = _mm_unpackhi_ps(vvec, vvec); // sx,sy,ex,ey -> ex,ex,ey,ey
-            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y
-            vhi = _mm_mul_ps(vhi, vrot_table);
-            vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
-            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
+            vhi = _mm_mul_ps(vhi, vrot_table); // mex1, mex2, mey1, mey2
+            __m128 vra = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(1,0,3,2)); // mey1, mey2, ,mex1, mex2
+            vhi = _mm_add_ps(vhi, vra); // x, y, x, y
             vvec = _mm_movehl_ps(vhi, vspos); // 0, 0, x, y
             vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
         
@@ -409,7 +410,7 @@ int main()
         const float rad_angle = math::deg2rad(angle);
         const float angle_sin = std::sin(rad_angle);
         const float angle_cos = std::cos(rad_angle);
-        float _iv_rot_table[4] = { angle_cos, -angle_sin, angle_sin, angle_cos };
+        float _iv_rot_table[4] = { angle_cos, angle_sin, -angle_sin, angle_cos };
         __m128 vrot_table = _mm_load_ps(_iv_rot_table);
 
         float _iv_zero[4] = { 0, 0, 0, 0 };
@@ -422,16 +423,16 @@ int main()
             float* fptr = _fptr0 + i;
             __m128 vvec = _mm_load_ps(fptr);
 
-            __m128 vspos = _mm_movelh_ps(vzero, vvec); // f[0], f[1], 0, 0
+            __m128 vspos = _mm_movelh_ps(vvec, vvec); // f[0], f[1], f[0], f[1]
             __m128 vtemp_rot_subadd = _mm_movelh_ps(vzero, vvec); // 0, 0, f[0], f[1]
             vvec = _mm_sub_ps(vvec, vtemp_rot_subadd);
             __m128 vhi = _mm_unpackhi_ps(vvec, vvec); // sx,sy,ex,ey -> ex,ex,ey,ey
-            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y
-            vhi = _mm_mul_ps(vhi, vrot_table);
-            vhi = _mm_add_ps(vhi, _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
-            vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
+            vhi = _mm_mul_ps(vhi, vrot_table); // mex1, mex2, mey1, mey2
+            __m128 vra = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(1,0,3,2)); // mey1, mey2, ,mex1, mex2
+            vhi = _mm_add_ps(vhi, vra); // x, y, x, y
             vvec = _mm_movehl_ps(vhi, vspos); // 0, 0, x, y
             vvec = _mm_add_ps(vvec, vtemp_rot_subadd);
+            
             _mm_store_ps(fptr, vvec);
         }
     }
