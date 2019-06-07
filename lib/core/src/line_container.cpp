@@ -55,39 +55,8 @@ namespace rvi
     {
         _lc_vtable result;
         
-        #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
-            #if CURRENT_ARCH_X86_FORCE_AVX
-            result.apply_offset = &apply_offset_avx;
-            result.apply_scale_both = &apply_scale_both_avx;
-            result.apply_scale_end = &apply_scale_end_avx;
-            result.apply_scale_start = &apply_scale_start_avx;
-            result.apply_transform = &apply_transform_avx;
-            result.apply_rotation = &apply_rotation_avx;
-            result.initialized = true;
-            return result;
-            #elif CURRENT_ARCH_X86_FORCE_SSE
-            result.apply_offset = &apply_offset_sse;
-            result.apply_scale_both = &apply_scale_both_sse;
-            result.apply_scale_end = &apply_scale_end_sse;
-            result.apply_scale_start = &apply_scale_start_sse;
-            result.apply_transform = &apply_transform_sse;
-            result.apply_rotation = &apply_rotation_sse;
-            result.initialized = true;
-            return result;
-            #elif CURRENT_ARCH_X86_FORCE_NOVEC
-            result.apply_offset = &apply_offset_std;
-            result.apply_scale_both = &apply_scale_both_std;
-            result.apply_scale_end = &apply_scale_end_std;
-            result.apply_scale_start = &apply_scale_start_std;
-            result.apply_transform = &apply_transform_std;
-            result.apply_rotation = &apply_rotation_std;
-            result.initialized = true;
-            return result;
-            #endif
-        #endif
-        
-        #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
-        if(cpu_support::x86::get_feature(cpu_support::x86::feature::AVX))
+        #ifdef CURRENT_ARCH_X86
+        if(!cpu_support::x86::get_feature(cpu_support::x86::feature::AVX))
         {
             result.apply_offset = &apply_offset_avx;
             result.apply_scale_both = &apply_scale_both_avx;
@@ -96,7 +65,7 @@ namespace rvi
             result.apply_transform = &apply_transform_avx;
             result.apply_rotation = &apply_rotation_avx;
         }
-        else if(cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
+        else if(!cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
         {
             result.apply_offset = &apply_offset_sse;
             result.apply_scale_both = &apply_scale_both_sse;
@@ -114,6 +83,7 @@ namespace rvi
             result.apply_transform = &apply_transform_std;
             result.apply_rotation = &apply_rotation_std;
         }
+        
         #else
         result.apply_offset = &apply_offset_std;
         result.apply_scale_both = &apply_scale_both_std;
@@ -494,8 +464,7 @@ namespace rvi
             __m128 vspos = _mm_movelh_ps(vvec, vzero); // f[0], f[1], 0, 0
 
             // -- ROTATION --
-            float _iv_rotator_temp_subadd[4] { 0, 0, fptr[0], fptr[1] };
-            __m128 vtemp_rot_subadd = _mm_load_ps(_iv_rotator_temp_subadd);
+            __m128 vtemp_rot_subadd = _mm_movehl_ps(vvec, vzero);
             vtemp_rot_subadd = _mm_mul_ps(vtemp_rot_subadd, vscale);
             vvec = _mm_sub_ps(vvec, vtemp_rot_subadd);
             __m128 vhi = _mm_unpackhi_ps(vvec, vvec); // sx,sy,ex,ey -> ex,ex,ey,ey
@@ -589,9 +558,7 @@ namespace rvi
             __m128 vvec = _mm_load_ps(fptr);
 
             __m128 vspos = _mm_movelh_ps(vvec, vzero); // f[0], f[1], 0, 0
-
-            float _iv_rotator_temp_subadd[4] { 0, 0, fptr[0], fptr[1] };
-            __m128 vtemp_rot_subadd = _mm_load_ps(_iv_rotator_temp_subadd);
+            __m128 vtemp_rot_subadd = _mm_movehl_ps(vvec, vzero); // f[2], f[3], 0, 0
             vvec = _mm_sub_ps(vvec, vtemp_rot_subadd);
             __m128 vhi = _mm_unpackhi_ps(vvec, vvec); // sx,sy,ex,ey -> ex,ex,ey,ey
             vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y
@@ -743,12 +710,7 @@ namespace rvi
             __m256 vvec = _mm256_load_ps(fptr);
 
             __m256 vspos = _mm256_blend_ps(vzero, vvec, 0b11001100);
-
-            float _iv_rotator_temp_subadd[8] { 
-                0, 0, fptr[0], fptr[1],
-                0, 0, fptr[4], fptr[5]
-            };
-            __m256 vtemp_rot_subadd = _mm256_load_ps(_iv_rotator_temp_subadd);
+            __m256 vtemp_rot_subadd = _mm256_blend_ps(vzero, vvec, 0b00110011);
             vvec = _mm256_sub_ps(vvec, vtemp_rot_subadd);
             __m256 vhi = _mm256_unpackhi_ps(vvec, vvec);
             vhi = _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y

@@ -181,6 +181,16 @@ namespace rvi::cpu_support::x86
         }
         return (*feature_map)[(int)f];
     }
+
+    void force_feature(feature f, bool enabled)
+    {
+        if(!initialized)
+        {
+            init();
+            initialized = true;
+        }
+        (*feature_map)[(int)f] = enabled;
+    }
 }
 
 #endif

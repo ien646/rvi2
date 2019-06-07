@@ -5,4 +5,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE 	${PROJECT_BINARY_DIR}/output/bin/sim
 file(GLOB SOURCES src/*.cpp src/*.hpp src/*.c src/*.h)
 add_executable(simd_bench ${SOURCES})
 
-target_link_libraries(simd_bench rvi2.core)
+target_link_libraries(simd_bench rvi2.core benchmark)
+if(WIN32)
+    target_link_libraries(simd_bench Shlwapi.lib)
+endif()
+include_directories(${PROJECT_SOURCE_DIR}/third-party/benchmark/include)

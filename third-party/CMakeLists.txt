@@ -15,5 +15,9 @@ endif()
 
 add_subdirectory(lua)
 
-add_definitions(SOL_USING_CXX_LUA)
+add_definitions(-DSOL_USING_CXX_LUA)
 add_subdirectory(sol2)
+
+option(BENCHMARK_ENABLE_TESTING "..." OFF)
+option(BENCHMARK_ENABLE_GTEST_TESTS "..." OFF)
+add_subdirectory(benchmark)

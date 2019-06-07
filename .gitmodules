@@ -10,3 +10,6 @@
 [submodule "third-party/sol2"]
 	path = third-party/sol2
 	url = https://github.com/bigiansen/sol2
+[submodule "third-party/benchmark"]
+	path = third-party/benchmark
+	url = https://github.com/google/benchmark
