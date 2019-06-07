@@ -56,7 +56,7 @@ namespace rvi
         _lc_vtable result;
         
         #ifdef CURRENT_ARCH_X86
-        if(!cpu_support::x86::get_feature(cpu_support::x86::feature::AVX))
+        if(cpu_support::x86::get_feature(cpu_support::x86::feature::AVX))
         {
             result.apply_offset = &apply_offset_avx;
             result.apply_scale_both = &apply_scale_both_avx;
@@ -65,7 +65,7 @@ namespace rvi
             result.apply_transform = &apply_transform_avx;
             result.apply_rotation = &apply_rotation_avx;
         }
-        else if(!cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
+        else if(cpu_support::x86::get_feature(cpu_support::x86::feature::SSE))
         {
             result.apply_offset = &apply_offset_sse;
             result.apply_scale_both = &apply_scale_both_sse;
@@ -431,7 +431,7 @@ namespace rvi
     //----------------------------------------------
     // Vtable methods SSE-vectorized implementation
     //----------------------------------------------
-    #if CURRENT_ARCH_X86_64 || CURRENT_ARCH_X86_32
+    #if CURRENT_ARCH_X86
     #include <xmmintrin.h>
     #include <rvi/math.hpp>
 
@@ -558,7 +558,7 @@ namespace rvi
             __m128 vvec = _mm_load_ps(fptr);
 
             __m128 vspos = _mm_movelh_ps(vvec, vzero); // f[0], f[1], 0, 0
-            __m128 vtemp_rot_subadd = _mm_movehl_ps(vvec, vzero); // f[2], f[3], 0, 0
+            __m128 vtemp_rot_subadd = _mm_movelh_ps(vzero, vvec); // 0, 0, f[0], f[1]
             vvec = _mm_sub_ps(vvec, vtemp_rot_subadd);
             __m128 vhi = _mm_unpackhi_ps(vvec, vvec); // sx,sy,ex,ey -> ex,ex,ey,ey
             vhi = _mm_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y
@@ -709,15 +709,15 @@ namespace rvi
             float* fptr = _fptr0 + i;
             __m256 vvec = _mm256_load_ps(fptr);
 
-            __m256 vspos = _mm256_blend_ps(vzero, vvec, 0b11001100);
-            __m256 vtemp_rot_subadd = _mm256_blend_ps(vzero, vvec, 0b00110011);
+            __m256 vspos = _mm256_blend_ps(vvec, vzero, 0b11001100);
+            __m256 vtemp_rot_subadd = _mm256_shuffle_ps(vspos, vspos, _MM_SHUFFLE(1,0,3,2));
             vvec = _mm256_sub_ps(vvec, vtemp_rot_subadd);
             __m256 vhi = _mm256_unpackhi_ps(vvec, vvec);
             vhi = _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0)); // x,x,y,y -> x,y,x,y
             vhi = _mm256_mul_ps(vhi, vrot_table);
             vhi = _mm256_add_ps(vhi, _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(2, 3, 0, 1)));
             vhi = _mm256_shuffle_ps(vhi, vhi, _MM_SHUFFLE(3, 1, 2, 0));
-            vhi = _mm256_blend_ps(vzero, vhi, 0b00110011); // 0, 0, x, y
+            vhi = _mm256_blend_ps(vzero, vhi, 0b11001100); // 0, 0, x, y
             vvec = _mm256_or_ps(vspos, vhi);
             vvec = _mm256_add_ps(vvec, vtemp_rot_subadd);
             _mm256_store_ps(fptr, vvec);
@@ -747,6 +747,5 @@ namespace rvi
             _mm_store_ps(fptr, vvec);
         }
     }
-
 #endif
 }
