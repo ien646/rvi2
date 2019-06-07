@@ -734,8 +734,8 @@ namespace rvi
         if(lc.size() % 2 == 1)
         {
             float* fptr = _fptr0 + ((lc.size() - 1) * 4);
-            __m128 vzero_sse = _mm_load_ps(_iv_zero);
-            __m128 vrot_table_sse = _mm_load_ps(_iv_rot_table);
+            __m128 vzero_sse = _mm256_castps256_ps128(vzero);
+            __m128 vrot_table_sse = _mm256_castps256_ps128(vrot_table);
 
             __m128 vvec = _mm_load_ps(fptr);
             __m128 vspos = _mm_movelh_ps(vvec, vzero_sse); // f[0], f[1], 0, 0
